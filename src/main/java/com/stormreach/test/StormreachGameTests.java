@@ -467,4 +467,27 @@ public class StormreachGameTests {
         if (t != null) t.discard();
         h.succeed();
     }
+
+    @GameTest(maxTicks = 20, skyAccess = true)
+    public void theDopplerRadarIsOneStructure(GameTestHelper h) {
+        openSky(h, 0, 0, 4, 4);
+        for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        var level = h.getLevel();
+        BlockPos base = h.absolutePos(new BlockPos(2, 2, 2));
+        Check.isTrue(h, com.stormreach.tornado.radar.RadarStructure.blocked(level, base).isEmpty(), "the radar should fit in an open space");
+        h.setBlock(new BlockPos(3, 5, 2), Blocks.STONE);
+        Check.isFalse(h, com.stormreach.tornado.radar.RadarStructure.blocked(level, base).isEmpty(), "a block inside the footprint should stop placement");
+        h.setBlock(new BlockPos(3, 5, 2), Blocks.AIR);
+        com.stormreach.tornado.radar.RadarStructure.build(level, base);
+        BlockPos controller = base.offset(com.stormreach.tornado.radar.RadarLayout.CONTROLLER);
+        Check.isTrue(h, com.stormreach.tornado.radar.RadarStructure.complete(level, controller), "the radar structure is incomplete after building");
+        Check.isTrue(h, level.getBlockEntity(controller) instanceof com.stormreach.tornado.radar.DopplerRadarBlockEntity, "the dish renderer's block entity is missing");
+        // taking the controller away brings the whole thing down
+        level.setBlock(controller, Blocks.AIR.defaultBlockState(), 3);
+        h.runAfterDelay(2, () -> {
+            for (BlockPos p : com.stormreach.tornado.radar.RadarLayout.footprint(base))
+                Check.isFalse(h, level.getBlockState(p).is(com.stormreach.tornado.radar.RadarContent.RADAR_PART), "a radar part was left floating at " + p);
+            h.succeed();
+        });
+    }
 }

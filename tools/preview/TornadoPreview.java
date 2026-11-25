@@ -28,8 +28,8 @@ public class TornadoPreview {
         BufferedImage sheet = new BufferedImage(W * cols, H * rows, BufferedImage.TYPE_INT_RGB);
         for (int k = 0; k < n; k++) {
             String[] p = a[k + 2].split(",");
-            if (p[0].equals("cloud") || p[0].equals("hail")) {
-                BufferedImage img = renderOther(p, ImageIO.read(new File(texDir, p[0].equals("cloud") ? "storm_cloud.png" : "hailstone.png")));
+            if (p[0].equals("cloud") || p[0].equals("hail") || p[0].equals("radar")) {
+                BufferedImage img = renderOther(p, ImageIO.read(new File(texDir, p[0].equals("cloud") ? "storm_cloud.png" : p[0].equals("radar") ? "../block/radar_dish.png" : "hailstone.png")));
                 java.awt.Graphics2D g = img.createGraphics();
                 g.setColor(java.awt.Color.WHITE); g.drawString(p[p.length - 1].replace('_', ' '), 8, 16); g.dispose();
                 sheet.getGraphics().drawImage(img, (k % cols) * W, (k / cols) * H, null);
@@ -80,8 +80,8 @@ public class TornadoPreview {
     /** cloud,growth,width,depth,severe,label  or  hail,sizeOrdinal,label */
     static BufferedImage renderOther(String[] p, BufferedImage tex) {
         int[] px = new int[W * H];
-        boolean cloud = p[0].equals("cloud");
-        double dist = cloud ? 520 : 1.2, eyeY = cloud ? 2 : 0.15, pitch = cloud ? Math.toRadians(14) : 0;
+        boolean cloud = p[0].equals("cloud"), radar = p[0].equals("radar");
+        double dist = cloud ? 520 : radar ? 6 : 1.2, eyeY = cloud ? 2 : radar ? 2.2 : 0.15, pitch = cloud ? Math.toRadians(14) : radar ? Math.toRadians(-6) : 0;
         double f = (H / 2.0) / Math.tan(Math.toRadians(70) / 2);
         int horizon = (int) (H / 2.0 + Math.tan(pitch) * f);
         for (int y = 0; y < H; y++) for (int x = 0; x < W; x++)
@@ -91,6 +91,9 @@ public class TornadoPreview {
             float g = Float.parseFloat(p[1]), w = Float.parseFloat(p[2]), d = Float.parseFloat(p[3]);
             boolean sev = p[4].equals("1");
             collect(quads, tex, sink -> com.stormreach.client.weather.WeatherMesh.stormCloud((x, y, z, u, v, c) -> sink.vertex(x, y + 90, z, u, v, c), g, w, d, sev, 7, 0), dist, eyeY, pitch);
+        } else if (radar) {
+            float yaw = (float) Math.toRadians(Float.parseFloat(p[1]));
+            collect(quads, tex, sink -> com.stormreach.client.weather.RadarMesh.build((x, y, z, u, v, c) -> sink.vertex(x, y + 0.5f, z, u, v, c), yaw), dist, eyeY, pitch);
         } else {
             com.stormreach.sim.HailSize hs = com.stormreach.sim.HailSize.values()[Integer.parseInt(p[1])];
             collect(quads, tex, sink -> com.stormreach.client.weather.WeatherMesh.hailstone(sink, hs.visualSize(), 3, 0), dist, eyeY, pitch);

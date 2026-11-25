@@ -49,7 +49,8 @@ public final class WeatherItems {
     public static final Block THERMOMETER = block("thermometer", InstrumentBlock.Kind.THERMOMETER);
     public static final Block WEATHER_STATION = block("weather_station", InstrumentBlock.Kind.WEATHER_STATION);
     public static final Block STORM_DETECTOR = block("storm_detector", InstrumentBlock.Kind.STORM_DETECTOR);
-    public static final Block TORNADO_RADAR = block("tornado_radar", InstrumentBlock.Kind.TORNADO_RADAR);
+    /** The Doppler radar: a multi-block structure placed from one item (see the radar package). */
+    public static final Block TORNADO_RADAR = dopplerRadar();
     public static final Block TORNADO_SIREN = block("tornado_siren", InstrumentBlock.Kind.TORNADO_SIREN);
     public static final Block WEATHER_MONITOR = block("weather_monitor", InstrumentBlock.Kind.WEATHER_MONITOR);
 
@@ -73,6 +74,16 @@ public final class WeatherItems {
 
     public static void init() {
         WeatherUi.init();
+        com.stormreach.tornado.radar.RadarContent.init();
+    }
+
+    private static Block dopplerRadar() {
+        ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Stormreach.id("tornado_radar"));
+        Block b = Registry.register(BuiltInRegistries.BLOCK, key, new com.stormreach.tornado.radar.DopplerRadarBlock(BlockBehaviour.Properties.of().setId(key)
+                .mapColor(MapColor.METAL).strength(2.5f, 6.0f).sound(SoundType.COPPER).requiresCorrectToolForDrops().noOcclusion()));
+        ResourceKey<Item> ik = ResourceKey.create(Registries.ITEM, Stormreach.id("tornado_radar"));
+        METEOROLOGY.add(Registry.register(BuiltInRegistries.ITEM, ik, new com.stormreach.tornado.radar.DopplerRadarItem(b, new Item.Properties().setId(ik).useBlockDescriptionPrefix())));
+        return b;
     }
 
     private static Block block(String name, InstrumentBlock.Kind kind) {

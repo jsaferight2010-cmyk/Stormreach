@@ -185,4 +185,39 @@ outline_px = [(x, 3) for x in range(5, 11)] + [(4, y) for y in range(4, 14)] + [
              + [(x, 6) for x in range(5, 11)] + [(7, 1), (8, 1), (6, 2), (9, 2), (7, 8), (8, 8)]
 for p in outline_px: icon.putpixel(p, (55, 55, 55, 110))
 icon.save(f'{OUT}/gui/sprites/container/slot/backpack.png')
+# ---- Doppler radar structure (64x)
+def tex64(name, base, seed, painter):
+    rnd = random.Random(seed)
+    img = Image.new('RGBA', (64, 64), base + (255,))
+    for y in range(64):
+        for x in range(64):
+            k = 1 + (rnd.random() - 0.5) * 0.12
+            img.putpixel((x, y), tuple(max(0, min(255, int(c * k))) for c in base) + (255,))
+    painter(img, rnd)
+    img.save(f'{OUT}/block/{name}.png')
+def hazard(img, rnd):
+    for y in range(64):
+        for x in range(64):
+            if x < 6 or x > 57 or y < 6 or y > 57:
+                img.putpixel((x, y), (226, 184, 40, 255) if ((x + y) // 6) % 2 == 0 else (32, 30, 28, 255))
+    for i in range(10, 54, 16):                       # expansion joints
+        for t in range(10, 54): img.putpixel((i, t), (120, 120, 118, 255)); img.putpixel((t, i), (120, 120, 118, 255))
+tex64('radar_base', (168, 168, 162), 2001, hazard)
+def lattice(img, rnd):
+    for y in range(64):
+        for x in range(64):
+            if x < 4 or x > 59 or ((x + y) % 22 < 3) or ((x - y) % 22 < 3): img.putpixel((x, y), (205, 210, 214, 255))
+            elif not (x < 4 or x > 59): img.putpixel((x, y), (70, 74, 80, 255))
+tex64('radar_mast', (150, 155, 160), 2002, lattice)
+def gearbox(img, rnd):
+    for y in range(64):
+        for x in range(64):
+            if y % 16 in (0, 1): img.putpixel((x, y), (60, 64, 70, 255))
+            if (x - 32) ** 2 + (y - 32) ** 2 < 36: img.putpixel((x, y), (230, 190, 60, 255))
+tex64('radar_pedestal', (110, 116, 124), 2003, gearbox)
+def panels(img, rnd):
+    for y in range(64):
+        for x in range(64):
+            if x % 16 == 0 or y % 16 == 0: img.putpixel((x, y), (190, 196, 202, 255))
+tex64('radar_dish', (236, 239, 242), 2004, panels)
 print('textures6 done')

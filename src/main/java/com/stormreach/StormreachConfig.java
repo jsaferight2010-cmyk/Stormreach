@@ -111,6 +111,8 @@ public final class StormreachConfig {
     public static boolean puddles = true;
     /** Storm clouds you can watch build, tower and spread during thunderstorms. */
     public static boolean stormClouds = true;
+    /** Outline the Doppler radar's footprint while you hold one. */
+    public static boolean radarPlacementOutline = true;
     public static boolean downbursts = true;
     public static int shadowAppearanceRate = 100;
     public static boolean shadowSigns = true;
@@ -194,6 +196,7 @@ public final class StormreachConfig {
         creativeSeeThroughTornadoes = bool(p, "creativeSeeThroughTornadoes", creativeSeeThroughTornadoes);
         puddles = bool(p, "puddles", puddles);
         stormClouds = bool(p, "stormClouds", stormClouds);
+        radarPlacementOutline = bool(p, "radarPlacementOutline", radarPlacementOutline);
         downbursts = bool(p, "downbursts", downbursts);
         shadowAppearanceRate = num(p, "shadowAppearanceRate", shadowAppearanceRate, 0, 300);
         shadowSigns = bool(p, "shadowSigns", shadowSigns);
@@ -277,6 +280,7 @@ public final class StormreachConfig {
         p.setProperty("creativeSeeThroughTornadoes", String.valueOf(creativeSeeThroughTornadoes));
         p.setProperty("puddles", String.valueOf(puddles));
         p.setProperty("stormClouds", String.valueOf(stormClouds));
+        p.setProperty("radarPlacementOutline", String.valueOf(radarPlacementOutline));
         p.setProperty("downbursts", String.valueOf(downbursts));
         p.setProperty("shadowAppearanceRate", String.valueOf(shadowAppearanceRate));
         p.setProperty("shadowSigns", String.valueOf(shadowSigns));

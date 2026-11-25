@@ -3,6 +3,12 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 6: the Doppler radar is a real radar
+- **The Doppler Radar is now a multi-block structure**: a 3x3 concrete pad with hazard edging, a lattice mast, a pedestal, and a 3-block parabolic dish with its feed horn. The dish turns steadily, once every 8 seconds.
+- Place it from the one item; it needs a clear 3x3 space, 7 blocks tall. Using any part opens the radar scope. Breaking any part takes the whole radar down and gives back one radar.
+- **Placement outline:** while you hold the radar, its footprint is outlined: green if it fits, red if something is in the way. Turn it off with `radarPlacementOutline=false` in `config/stormreach.properties`.
+- It still links to a Weather Monitor (within 8 blocks of the pedestal) and still gives a redstone signal when a tornado is near.
+
 ### Stage 5: weather screens
 - **Every weather device opens its own screen** instead of printing to chat. Sneak + use still prints the old chat reading.
   - The anemometer and wind vane show the Wind tab: a compass rose with the wind's direction, average and gusts, and the Beaufort scale.

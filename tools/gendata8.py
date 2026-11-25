@@ -75,6 +75,19 @@ for name in ('weather_station', 'tornado_radar', 'weather_monitor', 'storm_detec
     model(name, {'parent': 'minecraft:block/cube', 'textures': {'particle': side, 'north': f'stormreach:block/{name}_front', 'south': side,
            'east': side, 'west': side, 'up': top, 'down': side}})
     simple_state(name); item_def(name, 'block/' + name)
+# 5.1: the Doppler radar is a multi-block structure; its controller is the pedestal on top of the mast
+model('tornado_radar_item', {'parent': 'minecraft:block/cube', 'textures': {'particle': 'stormreach:block/tornado_radar_side',
+      'north': 'stormreach:block/tornado_radar_front', 'south': 'stormreach:block/tornado_radar_side', 'east': 'stormreach:block/tornado_radar_side',
+      'west': 'stormreach:block/tornado_radar_side', 'up': 'stormreach:block/tornado_radar_top', 'down': 'stormreach:block/tornado_radar_side'}})
+item_def('tornado_radar', 'block/tornado_radar_item')
+model('tornado_radar', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/radar_pedestal', 'p': 'stormreach:block/radar_pedestal'},
+      'elements': [box([3, 0, 3], [13, 9, 13], '#p'), box([5, 9, 5], [11, 11, 11], '#p')]})
+model('radar_part_base', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/radar_base', 'b': 'stormreach:block/radar_base'},
+      'elements': [box([0, 0, 0], [16, 8, 16], '#b')]})
+model('radar_part_mast', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/radar_mast', 'm': 'stormreach:block/radar_mast'},
+      'elements': [box([5, 0, 5], [11, 16, 11], '#m')]})
+model('radar_part_dish', {'textures': {'particle': 'stormreach:block/radar_dish'}})
+w(f'{A}/blockstates/radar_part.json', {'variants': {f'part={p}': {'model': ns(f'block/radar_part_{p}')} for p in ('base', 'mast', 'dish')}})
 model('anemometer', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/anemometer', 'a': 'stormreach:block/anemometer'}, 'elements': [
     box([7, 0, 7], [9, 12, 9], '#a'), box([1, 12, 7.5], [15, 13, 8.5], '#a'), box([7.5, 12, 1], [8.5, 13, 15], '#a'),
     box([0, 11, 6], [2, 14, 9], '#a'), box([14, 11, 7], [16, 14, 10], '#a'), box([7, 11, 0], [10, 14, 2], '#a'), box([6, 11, 14], [9, 14, 16], '#a')]})
@@ -360,6 +373,9 @@ MSG = {
  'gui.stormreach.weather.ground': 'Ground wetness: %s%%',
  'gui.stormreach.weather.forecast': 'Forecast: %s',
  'gui.stormreach.weather.range': 'Range %s blocks',
+ 'block.stormreach.tornado_radar.blocked': 'Not enough room: the Doppler radar needs a clear 3x3 space, 7 blocks tall.',
+ 'block.stormreach.radar_part': 'Doppler Radar',
+ 'item.stormreach.tornado_radar.tooltip': 'Places a 3x3, 7-block-tall radar with a rotating dish. Use any part to open the radar scope.',
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',

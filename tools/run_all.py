@@ -13,7 +13,7 @@ if snd.exists(): shutil.copytree(snd, keep)
 for d in ('assets', 'data'):
     shutil.rmtree(res / d, ignore_errors=True)
 try:
-  for s in ('textures.py', 'textures2.py', 'textures3.py', 'gendata.py', 'gendata2.py', 'gendata3.py', 'gendata5.py', 'gendata4.py', 'textures4.py', 'gendata6.py', 'gendata7.py', 'textures5.py', 'gendata8.py', 'textures6.py', 'guidebooks.py', 'fixorder.py'):
+  for s in ('textures.py', 'textures2.py', 'textures3.py', 'gendata.py', 'gendata2.py', 'gendata3.py', 'gendata5.py', 'gendata4.py', 'textures4.py', 'gendata6.py', 'gendata7.py', 'textures5.py', 'gendata8.py', 'textures6.py', 'guidebooks.py', 'hd64.py', 'fixorder.py'):
     print('==', s); runpy.run_path(str(here / s), run_name='__main__')
 finally:
   # put the sounds back even if a script failed

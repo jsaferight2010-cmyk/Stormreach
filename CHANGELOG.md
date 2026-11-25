@@ -3,6 +3,12 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 12: 64x blocks
+- **Every Stormreach block texture is now 64x64** (animated ones keep their animation): 170 textures in all.
+  - The 5.1 additions were drawn at 64x: radar, vault, lamps, locks.
+  - The older ones were upscaled with a detail pass: each original pixel becomes a 4x4 cell with a soft bevel and fine grain, so bricks, crystals and metal read as carved, stacked or riveted, and the designs stay recognisable.
+- Storm versions of vanilla blocks still use the vanilla textures, tinted, and pick up your resource pack's resolution.
+
 ### Stage 11: the Tempest Spire temple and the Sovereign's arena
 - **The Tempest Spire is now a temple** (25 x 25, 52 tall):
   - three stepped terraces with stairs up every side

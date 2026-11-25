@@ -80,6 +80,14 @@ public final class RadarScan {
                     double fade = Math.exp(-(d / reach) * (d / reach));
                     u = u + (s.u() - u) * fade;          // the vortex (with its own motion) takes over near the funnel
                     v = v + (sampleV(s) - v) * fade;
+                    // the parent mesocyclone: a broad, weaker circulation the radar resolves even when the tornado
+                    // itself is smaller than a gate (that is what a real velocity couplet usually is)
+                    double rm = Math.max(70, f.coreRadius * 6), vm = Math.min(45, f.vMax * 0.45);
+                    if (d < rm * 6 && d > 0.5) {
+                        double vt = WindField.tangential(vm, rm, d) * Math.exp(-(d / (rm * 3)) * (d / (rm * 3)));
+                        u += vt * (tz / d) * f.rotationSign;
+                        v += vt * (-tx / d) * f.rotationSign;
+                    }
                     if (d < Math.max(12, tor.visualWidth() * 1.5)) { debris = true; dbz = RadarMath.combineDbz(dbz, 62); }   // debris ball
                     else dbz = RadarMath.combineDbz(dbz, RadarMath.coreDbz(48, reach * 0.6, d));                           // hook echo / RFD precip
                 }

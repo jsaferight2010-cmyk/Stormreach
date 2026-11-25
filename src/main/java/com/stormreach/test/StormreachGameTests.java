@@ -328,7 +328,7 @@ public class StormreachGameTests {
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 2))),
                 stationary(TornadoFormation.SUPERCELL, EFScale.EF0, 70, 4));
         Check.isTrue(h, t != null, "tornado did not spawn");
-        Vec3 target = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(12, 2, 2)));
+        Vec3 target = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 2, 2))); // stay inside the test's ticking chunks
         t.steerTo(target);
         h.runAfterDelay(80, () -> {
             double d = Math.hypot(t.getX() - target.x, t.getZ() - target.z);

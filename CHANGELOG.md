@@ -3,6 +3,18 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 4: backpacks get their own slot
+- **A backpack slot** in the inventory, just above the offhand slot. It's separate from the chestplate, so you can wear armour and a backpack together.
+  - Shift-click a backpack to put it on or take it off, or sneak + use with one in hand.
+  - The Open Backpack key (B) opens the one you're wearing first.
+- **Worn backpacks show on your back**, sitting over a chestplate instead of clipping into it. Every tier looks different:
+  - its own colours and trim on every tier
+  - side pockets from Storm Crystal up and a bedroll from Aurorite up
+  - a glowing crystal on the Maelstrom pack
+  - the Storm Chaser's Pack has its own look
+- Contents stay in the backpack whether it's worn, carried or dropped. It saves with your character, Soulbound keeps a worn pack too, and without Soulbound it drops on death like armour.
+- In the Creative inventory tab the slot is hidden; sneak + use or the B key still work there.
+
 ### Stage 3: rain, hail, downbursts and storm clouds
 - **Real hailstones** in six sizes: pea, marble, quarter, golf ball, baseball and softball.
   - Each falls at its real terminal speed and is drawn as a lumpy ball of ice sized to its class.

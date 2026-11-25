@@ -143,4 +143,46 @@ for y in range(64):
         v = min(1, v)
         img.putpixel((x, y), (int(58 + 90 * v), int(84 + 90 * v), int(118 + 80 * v), int(150 + 60 * v)))
 img.save(f'{OUT}/block/puddle.png')
+# ---- worn backpacks (64x32 entity textures, one per tier; see BackpackModel for the UV layout)
+os.makedirs(f'{OUT}/entity/backpack', exist_ok=True)
+TIERS = {'diamond': ('#7a5232', '#4fd6d0'), 'obsidian': ('#2a1f3d', '#7b4fc9'), 'netherite': ('#3b3534', '#b08a3a'),
+         'storm_crystal': ('#2f4a66', '#7fd4ff'), 'voltite': ('#5a4a1e', '#f2c94c'), 'aurorite': ('#5e2a6e', '#d66be8'),
+         'maelstrom': ('#1c2333', '#6fdcff'), 'storm_chasers': ('#5f6334', '#e07a2a')}
+def hx(h): h = h.lstrip('#'); return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+def shade(c, k): return tuple(max(0, min(255, int(v * k))) for v in c)
+def box_uv(u, v, w, h, d):
+    # Minecraft cube UV layout: top, bottom; then left, front, right, back
+    return {'top': (u + d, v, w, d), 'bottom': (u + d + w, v, w, d), 'left': (u, v + d, d, h), 'front': (u + d, v + d, w, h),
+            'right': (u + d + w, v + d, d, h), 'back': (u + 2 * d + w, v + d, w, h)}
+for name, (base_h, trim_h) in TIERS.items():
+    rnd = random.Random(sum(map(ord, name)) * 7919)
+    base, trim = hx(base_h), hx(trim_h)
+    img = Image.new('RGBA', (64, 32), (0, 0, 0, 0))
+    def fill(rect, col, grain=0.08, edge=True):
+        x0, y0, w, h = rect
+        for y in range(y0, y0 + h):
+            for x in range(x0, x0 + w):
+                k = 1 + (rnd.random() - 0.5) * grain * 2
+                if edge and (x in (x0, x0 + w - 1) or y in (y0, y0 + h - 1)): k *= 0.72   # stitched seams
+                img.putpixel((x, y), shade(col, k) + (255,))
+    for face, r in box_uv(0, 0, 8, 10, 4).items(): fill(r, base)              # bag
+    for face, r in box_uv(0, 14, 9, 4, 5).items(): fill(r, shade(base, 1.18))  # flap
+    fx, fy, fw, fh = box_uv(0, 14, 9, 4, 5)['back']                           # buckle on the flap's outer face
+    for y in range(fy + 1, fy + 4):
+        for x in (fx + 4, fx + 5): img.putpixel((x, y), trim + (255,))
+    bx, by, bw, bh = box_uv(0, 0, 8, 10, 4)['back']                           # trim band across the bag
+    for x in range(bx, bx + bw): img.putpixel((x, by + 6), shade(trim, 0.9) + (255,))
+    for face, r in box_uv(28, 0, 2, 5, 3).items(): fill(r, shade(base, 0.9))   # side pockets
+    for face, r in box_uv(0, 23, 10, 3, 3).items(): fill(r, shade(trim, 0.55), 0.12)  # bedroll
+    for face, r in box_uv(38, 8, 2, 4, 2).items(): fill(r, trim, 0.2, False)  # maelstrom crystal
+    for face, r in box_uv(48, 0, 1, 9, 1).items(): fill(r, shade(base, 0.7), 0.05, False)  # straps
+    img.save(f'{OUT}/entity/backpack/{name}.png')
+
+# empty worn-backpack slot icon (GUI sprite, 16x16): a faint backpack outline like vanilla's empty armour slots
+os.makedirs(f'{OUT}/gui/sprites/container/slot', exist_ok=True)
+icon = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
+outline_px = [(x, 3) for x in range(5, 11)] + [(4, y) for y in range(4, 14)] + [(11, y) for y in range(4, 14)] + [(x, 14) for x in range(5, 11)] \
+             + [(x, 6) for x in range(5, 11)] + [(7, 1), (8, 1), (6, 2), (9, 2), (7, 8), (8, 8)]
+for p in outline_px: icon.putpixel(p, (55, 55, 55, 110))
+icon.save(f'{OUT}/gui/sprites/container/slot/backpack.png')
 print('textures6 done')

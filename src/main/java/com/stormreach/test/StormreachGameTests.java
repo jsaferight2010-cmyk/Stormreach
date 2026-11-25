@@ -419,4 +419,34 @@ public class StormreachGameTests {
             });
         });
     }
+
+    @GameTest
+    public void theBackpackHasItsOwnEquipmentSlot(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        ItemStack pack = new ItemStack(Backpacks.BY_TIER.get(BackpackTier.DIAMOND));
+        ItemStack chest = new ItemStack(Items.IRON_CHESTPLATE);
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, chest);
+        p.getInventory().setItem(9, pack);
+        var menu = p.inventoryMenu;
+        net.minecraft.world.inventory.Slot worn = null;
+        for (var s : menu.slots) if (s instanceof com.stormreach.backpack.BackpackEquipment.WornSlot) worn = s;
+        Check.isTrue(h, worn != null, "the inventory has no backpack slot");
+        int from = -1;
+        for (var s : menu.slots) if (s.container == p.getInventory() && s.getContainerSlot() == 9) from = s.index;
+        menu.quickMoveStack(p, from);
+        Check.isTrue(h, com.stormreach.backpack.BackpackEquipment.worn(p).getItem() instanceof BackpackItem, "shift-click didn't put the backpack on");
+        Check.isTrue(h, p.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST) == chest, "the chestplate was disturbed: the pack must not use the chest slot");
+        Check.isTrue(h, p.getInventory().getItem(9).isEmpty(), "the backpack was duplicated");
+        Check.isFalse(h, worn.mayPlace(new ItemStack(Items.DIRT)), "only backpacks fit the backpack slot");
+        // its contents are kept while worn
+        BackpackStorage st = BackpackStorage.read(com.stormreach.backpack.BackpackEquipment.worn(p), 27);
+        st.items.set(0, new ItemStack(Items.EMERALD, 5));
+        st.write(com.stormreach.backpack.BackpackEquipment.worn(p));
+        menu.quickMoveStack(p, worn.index);
+        Check.isTrue(h, com.stormreach.backpack.BackpackEquipment.worn(p).isEmpty(), "shift-click didn't take the backpack off");
+        ItemStack back = ItemStack.EMPTY;
+        for (int i = 0; i < 36; i++) if (p.getInventory().getItem(i).getItem() instanceof BackpackItem) back = p.getInventory().getItem(i);
+        Check.isTrue(h, BackpackStorage.read(back, 27).items.get(0).is(Items.EMERALD), "the backpack lost its contents");
+        h.succeed();
+    }
 }

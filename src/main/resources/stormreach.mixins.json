@@ -3,6 +3,7 @@
   "package": "com.stormreach.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
+    "InventoryMenuMixin",
     "InventoryMixin",
     "ItemEntityMixin",
     "LightningBoltMixin",

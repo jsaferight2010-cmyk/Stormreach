@@ -321,6 +321,7 @@ MSG = {
  'block.stormreach.puddle': 'Puddle',
  'entity.stormreach.hailstone': 'Hailstone',
  'entity.stormreach.storm_cell': 'Storm Cloud',
+ 'item.stormreach.backpack.worn_hint': 'Sneak + use to wear it (it has its own slot, above your offhand).',
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',

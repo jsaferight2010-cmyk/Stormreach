@@ -112,7 +112,8 @@ public class BackpackMenu extends ChestMenu {
 
     @Override
     public boolean stillValid(Player player) {
-        if (stack.isEmpty() && lockedInventorySlot < 0) return true; // client side
+        if (stack.isEmpty() && lockedInventorySlot == -1) return true; // client side
+        if (lockedInventorySlot == BackpackEquipment.WORN) return player.isAlive() && BackpackEquipment.worn(player) == stack;
         return player.isAlive() && player.getInventory().getItem(lockedInventorySlot) == stack;
     }
 

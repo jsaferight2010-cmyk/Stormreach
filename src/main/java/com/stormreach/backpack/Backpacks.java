@@ -92,6 +92,10 @@ public final class Backpacks {
         ServerPlayNetworking.registerGlobalReceiver(OpenBackpackPayload.TYPE, (payload, ctx) -> {
             ServerPlayer p = ctx.player();
             ctx.server().execute(() -> {
+                if (BackpackEquipment.isBackpack(BackpackEquipment.worn(p))) { // the worn pack first
+                    open(p, BackpackEquipment.WORN);
+                    return;
+                }
                 Inventory inv = p.getInventory();
                 int[] order = new int[inv.getContainerSize()];
                 // offhand first, then hotbar, then the main inventory
@@ -126,8 +130,9 @@ public final class Backpacks {
         });
     }
 
+    /** Opens the backpack in inventory slot {@code invSlot}, or the worn one for {@link BackpackEquipment#WORN}. */
     public static void open(ServerPlayer player, int invSlot) {
-        ItemStack stack = player.getInventory().getItem(invSlot);
+        ItemStack stack = invSlot == BackpackEquipment.WORN ? BackpackEquipment.worn(player) : player.getInventory().getItem(invSlot);
         if (!(stack.getItem() instanceof BackpackItem bp)) return;
         int capacity = bp.slots(player.level(), stack);
         int rows = BackpackTier.rows(capacity);
@@ -147,6 +152,11 @@ public final class Backpacks {
                 kept.add(s);
                 inv.setItem(i, ItemStack.EMPTY);
             }
+        }
+        ItemStack worn = BackpackEquipment.worn(sp);
+        if (worn.getItem() instanceof BackpackItem && BackpackEnchants.level(sp.level(), worn, BackpackEnchants.SOULBOUND) > 0) {
+            kept.add(worn);
+            sp.setItemSlot(BackpackEquipment.SLOT, ItemStack.EMPTY);
         }
         if (!kept.isEmpty()) {
             SOULBOUND.computeIfAbsent(sp.getUUID(), k -> new ArrayList<>()).addAll(kept);

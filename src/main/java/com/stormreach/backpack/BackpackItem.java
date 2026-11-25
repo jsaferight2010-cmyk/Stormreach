@@ -56,6 +56,14 @@ public class BackpackItem extends Item {
 
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
+        if (player.isSecondaryUseActive()) {
+            // sneak + use: put it on your back (or swap with the one you're wearing)
+            if (!level.isClientSide()) {
+                BackpackEquipment.swapFromHand(player, hand);
+                level.playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER.value(), net.minecraft.sounds.SoundSource.PLAYERS, 1f, 0.9f);
+            }
+            return InteractionResult.SUCCESS;
+        }
         if (!level.isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp) {
             int slot = hand == InteractionHand.OFF_HAND ? 40 : sp.getInventory().getSelectedSlot();
             Backpacks.open(sp, slot);

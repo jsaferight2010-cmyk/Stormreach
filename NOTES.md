@@ -289,3 +289,15 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
   - the temple redesign and optional boss arena
   - the full 64x art pass for the remaining 4.0/5.0 blocks, items, mobs and armour, possibly with Meshy for 3D references
   - the GameTests still run on a headless server in GitHub Actions (the user's "no server" constraint applies to this session, not CI; flag in the final report)
+
+### 5.1 stages 11–12 and status
+- Stage 11: the Tempest Spire was redesigned in gendata7.py (25x25x52 temple, spiral stair, crown altar). `realm/SovereignArena` is the optional sky arena (sovereignArena config) with safe teleport out and back, a fall-off catch and return on rejoin, ticked from ServerLevelMixin.
+- Stage 12: `tools/hd64.py` runs last in run_all and upscales 16x block textures to 64x with a bevel and grain pass. It skips anything already larger, so real 64x art drawn later replaces it.
+- Not done from the overhaul spec:
+  - Hollow Keeper behaviour improvements
+  - redrawn 64x items, mobs and armour (items are still 16x/32x)
+  - Meshy-made 3D models (not used)
+  - block step and break sounds (still vanilla SoundTypes)
+- Verified by CI only (headless server GameTests, 28 of them); never run in a client:
+  - all rendering: tornado and cloud meshes, radar dish, backpack layer, screens, particles, locker camera
+  - generation of the new maze and temple in a real world

@@ -232,6 +232,17 @@ public class StormreachGameTests {
         });
     }
 
+    /**
+     * The GameTest server encloses each test in barrier blocks, roof included. Tornadoes find the ground with the
+     * heightmap, so tests that need open sky take the roof off over their area first.
+     */
+    private static void openSky(GameTestHelper h, int x0, int z0, int x1, int z1) {
+        for (int x = x0; x <= x1; x++) for (int z = z0; z <= z1; z++) for (int y = 1; y <= 40; y++) {
+            BlockPos a = h.absolutePos(new BlockPos(x, y, z));
+            if (h.getLevel().getBlockState(a).is(Blocks.BARRIER)) h.getLevel().setBlock(a, Blocks.AIR.defaultBlockState(), 2);
+        }
+    }
+
     private static TornadoProfile stationary(TornadoFormation formation, EFScale rating, double gustMph, double width) {
         return new TornadoProfile(formation, rating, gustMph, com.stormreach.sim.TornadoMorphology.STOVEPIPE,
                 com.stormreach.sim.VortexStructure.SINGLE, 0, width, 0.0, 0, 1, 6000, com.stormreach.sim.TornadoRelation.NONE);
@@ -239,6 +250,7 @@ public class StormreachGameTests {
 
     @GameTest(maxTicks = 60)
     public void aNewTornadoComesDownBeforeItDoesDamage(GameTestHelper h) {
+        openSky(h, 0, 0, 4, 4);
         for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.OAK_PLANKS);
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(2, 2, 2))),
                 stationary(TornadoFormation.SUPERCELL, EFScale.EF5, 230, 20));
@@ -255,6 +267,7 @@ public class StormreachGameTests {
 
     @GameTest(maxTicks = 100)
     public void anEf5TearsUpBlocksAndCarriesMobsAloft(GameTestHelper h) {
+        openSky(h, -4, -4, 12, 12);
         for (int x = 0; x < 9; x++) for (int z = 0; z < 9; z++) { h.setBlock(new BlockPos(x, 1, z), Blocks.OAK_PLANKS); h.setBlock(new BlockPos(x, 2, z), Blocks.OAK_PLANKS); }
         var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(8, 3, 4)); // at the core's edge, where the wind peaks
         double startY = zombie.getY();
@@ -279,6 +292,7 @@ public class StormreachGameTests {
 
     @GameTest(maxTicks = 120)
     public void waterspoutsStayOverWater(GameTestHelper h) {
+        openSky(h, -2, -2, 14, 14);
         for (int x = 0; x < 13; x++) for (int z = 0; z < 13; z++) {
             h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
             h.setBlock(new BlockPos(x, 2, z), x >= 2 && x <= 10 && z >= 2 && z <= 10 ? Blocks.WATER : Blocks.GRASS_BLOCK);
@@ -308,6 +322,7 @@ public class StormreachGameTests {
 
     @GameTest(maxTicks = 100)
     public void theTornadoDirectorSteersATornadoToItsTarget(GameTestHelper h) {
+        openSky(h, 0, 0, 13, 5);
         for (int x = 0; x < 14; x++) for (int z = 0; z < 6; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 2))),
                 stationary(TornadoFormation.SUPERCELL, EFScale.EF0, 70, 4));

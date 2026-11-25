@@ -3,6 +3,20 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 2: tornadoes and waterspouts rebuilt
+- **They come down from the sky.** A new tornado starts as a bulge under the cloud base and lowers a pointed funnel until it reaches the ground. A dust whirl (or spray over water) spins up underneath first. It only damages blocks and pulls things in once it touches down, and it lifts back into the cloud when it ropes out or is dispelled.
+- **New look**, drawn as layered, turbulent meshes instead of stacked boxes:
+  - a lumpy condensation funnel with a looser outer sheath, spinning at a rate that fits its width (ropes whirl, wedges turn slowly)
+  - a tall debris cloud at the base (dusty for landspouts, white spray for waterspouts)
+  - a cloud base for the funnel to hang from, with a lowered, rotating wall cloud under supercells
+  - suction vortices orbiting inside multiple-vortex tornadoes
+  - ropes and needles snake about; each shape (rope, needle, drill bit, cone, stovepipe, wedge) keeps its own profile
+- **Violent tornadoes are violent.** Stronger, wider tornadoes check up to four times as many blocks. They strip roofs first, then tear into the walls below. An EF5 levels most things in its core.
+- **Debris is picked up, carried and thrown.** Blocks spiral up around the core, ride the vortex for a while (longer in stronger tornadoes), then fly out along the rotation. Anything they hit takes damage.
+- **Wind forces on players and mobs** depend on size and armour: an EF3 skids you along, an EF4 lifts you, an EF5 carries you high and throws you. Sneaking helps you brace. Fall damage counts from where you're dropped.
+- **Waterspouts stay over water.** They only form over open water, steer away from the shore, and fall apart if pushed onto land. They don't scour the lakebed. The waterspout spawner tells you if there's no water.
+- Shape, formation and vortex structure stay independent. The EF rating still comes from the damage survey.
+
 ### Stage 1: crash and gameplay fixes
 - **Sovereign Altar crash fixed.** The ritual could aim a lightning strike at a spot with no ground under it (an altar over the void or over open air), which crashed the server. Strikes now step inward to find ground and always have a target.
 - **Lightning Staff no longer burns anything.** Its bolts still hit as hard, but they light no fires and set nothing (you, mobs, the ground) on fire. No Fire Resistance is applied or shown; only the staff's own bolts are affected, so natural lightning works as before.

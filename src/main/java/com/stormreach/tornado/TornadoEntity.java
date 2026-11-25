@@ -4,6 +4,8 @@ import com.stormreach.Stormreach;
 import com.stormreach.StormreachConfig;
 import com.stormreach.sim.DebrisBudget;
 import com.stormreach.sim.EFScale;
+import com.stormreach.sim.FunnelShape;
+import com.stormreach.sim.VortexForces;
 import com.stormreach.sim.StructuralIntegrity.MaterialClass;
 import com.stormreach.sim.TornadoFormation;
 import com.stormreach.sim.TornadoMorphology;
@@ -41,8 +43,9 @@ import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -70,8 +73,20 @@ public class TornadoEntity extends Entity {
     private UUID parentId;
     private double orbitAngle;
     private final DebrisBudget budget = new DebrisBudget(0, 0);
-    private final List<FallingBlockEntity> debris = new ArrayList<>();
+    /** Blocks the tornado has picked up, and where each one is in its ride (spiralling up, then thrown). */
+    private final Map<FallingBlockEntity, Flight> debris = new LinkedHashMap<>();
+    private int offWaterTicks;
+
+    private static final class Flight {
+        int ticks;
+        final int carry;
+        final double orbit;
+        boolean thrown;
+        Flight(int carry, double orbit) { this.carry = carry; this.orbit = orbit; }
+    }
     private double headingDeg;
+    /** Client only: the funnel's accumulated spin angle (radians), and last tick's, for smooth interpolation. */
+    public float clientSpin, clientSpinO;
 
     public TornadoEntity(EntityType<? extends TornadoEntity> type, Level level) {
         super(type, level);
@@ -140,6 +155,18 @@ public class TornadoEntity extends Entity {
 
     public boolean isDissipating() { return dissipating; }
 
+    private boolean simulateWithoutPlayers;
+
+    /** GameTests: jump to a point in the tornado's life (0..1). */
+    public void skipTo(double lifeFraction) {
+        if (profile != null) age = (int) Math.round(profile.lifetimeTicks() * Math.max(0, Math.min(1, lifeFraction)));
+    }
+
+    /** GameTests: run the full simulation even with no real player nearby (mock players aren't in the level's list). */
+    public void simulateWithoutPlayers() { simulateWithoutPlayers = true; }
+
+    public int damagedBlocks() { return damagedBlocks; }
+
     public double lifeFraction() {
         return profile == null ? 0 : Math.min(1, age / (double) profile.lifetimeTicks());
     }
@@ -189,24 +216,22 @@ public class TornadoEntity extends Entity {
         maxWidth = Math.max(maxWidth, width);
         entityData.set(WIDTH, width);
         entityData.set(INTENSITY, (float) TornadoStage.intensityAt(f));
-        entityData.set(FUNNEL_REACH, (float) Mth.clamp(f / 0.2, 0.15, 1.0) * (f > 0.95 ? (float) ((1 - f) / 0.05) : 1f));
+        double reach = FunnelShape.reach(f);
+        entityData.set(FUNNEL_REACH, (float) reach);
         if (f >= 1.0) {
             finish(level);
             return;
         }
         move(level);
         Player near = level.getNearestPlayer(getX(), getY(), getZ(), StormreachConfig.tornadoSimulationDistance, false);
-        if (near == null) return; // keep moving and ageing, but skip the expensive parts far from players
-        if (tickCount % 2 == 0) pushEntities(level);
-        if (StormreachConfig.tornadoDestruction) damageBlocks(level);
-        debris.removeIf(e -> e.isRemoved());
-        budget.setAirborne(debris.size());
-        for (FallingBlockEntity d : debris) {
-            if (d.tickCount < 60) {
-                Vec3 w = windAt(d.position()).scale(0.05); // m/s to blocks per tick
-                d.setDeltaMovement(d.getDeltaMovement().scale(0.8).add(w.scale(0.2)).add(0, 0.03, 0));
-            }
+        if (near == null && !simulateWithoutPlayers) return; // keep moving and ageing, but skip the expensive parts far from players
+        // nothing happens on the ground until the funnel has come down and touched it
+        boolean down = FunnelShape.touchedDown(reach);
+        if (down) {
+            pushEntities(level);
+            if (StormreachConfig.tornadoDestruction) damageBlocks(level);
         }
+        flyDebris(level, down);
         if (tickCount % 40 == 0) {
             level.playSound(null, blockPosition(), SoundEvents.ELYTRA_FLYING, SoundSource.WEATHER, 3.0f + intensity() * 4f, 0.4f);
         }
@@ -232,10 +257,58 @@ public class TornadoEntity extends Entity {
         headingDeg += (random.nextDouble() - 0.5) * 0.6;
         if (f > 0.7) headingDeg -= 0.05 * rotationSign();
         double speed = profile.translationMs() * (f > 0.85 ? 0.6 : 1.0) * 0.05; // m/s to blocks/tick
+        if (formation() == TornadoFormation.WATERSPOUT) speed *= 0.6; // waterspouts drift slowly
         double rad = Math.toRadians(headingDeg);
         double nx = getX() + Math.cos(rad) * speed, nz = getZ() + Math.sin(rad) * speed;
+        if (formation() == TornadoFormation.WATERSPOUT) {
+            // a waterspout stays over open water: steer away from shore, and if it is pushed onto land it dies
+            double look = Math.max(6, visualWidth());
+            if (!overWater(level, getX() + Math.cos(rad) * look, getZ() + Math.sin(rad) * look)) {
+                for (int turn = 20; turn <= 180; turn += 20) {
+                    boolean found = false;
+                    for (int sign : new int[]{1, -1}) {
+                        double h = Math.toRadians(headingDeg + sign * turn);
+                        if (overWater(level, getX() + Math.cos(h) * look, getZ() + Math.sin(h) * look)) {
+                            headingDeg += sign * Math.min(turn, 6); // turn a few degrees per tick, not instantly
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) break;
+                }
+                rad = Math.toRadians(headingDeg);
+                nx = getX() + Math.cos(rad) * speed;
+                nz = getZ() + Math.sin(rad) * speed;
+            }
+            if (!overWater(level, nx, nz)) {
+                nx = getX(); nz = getZ(); // hold position rather than go ashore
+            }
+            if (!overWater(level, getX(), getZ())) {
+                if (++offWaterTicks > 40 && !dissipating) dissipate(); // landfall: the waterspout falls apart
+            } else offWaterTicks = 0;
+        }
         setPos(nx, groundY(level, nx, nz), nz);
         pathLength += position().distanceTo(before);
+    }
+
+    /** True if the surface at x/z is water (a lake, river or ocean). */
+    public static boolean overWater(ServerLevel level, double x, double z) {
+        BlockPos top = BlockPos.containing(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(x), Mth.floor(z)) - 1, z);
+        return level.isLoaded(top) && level.getFluidState(top).is(net.minecraft.tags.FluidTags.WATER);
+    }
+
+    /** Nearest open water to {@code at} within {@code radius} blocks, or null. */
+    public static Vec3 findWater(ServerLevel level, Vec3 at, int radius) {
+        if (overWater(level, at.x, at.z)) return at;
+        for (int r = 4; r <= radius; r += 4) {
+            for (int a = 0; a < 16; a++) {
+                double ang = a * Math.PI / 8;
+                double x = at.x + Math.cos(ang) * r, z = at.z + Math.sin(ang) * r;
+                if (overWater(level, x, z) && overWater(level, x + 3, z) && overWater(level, x - 3, z) && overWater(level, x, z + 3) && overWater(level, x, z - 3))
+                    return new Vec3(x, at.y, z);
+            }
+        }
+        return null;
     }
 
     private static double groundY(ServerLevel level, double x, double z) {
@@ -245,21 +318,27 @@ public class TornadoEntity extends Entity {
 
     private void pushEntities(ServerLevel level) {
         double reach = Math.max(12, visualWidth() * 1.8);
-        AABB box = new AABB(getX() - reach, getY() - 4, getZ() - reach, getX() + reach, getY() + cloudBase(), getZ() + reach);
-        for (Entity e : level.getEntities(this, box, e -> !(e instanceof TornadoEntity) && !e.isSpectator() && !(e instanceof Player p && p.isCreative()))) {
+        double peak = currentPeakMph();
+        double ceiling = VortexForces.ceiling(peak);
+        AABB box = new AABB(getX() - reach, getY() - 4, getZ() - reach, getX() + reach, getY() + Math.max(cloudBase(), ceiling + 8), getZ() + reach);
+        for (Entity e : level.getEntities(this, box, e -> !(e instanceof TornadoEntity) && !e.isSpectator() && !(e instanceof Player p && (p.isCreative() || p.isSpectator()))
+                && !(e instanceof FallingBlockEntity fb && debris.containsKey(fb)) && !e.isPassenger())) {
             Vec3 w = windAt(e.position());
             double mph = EFScale.msToMph(Math.hypot(w.x, w.z));
             if (mph < 40) continue;
-            // drag pulls the entity toward the wind's velocity; heavier (armored) players resist slightly
-            double k = e instanceof LivingEntity le ? 0.04 / (1 + le.getArmorValue() * 0.02) : 0.06;
-            Vec3 target = w.scale(0.05);
+            double above = e.getY() - groundY(level, e.getX(), e.getZ());
+            int armor = e instanceof LivingEntity le ? le.getArmorValue() : 0;
+            double mass = VortexForces.mass(e.getBbWidth(), e.getBbHeight(), armor);
+            double dx = e.getX() - getX(), dz = e.getZ() - getZ(), r = Math.max(0.01, Math.hypot(dx, dz));
             Vec3 v = e.getDeltaMovement();
-            Vec3 dv = target.subtract(v).scale(k);
-            double lift = mph > 95 ? Math.min(0.12, (mph - 95) / 900.0) : 0;
-            e.setDeltaMovement(v.add(dv.x, dv.y * 0.5 + lift, dv.z));
+            double[] nv = VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{w.x * 0.05, w.y * 0.05 * 0.3, w.z * 0.05}, mph, mass,
+                    e.onGround(), e instanceof Player p && p.isShiftKeyDown(), above, ceiling, new double[]{dx / r, dz / r});
+            e.setDeltaMovement(nv[0], nv[1], nv[2]);
             e.needsSync = true;
-            if (e instanceof LivingEntity le && mph > 110 && tickCount % 20 == 0) {
-                le.hurtServer(level, level.damageSources().flyIntoWall(), (float) ((mph - 110) / 25.0) * (carriesBadge(le) ? 0.5f : 1f));
+            if (nv[1] > 0.05) e.resetFallDistance(); // fall damage counts from where they're dropped, not from the ground
+            if (e instanceof LivingEntity le && tickCount % 10 == 0) {
+                double dps = VortexForces.windDamagePerSecond(mph);
+                if (dps > 0) le.hurtServer(level, level.damageSources().flyIntoWall(), (float) (dps * 0.5) * (carriesBadge(le) ? 0.5f : 1f));
             }
             if (e instanceof ServerPlayer sp && mph > 65 && tickCount % 200 == 0) {
                 com.stormreach.progress.StormAdvancements.award(sp, "inside_tornado");
@@ -267,9 +346,15 @@ public class TornadoEntity extends Entity {
         }
     }
 
+    /** The strongest ground-relative wind the tornado can produce right now, mph. */
+    public double currentPeakMph() {
+        return profile == null ? 0 : profile.peakGustMph() * Math.max(0.01, TornadoStage.intensityAt(lifeFraction()));
+    }
+
     private void damageBlocks(ServerLevel level) {
         budget.newTick();
-        int checks = StormreachConfig.tornadoBlockChecksPerTick;
+        int checks = VortexForces.blockChecks(StormreachConfig.tornadoBlockChecksPerTick, currentPeakMph(), visualWidth());
+        boolean water = formation() == TornadoFormation.WATERSPOUT;
         int limit = StormreachConfig.tornadoDebrisLimit;
         double radius = Math.max(6, visualWidth() * 1.4 + 4);
         RandomSource rnd = level.getRandom();
@@ -279,7 +364,10 @@ public class TornadoEntity extends Entity {
             double r = Math.sqrt(rnd.nextDouble()) * radius;
             int x = Mth.floor(getX() + Math.cos(a) * r), z = Mth.floor(getZ() + Math.sin(a) * r);
             int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1;
-            int y = rnd.nextInt(4) == 0 ? top - rnd.nextInt(Math.max(1, Math.min(20, top - (int) getY() + 3))) : top;
+            // the exposed top block first (roofs, treetops); violent winds also tear into the walls below it
+            int y = top;
+            if (currentPeakMph() > 135 && rnd.nextInt(3) == 0) y = top - 1 - rnd.nextInt(Math.max(1, Math.min(24, top - (int) getY() + 3)));
+            else if (rnd.nextInt(5) == 0) y = top - rnd.nextInt(Math.max(1, Math.min(6, top - (int) getY() + 3)));
             BlockPos pos = new BlockPos(x, y, z);
             if (!level.isLoaded(pos)) continue;
             BlockState s = level.getBlockState(pos);
@@ -287,7 +375,9 @@ public class TornadoEntity extends Entity {
             WindField.Sample sample = field.sample(x + 0.5 - getX(), z + 0.5 - getZ(), Math.max(0, y - getY()), tickCount / 20.0);
             double mph = sample.horizontalMph();
             if (mph < 45) continue;
+            if (!s.getFluidState().isEmpty() && s.getFluidState().isSource()) continue; // water itself is not debris
             MaterialClass m = BlockWind.classify(level, pos, s);
+            if (water && m == MaterialClass.LOOSE_EARTH) continue; // a waterspout doesn't scour the lakebed
             if (m == MaterialClass.UNBREAKABLE) continue;
             double threshold = BlockWind.failureMph(level, pos, s, m);
             if (mph < threshold) continue;
@@ -309,16 +399,59 @@ public class TornadoEntity extends Entity {
             level.destroyBlock(pos, level.getRandom().nextInt(4) == 0);
             return;
         }
-        if (m.liftable && debris.size() < limit && level.getBlockState(pos).getBlock().defaultBlockState().hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF) == false) {
+        if (m.liftable && debris.size() < limit && !s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF)
+                && !s.hasBlockEntity()) {
             FallingBlockEntity fb = FallingBlockEntity.fall(level, pos, s);
             fb.dropItem = true;
-            fb.setHurtsEntities(1.5f, 12);
+            fb.setHurtsEntities(2.0f, 20);
             Vec3 w = new Vec3(sample.u(), 0, sample.w()).scale(0.05 * 0.5);
             fb.setDeltaMovement(w.x, 0.4 + Math.min(0.8, sample.vertical() * 0.02), w.z);
-            debris.add(fb);
+            double core = Math.max(2, visualWidth() * 0.5);
+            debris.put(fb, new Flight(VortexForces.carryTicks(currentPeakMph(), level.getRandom().nextDouble()), core * (0.7 + 0.6 * level.getRandom().nextDouble())));
         } else {
             level.destroyBlock(pos, true);
         }
+    }
+
+    /** Picked-up blocks spiral up around the core, then are thrown out; flying debris hurts what it hits. */
+    private void flyDebris(ServerLevel level, boolean down) {
+        double peak = currentPeakMph();
+        double ceiling = Math.max(6, VortexForces.ceiling(peak) * 0.9);
+        Vec3 drift = new Vec3(getX() - xo, 0, getZ() - zo);
+        for (Iterator<Map.Entry<FallingBlockEntity, Flight>> it = debris.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<FallingBlockEntity, Flight> en = it.next();
+            FallingBlockEntity d = en.getKey();
+            Flight fl = en.getValue();
+            if (d.isRemoved()) { it.remove(); continue; }
+            fl.ticks++;
+            double dx = d.getX() - getX(), dz = d.getZ() - getZ();
+            Vec3 w = windAt(d.position());
+            double tangential = Math.hypot(w.x, w.z) * 0.05 * 0.6;
+            if (!fl.thrown) {
+                double above = d.getY() - getY();
+                if (!down || fl.ticks > fl.carry || above > ceiling) {
+                    fl.thrown = true;
+                    double[] v = VortexForces.eject(dx, dz, tangential, rotationSign());
+                    d.setDeltaMovement(v[0] + drift.x, v[1], v[2] + drift.z);
+                } else {
+                    double rise = 0.08 + 0.22 * intensity();
+                    double[] v = VortexForces.carry(dx, dz, above, fl.orbit, tangential, rise, ceiling, rotationSign(), 0.04);
+                    d.setDeltaMovement(v[0] + drift.x, v[1], v[2] + drift.z);
+                }
+                d.needsSync = true;
+            }
+            // impacts: anything flying fast enough hurts what it hits
+            Vec3 dv = d.getDeltaMovement();
+            double speed = dv.length();
+            if (speed > 0.7 && fl.ticks % 2 == 0) {
+                for (LivingEntity le : level.getEntitiesOfClass(LivingEntity.class, d.getBoundingBox().inflate(0.4),
+                        le -> !(le instanceof Player p && (p.isCreative() || p.isSpectator())))) {
+                    float dmg = (float) Math.min(14, speed * 4) * (carriesBadge(le) ? 0.5f : 1f);
+                    le.hurtServer(level, level.damageSources().fallingBlock(d), dmg);
+                }
+            }
+        }
+        budget.setAirborne(debris.size());
     }
 
     private void finish(ServerLevel level) {
@@ -391,6 +524,10 @@ public class TornadoEntity extends Entity {
     public static TornadoEntity spawn(ServerLevel level, Vec3 at, TornadoProfile p) {
         if (TornadoManager.active(level) >= Math.max(1, StormreachConfig.maxActiveTornadoes) && StormreachConfig.maxActiveTornadoes > 0) {
             return null;
+        }
+        if (p.formation() == TornadoFormation.WATERSPOUT) {
+            at = findWater(level, at, 48); // waterspouts only form over open water
+            if (at == null) return null;
         }
         TornadoEntity t = TornadoTypes.TORNADO.create(level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
         if (t == null) return null;

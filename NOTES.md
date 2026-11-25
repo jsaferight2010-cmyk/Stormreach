@@ -231,3 +231,11 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
 - `run_all.py` now refuses to start without the vanilla files, and puts the sounds back even if a script fails (a failed run had deleted them; restored from git).
 - New GameTests: altar over the void, fireless staff bolt, dispel, locker hold and one-hider rule.
 - Not runtime-tested: the client camera and input mixins and the grate rendering (the CI server never runs client code).
+
+### 5.1 stage 2: tornado rebuild
+- `sim/FunnelShape`: reach over life (descends by 14% of lifetime, lifts after 95.5%), touchdown gate, tip-tapered radius profile, flare into the cloud base. Unit-tested.
+- `sim/VortexForces`: drag toward the wind (mass from the hitbox, ground friction, bracing), lift above a mass-dependent threshold, a carry ceiling with outward fling, wind damage per second, debris carry and eject vectors, block-check scaling. Unit-tested.
+- `TornadoEntity`: touchdown gating; debris tracked as flights (carry, then thrown); debris impacts; waterspout steering, landfall and `findWater`; `skipTo`/`simulateWithoutPlayers` test hooks.
+- Client: `TornadoMesh` builds every layer into a `Sink` (no Minecraft classes), and `TornadoRenderer` submits it with `submitCustomGeometry`. The spin is accumulated per tick in `TornadoEntity.clientSpin`. Textures come from `tools/textures6.py`.
+- `tools/preview/TornadoPreview.java` (run with `/home/claude/tools/preview_tornado.sh`) rasterises the same meshes offline. Its lighting is approximate, so it is a shape check, not a screenshot.
+- GameTests: no damage before touchdown; an EF5 tears up a plank floor and lifts a zombie; a waterspout stays over a pool, and none can be made on land.

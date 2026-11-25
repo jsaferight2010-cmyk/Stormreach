@@ -1,7 +1,11 @@
 package com.stormreach.client.tornado;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.stormreach.Stormreach;
+import com.stormreach.sim.FunnelShape;
+import com.stormreach.sim.TornadoFormation;
+import com.stormreach.sim.TornadoMorphology;
 import com.stormreach.tornado.TornadoEntity;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -10,16 +14,28 @@ import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
 
-/** Draws the funnel (and, for multiple-vortex tornadoes, the orbiting subvortex funnels). */
+/**
+ * Draws a tornado as layered, turbulent meshes rather than a model:
+ * <ul>
+ * <li>the condensation funnel, a lumpy tube that spins faster near the ground and lowers from the cloud base
+ *     with a pendant tip until it touches down ({@link FunnelShape}),</li>
+ * <li>a looser outer sheath for depth,</li>
+ * <li>the debris cloud at the base (dust and wreckage over land, white spray over water),</li>
+ * <li>for supercell tornadoes, the lowered, rotating wall cloud the funnel hangs from,</li>
+ * <li>for multiple-vortex tornadoes, suction vortices orbiting inside the main circulation.</li>
+ * </ul>
+ * Shape comes from the morphology, width and reach the server syncs, so every player sees the same tornado.
+ */
 public class TornadoRenderer extends EntityRenderer<TornadoEntity, TornadoRenderState> {
-    private static final Identifier TEXTURE = Stormreach.id("textures/entity/tornado.png");
-    private final FunnelModel model;
+    private static final Identifier FUNNEL = Stormreach.id("textures/entity/tornado_funnel.png");
+    private static final Identifier DEBRIS = Stormreach.id("textures/entity/tornado_debris.png");
+    private static final Identifier WALL = Stormreach.id("textures/entity/tornado_wallcloud.png");
 
     public TornadoRenderer(EntityRendererProvider.Context context) {
         super(context);
-        this.model = new FunnelModel(FunnelModel.createLayer().bakeRoot());
         this.shadowRadius = 0;
     }
 
@@ -36,39 +52,35 @@ public class TornadoRenderer extends EntityRenderer<TornadoEntity, TornadoRender
         s.reach = e.funnelReach();
         s.intensity = e.intensity();
         s.morph = e.morphology().ordinal();
+        s.formation = e.formation().ordinal();
         s.subvortices = e.subvortices();
-        s.rotation = e.rotationSign();
+        s.rotation = -e.rotationSign(); // angles here grow from +x toward +z; WindField's cyclonic flow turns the other way
+        s.seed = (e.getUUID().hashCode() & 1023) * 0.37f;
+        s.spin = Mth.lerp(partial, e.clientSpinO, e.clientSpin);
     }
 
     @Override
     protected AABB getBoundingBoxForCulling(TornadoEntity e, float partial) {
-        double w = Math.max(8, e.visualWidth());
-        return new AABB(e.getX() - w, e.getY() - 2, e.getZ() - w, e.getX() + w, e.getY() + e.cloudBase() + 10, e.getZ() + w);
+        double w = Math.max(16, e.visualWidth() * 4 + 40);
+        return new AABB(e.getX() - w, e.getY() - 4, e.getZ() - w, e.getX() + w, e.getY() + e.cloudBase() + 16, e.getZ() + w);
     }
 
     @Override
     public void submit(TornadoRenderState s, PoseStack pose, SubmitNodeCollector collector, CameraRenderState camera) {
         super.submit(s, pose, collector, camera);
-        int alpha = (int) (110 + 120 * Math.min(1, s.intensity));
-        int color = (alpha << 24) | 0x7A7F86;
-        drawFunnel(s, pose, collector, 0, 0, 1f, 0f, color);
-        if (s.subvortices > 0 && s.intensity > 0.6f) {
-            // suction vortices orbit just inside the edge of the parent circulation
-            float orbit = s.width * 0.5f * 0.75f;
-            for (int i = 0; i < s.subvortices; i++) {
-                double a = s.rotation * s.ageInTicks * 0.06 + i * Math.PI * 2 / s.subvortices;
-                drawFunnel(s, pose, collector, (float) Math.cos(a) * orbit, (float) Math.sin(a) * orbit, 0.18f, i * 17f, (alpha << 24) | 0x5E6168);
-            }
-        }
+        int light = s.lightCoords;
+        if (s.reach > 0.01f)
+            collector.submitCustomGeometry(pose, RenderTypes.entityTranslucent(FUNNEL), (p, vc) -> TornadoMesh.funnelLayer(s, sink(p, vc, light)));
+        if (TornadoMesh.hasDebris(s))
+            collector.submitCustomGeometry(pose, RenderTypes.entityTranslucent(DEBRIS), (p, vc) -> TornadoMesh.debrisLayer(s, sink(p, vc, light)));
+        if (TornadoMesh.hasWallCloud(s))
+            collector.submitCustomGeometry(pose, RenderTypes.entityTranslucent(WALL), (p, vc) -> TornadoMesh.wallLayer(s, sink(p, vc, light)));
     }
 
-    private void drawFunnel(TornadoRenderState s, PoseStack pose, SubmitNodeCollector collector, float ox, float oz, float widthScale, float phase, int color) {
-        pose.pushPose();
-        pose.translate(ox, 0, oz);
-        pose.scale(-1, -1, 1); // model space is y-down
-        model.widthScale = widthScale;
-        model.phase = phase;
-        collector.submitModel(model, s, pose, RenderTypes.entityTranslucent(TEXTURE), s.lightCoords, OverlayTexture.NO_OVERLAY, color, null, 0);
-        pose.popPose();
+    private static TornadoMesh.Sink sink(PoseStack.Pose p, VertexConsumer vc, int light) {
+        return (x, y, z, u, v, argb) -> {
+            float len = Math.max(0.001f, Mth.sqrt(x * x + z * z));
+            vc.addVertex(p, x, y, z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(p, x / len, 0, z / len);
+        };
     }
 }

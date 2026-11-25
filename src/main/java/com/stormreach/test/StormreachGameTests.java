@@ -227,4 +227,74 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    private static TornadoProfile stationary(TornadoFormation formation, EFScale rating, double gustMph, double width) {
+        return new TornadoProfile(formation, rating, gustMph, com.stormreach.sim.TornadoMorphology.STOVEPIPE,
+                com.stormreach.sim.VortexStructure.SINGLE, 0, width, 0.0, 0, 1, 6000, com.stormreach.sim.TornadoRelation.NONE);
+    }
+
+    @GameTest(maxTicks = 60)
+    public void aNewTornadoComesDownBeforeItDoesDamage(GameTestHelper h) {
+        for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.OAK_PLANKS);
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(2, 2, 2))),
+                stationary(TornadoFormation.SUPERCELL, EFScale.EF5, 230, 20));
+        h.assertTrue(t != null, "tornado did not spawn");
+        t.simulateWithoutPlayers();
+        h.runAfterDelay(20, () -> {
+            h.assertTrue(t.funnelReach() < 0.5f, "the funnel should still be coming down, reach=" + t.funnelReach());
+            h.assertTrue(t.damagedBlocks() == 0, "the tornado did damage before touching down");
+            for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.assertBlockPresent(Blocks.OAK_PLANKS, new BlockPos(x, 1, z));
+            t.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 100)
+    public void anEf5TearsUpBlocksAndCarriesMobsAloft(GameTestHelper h) {
+        for (int x = 0; x < 9; x++) for (int z = 0; z < 9; z++) { h.setBlock(new BlockPos(x, 1, z), Blocks.OAK_PLANKS); h.setBlock(new BlockPos(x, 2, z), Blocks.OAK_PLANKS); }
+        var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(8, 3, 4)); // at the core's edge, where the wind peaks
+        double startY = zombie.getY();
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(4, 3, 4))),
+                stationary(TornadoFormation.SUPERCELL, EFScale.EF5, 240, 8));
+        h.assertTrue(t != null, "tornado did not spawn");
+        t.simulateWithoutPlayers();
+        t.skipTo(0.4); // mature and on the ground
+        double[] maxY = {startY};
+        h.onEachTick(() -> { if (zombie.isAlive()) maxY[0] = Math.max(maxY[0], zombie.getY()); });
+        h.runAfterDelay(80, () -> {
+            int gone = 0;
+            for (int x = 0; x < 9; x++) for (int z = 0; z < 9; z++) for (int y = 1; y <= 2; y++)
+                if (!h.getBlockState(new BlockPos(x, y, z)).is(Blocks.OAK_PLANKS)) gone++;
+            h.assertTrue(t.damagedBlocks() > 0, "an EF5 did no damage at all");
+            h.assertTrue(gone >= 40, "an EF5 should tear up most of a plank floor in 4 seconds, removed " + gone + " of 162");
+            h.assertTrue(maxY[0] > startY + 4 || !zombie.isAlive(), "an EF5 core should lift (or kill) a zombie; it rose " + (maxY[0] - startY));
+            t.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 120)
+    public void waterspoutsStayOverWater(GameTestHelper h) {
+        for (int x = 0; x < 13; x++) for (int z = 0; z < 13; z++) {
+            h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+            h.setBlock(new BlockPos(x, 2, z), x >= 2 && x <= 10 && z >= 2 && z <= 10 ? Blocks.WATER : Blocks.GRASS_BLOCK);
+        }
+        TornadoProfile p = new TornadoProfile(TornadoFormation.WATERSPOUT, EFScale.EF0, 75, com.stormreach.sim.TornadoMorphology.NEEDLE,
+                com.stormreach.sim.VortexStructure.SINGLE, 0, 4, 12.0, 0, 1, 6000, com.stormreach.sim.TornadoRelation.NONE);
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 3, 6))), p);
+        h.assertTrue(t != null, "waterspout did not spawn over water");
+        t.simulateWithoutPlayers();
+        h.onEachTick(() -> {
+            if (!t.isRemoved() && !t.isDissipating())
+                h.assertTrue(TornadoEntity.overWater(h.getLevel(), t.getX(), t.getZ()), "the waterspout went ashore at " + t.position());
+        });
+        h.runAfterDelay(100, () -> {
+            t.discard();
+            // and one can't be made on dry land at all
+            for (int x = 0; x < 13; x++) for (int z = 0; z < 13; z++) h.setBlock(new BlockPos(x, 2, z), Blocks.GRASS_BLOCK);
+            h.assertTrue(TornadoEntity.findWater(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 3, 6))), 6) == null,
+                    "found water where there is none");
+            h.succeed();
+        });
+    }
 }

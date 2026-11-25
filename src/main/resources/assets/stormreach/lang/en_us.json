@@ -1918,6 +1918,7 @@
   "tornado.stormreach.multivortex": "(multiple-vortex)",
   "event.stormreach.tornado.warning": "TORNADO WARNING: a tornado is on the ground %s of you, %s blocks away. Take shelter!",
   "event.stormreach.tornado.survey": "Damage survey: rated %s. Highest wind supported by damage %s mph (peak gust %s mph). %s blocks damaged along a %s km path, up to %s blocks wide. Appearance: %s.",
+  "item.stormreach.tornado_spawner.needs_water": "A waterspout needs open water: aim at a lake or the sea.",
   "event.stormreach.dispel": "The storm breaks up. The sky is clearing.",
   "event.stormreach.dispel.clear": "The sky is already clear.",
   "event.stormreach.supercell": "A supercell is organising: watch the wall cloud for rotation.",

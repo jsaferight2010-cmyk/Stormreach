@@ -167,6 +167,10 @@ public final class WeatherItems {
                 p = new TornadoProfile(p.formation(), p.potentialRating(), p.peakGustMph(), p.morphology(), VortexStructure.MULTIPLE_VORTEX,
                         3 + random.nextInt(3), p.width(), p.translationMs(), p.headingDeg(), p.rotationSign(), p.lifetimeTicks(), p.relation());
             }
+            if (formation == TornadoFormation.WATERSPOUT && TornadoEntity.findWater(server, at, 48) == null) {
+                player.sendOverlayMessage(Component.translatable("item.stormreach.tornado_spawner.needs_water"));
+                return InteractionResult.FAIL;
+            }
             TornadoEntity t = TornadoEntity.spawn(server, at, p);
             if (t == null) {
                 player.sendOverlayMessage(Component.translatable("item.stormreach.tornado_spawner.cap"));

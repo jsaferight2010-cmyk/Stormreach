@@ -28,10 +28,19 @@ public final class VortexForces {
         return clamp(vol / 0.648, 0.15, 8.0) * (1 + armor * 0.02);
     }
 
-    /** Share of the wind/velocity gap closed each tick. */
+    /** Share of the wind/velocity gap closed each tick (no wind-speed boost; see the 4-argument version). */
     public static double dragFactor(double mass, boolean onGround, boolean bracing) {
+        return dragFactor(mass, onGround, bracing, 0);
+    }
+
+    /**
+     * Share of the wind/velocity gap closed each tick. On the ground Minecraft's friction removes about 45% of a
+     * body's sideways speed every tick, so strong winds need a matching boost or a 70 mph gust would barely nudge
+     * anyone: from about 40 mph the grounded drag grows until a 100 mph wind sends you skidding.
+     */
+    public static double dragFactor(double mass, boolean onGround, boolean bracing, double mph) {
         double k = 0.07 / Math.sqrt(mass);
-        if (onGround) k *= 0.55;      // friction and grip
+        if (onGround) k = (0.04 + 0.3 * clamp((mph - 40) / 80.0, 0, 1)) / Math.sqrt(mass);
         if (bracing) k *= 0.6;        // a sneaking player braces against the wind
         return clamp(k, 0.005, 0.35);
     }
@@ -79,7 +88,7 @@ public final class VortexForces {
      */
     public static double[] step(double[] vel, double[] wind, double mph, double mass, boolean onGround, boolean bracing,
                                 double heightAboveGround, double ceiling, double[] radialOut) {
-        double k = dragFactor(mass, onGround, bracing);
+        double k = dragFactor(mass, onGround, bracing, mph);
         double vx = vel[0] + (wind[0] - vel[0]) * k;
         double vz = vel[2] + (wind[2] - vel[2]) * k;
         double vy = vel[1] + (wind[1] - vel[1]) * k * 0.5 + lift(mph, mass, heightAboveGround, ceiling);

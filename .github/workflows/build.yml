@@ -29,6 +29,17 @@ jobs:
       - name: Run the in-game GameTests
         run: ./gradlew runGametest --stacktrace
 
+      - name: Show failed GameTests
+        if: failure()
+        run: |
+          python3 - <<'PY' || true
+          import xml.etree.ElementTree as ET
+          t = ET.parse('build/gametest/junit.xml')
+          for c in t.iter('testcase'):
+              for f in list(c.iter('failure')) + list(c.iter('error')):
+                  print('FAILED TEST:', c.get('name'), '|', (f.get('message') or f.text or '').strip()[:400])
+          PY
+
       - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4

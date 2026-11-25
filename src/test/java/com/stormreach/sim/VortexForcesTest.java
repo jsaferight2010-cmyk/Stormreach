@@ -104,4 +104,22 @@ class VortexForcesTest {
         assertTrue(VortexForces.blockChecks(96, 230, 200) <= 96 * 4);
         assertTrue(VortexForces.carryTicks(220, 0.5) > VortexForces.carryTicks(90, 0.5));
     }
+
+    @Test
+    void strongWindsShoveGroundedBodiesDespiteFriction() {
+        double m = VortexForces.mass(0.6, 1.8, 0);
+        double[] v = {0, 0, 0};
+        double wind = EFScale.mphToMs(80) * 0.05;
+        for (int i = 0; i < 40; i++) {
+            v = VortexForces.step(v, new double[]{wind, 0, 0}, 80, m, true, false, 0, 5, new double[]{1, 0});
+            v[0] *= 0.546; // Minecraft ground friction
+        }
+        assertTrue(v[0] * 20 > 3, "an 80 mph wind should push a standing player faster than a stroll, got " + v[0] * 20 + " m/s");
+        double[] calm = {0, 0, 0};
+        for (int i = 0; i < 40; i++) {
+            calm = VortexForces.step(calm, new double[]{EFScale.mphToMs(25) * 0.05, 0, 0}, 25, m, true, false, 0, 5, new double[]{1, 0});
+            calm[0] *= 0.546;
+        }
+        assertTrue(calm[0] * 20 < 1, "a 25 mph breeze shouldn't push a player around, got " + calm[0] * 20 + " m/s");
+    }
 }

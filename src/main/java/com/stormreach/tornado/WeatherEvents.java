@@ -126,7 +126,7 @@ public final class WeatherEvents {
                 int armor = e instanceof LivingEntity le ? le.getArmorValue() : 0;
                 double mass = com.stormreach.sim.VortexForces.mass(e.getBbWidth(), e.getBbHeight(), armor);
                 Vec3 v = e.getDeltaMovement();
-                double[] nv = com.stormreach.sim.VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{dx / r * bpt, -0.02, dz / r * bpt}, mph * 0.6, mass,
+                double[] nv = com.stormreach.sim.VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{dx / r * bpt, -0.02, dz / r * bpt}, mph, mass,
                         e.onGround(), e instanceof Player p && p.isShiftKeyDown(), 0, 3, new double[]{0, 0});
                 e.setDeltaMovement(nv[0], nv[1], nv[2]);
                 e.needsSync = true;

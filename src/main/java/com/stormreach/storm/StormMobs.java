@@ -58,7 +58,8 @@ public final class StormMobs {
         int skipped = 0;
         for (EntityType<?> t : vanilla) {
             try {
-                Class<?> cls = t.getBaseClass();
+                Class<?> cls = classOf(t);
+                if (cls == null) { skipped++; continue; }
                 if (!Mob.class.isAssignableFrom(cls) || Modifier.isAbstract(cls.getModifiers())) { skipped++; continue; }
                 Constructor<?> ctor = cls.getDeclaredConstructor(EntityType.class, Level.class);
                 ctor.setAccessible(true);
@@ -90,7 +91,7 @@ public final class StormMobs {
                 }
             } catch (Throwable e) {
                 skipped++;
-                Stormreach.LOGGER.debug("No storm counterpart for {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(t), e.toString());
+                Stormreach.LOGGER.info("No storm counterpart for {}: {}", BuiltInRegistries.ENTITY_TYPE.getKey(t), e.toString());
             }
         }
         Stormreach.LOGGER.info("Stormreach: generated {} storm mobs ({} skipped)", STORM_OF.size(), skipped);
@@ -99,5 +100,36 @@ public final class StormMobs {
     /** Mobs the Stormblight never converts (converting the End's dragon would break the dragon fight). */
     public static boolean neverConvert(Entity e) {
         return e.getType() == EntityTypes.ENDER_DRAGON;
+    }
+
+    private static java.util.Map<EntityType<?>, Class<?>> classes;
+
+    /**
+     * The Java class behind a vanilla entity type. EntityType.getBaseClass() returns Entity.class for every type in
+     * 26.x, so the classes come from stormreach_entity_classes.txt (EntityTypes field = class), generated from the
+     * game jar by tools/entity_classes.py.
+     */
+    static Class<?> classOf(EntityType<?> t) {
+        if (classes == null) {
+            classes = new java.util.HashMap<>();
+            try (java.io.InputStream in = StormMobs.class.getResourceAsStream("/stormreach_entity_classes.txt")) {
+                if (in != null) {
+                    for (String line : new String(in.readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).split("\n")) {
+                        line = line.trim();
+                        if (line.isEmpty() || line.startsWith("#") || !line.contains("=")) continue;
+                        String[] kv = line.split("=", 2);
+                        try {
+                            Object type = net.minecraft.world.entity.EntityTypes.class.getField(kv[0]).get(null);
+                            classes.put((EntityType<?>) type, Class.forName(kv[1], false, StormMobs.class.getClassLoader()));
+                        } catch (ReflectiveOperationException | LinkageError ignored) {
+                            // renamed in a later Minecraft version: that mob just gets no storm counterpart
+                        }
+                    }
+                }
+            } catch (java.io.IOException e) {
+                Stormreach.LOGGER.warn("Could not read stormreach_entity_classes.txt", e);
+            }
+        }
+        return classes.get(t);
     }
 }

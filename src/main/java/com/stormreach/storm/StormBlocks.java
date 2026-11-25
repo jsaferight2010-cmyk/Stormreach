@@ -72,15 +72,17 @@ public final class StormBlocks {
             if (id.getNamespace().equals("minecraft") && wanted.contains(id.getPath())) vanilla.add(b);
         }
         int skipped = 0;
+        java.util.Set<Object> holdersBefore = pendingIntrusiveHolders();
         for (Block v : vanilla) {
             try {
                 Block storm = cloneBlock(v);
                 if (storm != null) STORM_OF.put(v, storm); else skipped++;
             } catch (Throwable t) {
                 skipped++;
-                Stormreach.LOGGER.debug("No storm counterpart for {}: {}", BuiltInRegistries.BLOCK.getKey(v), t.toString());
+                Stormreach.LOGGER.info("No storm counterpart for {}: {}", BuiltInRegistries.BLOCK.getKey(v), t.toString());
             }
         }
+        dropLeakedHolders(holdersBefore);
         // Items second, so standing/wall pairs (torches) can find each other.
         for (Map.Entry<Block, Block> e : STORM_OF.entrySet()) {
             try {
@@ -187,5 +189,37 @@ public final class StormBlocks {
             item = stormWall == null ? new BlockItem(storm, props) : new StandingAndWallBlockItem(storm, stormWall, (Direction) df.get(v), props);
         } else item = new BlockItem(storm, props);
         ITEMS.add(Registry.register(BuiltInRegistries.ITEM, key, item));
+    }
+
+    /**
+     * A Block reserves a registry slot (an "intrusive holder") the moment it is constructed. If a clone's constructor
+     * throws part-way, that slot is never filled and the game refuses to start ("Some intrusive holders were not
+     * registered"). These two methods remember which slots existed before cloning and release any a failed clone left.
+     */
+    @SuppressWarnings("unchecked")
+    private static java.util.Map<Object, Object> intrusiveHolders() {
+        try {
+            Field f = net.minecraft.core.MappedRegistry.class.getDeclaredField("unregisteredIntrusiveHolders");
+            f.setAccessible(true);
+            return (java.util.Map<Object, Object>) f.get(BuiltInRegistries.BLOCK);
+        } catch (ReflectiveOperationException e) {
+            return null;
+        }
+    }
+
+    private static java.util.Set<Object> pendingIntrusiveHolders() {
+        java.util.Map<Object, Object> m = intrusiveHolders();
+        return m == null ? java.util.Set.of() : new java.util.HashSet<>(m.keySet());
+    }
+
+    private static void dropLeakedHolders(java.util.Set<Object> before) {
+        java.util.Map<Object, Object> m = intrusiveHolders();
+        if (m == null) return;
+        int dropped = 0;
+        for (java.util.Iterator<Object> it = m.keySet().iterator(); it.hasNext(); ) {
+            Object b = it.next();
+            if (!before.contains(b)) { it.remove(); dropped++; }
+        }
+        if (dropped > 0) Stormreach.LOGGER.info("Stormreach: released {} half-built storm blocks", dropped);
     }
 }

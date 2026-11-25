@@ -20,6 +20,7 @@ public abstract class CameraMixin {
     @Shadow protected abstract void setRotation(float yRot, float xRot);
     @Shadow public abstract float yRot();
     @Shadow public abstract float xRot();
+    @Shadow private boolean detached;
 
     @Inject(method = "alignWithEntity(F)V", at = @At("TAIL"))
     private void stormreach$lockerView(float partialTick, CallbackInfo ci) {
@@ -30,5 +31,6 @@ public abstract class CameraMixin {
         float pitch = Mth.clamp(xRot(), -35f, 35f);
         setRotation(yaw, pitch);
         setPosition(eye.x, eye.y, eye.z);
+        detached = false; // always first person from inside the locker (so your own body isn't drawn in front of you)
     }
 }

@@ -1053,4 +1053,43 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    /** 6.0 (test list 13): puddles are pickable in creative, unminable in survival and dry up on a timer. */
+    @GameTest(maxTicks = 20)
+    public void puddlesDryUpAndCanBePicked(GameTestHelper h) {
+        h.setBlock(new BlockPos(1, 1, 1), Blocks.STONE);
+        BlockPos at = new BlockPos(1, 2, 1);
+        h.setBlock(at, com.stormreach.weather.precip.PrecipContent.PUDDLE);
+        var level = h.getLevel();
+        BlockPos abs = h.absolutePos(at);
+        var st = level.getBlockState(abs);
+        Check.isTrue(h, !st.getCloneItemStack(level, abs, false).isEmpty(), "middle-click on a puddle gives nothing");
+        Check.isTrue(h, level.getBlockTicks().hasScheduledTick(abs, com.stormreach.weather.precip.PrecipContent.PUDDLE), "a new puddle has no drying timer");
+        Check.isTrue(h, st.getShape(level, abs, net.minecraft.world.phys.shapes.CollisionContext.empty()).isEmpty(), "survival players can still target (and mine) a puddle");
+        st.tick(level, abs, level.getRandom());
+        Check.isTrue(h, !h.getBlockState(at).is(com.stormreach.weather.precip.PrecipContent.PUDDLE) || level.isRainingAt(abs), "a puddle in dry weather didn't dry up");
+        h.succeed();
+    }
+
+    /** 6.0: entity-less hail lands where it was scheduled, hurts what stands there and leaves hail on open ground. */
+    @GameTest(maxTicks = 120)
+    public void hailWithoutEntitiesStillHitsAndSettles(GameTestHelper h) {
+        for (int x = 0; x < 6; x++) for (int z = 0; z < 6; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        var level = h.getLevel();
+        var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(1, 2, 1));
+        float hp = zombie.getHealth();
+        Vec3 z0 = zombie.position();
+        int before = com.stormreach.weather.precip.HailstoneEntity.live();
+        for (int i = 0; i < 6; i++) com.stormreach.weather.precip.HailSim.schedule(level, z0.x, z0.y + 20, z0.z, com.stormreach.sim.HailSize.GOLF_BALL, 0, 0);
+        BlockPos open = h.absolutePos(new BlockPos(4, 2, 4));
+        for (int i = 0; i < 60; i++) com.stormreach.weather.precip.HailSim.schedule(level, open.getX() + 0.5, open.getY() + 20, open.getZ() + 0.5, com.stormreach.sim.HailSize.SOFTBALL, 0, 0);
+        Check.isTrue(h, com.stormreach.weather.precip.HailstoneEntity.live() == before, "scheduling hail spawned entities");
+        h.runAfterDelay(60, () -> {
+            Check.isTrue(h, zombie.getHealth() < hp, "the hail never hit the zombie");
+            Check.isTrue(h, h.getBlockState(new BlockPos(4, 2, 4)).is(com.stormreach.weather.precip.PrecipContent.HAIL_LAYER), "no hail settled on open ground");
+            Check.isTrue(h, com.stormreach.weather.precip.HailSim.pending(level) == 0, "hail impacts were left pending");
+            zombie.discard();
+            h.succeed();
+        });
+    }
 }

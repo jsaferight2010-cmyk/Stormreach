@@ -40,8 +40,43 @@ public class PuddleBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> b) { b.add(SIZE); }
 
+    /**
+     * 6.0: a puddle is a film of water, not something you mine. Only creative players can target it (so middle-click
+     * picks it and they can clear it); everyone else's clicks go straight through to the ground underneath, and when
+     * that ground is dug out the puddle goes with it.
+     */
     @Override
-    protected VoxelShape getShape(BlockState s, BlockGetter level, BlockPos pos, CollisionContext ctx) { return SHAPES[s.getValue(SIZE) - 1]; }
+    protected VoxelShape getShape(BlockState s, BlockGetter level, BlockPos pos, CollisionContext ctx) {
+        if (ctx instanceof net.minecraft.world.phys.shapes.EntityCollisionContext ec && ec.getEntity() instanceof net.minecraft.world.entity.player.Player p && p.isCreative())
+            return SHAPES[s.getValue(SIZE) - 1];
+        return Shapes.empty();
+    }
+
+    @Override
+    protected net.minecraft.world.item.ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState s, boolean includeData) {
+        return new net.minecraft.world.item.ItemStack(PrecipContent.PUDDLE_ITEM);
+    }
+
+    /** Ticks until a puddle next shrinks: slowly while it rains on it (rain may top it up again), quickly once dry. */
+    public static int dryDelay(boolean raining, RandomSource r) {
+        return raining ? 2400 + r.nextInt(2400) : 300 + r.nextInt(400);
+    }
+
+    @Override
+    protected void onPlace(BlockState s, Level level, BlockPos pos, BlockState old, boolean moved) {
+        if (!level.isClientSide() && !old.is(this)) level.scheduleTick(pos, this, dryDelay(level.isRainingAt(pos), level.getRandom()));
+    }
+
+    @Override
+    protected void tick(BlockState s, ServerLevel level, BlockPos pos, RandomSource random) {
+        boolean raining = level.isRainingAt(pos);
+        int size = s.getValue(SIZE);
+        if (!raining || random.nextBoolean()) {
+            if (size <= 1) { level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3); return; }
+            level.setBlock(pos, s.setValue(SIZE, size - 1), 3);
+        }
+        level.scheduleTick(pos, this, dryDelay(raining, random));
+    }
 
     @Override
     protected VoxelShape getCollisionShape(BlockState s, BlockGetter level, BlockPos pos, CollisionContext ctx) { return Shapes.empty(); }
@@ -62,6 +97,8 @@ public class PuddleBlock extends Block {
 
     @Override
     protected void randomTick(BlockState s, ServerLevel level, BlockPos pos, RandomSource random) {
+        // safety net: a puddle whose drying timer was lost (chunk unloaded, older world) gets a new one
+        if (!level.getBlockTicks().hasScheduledTick(pos, this)) level.scheduleTick(pos, this, dryDelay(level.isRainingAt(pos), random));
         double chance = Rainfall.evaporation(level.isRainingAt(pos), level.getBiome(pos).value().getBaseTemperature());
         if (random.nextDouble() >= chance) return;
         int size = s.getValue(SIZE);

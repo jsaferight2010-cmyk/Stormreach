@@ -116,6 +116,25 @@ public final class WeatherEvents {
                     if (i % 2 == 0) level.sendParticles(com.stormreach.particle.ModParticles.DEBRIS_DUST, x, centre.y + 0.5 + rnd.nextDouble() * 2, z, 0, vx * 0.5, 0.05, vz * 0.5, 0.4);
                 }
             }
+            // 6.0: what the outflow does to the ground it crosses: a wet one floods hollows and puts out fires,
+            // a dry one throws up a wall of dust and dries out farmland
+            if (age % 4 == 0 && age < duration - 30) {
+                for (int i = 0; i < 6; i++) {
+                    double a = rnd.nextDouble() * Math.PI * 2, d = Math.sqrt(rnd.nextDouble()) * Math.max(4, front);
+                    int x = Mth.floor(centre.x + Math.cos(a) * d), z = Mth.floor(centre.z + Math.sin(a) * d);
+                    BlockPos top = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), z);
+                    if (!level.isLoaded(top)) continue;
+                    BlockState above = level.getBlockState(top), below = level.getBlockState(top.below());
+                    if (wet) {
+                        if (above.is(net.minecraft.world.level.block.Blocks.FIRE)) level.removeBlock(top, false);
+                        else if (StormreachConfig.puddles && d < radius && rnd.nextInt(3) == 0) com.stormreach.weather.precip.PuddleBlock.grow(level, top, 3);
+                    } else {
+                        if (below.is(net.minecraft.world.level.block.Blocks.FARMLAND) && below.getValue(net.minecraft.world.level.block.FarmlandBlock.MOISTURE) > 0)
+                            level.setBlock(top.below(), below.setValue(net.minecraft.world.level.block.FarmlandBlock.MOISTURE, 0), 2);
+                        if (i < 3) level.sendParticles(com.stormreach.particle.ModParticles.DEBRIS_DUST, x + 0.5, top.getY() + 1 + rnd.nextDouble() * 5, z + 0.5, 0, Math.cos(a) * 0.3, 0.08, Math.sin(a) * 0.3, 0.5);
+                    }
+                }
+            }
             // wind on bodies: outward, falling off with distance behind and ahead of the front
             AABB box = new AABB(centre.x - radius * 2, centre.y - 6, centre.z - radius * 2, centre.x + radius * 2, centre.y + 30, centre.z + radius * 2);
             for (Entity e : level.getEntities((Entity) null, box, e -> !(e instanceof TornadoEntity) && !e.isSpectator() && !(e instanceof Player p && (p.isCreative() || p.isSpectator())))) {
@@ -172,15 +191,17 @@ public final class WeatherEvents {
                 if (Math.hypot(p.getX() - centre.x, p.getZ() - centre.z) < radius + 8)
                     level.playSound(null, p.getX(), p.getY() + 2, p.getZ(), com.stormreach.registry.ModSfx.WEATHER_HAIL, SoundSource.WEATHER, (float) (0.4 + 0.6 * severity * ramp), 0.9f + level.getRandom().nextFloat() * 0.2f);
             double windX = Math.cos(age * 0.003) * 0.06, windZ = Math.sin(age * 0.003) * 0.06;
+            // 6.0: clients draw the falling stones from this description; the server only resolves impacts (HailSim)
+            if (age % 20 == 1) com.stormreach.weather.precip.HailSim.broadcast(level, centre, radius, severity * ramp, windX, windZ);
             for (Player p : level.players()) {
                 if (p.isSpectator() || Math.hypot(p.getX() - centre.x, p.getZ() - centre.z) > radius + 48) continue;
-                int count = (int) Math.round((2 + 6 * severity) * ramp * StormreachConfig.particleDensity / 100.0);
+                // gameplay stones around each player (the hits, the damage, the cover building up): cheap now, so denser
+                int count = (int) Math.round((3 + 9 * severity) * ramp);
                 for (int i = 0; i < count; i++) {
                     double x = p.getX() + (random.nextDouble() - 0.5) * 48, z = p.getZ() + (random.nextDouble() - 0.5) * 48;
                     if (Math.hypot(x - centre.x, z - centre.z) > radius) continue;
-                    int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(x), Mth.floor(z));
-                    double y = Math.max(top, p.getY()) + 24 + random.nextDouble() * 8;
-                    com.stormreach.weather.precip.HailstoneEntity.drop(level, new Vec3(x, y, z), com.stormreach.sim.HailSize.roll(random, severity), windX, windZ);
+                    double y = p.getY() + 24 + random.nextDouble() * 8;
+                    com.stormreach.weather.precip.HailSim.schedule(level, x, y, z, com.stormreach.sim.HailSize.roll(random, severity), windX, windZ);
                 }
             }
         }
@@ -221,13 +242,32 @@ public final class WeatherEvents {
         }
     }
 
-    /** A downburst at {@code at}: wet if it is raining there, dry otherwise. */
+    /**
+     * A downburst at {@code at}. 6.0: wet or dry follows the ground as well as the sky: rain falling there, a soaked
+     * surface after long rain, or open water / mud / swamp under it make it wet; parched ground makes a dry
+     * microburst (stronger gusts from evaporative cooling, a dust wall instead of a rain foot).
+     */
     public static void downburst(ServerLevel level, Vec3 at) {
-        downburst(level, at, level.isRainingAt(BlockPos.containing(at).above(2)));
+        downburst(level, at, groundIsWet(level, BlockPos.containing(at)));
+    }
+
+    public static boolean groundIsWet(ServerLevel level, BlockPos at) {
+        if (level.isRainingAt(at.above(2))) return true;
+        if (com.stormreach.weather.precip.RainAccumulation.wetness(level) > 0.3) return true;
+        int wet = 0;
+        for (int dx = -4; dx <= 4; dx += 4) for (int dz = -4; dz <= 4; dz += 4) {
+            int x = at.getX() + dx, z = at.getZ() + dz;
+            BlockPos top = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1, z);
+            BlockState s = level.getBlockState(top);
+            if (!s.getFluidState().isEmpty() || s.is(net.minecraft.world.level.block.Blocks.MUD) || s.is(com.stormreach.weather.precip.PrecipContent.PUDDLE)
+                    || level.getBlockState(top.above()).is(com.stormreach.weather.precip.PrecipContent.PUDDLE)) wet++;
+        }
+        return wet >= 3 || level.getBiome(at).is(net.minecraft.world.level.biome.Biomes.SWAMP) || level.getBiome(at).is(net.minecraft.world.level.biome.Biomes.MANGROVE_SWAMP);
     }
 
     public static void downburst(ServerLevel level, Vec3 at, boolean wet) {
         double peak = 60 + level.getRandom().nextDouble() * 70; // most downbursts are EF0–EF1 equivalent; strong ones exceed 100 mph
+        if (!wet) peak *= 1.15;                                   // dry microbursts: evaporative cooling drives harder gusts
         TornadoManager.schedule(new Downburst(level, at, 18 + level.getRandom().nextDouble() * 22, peak, wet));
     }
 

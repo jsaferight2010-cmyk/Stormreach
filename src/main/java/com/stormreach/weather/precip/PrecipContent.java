@@ -26,6 +26,8 @@ public final class PrecipContent {
             .mapColor(MapColor.WATER).replaceable().noCollision().noOcclusion().randomTicks().instabreak().sound(SoundType.EMPTY)
             .pushReaction(PushReaction.POPPED).noLootTable());
     public static final Item HAIL_LAYER_ITEM = item("hail_layer", HAIL_LAYER);
+    /** 6.0: so creative players can pick, place and clear puddles. */
+    public static final Item PUDDLE_ITEM = item("puddle", PUDDLE);
 
     public static final EntityType<HailstoneEntity> HAILSTONE = Registry.register(BuiltInRegistries.ENTITY_TYPE,
             ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("hailstone")),

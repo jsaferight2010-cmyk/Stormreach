@@ -34,6 +34,7 @@ public final class WeatherMesh {
         float baseW = width * 0.5f * (float) CloudGrowth.base(f);
         float anvil = (float) CloudGrowth.anvil(f);
         int dark = severe ? 0x464B53 : 0x5E646C, mid = severe ? 0xA2A8B0 : 0xBCC2C9, light = 0xF5F7FA;
+        floor = 0;
         // base: a ring of wide, flat-bottomed billows (the dark cloud base you see from below)
         for (int i = 0; i < 12; i++) {
             float a = (float) (i * Math.PI * 2 / 12 + r.nextDouble() * 0.4);
@@ -59,7 +60,8 @@ public final class WeatherMesh {
                 int c1 = lerp(mid, light, hk), c0 = lerp(dark, mid, hk);
                 puff(out, (float) Math.cos(a) * d, y, (float) Math.sin(a) * d, rad, rad * 0.9f, rad, r, c0, c1, op, time);
             }
-            if (grown > 0.3f) puff(out, 0, y, 0, colR * 0.6f * grown, colR * 0.5f * grown, colR * 0.6f * grown, r, lerp(dark, mid, hk), lerp(mid, light, hk), op, time);
+            // the core billow at every level keeps the tower one continuous column
+            puff(out, 0, y, 0, colR * 0.78f * Math.max(0.3f, grown), depth / levels * 0.95f, colR * 0.78f * Math.max(0.3f, grown), r, lerp(dark, mid, hk), lerp(mid, light, hk), op, time);
         }
         // the growing top: a bright, bulging cauliflower head
         if (anvil < 0.6f) {
@@ -73,6 +75,8 @@ public final class WeatherMesh {
         // anvil: wide flat puffs at the top, sheared downwind (+x) and thinning at the edges
         if (anvil > 0) {
             float spread = width * 2.2f * anvil;
+            // the neck where the updraft spreads into the anvil, so the anvil sits on the tower instead of floating
+            puff(out, spread * 0.12f, top - width * 0.25f, 0, baseW * 0.9f, width * 0.3f, baseW * 0.85f, r, mid, light, op, time);
             for (int i = 0; i < 24; i++) {
                 float a = (float) (i * Math.PI * 2 / 12 + r.nextDouble() * 0.3);
                 float d = spread * (i < 12 ? 0.25f + 0.2f * (float) r.nextDouble() : 0.55f + 0.3f * (float) r.nextDouble());
@@ -83,13 +87,42 @@ public final class WeatherMesh {
             }
             puff(out, spread * 0.25f, top, 0, width * 0.5f * anvil + 4, width * 0.12f, width * 0.5f * anvil + 4, r, mid, light, op, time);
         }
+        floor = Float.NEGATIVE_INFINITY;
     }
+
+    /** Cloud billows are flat-bottomed at the cloud base (y = 0): nothing hangs below it except the rain shaft. */
+    private static float floor = Float.NEGATIVE_INFINITY;
 
     private static void puff(TornadoMesh.Sink out, float x, float y, float z, float rx, float ry, float rz, Random r, int bottom, int top, float op, float time) {
         float[] lump = new float[9];
         for (int i = 0; i < lump.length; i++) lump[i] = (float) (r.nextDouble() * 2 * Math.PI);
-        int a = Math.round(235 * clamp(op, 0, 1));
-        ellipsoid(out, x, y, z, rx, ry, rz, 10, 7, 0.16f, lump, time * 0.002f, (bottom << 8) | a, (top << 8) | a, 1, 0);
+        // 6.0: opaque billows (drawn cutout, so overlapping puffs merge into one solid cloud with no sorting
+        // artefacts); a cloud that is still forming shows by its size, not by fading
+        float k = 0.35f + 0.65f * clamp(op, 0, 1);
+        ellipsoid(out, x, y, z, rx * k, ry * k, rz * k, 10, 7, 0.16f, lump, time * 0.002f, (bottom << 8) | 255, (top << 8) | 255, 1, 0);
+    }
+
+    /**
+     * The precipitation shaft under a mature cell: a slightly tapered curtain from the cloud base to the ground,
+     * drawn translucent with streaks that scroll downward. {@code drop} is how far the ground is below the base.
+     */
+    public static void rainShaft(TornadoMesh.Sink out, float f, float width, float drop, boolean severe, float time) {
+        if (f < 0.35f || drop < 4) return;
+        float strength = clamp((f - 0.35f) / 0.3f, 0, 1);
+        float r0 = width * 0.42f, r1 = width * 0.55f;
+        int seg = 20, alpha = Math.round((severe ? 120 : 85) * strength);
+        int col = ((severe ? 0x55606C : 0x6E7884) & 0xFFFFFF) | (alpha << 24);
+        float scroll = -time * 0.05f;
+        float vRepeat = drop / 24f;
+        for (int i = 0; i < seg; i++) {
+            double a0 = i * Math.PI * 2 / seg, a1 = (i + 1) * Math.PI * 2 / seg;
+            float x0 = (float) Math.cos(a0), z0 = (float) Math.sin(a0), x1 = (float) Math.cos(a1), z1 = (float) Math.sin(a1);
+            float u0 = (float) i / seg * 4, u1 = (float) (i + 1) / seg * 4;
+            out.vertex(x0 * r0, 0, z0 * r0, u0, scroll, col);
+            out.vertex(x1 * r0, 0, z1 * r0, u1, scroll, col);
+            out.vertex(x1 * r1, -drop, z1 * r1, u1, scroll + vRepeat, col & 0x00FFFFFF | ((alpha / 3) << 24));
+            out.vertex(x0 * r1, -drop, z0 * r1, u0, scroll + vRepeat, col & 0x00FFFFFF | ((alpha / 3) << 24));
+        }
     }
 
     /**
@@ -111,7 +144,7 @@ public final class WeatherMesh {
                 float t = th + spin;
                 px[i][j] = cx + (float) Math.cos(t) * sr * rx * bump;
                 pz[i][j] = cz + (float) Math.sin(t) * sr * rz * bump;
-                py[i][j] = cy + sy * ry * bump;
+                py[i][j] = Math.max(floor, cy + sy * ry * bump);
             }
             // flattened, darker underside; brighter, sunlit top
             int lo = topIsSecond == 1 ? rgbaTop : rgbaBottom, hi = topIsSecond == 1 ? rgbaBottom : rgbaTop;

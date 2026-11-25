@@ -229,6 +229,7 @@ d('storm_shelter_hatch', 'A heavy steel hatch for a storm cellar. Blast-proof; o
 d('stormfly_jar', 'A jar of glowing Stormflies. A soft lamp to stand on a shelf or hang from a chain.')
 d('stormheart', 'A seed of the Stormblight. Wake it and it turns the land and mobs around it into storm versions.')
 d('hail_layer', 'A layer of fallen hail. Melts in the sun.')
+d('puddle', 'A rain puddle. Collects on open ground in long rain and dries up after; creative only.')
 d('stormwater_bucket', 'A bucket of Stormwater, the charged water of the Stormreach coast.')
 d('stormlava_bucket', 'A bucket of Stormlava. Water hardens it into stone.')
 for wood, desc in (('driftwood', 'Weathered, salt-bleached wood from the shore.'), ('elderstorm', 'Wood from the ancient Elderstorm trees.'),

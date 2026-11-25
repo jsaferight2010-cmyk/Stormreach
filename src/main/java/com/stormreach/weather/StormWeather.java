@@ -73,6 +73,7 @@ public final class StormWeather {
     }
 
     public static void tick(ServerLevel level) {
+        com.stormreach.weather.precip.HailSim.tick(level);
         if (!StormreachConfig.stormWeather) return;
         if (level.dimension() != Level.OVERWORLD) {
             if (StormreachConfig.stormInOtherDimensions) otherDimensionTick(level);

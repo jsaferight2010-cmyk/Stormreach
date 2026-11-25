@@ -146,5 +146,53 @@ held_or_icon('stormkite', 'stormkite_held')
 for n in ('tornado_radar', 'wind_turbine', 'tornado_siren', 'weather_station'):
     gen_item(n)
 
+# Portable Storm Radar in hand: a rugged field unit (rubber bumpers, live PPI screen that glows, keypad, antenna)
+pr = [pel([3, 0, 7], [13, 14, 9.5], 0), pel([2.5, -0.5, 6.6], [13.5, 1.5, 9.9], 1), pel([2.5, 12.5, 6.6], [13.5, 14.5, 9.9], 1),
+      pel([11, 14.5, 7.8], [12, 22, 8.8], 5), pel([10.8, 22, 7.6], [12.2, 23, 9.0], 6),
+      pel([4, 1.5, 6.9], [6, 3, 7.0], 4), pel([7, 1.5, 6.9], [9, 3, 7.0], 5), pel([10, 1.5, 6.9], [12, 3, 7.0], 5)]
+screen = el([4, 4, 6.8], [12, 12.5, 7.0], '#s', faces='n'); screen['faces']['north']['uv'] = [0, 0, 16, 16]; screen['light_emission'] = 12
+pr.append(screen)
+w(f'{A}/models/item/storm_radar_held.json', {'textures': {'particle': 'stormreach:item/storm_radar', 'p': 'stormreach:item/radar_parts', 's': 'stormreach:item/storm_radar_screen'},
+    'elements': pr, 'display': {
+        'thirdperson_righthand': {'rotation': [-30, 180, 0], 'translation': [0, 3, 2], 'scale': [0.55, 0.55, 0.55]},
+        'thirdperson_lefthand': {'rotation': [-30, 180, 0], 'translation': [0, 3, 2], 'scale': [0.55, 0.55, 0.55]},
+        'firstperson_righthand': {'rotation': [-25, 160, 0], 'translation': [-2, 3, -2], 'scale': [0.6, 0.6, 0.6]},
+        'firstperson_lefthand': {'rotation': [-25, 200, 0], 'translation': [-2, 3, -2], 'scale': [0.6, 0.6, 0.6]}}})
+held_or_icon('storm_radar', 'storm_radar_held')
+
+# ---------------------------------------------------------------- puddles and hail (stage 3)
+gen_item('puddle')
+for n in ('hail_small', 'hail_medium', 'hail_large'):
+    w(f'{A}/particles/{n}.json', {'textures': ['stormreach:hail_stone_0', 'stormreach:hail_stone_1', 'stormreach:hail_stone_2']})
+
+# Hail on the ground: a granular crust that thickens with each layer and a scatter of loose stones on top (bigger
+# lumps when golf-ball hail or larger fell), three random layouts per state so a field of hail never tiles.
+import random as _r
+def hail_model(layers, big, variant):
+    rnd = _r.Random(layers * 31 + big * 7 + variant * 101)
+    h = 2 * layers
+    els = [el([0, 0, 0], [16, max(0.6, h - 1.2), 16], '#c')]
+    for e in els:
+        for f in e['faces'].values(): f['uv'] = [0, 0, 16, 16]
+    n = 10 + layers * 4 if not big else 7 + layers * 3
+    for _ in range(n):
+        size = rnd.choice((1, 1, 1.5, 2)) if not big else rnd.choice((2, 2.5, 3, 3.5))
+        x, z = rnd.uniform(0.2, 15.8 - size), rnd.uniform(0.2, 15.8 - size)
+        y0 = max(0, h - 1.2 - size * 0.35)
+        e = el([round(x, 2), round(y0, 2), round(z, 2)], [round(x + size, 2), round(y0 + size * 0.85, 2), round(z + size, 2)], '#p')
+        for f in e['faces'].values(): f['uv'] = [0, 0, 16, 16]
+        if rnd.random() < 0.5: e['rotation'] = {'origin': [x + size / 2, y0, z + size / 2], 'axis': 'y', 'angle': rnd.choice((-22.5, 22.5))}
+        els.append(e)
+    name = f'hail_layer{"_big" if big else ""}_{layers}_v{variant}'
+    bmodel(name, {'parent': 'minecraft:block/block', 'ambientocclusion': False,
+                  'textures': {'particle': B + 'hail_crust', 'c': B + 'hail_crust', 'p': B + 'hail_pellet'}, 'elements': els})
+    return B + name
+variants = {}
+for b in (False, True):
+    for l in range(1, 9):
+        lv = min(l, 4)
+        variants[f'big={str(b).lower()},layers={l}'] = [{'model': hail_model(lv, b, v)} for v in range(3)]
+w(f'{A}/blockstates/hail_layer.json', {'variants': variants})
+
 with open(f'{A}/lang/en_us.json', 'w') as f: json.dump(lang, f, indent=2, ensure_ascii=False); f.write('\n')
 print('gendata60: overhaul data written')

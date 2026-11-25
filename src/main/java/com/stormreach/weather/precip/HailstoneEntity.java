@@ -119,21 +119,30 @@ public class HailstoneEntity extends Entity {
     }
 
     private void hitEntity(ServerLevel level, LivingEntity e, HailSize size) {
-        DamageSource src = level.damageSources().source(StormWeather.HAIL);
-        if (!com.stormreach.front.UmbrellaItem.shields(e)) e.hurtServer(level, src, size.damage());
-        level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, getX(), getY(), getZ(), 4 + size.ordinal() * 2, 0.1, 0.1, 0.1, 0.1);
+        strikeEntity(level, e, size, position());
         discard();
     }
 
+    /** 6.0: shared by the entity-less hail simulation (HailSim). */
+    public static void strikeEntity(ServerLevel level, LivingEntity e, HailSize size, Vec3 at) {
+        DamageSource src = level.damageSources().source(StormWeather.HAIL);
+        if (!com.stormreach.front.UmbrellaItem.shields(e)) e.hurtServer(level, src, size.damage());
+        level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, at.x, at.y, at.z, 4 + size.ordinal() * 2, 0.1, 0.1, 0.1, 0.1);
+    }
+
     private void hitBlock(ServerLevel level, BlockHitResult hit, HailSize size) {
-        BlockPos pos = hit.getBlockPos();
+        strikeBlock(level, hit.getBlockPos(), hit.getDirection(), hit.getLocation(), size, true);
+        discard();
+    }
+
+    /** 6.0: what a stone does to the block it lands on (shared with HailSim). {@code particles}: show the shatter. */
+    public static void strikeBlock(ServerLevel level, BlockPos pos, Direction face, Vec3 at, HailSize size, boolean particles) {
+        var random = level.getRandom();
         BlockState s = level.getBlockState(pos);
-        Vec3 at = hit.getLocation();
-        level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, at.x, at.y + 0.05, at.z,
+        if (particles) level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, at.x, at.y + 0.05, at.z,
                 3 + size.ordinal() * 3, 0.1, 0.05, 0.1, 0.12);
         if (!s.getFluidState().isEmpty()) {
-            level.sendParticles(com.stormreach.particle.ModParticles.RAIN_SPLASH, at.x, at.y + 0.1, at.z, 2 + size.ordinal() * 2, 0.1, 0, 0.1, 0.1);
-            discard();
+            if (particles) level.sendParticles(com.stormreach.particle.ModParticles.RAIN_SPLASH, at.x, at.y + 0.1, at.z, 2 + size.ordinal() * 2, 0.1, 0, 0.1, 0.1);
             return;
         }
         boolean broke = false;
@@ -151,11 +160,12 @@ public class HailstoneEntity extends Entity {
             broke = true;
         }
         float pitch = 1.8f - size.ordinal() * 0.22f;
-        level.playSound(null, pos, broke ? com.stormreach.registry.ModSfx.MAGIC_SHATTER : com.stormreach.registry.ModSfx.BLOCK_STONE_TAP, SoundSource.WEATHER, 0.25f + size.ordinal() * 0.15f, pitch);
-        if (!broke && hit.getDirection() == Direction.UP && random.nextDouble() < size.accumulation()) {
+        // small stones are heard through the client's own hail clatter; only breaks and big stones make a world sound
+        if (broke || size.ordinal() >= HailSize.GOLF_BALL.ordinal())
+            level.playSound(null, pos, broke ? com.stormreach.registry.ModSfx.MAGIC_SHATTER : com.stormreach.registry.ModSfx.BLOCK_STONE_TAP, SoundSource.WEATHER, 0.25f + size.ordinal() * 0.15f, pitch);
+        if (!broke && face == Direction.UP && random.nextDouble() < size.accumulation()) {
             HailLayerBlock.accumulate(level, pos.above(), size);
         }
-        discard();
     }
 
     @Override

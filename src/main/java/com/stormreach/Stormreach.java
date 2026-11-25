@@ -49,6 +49,7 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.structure.StructureRegistry.init();
         com.stormreach.weather.WeatherHud.init();
         com.stormreach.chase.TivControls.init();
+        com.stormreach.weather.precip.HailSim.init();
         com.stormreach.weather.precip.PrecipContent.init();
         com.stormreach.guide.Guidebooks.init();
         com.stormreach.realm.SovereignArena.init();

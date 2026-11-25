@@ -35,12 +35,20 @@ public final class StormCells {
         }
     }
 
+    /**
+     * 6.0: storm cloud bases sit well above the land (they were only 70-100 blocks over the ground, low enough to look
+     * like fog banks from a hill): at least y=165 and 90+ blocks over the terrain, leaving room for the tower.
+     */
+    public static double cloudBase(ServerLevel level, int ground, RandomSource r) {
+        return Math.min(level.getMaxY() - 70, Math.max(165, ground + 90) + r.nextDouble() * 20);
+    }
+
     /** Spawns a cell 150–350 blocks from {@code around} (or right there if {@code here}). */
     public static StormCellEntity spawnNear(ServerLevel level, Vec3 around, RandomSource r, boolean severe, boolean here) {
         double a = r.nextDouble() * Math.PI * 2, d = here ? 0 : 150 + r.nextDouble() * 200;
         double x = around.x + Math.cos(a) * d, z = around.z + Math.sin(a) * d;
         int ground = Math.max(level.getSeaLevel(), level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(x), (int) Math.floor(z)));
-        double base = Math.min(level.getMaxY() - 60, ground + 70 + r.nextDouble() * 30);
+        double base = cloudBase(level, ground, r);
         float depth = (float) Math.min(level.getMaxY() - 6 - base, (severe ? 150 : 90) + r.nextDouble() * 60);
         if (depth < 30) return null;
         StormCellEntity c = PrecipContent.STORM_CELL.create(level, EntitySpawnReason.EVENT);

@@ -11,11 +11,12 @@ import net.minecraft.util.Mth;
 
 /** One class for all of Stormreach's particles; each kind sets its own life, size, motion, fade and animation. */
 public class StormParticle extends SingleQuadParticle {
-    enum Kind { SPARK, SPLASH, SHARD, DUST, STREAK, VAULT }
+    enum Kind { SPARK, SPLASH, SHARD, DUST, STREAK, VAULT, HAIL_S, HAIL_M, HAIL_L }
 
     private final Kind kind;
     private final SpriteSet sprites;
     private final float baseSize;
+    private boolean bounced;
 
     StormParticle(ClientLevel level, double x, double y, double z, double xd, double yd, double zd, SpriteSet sprites, Kind kind) {
         super(level, x, y, z, xd, yd, zd, sprites.first());
@@ -30,6 +31,10 @@ public class StormParticle extends SingleQuadParticle {
             case DUST -> { lifetime = 30 + random.nextInt(30); gravity = -0.01f; friction = 0.94f; quadSize = 0.25f + r * 0.35f; roll = r * 6.28f; }
             case STREAK -> { lifetime = 10 + random.nextInt(8); gravity = 0; friction = 0.98f; quadSize = 0.12f + r * 0.08f; hasPhysics = false; }
             case VAULT -> { lifetime = 40 + random.nextInt(40); gravity = -0.004f; friction = 0.97f; quadSize = 0.04f + r * 0.03f; }
+            // 6.0 hail: falls at the stone's terminal speed (set by the spawner), bounces once, rolls a moment and melts away
+            case HAIL_S -> { lifetime = 70; gravity = 0; friction = 1f; quadSize = 0.035f + r * 0.02f; roll = r * 6.28f; }
+            case HAIL_M -> { lifetime = 80; gravity = 0; friction = 1f; quadSize = 0.07f + r * 0.035f; roll = r * 6.28f; }
+            case HAIL_L -> { lifetime = 90; gravity = 0; friction = 1f; quadSize = 0.14f + r * 0.07f; roll = r * 6.28f; }
         }
         this.baseSize = quadSize;
         setSpriteFromAge(sprites);
@@ -47,13 +52,21 @@ public class StormParticle extends SingleQuadParticle {
             case STREAK -> alpha = Mth.sin((float) Math.PI * f);
             case VAULT -> alpha = 0.9f * Mth.sin((float) Math.PI * f);
             case SHARD -> { oRoll = roll; roll += 0.25f; if (onGround) alpha *= 0.9f; }
+            case HAIL_S, HAIL_M, HAIL_L -> {
+                oRoll = roll; roll += 0.2f;
+                if (onGround) {
+                    if (!bounced) { bounced = true; yd = 0.05 + quadSize * 0.4; xd *= 0.3; zd *= 0.3; gravity = 0.9f; friction = 0.8f;
+                        if (lifetime - age > 25) lifetime = age + 25; }
+                    else alpha = Math.max(0, alpha - 0.05f);
+                }
+            }
             default -> alpha = 1 - f * f;
         }
     }
 
     @Override
     protected Layer getLayer() {
-        return kind == Kind.SHARD ? Layer.OPAQUE : Layer.TRANSLUCENT;
+        return kind == Kind.SHARD || kind == Kind.HAIL_S || kind == Kind.HAIL_M || kind == Kind.HAIL_L ? Layer.OPAQUE : Layer.TRANSLUCENT;
     }
 
     record Provider(SpriteSet sprites, Kind kind) implements ParticleProvider<SimpleParticleType> {
@@ -72,5 +85,8 @@ public class StormParticle extends SingleQuadParticle {
         reg.register(ModParticles.DEBRIS_DUST, s -> new Provider(s, Kind.DUST));
         reg.register(ModParticles.WIND_STREAK, s -> new Provider(s, Kind.STREAK));
         reg.register(ModParticles.VAULT_DUST, s -> new Provider(s, Kind.VAULT));
+        reg.register(ModParticles.HAIL_SMALL, s -> new Provider(s, Kind.HAIL_S));
+        reg.register(ModParticles.HAIL_MEDIUM, s -> new Provider(s, Kind.HAIL_M));
+        reg.register(ModParticles.HAIL_LARGE, s -> new Provider(s, Kind.HAIL_L));
     }
 }

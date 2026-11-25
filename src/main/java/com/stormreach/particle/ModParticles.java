@@ -19,6 +19,10 @@ public final class ModParticles {
     public static final SimpleParticleType DEBRIS_DUST = register("debris_dust");
     public static final SimpleParticleType WIND_STREAK = register("wind_streak");
     public static final SimpleParticleType VAULT_DUST = register("vault_dust");
+    /** 6.0: falling hailstones, drawn on the client from the hail field (small: pea/marble, medium: quarter/golf ball, large). */
+    public static final SimpleParticleType HAIL_SMALL = register("hail_small");
+    public static final SimpleParticleType HAIL_MEDIUM = register("hail_medium");
+    public static final SimpleParticleType HAIL_LARGE = register("hail_large");
 
     private static SimpleParticleType register(String name) {
         return Registry.register(BuiltInRegistries.PARTICLE_TYPE, Stormreach.id(name), FabricParticleTypes.simple());

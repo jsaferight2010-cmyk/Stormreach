@@ -66,6 +66,7 @@ def hexa(h):
 # umbrella: storm-blue and white canopy panels, steel shaft, wooden J handle, black tips
 palette('umbrella_parts', [hexa(c) for c in ('#2f5f9e', '#eef2f6', '#5b6269', '#7a5232', '#1c1e22', '#f2c94c', '#3f78c0', '#c9d3dd')])
 # stormkite: navy and sky sail, lightning-yellow stripe, spruce spars, red/white tail bows, cord
+palette('radar_parts', [hexa(c) for c in ('#2b3036', '#3d444c', '#0c2a14', '#30e070', '#e0b030', '#9aa2aa', '#c03028', '#e8eef2')])
 palette('stormkite_parts', [hexa(c) for c in ('#1f3e74', '#7fc4ec', '#f2c94c', '#6b4a2c', '#d33a2c', '#f4f4f4', '#d8d0bf', '#2a5aa0')])
 
 
@@ -114,5 +115,112 @@ import shutil
 ART = pathlib.Path(__file__).resolve().parent / 'art'
 for art, item in (('radar', 'tornado_radar'), ('turbine', 'wind_turbine'), ('siren', 'tornado_siren'), ('station', 'weather_station')):
     shutil.copy(ART / f'icon_{art}.png', TEX / 'item' / f'{item}.png')
+
+
+def radar_screen():
+    """The handheld radar's screen: a green PPI with range rings, a sweep and a red hook echo."""
+    import math
+    img = Image.new('RGBA', (64, 64), (8, 22, 12, 255))
+    for y in range(64):
+        for x in range(64):
+            r = math.hypot(x - 31.5, y - 33.5)
+            if abs(r - 9) < 0.6 or abs(r - 18) < 0.6 or abs(r - 27) < 0.6: img.putpixel((x, y), (30, 96, 46, 255))
+            a = math.atan2(y - 33.5, x - 31.5)
+            if r < 28 and abs(a + 0.9) < 0.04: img.putpixel((x, y), (120, 255, 150, 255))
+            hx, hy = x - 42, y - 22
+            if hx * hx * 0.5 + hy * hy < 30: img.putpixel((x, y), (40, 200, 60, 255))
+            if hx * hx * 0.5 + hy * hy < 12: img.putpixel((x, y), (240, 220, 40, 255))
+            if hx * hx * 0.6 + (hy - 1) ** 2 < 4: img.putpixel((x, y), (230, 40, 30, 255))
+    save(img, 'item/storm_radar_screen.png')
+
+
+radar_screen()
+
+
+def rain_shaft():
+    """Vertical rain streaks for the precipitation curtain under storm cells (tiles vertically, scrolls in game)."""
+    import random
+    r = random.Random(62)
+    img = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
+    for k in range(70):
+        x = r.randrange(64); y0 = r.randrange(64); ln = r.randint(10, 26); a = r.randint(90, 200)
+        for i in range(ln):
+            y = (y0 + i) % 64
+            img.putpixel((x, y), (205, 214, 226, int(a * (0.4 + 0.6 * i / ln))))
+    for y in range(64):
+        for x in range(64):
+            p = img.getpixel((x, y))
+            if p[3] == 0: img.putpixel((x, y), (150, 160, 175, 70))
+    save(img, 'entity/rain_shaft.png')
+
+
+rain_shaft()
+
+
+def hail_sprites():
+    """Falling hailstones: milky ice balls with a bright top-left highlight and a translucent rim (32 px)."""
+    import math
+    for k in range(3):
+        img = Image.new('RGBA', (32, 32), (0, 0, 0, 0))
+        rr = 13.5 - k * 1.0
+        for y in range(32):
+            for x in range(32):
+                dx, dy = x - 15.5, y - 15.5
+                lump = 1 + 0.06 * math.sin(math.atan2(dy, dx) * (3 + k) + k)
+                d = math.hypot(dx, dy) / (rr * lump)
+                if d > 1: continue
+                shade = 1 - 0.35 * max(0, (dx + dy) / (2 * rr))
+                hl = max(0, 1 - math.hypot(dx + 5, dy + 5) / 5)
+                v = int(min(255, (205 + 40 * hl) * shade))
+                a = 255 if d < 0.82 else int(255 * (1 - (d - 0.82) / 0.18) * 0.9)
+                img.putpixel((x, y), (v - 8, v, min(255, v + 12), a))
+        save(img, f'particle/hail_stone_{k}.png')
+
+
+def hail_pellets():
+    """Packed hail on the ground: a granular crust of white and blue-grey pellets, and a pellet texture for lumps."""
+    import random
+    r = random.Random(63)
+    crust = Image.new('RGBA', (64, 64))
+    for y in range(64):
+        for x in range(64):
+            v = 206 + r.randint(-18, 12)
+            crust.putpixel((x, y), (v - 6, v, min(255, v + 10), 255))
+    for _ in range(140):
+        cx, cy, rad = r.randrange(64), r.randrange(64), r.choice((1, 2, 2, 3))
+        for y in range(-rad, rad + 1):
+            for x in range(-rad, rad + 1):
+                if x * x + y * y <= rad * rad:
+                    t = (x + y) / (2 * rad + 0.01)
+                    v = int(236 - 40 * max(0, t))
+                    crust.putpixel(((cx + x) % 64, (cy + y) % 64), (v - 4, v + 2, min(255, v + 14), 255))
+    save(crust, 'block/hail_crust.png')
+    pel = Image.new('RGBA', (64, 64))
+    for y in range(64):
+        for x in range(64):
+            t = (x + y) / 126
+            v = int(250 - 60 * t)
+            pel.putpixel((x, y), (v - 6, v, min(255, v + 12), 255))
+    save(pel, 'block/hail_pellet.png')
+
+
+hail_sprites(); hail_pellets()
+
+
+def puddle_icon():
+    import math
+    img = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
+    for y in range(64):
+        for x in range(64):
+            dx, dy = (x - 31.5) / 26, (y - 34) / 16
+            r = math.hypot(dx, dy) * (1 + 0.08 * math.sin(math.atan2(dy, dx) * 3))
+            if r < 1:
+                v = 1 - r
+                img.putpixel((x, y), (int(60 + 80 * v), int(110 + 80 * v), int(190 + 50 * v), 220))
+                if 0.55 < r < 0.62 and y < 34: img.putpixel((x, y), (220, 236, 255, 230))
+    save(img, 'item/puddle.png')
+
+
+puddle_icon()
 
 print('textures60: done')

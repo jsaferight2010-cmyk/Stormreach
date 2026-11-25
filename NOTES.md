@@ -452,3 +452,20 @@ boot the headless test server in GitHub Actions as before.
 - TIV: new armoured model (skirts, glacis, slit-window cab, camera turret, light bar, mast), first-person cockpit
   (cab hidden for the driver), passenger seat lowered into the cab, hitbox 2.4x2.6. Anchor key (default Z) toggles the
   spikes immediately (TivControls payload); the 2 s auto-anchor is gone.
+
+### Stage 3: weather visuals and hail
+- Storm clouds: drawn cutout (opaque) so overlapping billows merge into one mass (5.x drew translucent ellipsoids,
+  which sorted badly into the "shards" in the screenshot); flat dark base (billows clipped at the base), a core billow
+  at every tower level, a neck joining the anvil; a translucent rain shaft scrolls from base to ground. Bases now
+  start at y>=165 and 90+ above the terrain (`StormCells.cloudBase`).
+- Hail: no entities. `weather/precip/HailSim` schedules impacts (landing point and tick from terminal speed + drift)
+  and resolves them in a per-tick budget; the burst sends `HailSim.FieldPayload` once a second and
+  `client/weather/HailClient` draws falling stones as particles (three size classes, bounce, melt). Server work per
+  stone: one heightmap lookup and one tiny box query, nothing synced. Damage and breakage still scale with HailSize.
+  HailstoneEntity stays for the Hailstone Golem's thrown stones.
+- Hail on the ground: crust + loose stones (bigger lumps after golf-ball hail), 3 random layouts per state.
+- Puddles: only creative players can target them (pick block gives the new Puddle item, they can clear them);
+  survival clicks pass to the ground. They dry on a scheduled timer (slowly under rain, 15-35 s once dry) plus the
+  old random-tick evaporation and a timer safety net.
+- Downbursts: wet/dry now also follows the ground (soaked after long rain, water/mud/puddles under it, swamps); wet
+  ones flood hollows and put out fires, dry ones hit 15% harder, raise a dust wall and dry out farmland.

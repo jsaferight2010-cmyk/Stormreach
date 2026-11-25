@@ -52,6 +52,7 @@ public final class StormreachClient implements ClientModInitializer {
         com.stormreach.client.render.PlacementHologram.init();   // 6.0: replaces the particle outline (RadarPlacementOutline)
         com.stormreach.client.ClientWeather.init();
         com.stormreach.client.TivKeys.init();
+        com.stormreach.client.weather.HailClient.init();
         com.stormreach.client.hud.StormHudPanel.init();
         net.minecraft.client.renderer.blockentity.BlockEntityRenderers.register(com.stormreach.structure.StructureRegistry.INSTRUMENT_ENTITY, com.stormreach.client.render.InstrumentMachineRenderer::new);
         com.stormreach.client.guide.GuidebookScreen.registerOpener();

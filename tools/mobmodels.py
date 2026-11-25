@@ -1490,6 +1490,63 @@ M.append(Model('StormflyModel', 'stormfly', {'shell': ('shell', C('#2e3a52'), C(
     doc='The Stormfly: a firefly whose tail glows with stored lightning, on two buzzing wings under raised wing cases.',
     grounded=False, translucent=True))
 
+# ================================================================================================ 5.4 Thunderfront
+# ---- Rainfrog -------------------------------------------------------------------------------------------------
+rf = P('body', (0, 21, 0.5), (-0.12, 0, 0), [Box(-3, -2.5, -3.5, 6, 4, 7, 'skin'), Box(-2.5, 1.2, -3, 5, 1, 6, 'belly'), Box(-2, -3, -1, 4, 1, 4, 'skin2')])
+rhead = P('head', (0, -0.8, -3.5), (0.12, 0, 0), [Box(-3.5, -2.5, -4, 7, 3, 4, 'skin'), Box(-3.2, -4, -3, 2.2, 1.6, 2.2, 'skin2'), Box(1, -4, -3, 2.2, 1.6, 2.2, 'skin2'),
+                                                  Box(-3, -4.4, -2.8, 1.8, 1.4, 1.8, 'eye'), Box(1.2, -4.4, -2.8, 1.8, 1.4, 1.8, 'eye')])
+rhead.add(P('jaw', (0, 0.4, -0.5), boxes=[Box(-3.5, 0, -3.6, 7, 1, 3.8, 'belly')]),
+          P('sac', (0, 1.2, -2.2), boxes=[Box(-2, -0.4, -1.5, 4, 1.6, 3, 'sac')]))
+rf.add(rhead)
+rf.add(*pair(P('left_arm', (2.4, 0.8, -2.6), (0.2, 0, -0.25), [Box(-0.5, 0, -0.5, 1, 3, 1, 'skin')]).add(
+    P('left_hand', (0, 3, 0), boxes=[Box(-1, -0.3, -1.6, 2.2, 0.6, 2, 'toe')]))))
+rf.add(*pair(P('left_thigh', (2.6, 0.2, 2.2), (0, -0.25, 0), [Box(-0.5, -1.2, -1.5, 2.2, 2.4, 4, 'skin')]).add(
+    P('left_shin', (0.6, 0.6, 2.3), (0.5, 0, 0), [Box(-0.6, -0.6, -4, 1.4, 1.2, 4, 'skin2')]).add(
+        P('left_foot', (0, 0.4, -4), (-0.5, 0, 0), [Box(-1, 0, -0.5, 2.6, 0.6, 3.2, 'toe')])))))
+hop = sym(T(body_py=[(0, 0), (0.12, 0.4), (0.4, -3.2), (0.7, -0.4), (0.82, 0.3), (1, 0)], body_rx=[(0, 0), (0.12, 6), (0.4, -12), (0.75, 6), (1, 0)],
+            left_thigh_rx=[(0, 0), (0.12, -12), (0.3, 55), (0.62, 20), (0.85, -6), (1, 0)], left_shin_rx=[(0, 0), (0.12, 10), (0.3, -60), (0.62, -15), (1, 0)],
+            left_foot_rx=[(0, 0), (0.3, 50), (0.62, 10), (1, 0)], left_arm_rx=[(0, 0), (0.25, -40), (0.55, -60), (0.78, 20), (1, 0)],
+            head_rx=[(0, 0), (0.4, -6), (0.8, 4), (1, 0)]))
+croak = T(sac_s=[(0, 0), (0.25, 0.95), (0.45, 0.3), (0.65, 1.05), (0.88, 0.2), (1, 0)], jaw_rx=[(0, 0), (0.25, 4), (0.45, 0), (0.65, 4), (1, 0)],
+          head_rx=[(0, 0), (0.2, -10), (0.85, -10), (1, 0)], body_sy=[(0, 0), (0.25, 0.06), (0.45, 0), (0.65, 0.06), (1, 0)])
+M.append(Model('RainfrogModel', 'rainfrog', {'skin': ('skin', C('#3fae8a'), C('#1d5c47')), 'skin2': ('skin', C('#55c49e'), C('#24705a')),
+    'belly': ('scale', C('#eae2b0'), C('#a89a66')), 'sac': ('skin', C('#c8eef6'), C('#7ab8d0')), 'toe': ('skin', C('#2f8a6c'), C('#f2c94c')),
+    'eye': ('eye', C('#f2c94c'), C('#c8962c'))}, [rf], [
+    Clip('time', 50, T(body_sy=[(0, 0), (0.5, 0.03)], sac_s=[(0, 0), (0.5, 0.25)]), 'idleW'),
+    Clip('dist', 0.45, hop, 'moveW'),
+    Clip('cast', 26, croak),
+    Clip('fidget', 140, T(head_ry=[(0, 0), (0.2, 25), (0.7, 25), (1, 0)], left_arm_rz=[(0, 0), (0.3, -20), (0.6, 0)]), 'idleW', dur=24),
+    hurt_clip('body', 'head', 0.8)],
+    doc='The Rainfrog: a blue-green tree frog with bulging golden eyes, spotted skin and a pale throat sac; it hops with its long hind legs kicking out behind, and croaks with its throat puffing up twice.',
+    look=[('head', 0.6, 0.3)]))
+
+# ---- Storm Petrel ---------------------------------------------------------------------------------------------
+bird('StormPetrelModel', 'storm_petrel', {'feather': ('feather', C('#2c2a30'), C('#141218')), 'feather2': ('feather', C('#3a3740'), C('#18161c')),
+     'belly': ('feather', C('#46424c'), C('#221f26')), 'beak': ('shell', C('#1c1a1e'), C('#0a0a0c')), 'beak2': ('shell', C('#26242a'), C('#0e0e10')),
+     'eye': ('eye', C('#3a3030'), C('#060606')), 'tail': ('feather', C('#f2f2f2'), C('#2c2a30')), 'tip': ('feather', C('#24222a'), C('#0e0c12')),
+     'leg': ('scale', C('#1c1a1e'), C('#3a6ab0'))}, 0.75, False,
+     'The Storm Petrel: a small sooty seabird with a bright white rump band and long wings; it flutters low over the waves, feet dangling to patter on the water.')
+
+# ---- Dust Devil -----------------------------------------------------------------------------------------------
+dd_parts, dd_spin = [], []
+for i in range(7):
+    w = 2.2 + i * 1.55; h = 7.6; y = 24 - i * 7.2
+    ring = P(f'ring{i}', (0, y - h / 2, 0), boxes=[Box(-w, -h / 2, -w, 2 * w, h, 1.6, 'sand' if i % 2 else 'sand2'),
+                                                   Box(-w, -h / 2, w - 1.6, 2 * w, h, 1.6, 'sand2' if i % 2 else 'sand'),
+                                                   Box(-w, -h / 2, -w + 1.6, 1.6, h, 2 * w - 3.2, 'sand'), Box(w - 1.6, -h / 2, -w + 1.6, 1.6, h, 2 * w - 3.2, 'sand2')])
+    for k in range(2 + i // 2):
+        a = k * 2.4 + i
+        ring.add(P(f'grit{i}_{k}', (math.cos(a) * (w + 1.2), (k % 3 - 1) * 2.2, math.sin(a) * (w + 1.2)), boxes=[Box(-0.6, -0.6, -0.6, 1.2, 1.2, 1.2, 'grit')]))
+    dd_parts.append(ring); dd_spin.append(ring.field)
+M.append(Model('DustDevilModel', 'dust_devil', {'sand': ('cloud', C('#e6d2a0'), C('#b0905a')), 'sand2': ('cloud', C('#d8bc84'), C('#9a7a48')),
+    'grit': ('stone', C('#a88a5a'), C('#5a4a30'))}, dd_parts, [
+    Clip('time', 30, {**{(f'ring{i}', 'sx'): shift(even(0.06, -0.06), i * 0.11) for i in range(7)},
+                      **{(f'ring{i}', 'sz'): shift(even(-0.06, 0.06), i * 0.11) for i in range(7)}}, '1f')],
+    doc='The Dust Devil: a whirling column of sand that widens as it climbs, seven bands turning at different speeds and swaying like a rope, with grit flung round its edge.',
+    grounded=False, translucent=True,
+    extra=''.join(f'        {f}.yRot += t * {0.62 - j * 0.06:.2f}f; {f}.x += Mth.sin(t * 0.09f + {j * 0.7:.1f}f) * {j * 0.55:.2f}f; {f}.z += Mth.cos(t * 0.07f + {j * 0.5:.1f}f) * {j * 0.4:.2f}f;\n'
+                  for j, f in enumerate(dd_spin))))
+
 MOB_TEXTURES = {m.texture for m in M}
 
 

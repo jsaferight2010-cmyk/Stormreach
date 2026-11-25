@@ -319,6 +319,42 @@ NEW53 = {'creature.serpent_roar': serpent_roar, 'creature.serpent_hurt': serpent
          'creature.golem_throw': golem_throw, 'creature.moth_flutter': moth_flutter, 'creature.stormfly_buzz': stormfly_buzz,
          'item.radio_alert': radio_alert}
 
+# ---------------------------------------------------------------------------------------------- 5.4 Thunderfront
+def frog_croak():
+    # a two-pulse "rrr-ribbit": a low buzzy voice gated into fast pulses, with a throaty resonance
+    out = np.zeros(int(0.75 * SR))
+    for at, sec, f0 in ((0.0, 0.28, 330), (0.36, 0.22, 360)):
+        t = t_(sec)
+        ph = 2 * np.pi * np.cumsum(f0 * (1 - 0.15 * t / sec)) / SR
+        voice = np.sign(np.sin(ph)) * 0.4 + np.sin(ph * 2) * 0.3
+        gate = (np.sin(2 * np.pi * 38 * t) > -0.2).astype(float)
+        place(out, bp(voice * gate, 250, 1800) * adsr(len(t), 0.01, 0.05, 0.8, 0.06), at)
+    return out
+def petrel_call():
+    # a dry, purring chitter: a burst of fast clicks over a buzzy whistle
+    out = np.zeros(int(0.7 * SR))
+    for k in range(9):
+        place(out, tone_hit(2600 + 400 * np.sin(k), 0.03, 120) * 0.5, k * 0.045); place(out, knock(2000, 6000, 0.03, 160) * 0.4, k * 0.045)
+    place(out, chirp(1900, 2300, 0.18, 1) * 0.5, 0.42)
+    return out
+def dust_devil_whirl():
+    # a rushing hiss that sweeps up and down, with grit pattering inside it
+    sec = 2.4; t = t_(sec)
+    sweep = 900 + 600 * np.sin(2 * np.pi * 0.8 * t)
+    hiss = np.zeros(len(t)); x = noise(sec)
+    for k in range(0, len(t), 2205):
+        seg = x[k:k + 2205]; f = float(sweep[min(k, len(t) - 1)])
+        hiss[k:k + len(seg)] = bp(seg, max(200, f * 0.6), f * 1.6)
+    grit = (rng.random(len(t)) < 0.002) * rng.standard_normal(len(t)) * 3
+    return (hiss * np.sin(np.pi * t / sec) ** 0.6 + hp(grit, 3000) * 0.3) * 0.8
+def wind_chime():
+    # one struck brass tube: a bright inharmonic bell with a long shimmering tail
+    t = t_(3.0); f = 1046.5
+    tone = sum(a * np.sin(2 * np.pi * f * m * t) * np.exp(-t * d) for m, a, d in ((1, 1.0, 1.2), (2.76, 0.45, 2.2), (5.40, 0.22, 3.5), (8.93, 0.1, 5.0)))
+    tone[:200] += noise(200 / SR)[:200] * 0.2
+    return reverb(tone * 0.6, 1.8, 0.35)
+NEW54 = {'creature.frog_croak': frog_croak, 'creature.petrel_call': petrel_call, 'creature.dust_devil_whirl': dust_devil_whirl, 'block.wind_chime': wind_chime}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -329,7 +365,7 @@ SYNTH = {
     'creature.wind_hurt': wind_hurt, 'creature.wind_death': wind_death, 'creature.titan_ambient': titan_ambient, 'creature.titan_roar': titan_roar,
     'creature.titan_hurt': titan_hurt, 'creature.titan_death': titan_death, 'creature.titan_charge': titan_charge, 'creature.titan_blast': titan_blast,
     'weather.hail': hail, 'weather.puddle_splash': splash, 'block.radar_ping': radar_ping,
-    **MAT_SYNTH, **NEW52, **NEW53,
+    **MAT_SYNTH, **NEW52, **NEW53, **NEW54,
 }
 
 # ---------------------------------------------------------------------------------------------- the Labyrinth score

@@ -797,4 +797,69 @@ public class StormreachGameTests {
         Check.isTrue(h, com.stormreach.weather.StormWeather.isLightningProof(p), "the full suit should make you lightning-proof");
         h.succeed();
     }
+
+    // ------------------------------------------------------------------------------------------------ 5.4 Thunderfront
+    @GameTest(maxTicks = 20)
+    public void thunderfrontContentLoaded(GameTestHelper h) {
+        MinecraftServer server = h.getLevel().getServer();
+        for (String a : new String[]{"omen_feather", "bottled_dust_devil", "tesla_coil", "umbrella_hail"})
+            Check.isTrue(h, server.getAdvancements().get(Stormreach.id(a)) != null, "advancement missing: " + a);
+        for (String t : new String[]{"entities/storm_petrel", "entities/rainfrog", "blocks/tesla_coil", "blocks/wind_chimes"}) {
+            LootTable table = server.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Stormreach.id(t)));
+            Check.isTrue(h, table != LootTable.EMPTY, "loot table missing or failed to parse: " + t);
+        }
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 60)
+    public void thunderfrontCreaturesSpawnAndLive(GameTestHelper h) {
+        openSky(h, 0, 0, 8, 8);
+        java.util.List<net.minecraft.world.entity.Mob> mobs = new java.util.ArrayList<>();
+        mobs.add(h.spawn(com.stormreach.front.FrontRegistry.RAINFROG, new BlockPos(1, 2, 1)));
+        mobs.add(h.spawn(com.stormreach.front.FrontRegistry.STORM_PETREL, new BlockPos(5, 4, 5)));
+        var devil = h.spawn(com.stormreach.front.FrontRegistry.DUST_DEVIL, new BlockPos(4, 2, 1));
+        devil.anchor(200);
+        mobs.add(devil);
+        h.runAfterDelay(40, () -> {
+            for (var m : mobs) Check.isTrue(h, m.isAlive(), m.getType().toShortString() + " died within two seconds of spawning");
+            for (var m : mobs) m.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 80)
+    public void aChargedTeslaCoilZapsAMonster(GameTestHelper h) {
+        openSky(h, 0, 0, 8, 8);
+        BlockPos coil = new BlockPos(1, 2, 1);
+        h.setBlock(coil, com.stormreach.front.FrontRegistry.TESLA_COIL);
+        var be = (com.stormreach.front.TeslaCoilBlockEntity) h.getLevel().getBlockEntity(h.absolutePos(coil));
+        Check.isTrue(h, be != null, "tesla coil block entity missing");
+        be.addCharge(h.getLevel(), com.stormreach.front.TeslaCoilBlockEntity.MAX);
+        var spider = h.spawn(net.minecraft.world.entity.EntityTypes.SPIDER, new BlockPos(5, 2, 1));
+        spider.setNoAi(true);
+        h.runAfterDelay(50, () -> {
+            Check.isTrue(h, be.charge() < com.stormreach.front.TeslaCoilBlockEntity.MAX, "the coil should have spent charge zapping the spider");
+            Check.isTrue(h, !spider.isAlive() || spider.getHealth() < spider.getMaxHealth(), "the spider should have been zapped");
+            Check.isTrue(h, h.getBlockState(coil).getValue(com.stormreach.front.TeslaCoilBlock.CHARGE) > 0, "a charged coil should show its charge");
+            spider.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 20)
+    public void umbrellasFloatAndChimesFollowTheWind(GameTestHelper h) {
+        Check.isTrue(h, com.stormreach.front.WindChimesBlock.ringChance(0, true) == 0, "still air: no chimes");
+        Check.isTrue(h, com.stormreach.front.WindChimesBlock.ringChance(40, true) == 1, "a gale should ring them every time");
+        Check.isTrue(h, com.stormreach.front.WindChimesBlock.ringChance(20, false) < com.stormreach.front.WindChimesBlock.ringChance(20, true), "indoors should be quieter");
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(com.stormreach.front.FrontRegistry.UMBRELLA));
+        p.setOnGround(false);
+        p.setDeltaMovement(0, -0.9, 0);
+        p.fallDistance = 12;
+        com.stormreach.front.UmbrellaItem.tick(p);
+        Check.isTrue(h, p.getDeltaMovement().y >= -0.17, "an umbrella should slow a fall, vy=" + p.getDeltaMovement().y);
+        Check.isTrue(h, p.fallDistance < 1, "an umbrella should cancel fall damage");
+        Check.isTrue(h, com.stormreach.front.UmbrellaItem.shields(p), "an umbrella in hand should shield from hail");
+        h.succeed();
+    }
 }

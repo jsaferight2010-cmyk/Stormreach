@@ -55,6 +55,7 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.wild.WildRegistry.init();
         com.stormreach.chase.ChaseRegistry.init();
         com.stormreach.sky.SkyRegistry.init();
+        com.stormreach.front.FrontRegistry.init();
         com.stormreach.story.StoryRegistry.init();
         com.stormreach.storm.StormBlocks.registerAll();
         com.stormreach.storm.StormMobs.registerAll();

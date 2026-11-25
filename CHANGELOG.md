@@ -1,5 +1,25 @@
 # Stormreach patch notes
 
+## 5.4.0 (Thunderfront)
+Signs of the coming storm, and tools for weathering it. The new creatures each have a jointed model, painted texture, keyframed animation and synthesized sounds.
+
+### New creatures
+- **Rainfrog** (marsh, coast, Elderstorm Grove): a golden-eyed frog whose whole marsh starts croaking in the minutes before rain. Its throat sac puffs with every croak, and it hops out to play once the rain arrives. Breed with Slimeballs.
+- **Storm Petrel:** a sooty little seabird with a white rump. Flocks gather low over the sea ahead of a storm and leave once it passes. Drops feathers and the **Omen Feather**.
+- **Dust Devil:** a whirling sand column on clear days in deserts, badlands and savannas. It lifts loose items and spins you round but does no harm. Catch one in a glass bottle.
+
+### Gear and blocks
+- **Umbrella:** keeps hail off you and floats you down from heights. Don't wave it about in a thunderstorm.
+- **Omen Feather:** use it to read the sky: when the rain comes or stops, and whether thunder is due.
+- **Bottled Dust Devil:** throw it to set down a whirlwind that sweeps up the dropped items around it.
+- **Tesla Coil:** stores lightning (from nearby strikes, Storm Cells or a thunderstorm) and zaps hostile mobs within 10 blocks. Redstone holds its fire, and comparators read its charge.
+- **Wind Chimes:** copper chimes that ring in the wind, from a tinkle in a breeze to a clamour in a gale.
+
+### Other
+- **Enchantment descriptions:** all 8 Stormreach enchantments now have descriptions. Mods such as Enchantment Descriptions show them, and these mods used to log a warning for each one.
+- Every new item has its description and Shift details.
+- 4 new achievements and 4 new synthesized sounds.
+
 ## 5.3.0 (Skyward)
 More storm creatures, storm chasing gear and weather gadgets, and a cleaner tooltip with a description on every item. Every new creature has its own jointed model, a painted texture, keyframed animation and synthesized sounds.
 

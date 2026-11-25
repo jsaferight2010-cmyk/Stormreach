@@ -241,6 +241,7 @@ public final class StormWeather {
         com.stormreach.realm.Stormgate.onLightning(level, hitBlock);
         com.stormreach.story.ShrineBlocks.onLightning(level, hitBlock);
         com.stormreach.sky.BottledLightningItem.onLightning(level, hitBlock);
+        com.stormreach.front.TeslaCoilBlockEntity.onLightning(level, hitBlock);
         BlockState state = level.getBlockState(hitBlock);
         RandomSource random = level.getRandom();
         net.minecraft.world.level.material.FluidState fluid = level.getFluidState(hitBlock.above());

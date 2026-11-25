@@ -102,6 +102,10 @@ public final class ModSfx {
     public static final SoundEvent CREATURE_MOTH_FLUTTER = ModSounds.register("creature.moth_flutter");
     public static final SoundEvent CREATURE_STORMFLY_BUZZ = ModSounds.register("creature.stormfly_buzz");
     public static final SoundEvent ITEM_RADIO_ALERT = ModSounds.register("item.radio_alert");
+    public static final SoundEvent CREATURE_FROG_CROAK = ModSounds.register("creature.frog_croak");
+    public static final SoundEvent CREATURE_PETREL_CALL = ModSounds.register("creature.petrel_call");
+    public static final SoundEvent CREATURE_DUST_DEVIL_WHIRL = ModSounds.register("creature.dust_devil_whirl");
+    public static final SoundEvent BLOCK_WIND_CHIME = ModSounds.register("block.wind_chime");
 
     /** For APIs that take a sound holder (equip sounds, some mob sounds). */
     public static Holder<SoundEvent> holder(SoundEvent e) {

@@ -96,6 +96,11 @@ SFX = {
     'creature.moth_flutter': ('Moth flutters', [], 8),
     'creature.stormfly_buzz': ('Stormflies buzz', [], 8),
     'item.radio_alert': ('Weather radio alert tone', [], 16),
+    # 5.4 Thunderfront
+    'creature.frog_croak': ('Rainfrog croaks', [], 16),
+    'creature.petrel_call': ('Storm Petrel chitters', [], 16),
+    'creature.dust_devil_whirl': ('Dust devil whirls', [], 16),
+    'block.wind_chime': ('Wind chimes ring', [], 16),
 }
 
 def java_const(sid):

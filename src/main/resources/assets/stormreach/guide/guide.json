@@ -101,7 +101,7 @@
     },
     {
      "s": "p",
-     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 14) list how often each shape appears at each rating."
+     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 15) list how often each shape appears at each rating."
     },
     {
      "s": "bullet",
@@ -1006,7 +1006,164 @@
    ]
   },
   {
-   "title": "9. The Stranger (spoilers)",
+   "title": "9. Skyward: storm creatures, gear and gadgets",
+   "lines": [
+    {
+     "s": "h",
+     "t": "Creatures"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Squall Serpent (Tempest Realm: Cloudsea Expanse, Aurora Spires, Galewood Highlands; rare, never more than one nearby): a horned sky-dragon three blocks long that swims through the air."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "160 health, 8 armour, with a purple boss bar."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "It circles its prey, lunges to bite, and rears back to spit three balls of lightning."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "When hurt it sometimes lashes the air into a gust that throws everything back."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Drops 3\u20136 Serpent Scales and its Squall Heart."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Hailstone Golem (Overworld thunderstorms): a two-and-a-half-block giant of packed hail around a glowing core."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Forms out under the open sky during a thunderstorm (5% a minute for each player outside, at most two nearby)."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "50 health, 10 armour. It smashes what it reaches and hurls fistfuls of hailstones at what it can't."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Out of the storm it melts: sunshine and warm biomes wear it down, and fire hurts it twice as much."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Drops a Glacial Core (half the time), Packed Ice and Snowballs."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Aurora Moth (Elderstorm Grove, Galewood Highlands, Aurora Spires, the coasts; at night): a violet moth with sheer aurora wings that flutters round lanterns and torches. It sheds Aurora Dust every few minutes."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Stormfly: a firefly whose tail glows with stored lightning. Swarms appear in the minutes before a storm and while it lasts, then fade away. Use a glass bottle on one to catch it."
+    },
+    {
+     "s": "h",
+     "t": "Gear and gadgets"
+    },
+    {
+     "s": "table",
+     "t": "Item  |  Recipe  |  What it does"
+    },
+    {
+     "s": "table",
+     "t": "Gale Blade  |  Serpent Scale, Squall Heart, Breeze Rod  |  A sword: every hit throws the target into the air. Use it to ride an updraft yourself (5 s cooldown). Repaired with Serpent Scales."
+    },
+    {
+     "s": "table",
+     "t": "Stormchaser Goggles  |  Leather, light-blue glass panes, copper  |  A heads-up readout of the nearest tornado (or wind and pressure when there isn't one)."
+    },
+    {
+     "s": "table",
+     "t": "Stormchaser Jacket  |  Leather, orange dye, glow ink sac  |  Braced against the wind: tornadoes and downbursts push you about a third as hard."
+    },
+    {
+     "s": "table",
+     "t": "Stormchaser Trousers and Boots  |  Leather, orange dye / slime balls  |  Speed I while it rains on you."
+    },
+    {
+     "s": "table",
+     "t": "Full Stormchaser suit  |  \u2014  |  Lightning can't hurt you."
+    },
+    {
+     "s": "table",
+     "t": "Bottled Lightning  |  Hold an empty bottle within 8 blocks of a lightning strike  |  Throw it and the bolt comes down where it lands."
+    },
+    {
+     "s": "table",
+     "t": "Cloud Seeder  |  Firework rocket, Bottled Rain, snowball (makes 2)  |  Fire it under open sky to bring five minutes of rain."
+    },
+    {
+     "s": "table",
+     "t": "Supercell Seeder  |  Cloud Seeder, Bottled Lightning, gunpowder  |  Fire it under open sky to start a thunderstorm (with everything that comes with one)."
+    },
+    {
+     "s": "table",
+     "t": "Wind Turbine  |  White wool, Anemometer, iron ingot, redstone  |  Turns in the wind and gives a redstone signal for how hard it blows (about 1 per 4 mph, 15 in a gale). Needs open sky. Right-click to read the wind."
+    },
+    {
+     "s": "table",
+     "t": "Storm Shelter Hatch  |  Iron ingots, orange dye (makes 2)  |  A heavy steel trapdoor for a storm cellar, as blast-proof as obsidian."
+    },
+    {
+     "s": "table",
+     "t": "Stormfly Jar  |  Copper ingot, glass panes, Bottled Stormfly  |  A soft lamp (light 12) that stands or hangs."
+    },
+    {
+     "s": "table",
+     "t": "Glacial Lamp  |  Packed Ice, Glacial Core (makes 4)  |  Light 15."
+    },
+    {
+     "s": "table",
+     "t": "Aurora Glass  |  Glass, Aurora Dust (makes 8)  |  Glass with the aurora drifting across it (light 7)."
+    },
+    {
+     "s": "table",
+     "t": "Serpentscale Block  |  4 Serpent Scales  |  A gleaming building block."
+    },
+    {
+     "s": "table",
+     "t": "Chaser's Coffee  |  2 cocoa beans, sugar, glass bottle  |  Speed, Haste and Night Vision for two minutes."
+    },
+    {
+     "s": "table",
+     "t": "Snow Cone  |  2 snowballs, sugar, sweet berries, paper (makes 2)  |  Fire Resistance for 30 seconds."
+    },
+    {
+     "s": "p",
+     "t": "Weather Radio, upgraded: carried, it now sounds an alert tone and broadcasts a Tornado Emergency when a tornado comes within 150 blocks, a Severe Thunderstorm Warning when thunder starts, a statement when rain moves in, the all-clear, and a wildlife advisory when a Thunderbird is about."
+    },
+    {
+     "s": "p",
+     "t": "New achievements: This Is Not a Test, Rainmaker, Playing God, Suited Up, Lightning in a Bottle, Jar of Sparks, Thaw, Serpent of the Squall and Riding the Gale."
+    },
+    {
+     "s": "h",
+     "t": "Tooltips"
+    },
+    {
+     "s": "p",
+     "t": "Every Stormreach item now has a short description under its name. Hold Shift to see how to use it and its exact effects."
+    }
+   ]
+  },
+  {
+   "title": "10. The Stranger (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -1093,7 +1250,7 @@
    ]
   },
   {
-   "title": "10. The Hollow Shrine (spoilers)",
+   "title": "11. The Hollow Shrine (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -1181,7 +1338,7 @@
    ]
   },
   {
-   "title": "11. Cyrrus, the Hollow Storm (spoilers)",
+   "title": "12. Cyrrus, the Hollow Storm (spoilers)",
    "lines": [
     {
      "s": "h",
@@ -1319,7 +1476,7 @@
    ]
   },
   {
-   "title": "12. Achievements",
+   "title": "13. Achievements",
    "lines": [
     {
      "s": "p",
@@ -1376,7 +1533,7 @@
    ]
   },
   {
-   "title": "13. Settings",
+   "title": "14. Settings",
    "lines": [
     {
      "s": "p",
@@ -1461,7 +1618,7 @@
     {
      "s": "bullet",
      "d": 0,
-     "t": "wildlifeSpawning (the 5.2 creatures), thunderbirdChance (percent chance per minute, per player out in a thunderstorm; default 6)"
+     "t": "wildlifeSpawning (the 5.2 and 5.3 creatures), thunderbirdChance (percent chance per minute, per player out in a thunderstorm; default 6), hailGolemChance (the same for Hailstone Golems; default 5)"
     },
     {
      "s": "bullet",
@@ -1476,7 +1633,7 @@
    ]
   },
   {
-   "title": "14. Rarity and drop-rate tables",
+   "title": "15. Rarity and drop-rate tables",
    "lines": [
     {
      "s": "p",
@@ -1496,15 +1653,15 @@
     },
     {
      "s": "table",
-     "t": "Epic (magenta)  |  Chaser's Badge, Heart of the Labyrinth, Maelstrom Core, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter"
+     "t": "Epic (magenta)  |  Chaser's Badge, Gale Blade, Heart of the Labyrinth, Maelstrom Core, Squall Heart, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter"
     },
     {
      "s": "table",
-     "t": "Rare (aqua)  |  Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle"
+     "t": "Rare (aqua)  |  Bottled Lightning, Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Supercell Seeder, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle"
     },
     {
      "s": "table",
-     "t": "Uncommon (yellow)  |  Cloud Ambergris, Gale Essence, Glimmer Antler, Handheld Storm Radar, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
+     "t": "Uncommon (yellow)  |  Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
     },
     {
      "s": "h",
@@ -1681,6 +1838,30 @@
     {
      "s": "table",
      "t": "Tidewrack Hermit  |  Kelp  |  0\u20131  |  50.0%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Squall Serpent  |  Serpent Scale  |  3\u20136  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Squall Serpent  |  Squall Heart  |  1  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Hailstone Golem  |  Packed Ice  |  1\u20133  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Hailstone Golem  |  Snowball  |  2\u20135  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Hailstone Golem  |  Glacial Core  |  1  |  50.0%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Aurora Moth  |  Aurora Dust  |  1\u20132  |  100.0%  |  Guaranteed"
     },
     {
      "s": "p",
@@ -2445,7 +2626,7 @@
    ]
   },
   {
-   "title": "15. Credits and licences",
+   "title": "16. Credits and licences",
    "lines": [
     {
      "s": "bullet",

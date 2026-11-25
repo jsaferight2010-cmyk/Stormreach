@@ -315,7 +315,40 @@ DETAILS = {
                                           'Sneak + right-click from outside to pack it up.'],
 }
 
+# ---------------------------------------------------------------------------------------------- 5.4 Thunderfront
+d('umbrella', 'A storm-blue umbrella. Keeps hail off you and lets you float down from a height.')
+d('omen_feather', 'A Storm Petrel feather that stirs before bad weather. Hold it up to read the sky.')
+d('bottled_dust_devil', 'A whirlwind in a bottle. Throw it to sweep up every dropped item nearby.')
+d('tesla_coil', 'A copper coil that stores lightning and zaps hostile mobs that come near.')
+d('wind_chimes', 'Copper chimes that ring in the wind: gently in a breeze, wildly in a gale.')
+MOBS.update({'rainfrog': 'a Rainfrog, whose croaking chorus says rain is coming', 'storm_petrel': 'a Storm Petrel, a seabird that flies ahead of storms',
+             'dust_devil': 'a Dust Devil, a whirlwind of hot clear days'})
+for m in ('rainfrog', 'storm_petrel', 'dust_devil'): D[f'{m}_spawn_egg'] = f'Spawns {MOBS[m]}.'
+DETAILS.update({
+    'item.stormreach.umbrella': ['Hold it: hailstones hit the umbrella, not you (each one wears it).', 'Hold it while falling: float down with no fall damage.',
+                                 'Careful in thunderstorms: it can draw lightning onto you.'],
+    'item.stormreach.omen_feather': ['Use: when rain comes or stops, and whether thunder is due.'],
+    'item.stormreach.bottled_dust_devil': ['Throw: a dust devil stays where it lands for 10 s and pulls in dropped items within 8 blocks.',
+                                           'Catch one with a glass bottle in a desert, badlands or savanna on a clear day.'],
+    'block.stormreach.tesla_coil': ['Charges from lightning within 24 blocks, a Storm Cell, or slowly in a thunderstorm.',
+                                    'Zaps the nearest hostile mob in sight within 10 blocks (6 damage), once a second.',
+                                    'A redstone signal holds its fire. Comparators read the charge.'],
+    'block.stormreach.wind_chimes': ['Hang it under a block, fence, chain or leaves.', 'Rings more the harder the wind blows; barely at all indoors.'],
+})
+# Enchantment descriptions (shown by mods such as Enchantment Descriptions)
+ENCH = {
+    'capacity': 'Backpacks only. Adds 9 slots per level.',
+    'magnetism': 'Backpacks only. Pulls nearby dropped items into the pack.',
+    'organization': 'Backpacks only. Sorts the pack every time you close it.',
+    'resilience': 'Backpacks only. A dropped pack survives fire, lava, explosions and cactus, and floats back up out of the void.',
+    'soulbound': 'Backpacks only. You keep the pack when you die.',
+    'conductive': 'Every hit also shocks the target with lightning damage.',
+    'galeforce': 'Boots. You move faster in the rain under open sky.',
+    'grounded': 'Armour. Reduces damage from lightning.',
+}
+
 with open(LANG) as f: lang = json.load(f)
+for k, v in ENCH.items(): lang[f'enchantment.stormreach.{k}.desc'] = v
 for k, v in D.items(): lang[f'desc.stormreach.{k}'] = v
 for key, lines in DETAILS.items():
     if key + '.tooltip' in lang: continue          # the item already has its own usage lines

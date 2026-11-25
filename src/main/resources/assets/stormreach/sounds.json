@@ -893,6 +893,42 @@
     ],
     "subtitle": "subtitles.stormreach.item.radio_alert"
   },
+  "creature.frog_croak": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_frog_croak",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.frog_croak"
+  },
+  "creature.petrel_call": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_petrel_call",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.petrel_call"
+  },
+  "creature.dust_devil_whirl": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_dust_devil_whirl",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.dust_devil_whirl"
+  },
+  "block.wind_chime": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_wind_chime",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.wind_chime"
+  },
   "voice.cyrrus.l01": {
     "sounds": [
       {

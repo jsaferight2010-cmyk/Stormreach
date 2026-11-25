@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "charge=0": {
+      "model": "stormreach:block/tesla_coil"
+    },
+    "charge=1": {
+      "model": "stormreach:block/tesla_coil_charged"
+    },
+    "charge=2": {
+      "model": "stormreach:block/tesla_coil_charged"
+    },
+    "charge=3": {
+      "model": "stormreach:block/tesla_coil_charged"
+    },
+    "charge=4": {
+      "model": "stormreach:block/tesla_coil_charged"
+    },
+    "charge=5": {
+      "model": "stormreach:block/tesla_coil_charged"
+    }
+  }
+}

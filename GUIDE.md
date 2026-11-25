@@ -15,13 +15,14 @@ Everything added in Stormreach 5.0 (the *Hollow Storm* update): how to find it, 
 7. Stormwild: new creatures
 8. Storm chasing
 9. Skyward: storm creatures, gear and gadgets
-10. The Stranger *(spoilers)*
-11. The Hollow Shrine *(spoilers)*
-12. Cyrrus, the Hollow Storm *(spoilers)*
-13. Achievements
-14. Settings
-15. Rarity and drop-rate tables
-16. Credits and licences
+10. Thunderfront: signs of the storm
+11. The Stranger *(spoilers)*
+12. The Hollow Shrine *(spoilers)*
+13. Cyrrus, the Hollow Storm *(spoilers)*
+14. Achievements
+15. Settings
+16. Rarity and drop-rate tables
+17. Credits and licences
 
 ---
 
@@ -60,7 +61,7 @@ Like a real survey, a powerful tornado that only crossed empty fields can come o
 
 ### What it looks like (morphology)
 
-A tornado's shape is a separate thing from its strength. The guide tables (section 15) list how often each shape appears at each rating.
+A tornado's shape is a separate thing from its strength. The guide tables (section 16) list how often each shape appears at each rating.
 
 - **Rope:** a thin, twisting tube. This is often how a tornado looks at the end of its life.
 - **Needle:** a thin, straight, tapering funnel.
@@ -381,7 +382,35 @@ Every Stormreach item now has a short description under its name. Hold **Shift**
 
 ---
 
-## 10. The Stranger *(spoilers)*
+## 10. Thunderfront: signs of the storm
+
+### Creatures
+- **Rainfrog** (Brinewater Marsh, the Stormreach Coast, Elderstorm Grove): a blue-green frog with golden eyes.
+  - In the minutes before rain the whole marsh starts croaking, throats puffing, louder and faster the closer the rain. Once it's raining they come out and hop about.
+  - A Rainfrog chorus is a forecast you can hear. Breed them with Slimeballs.
+- **Storm Petrel** (over oceans and beaches, while rain is due or falling): a small sooty seabird with a white rump that flutters low over the waves.
+  - Flocks of 3–5 gather ahead of a storm and leave once it has passed.
+  - Drops feathers and, a quarter of the time, an **Omen Feather**.
+- **Dust Devil** (deserts, badlands and savannas, on clear days): a whirling column of sand that skitters around for a minute or so.
+  - It lifts sand and loose items and spins anyone it crosses, but does no harm. Hit it and it scatters; rain or water breaks it up.
+  - Use a **glass bottle** on one to catch it.
+
+### Gear and gadgets
+| Item | Recipe | What it does |
+|---|---|---|
+| Umbrella | 3 wool, 2 sticks | Held in either hand: hailstones hit it, not you, and you float down from a height with no fall damage. In a thunderstorm it can draw lightning onto you. |
+| Omen Feather | Storm Petrels (25%) | Use it to read the sky: when rain comes or stops, and whether thunder is due. |
+| Bottled Dust Devil | Use a glass bottle on a Dust Devil | Throw it: a dust devil stays where it lands for 10 seconds and sweeps every dropped item within 8 blocks to the middle. |
+| Tesla Coil | Lightning rod, 2 copper ingots, Storm Shard, 3 iron ingots | Stores lightning: half a charge from each strike within 24 blocks or each Storm Cell, and a trickle in thunderstorms. While charged it zaps the nearest hostile mob in sight within 10 blocks (6 damage) once a second. A redstone signal holds its fire. Comparators read the charge. |
+| Wind Chimes | String, 3 wooden slabs, 2 copper ingots | Hang them under a block, fence, chain or leaves. They ring more the harder the wind blows, and barely at all indoors. |
+
+New achievements: Red Sky at Night, Whirlwind in a Bottle, It's Alive and Under the Weather.
+
+Every Stormreach enchantment now has a description too, for mods that show enchantment descriptions.
+
+---
+
+## 11. The Stranger *(spoilers)*
 
 You are not alone.
 
@@ -408,7 +437,7 @@ Craft all five pages with a book and a Hollow Remnant to rebind the **Weathered 
 
 ---
 
-## 11. The Hollow Shrine *(spoilers)*
+## 12. The Hollow Shrine *(spoilers)*
 
 **Finding it:**
 
@@ -442,7 +471,7 @@ Lay the **Weathered Journal** on the **Hollow Altar**.
 
 ---
 
-## 12. Cyrrus, the Hollow Storm *(spoilers)*
+## 13. Cyrrus, the Hollow Storm *(spoilers)*
 
 ### The intro
 
@@ -494,7 +523,7 @@ He has three last lines, and the storm clears.
 
 ---
 
-## 13. Achievements
+## 14. Achievements
 
 5.0 adds **49 achievements**, with three new tabs and new branches on the main tab.
 
@@ -514,7 +543,7 @@ The full reward list is in the tables below.
 
 ---
 
-## 14. Settings
+## 15. Settings
 
 **Mod Menu** (Stormreach → Configure) now holds **performance settings only**:
 
@@ -545,7 +574,7 @@ Gameplay options are still available for server owners in `config/stormreach.pro
 
 ---
 
-## 15. Rarity and drop-rate tables
+## 16. Rarity and drop-rate tables
 
 All numbers below are calculated directly from the mod's loot tables, worldgen files and code (by `tools/guide_tables.py`), so they match the game.
 
@@ -558,7 +587,7 @@ Minecraft colours item names by rarity: white = Common, yellow = Uncommon, aqua 
 |---|---|
 | Epic (magenta) | Chaser's Badge, Gale Blade, Heart of the Labyrinth, Maelstrom Core, Squall Heart, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter |
 | Rare (aqua) | Bottled Lightning, Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Supercell Seeder, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle |
-| Uncommon (yellow) | Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V) |
+| Uncommon (yellow) | Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Omen Feather, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V) |
 
 
 ### Mob drops
@@ -615,6 +644,8 @@ Chance is per kill without Looting (Looting adds up to +1 per level to most coun
 | Hailstone Golem | Snowball | 2–5 | 100.0% | Guaranteed |
 | Hailstone Golem | Glacial Core | 1 | 50.0% | Common |
 | Aurora Moth | Aurora Dust | 1–2 | 100.0% | Guaranteed |
+| Storm Petrel | Feather | 0–2 | 66.7% | Common |
+| Storm Petrel | Omen Feather | 1 | 25.0% | Uncommon |
 
 
 The Stranger and tornadoes drop nothing. Stranger: after you have seen it 3+ times, each time it vanishes there is a 25% chance it leaves a Hollow Remnant where it stood (Uncommon, but only after the third sighting).
@@ -891,7 +922,7 @@ Each reward item comes from exactly one achievement. The Sovereign Trophy is the
 
 ---
 
-## 16. Credits and licences
+## 17. Credits and licences
 
 - **Cyrrus's voice:**
   - spoken by the **Piper** text-to-speech engine with the "Ryan (high)" voice model

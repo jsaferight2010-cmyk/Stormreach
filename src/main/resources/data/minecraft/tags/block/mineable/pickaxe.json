@@ -1708,6 +1708,8 @@
     "stormreach:storm_shelter_hatch",
     "stormreach:stormfly_jar",
     "stormreach:serpentscale_block",
-    "stormreach:glacial_lamp"
+    "stormreach:glacial_lamp",
+    "stormreach:tesla_coil",
+    "stormreach:wind_chimes"
   ]
 }

@@ -1531,6 +1531,23 @@
    ]
   },
   {
+   "result": "stormreach:umbrella",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "#minecraft:wool",
+    "#minecraft:wool",
+    "#minecraft:wool",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:voltite_axe",
    "count": 1,
    "category": "equipment",
@@ -2191,6 +2208,23 @@
     "",
     "",
     ""
+   ]
+  },
+  {
+   "result": "stormreach:tesla_coil",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:lightning_rod",
+    "",
+    "minecraft:copper_ingot",
+    "stormreach:storm_shard",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot"
    ]
   },
   {
@@ -4146,6 +4180,23 @@
     "stormreach:hollow_remnant",
     "",
     ""
+   ]
+  },
+  {
+   "result": "stormreach:wind_chimes",
+   "count": 1,
+   "category": "decorations",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:string",
+    "",
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_slabs",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:copper_ingot"
    ]
   }
  ]

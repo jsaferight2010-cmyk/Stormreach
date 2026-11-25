@@ -120,7 +120,7 @@ public class HailstoneEntity extends Entity {
 
     private void hitEntity(ServerLevel level, LivingEntity e, HailSize size) {
         DamageSource src = level.damageSources().source(StormWeather.HAIL);
-        e.hurtServer(level, src, size.damage());
+        if (!com.stormreach.front.UmbrellaItem.shields(e)) e.hurtServer(level, src, size.damage());
         level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, getX(), getY(), getZ(), 4 + size.ordinal() * 2, 0.1, 0.1, 0.1, 0.1);
         discard();
     }

@@ -18,6 +18,7 @@ public abstract class LivingEntityMixin {
             com.stormreach.realm.RealmGear.tick((LivingEntity) (Object) this);
             StormPerks.tick((LivingEntity) (Object) this);
             com.stormreach.wild.Stormkite.tick((LivingEntity) (Object) this);
+            com.stormreach.front.UmbrellaItem.tick((LivingEntity) (Object) this);
         } catch (RuntimeException e) {
             Stormreach.LOGGER.error("Stormreach mob tick failed", e);
         }

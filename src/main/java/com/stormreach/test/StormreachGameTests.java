@@ -8,7 +8,6 @@ import com.stormreach.forest.ForestRegistry;
 import com.stormreach.forest.StormfruitPodBlock;
 import com.stormreach.labyrinth.HidingTracker;
 import com.stormreach.labyrinth.LabyrinthRegistry;
-import com.stormreach.realm.TempestRealm;
 import com.stormreach.registry.ModEffects;
 import com.stormreach.registry.ModSounds;
 import com.stormreach.sim.BackpackTier;
@@ -49,7 +48,9 @@ public class StormreachGameTests {
     @GameTest
     public void datapackContentLoaded(GameTestHelper h) {
         MinecraftServer server = h.getLevel().getServer();
-        h.assertTrue(server.getLevel(TempestRealm.LEVEL) != null, "the Tempest Realm dimension is missing");
+        // the GameTest server only creates the Overworld, so check the realm's data instead of a loaded level
+        h.assertTrue(server.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE)
+                .get(ResourceKey.create(Registries.DIMENSION_TYPE, Stormreach.id("tempest_realm"))).isPresent(), "the Tempest Realm dimension type is missing");
         String[] advancements = {"root", "meteorology", "enter_labyrinth", "stranger_seen", "defeat_cyrrus", "ef5_tornado", "backpack_maelstrom",
                 "struck_by_lightning", "elderstorm_grove", "stormreach_complete"};
         for (String a : advancements) h.assertTrue(server.getAdvancements().get(Stormreach.id(a)) != null, "advancement missing: " + a);

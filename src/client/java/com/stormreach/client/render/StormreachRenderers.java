@@ -2,9 +2,7 @@ package com.stormreach.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.stormreach.Stormreach;
-import com.stormreach.client.model.CliffCrabModel;
-import com.stormreach.client.model.SquallModel;
-import com.stormreach.client.model.StormGullModel;
+import com.stormreach.client.model.gen.*;
 import com.stormreach.entity.CliffCrab;
 import com.stormreach.entity.Squall;
 import com.stormreach.entity.StormGull;
@@ -68,6 +66,11 @@ public final class StormreachRenderers {
 
         public SquallRenderer(EntityRendererProvider.Context context) {
             super(context, new SquallModel(SquallModel.createBodyLayer().bakeRoot()), 0.0f);
+        }
+
+        @Override
+        protected void scale(LivingEntityRenderState state, PoseStack poseStack) {
+            poseStack.scale(1.5f, 1.5f, 1.5f);
         }
 
         @Override

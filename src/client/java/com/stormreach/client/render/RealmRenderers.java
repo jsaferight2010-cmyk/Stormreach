@@ -2,12 +2,7 @@ package com.stormreach.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.stormreach.Stormreach;
-import com.stormreach.client.model.OrbModel;
-import com.stormreach.client.model.PufflingModel;
-import com.stormreach.client.model.SkyrayModel;
-import com.stormreach.client.model.SovereignModel;
-import com.stormreach.client.model.StormGullModel;
-import com.stormreach.client.model.WaterspoutModel;
+import com.stormreach.client.model.gen.*;
 import com.stormreach.entity.Cyclone;
 import com.stormreach.entity.Puffling;
 import com.stormreach.entity.Skyray;
@@ -33,16 +28,20 @@ public final class RealmRenderers {
         public SovereignRenderer(EntityRendererProvider.Context c) { super(c, new SovereignModel(SovereignModel.createBodyLayer().bakeRoot()), 1.2f); }
         @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
         @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.9f, 1.9f, 1.9f); }
+        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.6f, 1.6f, 1.6f); }
         @Override protected int getBlockLightLevel(TempestSovereign e, BlockPos pos) { return 15; }
     }
 
-    public static class SkyrayRenderer extends MobRenderer<Skyray, LivingEntityRenderState, SkyrayModel> {
+    public static class SkyrayRenderer extends MobRenderer<Skyray, SkyrayModel.State, SkyrayModel> {
         private static final Identifier TEXTURE = tex("skyray");
         public SkyrayRenderer(EntityRendererProvider.Context c) { super(c, new SkyrayModel(SkyrayModel.createBodyLayer().bakeRoot()), 0.9f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { float k = s.isBaby ? 0.5f : 1.15f; pose.scale(k, k, k); }
+        @Override public SkyrayModel.State createRenderState() { return new SkyrayModel.State(); }
+        @Override public void extractRenderState(Skyray e, SkyrayModel.State s, float partial) {
+            super.extractRenderState(e, s, partial);
+            s.saddled = e.isSaddled();
+        }
+        @Override public Identifier getTextureLocation(SkyrayModel.State s) { return TEXTURE; }
+        @Override protected void scale(SkyrayModel.State s, PoseStack pose) { float k = s.isBaby ? 0.5f : 1.15f; pose.scale(k, k, k); }
     }
 
     public static class PufflingRenderer extends MobRenderer<Puffling, PufflingModel.State, PufflingModel> {
@@ -57,28 +56,28 @@ public final class RealmRenderers {
         @Override protected void scale(PufflingModel.State s, PoseStack pose) { if (s.isBaby) pose.scale(0.5f, 0.5f, 0.5f); }
     }
 
-    public static class StaticWispRenderer extends MobRenderer<StaticWisp, LivingEntityRenderState, OrbModel> {
+    public static class StaticWispRenderer extends MobRenderer<StaticWisp, LivingEntityRenderState, StaticWispModel> {
         private static final Identifier TEXTURE = tex("static_wisp");
-        public StaticWispRenderer(EntityRendererProvider.Context c) { super(c, new OrbModel(OrbModel.createBodyLayer().bakeRoot()), 0.0f); }
+        public StaticWispRenderer(EntityRendererProvider.Context c) { super(c, new StaticWispModel(StaticWispModel.createBodyLayer().bakeRoot()), 0.0f); }
         @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
         @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
         @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(0.8f, 0.8f, 0.8f); }
         @Override protected int getBlockLightLevel(StaticWisp e, BlockPos pos) { return 15; }
     }
 
-    public static class CycloneRenderer extends MobRenderer<Cyclone, LivingEntityRenderState, WaterspoutModel> {
+    public static class CycloneRenderer extends MobRenderer<Cyclone, LivingEntityRenderState, CycloneModel> {
         private static final Identifier TEXTURE = tex("cyclone");
-        public CycloneRenderer(EntityRendererProvider.Context c) { super(c, new WaterspoutModel(WaterspoutModel.createBodyLayer().bakeRoot()), 0.4f); }
+        public CycloneRenderer(EntityRendererProvider.Context c) { super(c, new CycloneModel(CycloneModel.createBodyLayer().bakeRoot()), 0.4f); }
         @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
         @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(0.5f, 0.28f, 0.5f); }
+        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(0.8f, 1.6f, 0.8f); }
     }
 
-    public static class StormhawkRenderer extends MobRenderer<Stormhawk, LivingEntityRenderState, StormGullModel> {
+    public static class StormhawkRenderer extends MobRenderer<Stormhawk, LivingEntityRenderState, StormhawkModel> {
         private static final Identifier TEXTURE = tex("stormhawk");
-        public StormhawkRenderer(EntityRendererProvider.Context c) { super(c, new StormGullModel(StormGullModel.createBodyLayer().bakeRoot()), 0.5f); }
+        public StormhawkRenderer(EntityRendererProvider.Context c) { super(c, new StormhawkModel(StormhawkModel.createBodyLayer().bakeRoot()), 0.5f); }
         @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
         @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.7f, 1.7f, 1.7f); }
+        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.15f, 1.15f, 1.15f); }
     }
 }

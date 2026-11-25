@@ -1,5 +1,8 @@
 package com.stormreach.client.story;
 
+import com.stormreach.client.model.gen.HollowKeeperModel;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
+import net.minecraft.client.renderer.entity.MobRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.stormreach.Stormreach;
 import com.stormreach.labyrinth.HollowKeeper;
@@ -52,15 +55,15 @@ public final class StoryRenderers {
         @Override protected int getBlockLightLevel(CyrrusBoss e, BlockPos pos) { return e.form() > 0 ? 12 : super.getBlockLightLevel(e, pos); }
     }
 
-    public static class KeeperRenderer extends HumanoidMobRenderer<HollowKeeper, HumanoidRenderState, HumanoidModel<HumanoidRenderState>> {
+    public static class KeeperRenderer extends MobRenderer<HollowKeeper, LivingEntityRenderState, HollowKeeperModel> {
         private static final Identifier TEXTURE = Stormreach.id("textures/entity/hollow_keeper.png");
 
         public KeeperRenderer(EntityRendererProvider.Context c) {
-            super(c, new HumanoidModel<>(c.bakeLayer(ModelLayers.ZOMBIE)), 0.7f);
+            super(c, new HollowKeeperModel(HollowKeeperModel.createBodyLayer().bakeRoot()), 0.7f);
         }
 
-        @Override public HumanoidRenderState createRenderState() { return new HumanoidRenderState(); }
-        @Override public Identifier getTextureLocation(HumanoidRenderState s) { return TEXTURE; }
-        @Override protected void scale(HumanoidRenderState s, PoseStack pose) { pose.scale(1.2f, 1.6f, 1.2f); }
+        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
+        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
+        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.27f, 1.27f, 1.27f); }
     }
 }

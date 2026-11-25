@@ -1,12 +1,40 @@
 # Stormreach patch notes
 
 ## 5.1.0 (the Overhaul)
-Built and tested in fourteen stages.
+Built and tested in sixteen stages.
+
+### Stage 16: every mob rebuilt
+- **All 17 Stormreach creature models are new**, with more parts, real joints and new animation. Each has its own texture painted to fit it at 4x detail (fur, feathers, shell, scales, crystal, metal, cloud, water).
+  - **Cliff Crab:** a ridged shell, two-jointed legs that scuttle, swaying eye stalks, and pincers that snap.
+  - **Thunder Crab:** now its own model instead of a big Cliff Crab, with crystal spines, a lightning-rod antenna and glowing eyes.
+  - **Storm Gull:** two-jointed wings with dark tips, a fanned tail and webbed feet.
+  - **Stormhawk:** now its own raptor instead of a big gull, with a hooked beak, a golden crest and a banded tail.
+  - **Harbor Seal:** a two-part body that wiggles as it moves, whiskers, front flippers and a tail fluke.
+  - **Squall:** a glowing core inside three cloud rings that spin against each other, with a wispy tail.
+  - **Stormwarden:** now its own storm-stone golem instead of a giant Squall, with a crystal crown, a glowing visor and core, plated shoulders and jointed arms.
+  - **Ball Lightning and Static Wisp:** separate models now. Ball Lightning spins three arcs of sparks around a white-hot core; the Wisp is a golden spark with a crown of spikes and a trailing tail.
+  - **Waterspout and Cyclone:** six turning rings each, of water or of wind, that sway as they spin.
+  - **Tempest Sovereign:** a crowned, armoured storm lord with crystal horns, a halo of lightning, a two-part cape and a body that trails into a spinning vortex.
+  - **Skyray:** two-jointed wing fins, head fins, a three-jointed glowing tail. The saddle now shows when it is saddled.
+  - **Puffling:** a thundercloud fleece with a spark on top, floppy ears and a pink snout. Shearing still removes the fleece.
+  - **Glimmerstag:** jointed legs and branching crystal antlers with glowing tips.
+  - **Thistlehop:** a hare with long ears and thistles blooming on its back; it really hops now.
+  - **Hollow Keeper:** no longer a stretched zombie. A gaunt robed figure three blocks tall, with a bone mask, glowing eyes, long clawed arms, ragged robes and a swinging lantern.
+- Cyrrus, the Stranger and the Brine Wraith stay humanoid (player- and zombie-shaped) and use their redrawn textures.
+- The models come from `tools/mobmodels.py`, which writes both the Java model and its texture, so they always match.
+
+### Stage 15: textures redrawn, not upscaled
+- **Every Stormreach block is repainted at 64x** by material, using each block's own colours:
+  - bricks with mortar and cracks, and stone with strata and veins
+  - ores with faceted gems, and crystal blocks with facets
+  - riveted metal, wood grain and rings, leaf clusters, grassy turf, soil, clouds, lamps and glass
+- Doors, trapdoors and other pictures are redrawn at 4x with smoothed edges, shading and outlines, so they are no longer blocky enlargements.
+- Items are redrawn the same way at 64x.
+- This replaces Stage 12–14's upscale pass.
 
 ### Stage 14: 64x items, mobs and armour
 - **Every Stormreach item texture is now 64x**, and **mob and armour textures are 4x their old resolution**, with the same detail pass as the blocks: crisp pixel-art cells with a soft bevel and fine grain.
 - The smooth, procedurally drawn textures (tornado, clouds, hailstones) were already high resolution and are left as they are.
-- Mob models keep their 5.0 shapes; only their textures changed.
 
 ### Stage 13: the Hollow Keeper hunts by sound, and blocks sound like Stormreach
 - **A smarter Hollow Keeper:**

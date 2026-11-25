@@ -309,4 +309,18 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
 - Stage 14: `tools/hd64.py` now covers items (to 64x) and entity/armour textures (4x small sheets, 2x medium). It skips the procedural textures.
 - Final: GUIDE.md regenerated, 55 unit tests, 30 GameTests, validator clean.
 - Still never run in a real client.
-- Not done: Meshy models (the Meshy CLI needs the user to sign in in a browser), and new mob geometry (the mob models are the 5.0 ones, with the new textures).
+- Not done: Meshy models (the Meshy CLI needs the user to sign in in a browser).
+
+### 5.1.0 stages 15–16 (after the user asked for real textures and models)
+- Stage 15: `tools/remaster64.py` replaces hd64.py (deleted).
+  - Blocks are repainted by material (see `block_painter`), with colours taken from each 16x original's palette.
+  - Pictures (doors, trapdoors, non-square textures) and items get an EPX 4x remaster with volume shading, rims and outlines.
+  - Mob textures from mobmodels.py are skipped. Other entity and armour sheets get the EPX pass.
+- Stage 16: `tools/mobmodels.py` describes 17 models as parts and boxes. It packs UVs, paints the texture at 4x, and writes `client/model/gen/*Model.java` with the animation.
+  - The old `client/model/*.java` and the forest Stag/Hop models were deleted.
+  - Thunder Crab, Stormhawk, Stormwarden, Static Wisp and Cyclone now have their own models.
+  - The Hollow Keeper's renderer is now a MobRenderer with its own model, not a zombie HumanoidModel.
+  - Skyray and Puffling use a `State` with `saddled` / `sheared`.
+  - Renderer scales were re-fitted to the hitboxes.
+  - `tools/preview/mob_preview.py` draws an offline contact sheet of the textured models, as a source check only.
+- run_all order: ... guidebooks, mobmodels, remaster64, fixorder.

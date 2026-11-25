@@ -1086,7 +1086,8 @@ public class StormreachGameTests {
         for (int i = 0; i < 60; i++) com.stormreach.weather.precip.HailSim.schedule(level, open.getX() + 0.5, open.getY() + 20, open.getZ() + 0.5, com.stormreach.sim.HailSize.SOFTBALL, 0, 0);
         Check.isTrue(h, com.stormreach.weather.precip.HailstoneEntity.live() == before, "scheduling hail spawned entities");
         h.runAfterDelay(60, () -> {
-            Check.isTrue(h, zombie.getHealth() < hp, "the hail never hit the zombie");
+            int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, net.minecraft.util.Mth.floor(z0.x), net.minecraft.util.Mth.floor(z0.z));
+            Check.isTrue(h, zombie.getHealth() < hp, "the hail never hit the zombie: zombie at " + zombie.position() + " scheduled at " + z0 + " column top " + top + " hp " + zombie.getHealth() + " hurtTime " + zombie.hurtTime);
             Check.isTrue(h, h.getBlockState(new BlockPos(4, 2, 4)).is(com.stormreach.weather.precip.PrecipContent.HAIL_LAYER), "no hail settled on open ground");
             Check.isTrue(h, com.stormreach.weather.precip.HailSim.pending(level) == 0, "hail impacts were left pending");
             zombie.discard();

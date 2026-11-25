@@ -3,7 +3,9 @@
   "package": "com.stormreach.client.mixin",
   "compatibilityLevel": "JAVA_25",
   "client": [
+    "CameraMixin",
     "EntityRenderersAccessor",
+    "KeyboardInputMixin",
     "LivingEntityRendererMixin"
   ],
   "injectors": {

@@ -1,5 +1,23 @@
 # Stormreach patch notes
 
+## 5.1.0 (in progress: the overhaul)
+Built in stages. This section grows as each stage lands.
+
+### Stage 1: crash and gameplay fixes
+- **Sovereign Altar crash fixed.** The ritual could aim a lightning strike at a spot with no ground under it (an altar over the void or over open air), which crashed the server. Strikes now step inward to find ground and always have a target.
+- **Lightning Staff no longer burns anything.** Its bolts still hit as hard, but they light no fires and set nothing (you, mobs, the ground) on fire. No Fire Resistance is applied or shown; only the staff's own bolts are affected, so natural lightning works as before.
+- **Dispel Weather works.** It now:
+  - ends the rain and thunder for 10–20 minutes (and with them the Gale and Thunderhead)
+  - makes live tornadoes rope out and cancels the ones still forming
+  - breaks up nearby storm fronts, Squalls and ball lightning
+  - shows a ring of clearing cloud with a chime and a message, and says so if the sky is already clear
+- **Rusted Locker rework.**
+  - You stand inside, facing out, and look out through the grate's slats.
+  - You're held in place: walking, jumping and sneaking don't take you out. **Press Use to step out.**
+  - Only one player fits in a locker, and other players see the locker, not you.
+  - The purple-and-black squares were missing icons for the Hidden and Labyrinth effects. Both now have icons.
+- **Creative Realm Pass** (new, Creative only): use it to go to the Tempest Realm and back, for testing. It has no recipe and drops from nothing, and it does nothing outside Creative mode.
+
 ## 5.0.0 (the Hollow Storm update)
 **Real tornadoes, weather instruments, backpacks, a buried labyrinth, a new realm forest, a story told in glimpses, and a voiced final boss.** The full player guide, with every rarity and drop-rate table, is in **GUIDE.md**.
 

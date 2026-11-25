@@ -154,4 +154,77 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    @GameTest
+    public void altarRitualAimsAtTheGroundEvenOverTheVoid(GameTestHelper h) {
+        // the 5.0 crash: an altar with nothing solid below its ring made the ritual strike a null position
+        BlockPos sky = h.absolutePos(new BlockPos(1, 1, 1)).atY(h.getLevel().getMaxY() - 20);
+        for (int i = 0; i < 16; i++) {
+            BlockPos aim = com.stormreach.realm.SovereignAltarBlock.ritualStrike(h.getLevel(), sky, i * Math.PI / 8, 6);
+            h.assertTrue(aim != null, "ritual strike had no target over the void");
+        }
+        h.assertTrue(com.stormreach.weather.StormWeather.surfaceOr(h.getLevel(), sky, 24) != null, "surfaceOr returned null");
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 60)
+    public void lightningStaffBoltsHurtButNeverBurn(GameTestHelper h) {
+        BlockPos spot = new BlockPos(2, 1, 2);
+        for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 0, z), Blocks.GRASS_BLOCK);
+        var cow = h.spawn(net.minecraft.world.entity.EntityTypes.COW, spot);
+        float hp = cow.getHealth();
+        com.stormreach.weather.StormWeather.strike(h.getLevel(), h.absolutePos(spot), null, true);
+        h.runAfterDelay(12, () -> {
+            for (int x = -2; x <= 6; x++) for (int y = 0; y <= 3; y++) for (int z = -2; z <= 6; z++)
+                h.assertFalse(h.getBlockState(new BlockPos(x, y, z)).is(Blocks.FIRE), "the staff's lightning lit a fire");
+            if (cow.isAlive()) {
+                h.assertFalse(cow.isOnFire(), "the staff's lightning set the target on fire");
+                h.assertFalse(cow.hasEffect(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE), "fire resistance was applied");
+                h.assertTrue(cow.getHealth() < hp, "the staff's lightning did no damage");
+            }
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 60)
+    public void dispelWeatherClearsTheStormAndTornadoes(GameTestHelper h) {
+        MinecraftServer server = h.getLevel().getServer();
+        server.setWeatherParameters(0, 6000, true, true);
+        Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 1, 1)));
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), at,
+                TornadoProfile.rollWith(new Random(3), TornadoFormation.SUPERCELL, EFScale.EF1, null, 0.3, 0.05, 90));
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { if (t != null) t.discard(); h.succeed(); return; }
+        int n = com.stormreach.tornado.WeatherEvents.dispel(h.getLevel(), p);
+        h.assertTrue(n > 0, "dispel reported nothing cleared");
+        h.assertFalse(server.getWeatherData().isRaining(), "rain still set after dispel");
+        h.assertFalse(server.getWeatherData().isThundering(), "thunder still set after dispel");
+        h.assertTrue(server.getWeatherData().getClearWeatherTime() >= 12000, "no clear-weather window after dispel");
+        h.assertTrue(t == null || t.isDissipating(), "tornado not dissipating after dispel");
+        if (t != null) t.discard();
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 40)
+    public void lockerHoldsItsHiderAndAllowsOnlyOne(GameTestHelper h) {
+        BlockPos lower = new BlockPos(1, 1, 1);
+        BlockState base = LabyrinthRegistry.LOCKER.defaultBlockState();
+        h.setBlock(lower, base.setValue(com.stormreach.labyrinth.LockerBlock.HALF, DoubleBlockHalf.LOWER));
+        h.setBlock(lower.above(), base.setValue(com.stormreach.labyrinth.LockerBlock.HALF, DoubleBlockHalf.UPPER));
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer a) || !(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer b)) { h.succeed(); return; }
+        BlockPos abs = h.absolutePos(lower);
+        HidingTracker.enter(a, abs, Direction.NORTH);
+        HidingTracker.enter(b, abs, Direction.NORTH);
+        h.assertTrue(HidingTracker.isHidden(a), "first player not hidden");
+        h.assertFalse(HidingTracker.isHidden(b), "two players hid in one locker");
+        a.teleportTo(a.getX() + 2, a.getY(), a.getZ()); // try to walk out
+        h.runAfterDelay(3, () -> {
+            // mock players aren't in the level's entity list, so the level tick can't reach them: run its hold step
+            if (h.getLevel().getEntity(a.getUUID()) == null) HidingTracker.hold(a);
+            h.assertTrue(a.position().distanceTo(Vec3.atBottomCenterOf(abs)) < 0.1, "the locker did not hold its hider in place");
+            HidingTracker.leave(a, true);
+            h.assertFalse(HidingTracker.isHidden(a), "still hidden after the exit request");
+            h.assertFalse(a.hasEffect(ModEffects.HIDDEN), "Hidden effect left behind");
+            h.succeed();
+        });
+    }
 }

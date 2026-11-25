@@ -216,3 +216,18 @@ The first runs were the user's client with a hand-built jar, then the CI GameTes
 6. The GameTest server has no Tempest Realm level, so the test now checks the dimension type instead.
 
 Result: CI is green. The build, 36 JUnit tests and all 8 required GameTests pass. validate.py now also checks loot types, predicates, recipe categories and biome attribute modifiers against vanilla 26.3.
+
+### 5.1 overhaul, stage 1 (code-only; Minecraft not launched)
+The user asked for the overhaul to be tested with builds, compiles, unit tests and validators only, without launching Minecraft, a client or a server from this session. CI still runs the headless GameTest server on GitHub.
+- Altar: `SovereignAltarBlock.ritualStrike` steps the strike radius inward until it finds ground; `StormWeather.surfaceOr` never returns null, and `strike`/`strikeVisual` reject a null position with a clear message.
+- Fireless lightning: `FirelessLightning` marks the staff's bolts. `LightningBoltMixin` cancels `spawnFire` for them and restores the fire ticks of the entities they hit (snapshot before the tick, restore after).
+- Dispel: `WeatherEvents.dispel` dissipates tornadoes (`TornadoEntity.dissipate` speeds up the rope-out), drops pending events, discards nearby fronts, Squalls and ball lightning, and calls `setWeatherParameters`. Its sound is still a vanilla placeholder until the sound stage.
+- Locker:
+  - server: `HidingTracker` holds the player, refuses a second hider, and sends `LockerNet.HidePayload`; `ExitPayload` is the Use-to-exit request
+  - client: `LockerClient` tracks the state, blocks attack and sends exit on Use; `KeyboardInputMixin` zeroes input; `CameraMixin` places the camera behind the grate with a ±70°/±35° view window
+  - the model is an open box with a two-sided cutout grate; the collision box is empty for the hider
+  - the purple-black effect icons: `mob_effect/hidden.png` and `labyrinth.png` were missing
+- `RealmPassItem`: Creative-only travel via `TempestRealm.queueTravel`.
+- `run_all.py` now refuses to start without the vanilla files, and puts the sounds back even if a script fails (a failed run had deleted them; restored from git).
+- New GameTests: altar over the void, fireless staff bolt, dispel, locker hold and one-hider rule.
+- Not runtime-tested: the client camera and input mixins and the grate rendering (the CI server never runs client code).

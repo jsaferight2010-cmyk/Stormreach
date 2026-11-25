@@ -88,7 +88,9 @@ public final class TabOrganizer {
                             .title(Component.translatable("itemGroup.stormreach." + t.name().toLowerCase()))
                             .icon(icons.get(t))
                             .displayItems((params, output) -> {
-                                for (Item item : sorted().get(t)) output.accept(item);
+                                // the Creative Realm Pass goes first in Materials, where it's easy to find
+                                if (t == Tab.MATERIALS) output.accept(com.stormreach.realm.RealmItems.REALM_PASS);
+                                for (Item item : sorted().get(t)) if (item != com.stormreach.realm.RealmItems.REALM_PASS) output.accept(item);
                             })
                             .build());
         }

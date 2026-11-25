@@ -34,6 +34,7 @@ public final class StormreachClient implements ClientModInitializer {
         EntityRendererRegistry.register(com.stormreach.forest.ForestRegistry.GLIMMERSTAG, com.stormreach.client.forest.ForestModels.StagRenderer::new);
         EntityRendererRegistry.register(com.stormreach.forest.ForestRegistry.THISTLEHOP, com.stormreach.client.forest.ForestModels.HopRenderer::new);
         com.stormreach.client.backpack.BackpackClient.init();
+        com.stormreach.client.labyrinth.LockerClient.init();
         net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(com.stormreach.client.story.LabyrinthMusic::tick);
         StormClientContent.init();
     }

@@ -37,26 +37,55 @@ public final class HidingTracker {
         return HIDING.get(p.getUUID());
     }
 
+    /** Someone else is already in this locker? */
+    public static boolean occupied(BlockPos lower) {
+        for (Hide h : HIDING.values()) if (h.locker().equals(lower)) return true;
+        return false;
+    }
+
     public static void enter(ServerPlayer p, BlockPos lower, Direction facing) {
-        Vec3 spot = Vec3.atBottomCenterOf(lower).add(-facing.getStepX() * 0.15, 0, -facing.getStepZ() * 0.15);
+        if (occupied(lower)) {
+            p.sendOverlayMessage(Component.translatable("block.stormreach.rusted_locker.occupied").withStyle(ChatFormatting.GRAY));
+            return;
+        }
+        // stand in the middle of the locker, facing out through the grate
+        Vec3 spot = Vec3.atBottomCenterOf(lower);
         p.teleportTo(spot.x, spot.y, spot.z);
         p.setYRot(facing.toYRot());
+        p.setYHeadRot(facing.toYRot());
         p.setDeltaMovement(Vec3.ZERO);
+        p.setShiftKeyDown(false);
         HIDING.put(p.getUUID(), new Hide(lower, facing, spot, p.level().getGameTime(), new boolean[]{false}));
-        p.addEffect(new MobEffectInstance(ModEffects.HIDDEN, 20 * 60 * 60, 0, false, false, true));
+        // Hidden: the Keeper can't see you. Invisible (no particles, no icon): other players don't see you standing in it.
+        p.addEffect(new MobEffectInstance(ModEffects.HIDDEN, 20 * 60 * 60, 0, true, false, true));
+        p.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 20 * 60 * 60, 0, true, false, false));
+        LockerNet.send(p, true, lower, facing.get2DDataValue());
         p.level().playSound(null, lower, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.6f, 0.7f);
         p.sendOverlayMessage(Component.translatable("block.stormreach.rusted_locker.hidden").withStyle(ChatFormatting.DARK_AQUA));
         com.stormreach.progress.StormAdvancements.award(p, "hide_locker");
     }
 
+    /** Takes off only the effects the locker gave (so a real Invisibility potion is left alone). */
+    private static void clearEffects(ServerPlayer p) {
+        p.removeEffect(ModEffects.HIDDEN);
+        MobEffectInstance inv = p.getEffect(net.minecraft.world.effect.MobEffects.INVISIBILITY);
+        if (inv != null && inv.isAmbient() && !inv.isVisible() && !inv.showIcon()) p.removeEffect(net.minecraft.world.effect.MobEffects.INVISIBILITY);
+    }
+
     public static void leave(ServerPlayer p, boolean stepOut) {
         Hide h = HIDING.remove(p.getUUID());
-        p.removeEffect(ModEffects.HIDDEN);
+        clearEffects(p);
+        LockerNet.send(p, false, h == null ? p.blockPosition() : h.locker(), 0);
         if (h != null && stepOut) {
             Vec3 out = Vec3.atBottomCenterOf(h.locker().relative(h.facing()));
             p.teleportTo(out.x, out.y, out.z);
             p.level().playSound(null, h.locker(), SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 0.6f, 0.7f);
         }
+    }
+
+    /** A player who logged out while hiding comes back with the locker's effects still on: take them off. */
+    public static void onJoin(ServerPlayer p) {
+        if (!isHidden(p) && p.hasEffect(ModEffects.HIDDEN)) clearEffects(p);
     }
 
     public static void discovered(ServerPlayer p) {
@@ -70,23 +99,13 @@ public final class HidingTracker {
             Map.Entry<UUID, Hide> e = it.next();
             if (!(level.getEntity(e.getKey()) instanceof ServerPlayer p)) continue;
             Hide h = e.getValue();
-            if (!level.getBlockState(h.locker()).is(LabyrinthRegistry.LOCKER)) {
+            if (!level.getBlockState(h.locker()).is(LabyrinthRegistry.LOCKER) || p.isDeadOrDying() || p.isSpectator()) {
                 it.remove();
-                p.removeEffect(ModEffects.HIDDEN);
+                clearEffects(p);
+                LockerNet.send(p, false, h.locker(), 0);
                 continue;
             }
-            if (p.isShiftKeyDown()) {
-                it.remove();
-                leave(p, true);
-                continue;
-            }
-            double moved = p.position().distanceTo(h.spot());
-            if (moved > 0.6) {
-                it.remove();
-                p.removeEffect(ModEffects.HIDDEN);
-                continue;
-            }
-            if (moved > 0.08) h.moved()[0] = true;
+            hold(p, h);
             if (level.getGameTime() % 20 == 0) {
                 HollowKeeper g = LabyrinthTracker.nearestGuardian(level, p.position(), 10);
                 if (g != null) p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(
@@ -94,6 +113,18 @@ public final class HidingTracker {
                         p.getX(), p.getY(), p.getZ(), 1.0f, 1.0f, level.getRandom().nextLong()));
             }
         }
+    }
+
+    /** Locked in place: movement, jumping and sneaking can't take you out (the client also ignores those keys). */
+    public static void hold(ServerPlayer p) {
+        Hide h = hide(p);
+        if (h != null) hold(p, h);
+    }
+
+    private static void hold(ServerPlayer p, Hide h) {
+        if (p.position().distanceToSqr(h.spot()) > 1.0E-4) p.teleportTo(h.spot().x, h.spot().y, h.spot().z);
+        p.setDeltaMovement(Vec3.ZERO);
+        p.setShiftKeyDown(false);
     }
 
     /** One search check by a guardian standing near a locker. */

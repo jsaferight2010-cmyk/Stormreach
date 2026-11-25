@@ -211,4 +211,43 @@ public final class WeatherEvents {
         }
         return best;
     }
+
+    /**
+     * Dispel Weather. Clears the weather itself, not just its effects:
+     * tornadoes rope out and lift, Stormreach events (downbursts, hail, supercells) end, storm fronts, squalls and
+     * ball lightning break up, and the vanilla rain and thunder stop (rain fades out over a few seconds the normal
+     * way, which every client sees because weather is server-side and synced).
+     * @return how many things were dispelled (0 means the sky was already clear)
+     */
+    public static int dispel(ServerLevel level, Player player) {
+        int n = 0;
+        for (TornadoEntity t : TornadoManager.live(level)) if (!t.isDissipating()) { t.dissipate(); n++; }
+        int events = TornadoManager.events().size();
+        TornadoManager.events().removeIf(e -> e.level == level);
+        n += events - TornadoManager.events().size();
+        net.minecraft.world.phys.AABB area = player.getBoundingBox().inflate(256);
+        for (net.minecraft.world.entity.Entity e : level.getEntities((net.minecraft.world.entity.Entity) null, area,
+                e -> e instanceof com.stormreach.entity.StormFront || e instanceof com.stormreach.entity.Squall || e instanceof com.stormreach.entity.BallLightning)) {
+            level.sendParticles(ParticleTypes.CLOUD, e.getX(), e.getY() + 1, e.getZ(), 30, 0.8, 0.8, 0.8, 0.05);
+            e.discard();
+            n++;
+        }
+        boolean wasWet = level.isRaining() || level.isThundering();
+        if (wasWet) n++;
+        // clear sky for 10-20 minutes; Stormreach's Gale and Thunderhead follow the vanilla weather, so they end too
+        level.getServer().setWeatherParameters(12000 + level.getRandom().nextInt(12000), 0, false, false);
+        // feedback: an expanding ring of clearing cloud, a rising chime, and a message
+        for (int ring = 1; ring <= 4; ring++) {
+            for (int a = 0; a < 24; a++) {
+                double ang = a * Math.PI / 12;
+                level.sendParticles(ParticleTypes.CLOUD, player.getX() + Math.cos(ang) * ring * 2.5, player.getY() + 0.6 + ring * 0.4,
+                        player.getZ() + Math.sin(ang) * ring * 2.5, 1, 0, 0, 0, 0.02);
+            }
+        }
+        level.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY() + 1.5, player.getZ(), 40, 0.3, 1.2, 0.3, 0.08);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sounds.SoundEvents.BEACON_DEACTIVATE,
+                net.minecraft.sounds.SoundSource.WEATHER, 1.2f, 1.4f);
+        player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable(n > 0 ? "event.stormreach.dispel" : "event.stormreach.dispel.clear"));
+        return n;
+    }
 }

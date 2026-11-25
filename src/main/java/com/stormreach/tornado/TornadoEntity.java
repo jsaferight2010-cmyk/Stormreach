@@ -62,6 +62,7 @@ public class TornadoEntity extends Entity {
 
     private TornadoProfile profile;
     private int age;
+    private boolean dissipating;
     private double survivedMaxMph;
     private int damagedBlocks;
     private double pathLength;
@@ -132,6 +133,13 @@ public class TornadoEntity extends Entity {
     public float cloudBase() { return entityData.get(CLOUD_BASE); }
     public float funnelReach() { return entityData.get(FUNNEL_REACH); }
 
+    /** Dispel Weather: the tornado ropes out and lifts over a couple of seconds instead of vanishing. */
+    public void dissipate() {
+        dissipating = true;
+    }
+
+    public boolean isDissipating() { return dissipating; }
+
     public double lifeFraction() {
         return profile == null ? 0 : Math.min(1, age / (double) profile.lifetimeTicks());
     }
@@ -171,6 +179,7 @@ public class TornadoEntity extends Entity {
             return;
         }
         age++;
+        if (dissipating) age += Math.max(1, (profile.lifetimeTicks() - age) / 30); // rope out over about 2 seconds
         double f = lifeFraction();
         if (age % 110 == 1) { // the roar: louder (heard farther) for stronger tornadoes; the clip is 5.5 s and loops seamlessly
             level.playSound(null, getX(), getY() + 4, getZ(), com.stormreach.registry.ModSounds.TORNADO_ROAR, net.minecraft.sounds.SoundSource.WEATHER,

@@ -103,10 +103,13 @@ for k in range(4):
 w(f'{A}/blockstates/labyrinth_keyhole.json', {'variants': {f'facing={f},keys={k}': {'model': f'stormreach:block/labyrinth_keyhole_{k}', **({'y': y} if y else {})}
     for f, y in FACING_Y.items() for k in range(4)}})
 item_def('labyrinth_keyhole', 'block/labyrinth_keyhole_0')
-for half, tex in (('lower', 'rusted_locker_bottom'), ('upper', 'rusted_locker_top')):
-    t = f'stormreach:block/{tex}'; side = 'stormreach:block/rusted_locker_bottom'
-    model(f'rusted_locker_{half}', {'parent': 'minecraft:block/block', 'textures': {'particle': side, 'f': t, 's': side}, 'elements': [
-        box([1, 0, 1], [15, 16, 15], {'n': '#f', 's': '#s', 'e': '#s', 'w': '#s', 'u': '#s', 'd': '#s'})]})
+for half in ('lower', 'upper'):
+    # open box: back, sides and a floor or roof, plus a two-sided grate across the front (so it reads from inside too)
+    side = 'stormreach:block/rusted_locker_bottom'; grate = f'stormreach:block/rusted_locker_grate_{half}'
+    cap = box([1, 0, 1], [15, 1, 15], '#s') if half == 'lower' else box([1, 15, 1], [15, 16, 15], '#s')
+    model(f'rusted_locker_{half}', {'parent': 'minecraft:block/block', 'textures': {'particle': side, 's': side, 'g': grate}, 'elements': [
+        box([1, 0, 14], [15, 16, 15], '#s'), box([1, 0, 1], [2, 16, 14], '#s'), box([14, 0, 1], [15, 16, 14], '#s'), cap,
+        box([2, 0, 1], [14, 16, 2], {'n': '#g', 's': '#g'}, faces='ns')]})
 w(f'{A}/blockstates/rusted_locker.json', {'variants': {f'facing={f},half={h}': {'model': f'stormreach:block/rusted_locker_{h}', **({'y': y} if y else {})}
     for f, y in FACING_Y.items() for h in ('lower', 'upper')}})
 gen_item('rusted_locker'); gen_item('labyrinth_key'); gen_item('heart_of_the_labyrinth'); gen_item('hollow_keeper_spawn_egg')
@@ -294,6 +297,8 @@ MSG = {
  'tornado.stormreach.multivortex': '(multiple-vortex)',
  'event.stormreach.tornado.warning': 'TORNADO WARNING: a tornado is on the ground %s of you, %s blocks away. Take shelter!',
  'event.stormreach.tornado.survey': 'Damage survey: rated %s. Highest wind supported by damage %s mph (peak gust %s mph). %s blocks damaged along a %s km path, up to %s blocks wide. Appearance: %s.',
+ 'event.stormreach.dispel': 'The storm breaks up. The sky is clearing.',
+ 'event.stormreach.dispel.clear': 'The sky is already clear.',
  'event.stormreach.supercell': 'A supercell is organising: watch the wall cloud for rotation.',
  'item.stormreach.tornado_spawner.rating': 'Intensity: %s', 'item.stormreach.tornado_spawner.current': 'Intensity: %s',
  'item.stormreach.tornado_spawner.help': 'Use on the ground to spawn. Sneak + use to change the intensity.',
@@ -304,7 +309,8 @@ MSG = {
  'gui.stormreach.backpack.sort': 'Sort', 'gui.stormreach.backpack.page': 'Page %s / %s',
  'key.stormreach.open_backpack': 'Open Backpack', 'key.category.stormreach.stormreach': 'Stormreach',
  # labyrinth
- 'block.stormreach.rusted_locker.hidden': 'You are hiding. Stay still. Sneak to step out.',
+ 'block.stormreach.rusted_locker.hidden': 'You are hiding. Press Use to step out.',
+ 'block.stormreach.rusted_locker.occupied': 'Someone is already hiding in there.',
  'block.stormreach.rusted_locker.found': 'The locker door is torn open.',
  'block.stormreach.labyrinth_keyhole.keys': '%s / 3 keys set',
  'block.stormreach.labyrinth_keyhole.hint': 'Three keys, three vaults, three corners of the maze. %s set so far.',

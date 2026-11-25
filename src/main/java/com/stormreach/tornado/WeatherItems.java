@@ -205,9 +205,7 @@ public final class WeatherItems {
                 case DOWNBURST -> WeatherEvents.downburst(server, at);
                 case HAILSTORM -> WeatherEvents.hail(server, at);
                 case BALL_LIGHTNING -> WeatherEvents.ballLightningSwarm(server, at);
-                case DISPEL -> {
-                    for (TornadoEntity t : TornadoManager.live(server)) if (t.distanceToSqr(player) < 1024 * 1024) t.discard();
-                }
+                case DISPEL -> WeatherEvents.dispel(server, player);
             }
             return InteractionResult.SUCCESS_SERVER;
         }

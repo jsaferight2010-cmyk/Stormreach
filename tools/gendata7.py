@@ -96,7 +96,7 @@ clone_family('oak_slab', 'galewood_slab', {'oak_planks': 'galewood_planks'})
 bs = rj(f'{A}/blockstates/galewood_slab.json'); bs['variants']['type=double'] = {'model': 'stormreach:block/galewood_planks'}; w(f'{A}/blockstates/galewood_slab.json', bs)
 for p in ('galewood_sapling', 'skybloom', 'stormcap', 'gale_grass'): cross(p)
 
-FLAT = ['tempest_sigil', 'tempest_eye', 'raw_voltite', 'voltite_ingot', 'aurorite', 'stormhawk_feather', 'ion_shard', 'cloudberries',
+FLAT = ['realm_pass', 'tempest_sigil', 'tempest_eye', 'raw_voltite', 'voltite_ingot', 'aurorite', 'stormhawk_feather', 'ion_shard', 'cloudberries',
         'cloudberry_tart', 'raw_skyray', 'cooked_skyray', 'storm_nectar', 'gale_bread', 'cloudstep_boots']
 TOOLS = []
 for m in ('voltite', 'aurorite'):
@@ -604,7 +604,7 @@ NAMES = {
  'voltite_ore': 'Voltite Ore', 'aurorite_ore': 'Aurorite Ore', 'ion_ore': 'Ion Ore', 'voltite_block': 'Block of Voltite', 'aurorite_block': 'Block of Aurorite',
  'ion_lamp': 'Ion Lamp', 'skybloom': 'Skybloom', 'stormcap': 'Stormcap', 'gale_grass': 'Gale Grass'}
 for k, v in NAMES.items(): L(f'block.stormreach.{k}', v)
-ITEMS = {'tempest_sigil': 'Tempest Sigil', 'tempest_eye': 'Tempest Eye', 'raw_voltite': 'Raw Voltite', 'voltite_ingot': 'Voltite Ingot', 'aurorite': 'Aurorite',
+ITEMS = {'realm_pass': 'Creative Realm Pass', 'tempest_sigil': 'Tempest Sigil', 'tempest_eye': 'Tempest Eye', 'raw_voltite': 'Raw Voltite', 'voltite_ingot': 'Voltite Ingot', 'aurorite': 'Aurorite',
  'stormhawk_feather': 'Stormhawk Feather', 'ion_shard': 'Ion Shard', 'cloudberries': 'Cloudberries', 'cloudberry_tart': 'Cloudberry Tart',
  'raw_skyray': 'Raw Skyray', 'cooked_skyray': 'Cooked Skyray', 'storm_nectar': 'Storm Nectar', 'gale_bread': 'Gale Bread', 'cloudstep_boots': 'Cloudstep Boots'}
 for m in ('voltite', 'aurorite'):
@@ -621,6 +621,10 @@ L('dimension.stormreach.tempest_realm', 'Tempest Realm')
 L('dimension.stormreach.tempest_realm.enter', 'You step through the storm and into the Tempest Realm.')
 L('dimension.stormreach.tempest_realm.fell', 'You tumble out of the Tempest Realm and through the clouds below...')
 TT = {
+ 'item.stormreach.realm_pass.tooltip': 'Creative only. Use it to travel to the Tempest Realm and back.',
+ 'item.stormreach.realm_pass.tooltip2': 'A testing shortcut: it has no recipe and drops from nothing.',
+ 'item.stormreach.realm_pass.creative_only': 'The Realm Pass only works in Creative mode.',
+ 'item.stormreach.realm_pass.missing': 'The Tempest Realm dimension is missing on this server.',
  'item.stormreach.tempest_sigil.tooltip': 'Use it on the Sovereign Altar atop a Tempest Spire.',
  'item.stormreach.tempest_sigil.tooltip2': 'It calls a thunderstorm and begins a long ritual;',
  'item.stormreach.tempest_sigil.tooltip3': 'when the ritual ends, the Tempest Sovereign descends.',

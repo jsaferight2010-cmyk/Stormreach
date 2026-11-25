@@ -242,6 +242,20 @@ for half in ('top', 'bottom'):
     else:
         img.putpixel((12, 2), METAL_L); img.putpixel((12, 3), METAL)
     save(img, f'block/rusted_locker_{half}')
+# the locker's front grate, seen from outside and (through the slats) from inside while hiding
+for half in ('upper', 'lower'):
+    img, rnd = noise(RUST, 10, 5335 + (half == 'upper'))
+    for y in range(16):
+        for x in range(16):
+            if rnd.random() < 0.15: img.putpixel((x, y), jitter(RUST_L, 10, rnd))
+            if x in (0, 15): img.putpixel((x, y), RUST_D)
+    rows = range(2, 13, 2) if half == 'upper' else range(9, 14, 2)
+    for y in rows:
+        for x in range(2, 14): img.putpixel((x, y), (0, 0, 0, 0))
+        for x in range(2, 14): img.putpixel((x, y + 1), jitter(RUST_D, 6, rnd))  # slat lip shadow
+    if half == 'lower':
+        img.putpixel((12, 3), METAL_L); img.putpixel((12, 4), METAL)  # handle
+    save(img, f'block/rusted_locker_grate_{half}')
 img = blank(); icon_t = load('block/rusted_locker_top').resize((8, 8), Image.NEAREST); icon_b = load('block/rusted_locker_bottom').resize((8, 8), Image.NEAREST)
 img.paste(icon_t, (4, 0)); img.paste(icon_b, (4, 8)); save(img, 'item/rusted_locker')
 art(['................', '................', '.....GGG........', '....GYYYG.......', '....GY.YG.......', '....GYYYG.......', '.....GGG........',
@@ -559,3 +573,13 @@ for name, base, accent, seed in (('meteorology', hexc('#3b4a5c'), STORM, 5800), 
     for i in range(3): img.putpixel((rnd.randrange(16), rnd.randrange(16)), shade(accent, 0.6))
     img.save(f'{OUT}/gui/advancements/backgrounds/{name}.png')
 print('backgrounds done')
+
+# mob effect icons (18x18). A missing one shows as the purple-black "missing texture" in the HUD and inventory.
+os.makedirs(f'{OUT}/mob_effect', exist_ok=True)
+def effect_icon(name, draw):
+    img = Image.new('RGBA', (18, 18), (0, 0, 0, 0)); d = ImageDraw.Draw(img); draw(d)
+    save(outline(img, (20, 18, 28, 255)), f'mob_effect/{name}')
+effect_icon('hidden', lambda d: (d.rectangle([4, 2, 13, 15], fill=RUST), [d.line([6, y, 11, y], fill=(14, 10, 8, 255)) for y in (5, 7, 9, 11)],
+                                 d.point([(8, 8), (9, 8)], fill=HOLLOW_L)))
+effect_icon('labyrinth', lambda d: (d.rectangle([2, 2, 15, 15], outline=HOLLOW, width=2), d.line([6, 2, 6, 11], fill=HOLLOW, width=2),
+                                    d.line([10, 6, 10, 15], fill=HOLLOW, width=2), d.line([6, 11, 10, 11], fill=HOLLOW_L)))

@@ -38,7 +38,8 @@ public final class LabyrinthRegistry {
             Stormreach.id("labyrinth_piece"), (StructurePieceType.ContextlessType) LabyrinthPiece::new);
 
     public static final Block LOCKER = block("rusted_locker", LockerBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BROWN)
-            .strength(5.0f, 6.0f).requiresCorrectToolForDrops().sound(SoundType.COPPER).noOcclusion().pushReaction(PushReaction.IMMOVEABLE), true);
+            .strength(5.0f, 6.0f).requiresCorrectToolForDrops().sound(SoundType.COPPER).noOcclusion().pushReaction(PushReaction.IMMOVEABLE)
+            .isSuffocating((s, l, p) -> false).isViewBlocking((s, l, p, a) -> false), true);
     public static final Block SEAL = block("labyrinth_seal", Block::new, BlockBehaviour.Properties.of().mapColor(MapColor.DEEPSLATE)
             .strength(-1.0f, 3600000.0f).noLootTable().sound(SoundType.DEEPSLATE).lightLevel(s -> 3), false);
     public static final Block KEYHOLE = block("labyrinth_keyhole", KeyholeBlock::new, BlockBehaviour.Properties.of().mapColor(MapColor.GOLD)
@@ -74,6 +75,8 @@ public final class LabyrinthRegistry {
     }
 
     public static void init() {
+        LockerNet.init();
+        net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.JOIN.register(HidingTracker::onJoin);
         FabricDefaultAttributeRegistry.register(HOLLOW_KEEPER, HollowKeeper.createAttributes());
         SpawnPlacements.register(HOLLOW_KEEPER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (t, l, r, p, rnd) -> false);
     }

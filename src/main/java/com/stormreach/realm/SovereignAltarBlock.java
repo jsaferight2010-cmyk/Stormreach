@@ -100,8 +100,7 @@ public class SovereignAltarBlock extends Block {
         // Lightning walks around the spire, faster and closer as the ritual nears its end.
         double angle = stage * (Math.PI / 4);
         int r = Math.max(3, 9 - stage / 2);
-        BlockPos ring = StormWeather.surfaceBelow(level, pos.offset((int) Math.round(Math.cos(angle) * r), 4, (int) Math.round(Math.sin(angle) * r)), 24);
-        StormWeather.strikeVisual(level, ring);
+        StormWeather.strikeVisual(level, ritualStrike(level, pos, angle, r));
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 20 + stage * 4, 0.4, 0.6, 0.4, 0.25);
         level.sendParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 10 + stage * 3, 1.5, 1.5, 1.5, 0.05);
         level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1.5f, 0.5f + stage * 0.08f);
@@ -129,5 +128,19 @@ public class SovereignAltarBlock extends Block {
 
     private static Component msg(String key) {
         return Component.translatable("block.stormreach.sovereign_altar." + key).withStyle(ChatFormatting.LIGHT_PURPLE);
+    }
+
+    /**
+     * Where the ritual's lightning lands at this step. The ring around the altar can hang over the spire's edge or
+     * open water, so this walks the aim point in toward the altar until it finds ground, and as a last resort
+     * strikes in mid-air beside the altar. (Before 5.0.1 a missing surface crashed the world tick.)
+     */
+    public static BlockPos ritualStrike(ServerLevel level, BlockPos altar, double angle, int radius) {
+        for (int r = radius; r >= 1; r--) {
+            BlockPos aim = altar.offset((int) Math.round(Math.cos(angle) * r), 4, (int) Math.round(Math.sin(angle) * r));
+            BlockPos ground = StormWeather.surfaceBelow(level, aim, 24);
+            if (ground != null) return ground;
+        }
+        return altar.offset((int) Math.round(Math.cos(angle) * radius), 1, (int) Math.round(Math.sin(angle) * radius));
     }
 }

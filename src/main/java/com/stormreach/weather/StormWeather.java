@@ -198,15 +198,23 @@ public final class StormWeather {
 
     /** A real lightning bolt (sets fire, damages mobs). */
     public static void strike(ServerLevel level, BlockPos pos, ServerPlayer cause) {
+        strike(level, pos, cause, false);
+    }
+
+    /** A real lightning bolt; with {@code fireless} it damages but never burns anything (see FirelessLightning). */
+    public static void strike(ServerLevel level, BlockPos pos, ServerPlayer cause, boolean fireless) {
+        if (pos == null) throw new IllegalArgumentException("lightning needs a position (use surfaceOr, which never returns null)");
         LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.TRIGGERED);
         if (bolt == null) return;
         bolt.snapTo(Vec3.atBottomCenterOf(pos));
         if (cause != null) bolt.setCause(cause);
+        if (fireless) FirelessLightning.mark(bolt);
         level.addFreshEntity(bolt);
     }
 
     /** Looks and sounds like lightning but does no damage. */
     public static void strikeVisual(ServerLevel level, BlockPos pos) {
+        if (pos == null) throw new IllegalArgumentException("lightning needs a position (use surfaceOr, which never returns null)");
         LightningBolt bolt = EntityTypes.LIGHTNING_BOLT.create(level, EntitySpawnReason.TRIGGERED);
         if (bolt == null) return;
         bolt.snapTo(Vec3.atBottomCenterOf(pos));
@@ -337,6 +345,15 @@ public final class StormWeather {
             if (!level.getBlockState(p).isAir() && level.getBlockState(p.above()).isAir()) return p.immutable();
         }
         return null;
+    }
+
+    /**
+     * Where lightning aimed at {@code start} should land: the first solid surface below it within {@code maxDepth},
+     * otherwise {@code start} itself (the bolt then strikes in mid-air over a drop or open water). Never null.
+     */
+    public static BlockPos surfaceOr(ServerLevel level, BlockPos start, int maxDepth) {
+        BlockPos ground = surfaceBelow(level, start, maxDepth);
+        return ground != null ? ground : start;
     }
 
     /** One-line forecast for /stormreach forecast. */

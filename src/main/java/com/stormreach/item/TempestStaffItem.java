@@ -42,7 +42,7 @@ public class TempestStaffItem extends Item {
             return InteractionResult.FAIL;
         }
 
-        StormWeather.strike(server, hit.getBlockPos().above(), player instanceof ServerPlayer sp ? sp : null);
+        StormWeather.strike(server, hit.getBlockPos().above(), player instanceof ServerPlayer sp ? sp : null, true);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THUNDER.value(),
                 SoundSource.PLAYERS, 0.6f, 1.2f);
         if (!server.isThundering()) {

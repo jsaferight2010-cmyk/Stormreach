@@ -26,7 +26,7 @@ import net.minecraft.util.RandomSource;
 
 /**
  * Rusted Locker: a two-block-tall hiding spot. Right-click to step inside; while you're inside and keep still,
- * the Hollow Keeper can't see you. Sneak (or right-click again) to step out.
+ * the Hollow Keeper can't see you. You are locked in place and look out through the grate; press Use to step out.
  */
 public class LockerBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<DoubleBlockHalf> HALF = BlockStateProperties.DOUBLE_BLOCK_HALF;
@@ -56,6 +56,20 @@ public class LockerBlock extends HorizontalDirectionalBlock {
             default -> NORTH;
         };
     }
+
+    /** The player hiding inside isn't pushed out by the locker's own walls. */
+    @Override
+    protected VoxelShape getCollisionShape(BlockState s, BlockGetter level, BlockPos pos, CollisionContext ctx) {
+        if (ctx instanceof net.minecraft.world.phys.shapes.EntityCollisionContext ecc && ecc.getEntity() instanceof Player p) {
+            BlockPos lower = s.getValue(HALF) == DoubleBlockHalf.LOWER ? pos : pos.below();
+            if (p instanceof ServerPlayer sp ? (HidingTracker.isHidden(sp) && HidingTracker.hide(sp).locker().equals(lower))
+                    : lower.equals(clientHiddenAt)) return Shapes.empty();
+        }
+        return getShape(s, level, pos, ctx);
+    }
+
+    /** Set by the client when the server says the local player is hiding (see LockerClient). */
+    public static volatile BlockPos clientHiddenAt;
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {

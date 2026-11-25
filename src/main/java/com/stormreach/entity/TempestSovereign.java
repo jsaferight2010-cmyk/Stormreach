@@ -121,7 +121,7 @@ public class TempestSovereign extends Monster {
             if (phase >= 2) {
                 for (int i = 0; i < 3; i++) {
                     double a = random.nextDouble() * Math.PI * 2;
-                    StormWeather.strike(server, StormWeather.surfaceBelow(server, at.offset((int) (Math.cos(a) * 4), 3, (int) (Math.sin(a) * 4)), 12), null);
+                    StormWeather.strike(server, StormWeather.surfaceOr(server, at.offset((int) (Math.cos(a) * 4), 3, (int) (Math.sin(a) * 4)), 12), null);
                 }
             }
             lightningCooldown = phase == 1 ? 70 : phase == 2 ? 50 : 32;
@@ -206,7 +206,7 @@ public class TempestSovereign extends Monster {
         super.die(source);
         if (level() instanceof ServerLevel server) {
             for (int i = 0; i < 6; i++) {
-                StormWeather.strikeVisual(server, StormWeather.surfaceBelow(server, blockPosition().offset(random.nextInt(13) - 6, 0, random.nextInt(13) - 6), 32));
+                StormWeather.strikeVisual(server, StormWeather.surfaceOr(server, blockPosition().offset(random.nextInt(13) - 6, 0, random.nextInt(13) - 6), 32));
             }
             for (ServerPlayer p : server.getPlayers(p -> p.distanceToSqr(this) < 96 * 96)) {
                 p.sendSystemMessage(Component.translatable("entity.stormreach.tempest_sovereign.defeated")

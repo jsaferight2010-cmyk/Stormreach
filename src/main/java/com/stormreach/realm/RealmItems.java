@@ -76,6 +76,9 @@ public final class RealmItems {
             20, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, CLOUDSTEP_REPAIRS, CLOUDSTEP_ASSET);
 
     // ---------- The road to the realm ----------
+    /** Creative-only shortcut to the realm and back (no recipe, no loot). */
+    public static final Item REALM_PASS = register("realm_pass", RealmPassItem::new,
+            new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant().component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true));
     public static final Item TEMPEST_SIGIL = register("tempest_sigil", p -> new TooltipItem.Plain(p, 3),
             new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant());
     public static final Item TEMPEST_EYE = register("tempest_eye", p -> new TooltipItem.Plain(p, 3),

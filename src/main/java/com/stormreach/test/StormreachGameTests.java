@@ -1077,6 +1077,7 @@ public class StormreachGameTests {
         for (int x = 0; x < 6; x++) for (int z = 0; z < 6; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
         var level = h.getLevel();
         var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(1, 2, 1));
+        zombie.setNoAi(true);   // stand still under the stones
         float hp = zombie.getHealth();
         Vec3 z0 = zombie.position();
         int before = com.stormreach.weather.precip.HailstoneEntity.live();

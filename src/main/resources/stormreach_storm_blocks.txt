@@ -15,7 +15,6 @@ acacia_wood
 activator_rail
 allium
 amethyst_block
-amethyst_cluster
 ancient_debris
 andesite
 andesite_slab
@@ -406,10 +405,8 @@ jungle_stairs
 jungle_trapdoor
 jungle_wood
 ladder
-lantern
 lapis_block
 lapis_ore
-large_amethyst_bud
 large_fern
 leaf_litter
 lever
@@ -487,7 +484,6 @@ mangrove_slab
 mangrove_stairs
 mangrove_trapdoor
 mangrove_wood
-medium_amethyst_bud
 melon
 moss_block
 moss_carpet
@@ -656,7 +652,6 @@ poplar_trapdoor
 poplar_wood
 poppy
 potatoes
-potent_sulfur
 powder_snow
 powered_rail
 prismarine
@@ -751,7 +746,6 @@ short_dry_grass
 short_grass
 shroomlight
 slime_block
-small_amethyst_bud
 small_dripleaf
 smithing_table
 smooth_basalt

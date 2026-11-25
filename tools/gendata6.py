@@ -26,7 +26,9 @@ SKIP_EXACT = {'air', 'cave_air', 'void_air', 'water', 'lava', 'bubble_column', '
     'chain_command_block', 'repeating_command_block', 'structure_block', 'jigsaw', 'crafter', 'decorated_pot', 'chiseled_bookshelf',
     'enchanting_table', 'bell', 'creaking_heart', 'test_block', 'test_instance_block', 'suspicious_sand', 'suspicious_gravel',
     'flower_pot', 'cauldron', 'water_cauldron', 'lava_cauldron', 'powder_snow_cauldron', 'cake', 'campfire', 'soul_campfire',
-    'end_portal_frame', 'dragon_egg', 'reinforced_deepslate', 'bedrock', 'redstone_wire', 'kelp', 'kelp_plant'}
+    'end_portal_frame', 'dragon_egg', 'reinforced_deepslate', 'bedrock', 'redstone_wire', 'kelp', 'kelp_plant',
+    # can't be cloned at runtime (ambiguous constructor fields), or Stormreach already has its own block of that name
+    'lantern', 'amethyst_cluster', 'large_amethyst_bud', 'medium_amethyst_bud', 'small_amethyst_bud', 'potent_sulfur'}
 SKIP_PATTERNS = [r'potted_', r'infested_', r'candle_cake$', r'_sign$', r'_banner$', r'_bed$', r'_head$', r'_skull$', r'shulker_box$',
     r'copper_golem_statue$', r'_shelf$', r'copper_chest$', r'_stem$', r'^attached_', r'command_block$']
 def eligible(b):

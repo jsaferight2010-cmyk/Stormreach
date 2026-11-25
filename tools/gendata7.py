@@ -142,7 +142,7 @@ def silk_or(name, item, lo, hi, fortune=True):
 silk_or('voltite_ore', 'raw_voltite', 1, 1); silk_or('aurorite_ore', 'aurorite', 1, 1); silk_or('ion_ore', 'ion_shard', 2, 4)
 silk_or('skyshale', 'cobbled_skyshale', 1, 1, fortune=False); silk_or('static_grass', 'skysoil', 1, 1, fortune=False)
 w(f'{D}/loot_table/blocks/gale_grass.json', {'type': 'minecraft:block', 'pools': [{'entries': [{'type': 'minecraft:item',
-   'condition': 'minecraft:tool/can_shear_blocks', 'name': 'stormreach:gale_grass'}], 'rolls': 1}], 'random_sequence': 'stormreach:blocks/gale_grass'})
+   'condition': 'minecraft:tool/can_shear', 'name': 'stormreach:gale_grass'}], 'rolls': 1}], 'random_sequence': 'stormreach:blocks/gale_grass'})
 leaves = json.dumps(rj(f'{VD}/loot_table/blocks/oak_leaves.json'))
 leaves = leaves.replace('minecraft:oak_leaves', 'stormreach:galewood_leaves').replace('minecraft:oak_sapling', 'stormreach:galewood_sapling') \
                .replace('minecraft:apple', 'stormreach:cloudberries').replace('minecraft:blocks/oak_leaves', 'stormreach:blocks/galewood_leaves')
@@ -247,7 +247,7 @@ shaped('cloudstep_boots', ['F F', 'N N'], {'F': 'stormhawk_feather', 'N': 'nimbu
 cook('cooked_skyray', 'raw_skyray', 'cooked_skyray', 0.35, ('smelting', 'smoking', 'campfire_cooking'))
 shapeless('cloudberry_tart', ['cloudberries', 'cloudberries', 'cloudberries', 'minecraft:sugar', 'minecraft:egg', 'minecraft:wheat'], 'cloudberry_tart')
 shapeless('storm_nectar', ['skybloom', 'skybloom', 'minecraft:honey_bottle'], 'storm_nectar')
-shaped('gale_bread', ['GGG'], {'G': 'gale_grass'}, 'gale_bread', 1, 'food')
+shaped('gale_bread', ['GGG'], {'G': 'gale_grass'}, 'gale_bread', 1, 'misc')
 shapeless('light_blue_dye_from_skybloom', ['skybloom'], 'minecraft:light_blue_dye')
 shapeless('purple_dye_from_stormcap', ['stormcap'], 'minecraft:purple_dye')
 

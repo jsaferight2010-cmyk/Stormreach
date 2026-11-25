@@ -370,11 +370,11 @@ leaves = leaves.replace('minecraft:dark_oak_leaves', 'stormreach:elderstorm_leav
                .replace('minecraft:apple', 'stormreach:stormfruit').replace('minecraft:blocks/dark_oak_leaves', 'stormreach:blocks/elderstorm_leaves')
 w(f'{D}/loot_table/blocks/elderstorm_leaves.json', json.loads(leaves))
 w(f'{D}/loot_table/blocks/sparkfern.json', {'type': 'minecraft:block', 'pools': [{'entries': [{'type': 'minecraft:alternatives', 'children': [
-    {'type': 'minecraft:item', 'condition': 'minecraft:tool/can_shear_blocks', 'name': 'stormreach:sparkfern'},
+    {'type': 'minecraft:item', 'condition': 'minecraft:tool/can_shear', 'name': 'stormreach:sparkfern'},
     {'type': 'minecraft:item', 'condition': {'type': 'minecraft:random_chance', 'chance': 0.125}, 'name': 'stormreach:thistle_down'}]}], 'rolls': 1}],
     'random_sequence': 'stormreach:blocks/sparkfern'})
-w(f'{D}/loot_table/blocks/stormfruit_pod.json', {'type': 'minecraft:block', 'pools': [{'condition': {'type': 'minecraft:block_state_property',
-    'block': 'stormreach:stormfruit_pod', 'properties': {'age': '2'}}, 'entries': [{'type': 'minecraft:item', 'name': 'stormreach:stormfruit',
+w(f'{D}/loot_table/blocks/stormfruit_pod.json', {'type': 'minecraft:block', 'pools': [{'condition': {'type': 'minecraft:match_block',
+    'blocks': 'stormreach:stormfruit_pod', 'state': {'age': '2'}}, 'entries': [{'type': 'minecraft:item', 'name': 'stormreach:stormfruit',
     'modifier': [{'type': 'minecraft:set_count', 'count': {'type': 'minecraft:uniform', 'min': 1, 'max': 2}}]}], 'rolls': 1}],
     'random_sequence': 'stormreach:blocks/stormfruit_pod'})
 def mob_loot(name, pools): w(f'{D}/loot_table/entities/{name}.json', {'type': 'minecraft:entity', 'pools': pools, 'random_sequence': f'stormreach:entities/{name}'})
@@ -454,8 +454,8 @@ shaped('tornado_siren', ['GNG', 'GRG', 'III'], {'G': 'minecraft:gold_ingot', 'N'
        'tornado_siren', 1, 'redstone')
 shaped('weather_monitor', ['PPP', 'PEP', 'IRI'], {'P': 'minecraft:glass_pane', 'E': 'minecraft:ender_eye', 'I': 'minecraft:iron_ingot', 'R': 'minecraft:redstone'},
        'weather_monitor', 1, 'redstone')
-shaped('storm_radar', ['ICI', 'IDI', 'IRI'], {'I': 'minecraft:iron_ingot', 'C': 'minecraft:compass', 'D': 'storm_detector', 'R': 'minecraft:redstone'}, 'storm_radar', 1, 'tools')
-shaped('weather_radio', [' I ', 'NSN', 'IRI'], {'I': 'minecraft:iron_ingot', 'N': 'minecraft:note_block', 'S': 'storm_shard', 'R': 'minecraft:redstone'}, 'weather_radio', 1, 'tools')
+shaped('storm_radar', ['ICI', 'IDI', 'IRI'], {'I': 'minecraft:iron_ingot', 'C': 'minecraft:compass', 'D': 'storm_detector', 'R': 'minecraft:redstone'}, 'storm_radar', 1, 'equipment')
+shaped('weather_radio', [' I ', 'NSN', 'IRI'], {'I': 'minecraft:iron_ingot', 'N': 'minecraft:note_block', 'S': 'storm_shard', 'R': 'minecraft:redstone'}, 'weather_radio', 1, 'equipment')
 # backpacks: Diamond is crafted, then each kit + the previous backpack makes the next one (contents and enchantments carry over)
 shaped('diamond_backpack', ['DLD', 'SCS', 'DLD'], {'D': 'minecraft:diamond', 'L': 'minecraft:leather', 'S': 'storm_shard', 'C': 'minecraft:chest'}, 'diamond_backpack', 1, 'equipment')
 KITS = {'obsidian': (['OFO', 'CSC', 'OFO'], {'O': 'minecraft:obsidian', 'F': 'fulgurite', 'C': 'charged_stormstone', 'S': 'storm_cell'}),

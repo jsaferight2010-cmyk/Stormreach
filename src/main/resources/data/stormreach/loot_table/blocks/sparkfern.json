@@ -8,7 +8,7 @@
           "children": [
             {
               "type": "minecraft:item",
-              "condition": "minecraft:tool/can_shear_blocks",
+              "condition": "minecraft:tool/can_shear",
               "name": "stormreach:sparkfern"
             },
             {

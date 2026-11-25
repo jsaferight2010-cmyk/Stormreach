@@ -3,9 +3,9 @@
   "pools": [
     {
       "condition": {
-        "type": "minecraft:block_state_property",
-        "block": "stormreach:stormfruit_pod",
-        "properties": {
+        "type": "minecraft:match_block",
+        "blocks": "stormreach:stormfruit_pod",
+        "state": {
           "age": "2"
         }
       },

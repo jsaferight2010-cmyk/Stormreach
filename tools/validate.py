@@ -198,6 +198,34 @@ for f in glob.glob(D + '/stormreach/worldgen/biome/*.json'):
 for f in glob.glob(D + '/stormreach/worldgen/feature/*.json'):
     for i in re.findall(r'"(?:id|block_provider)": "(stormreach:[a-z_]+)"', open(f).read()):
         if i not in ours and not os.path.exists(f"{D}/stormreach/worldgen/block_state_provider/{i.split(':')[1]}.json"): problems.append(f'feature {os.path.basename(f)}: unknown {i}')
+
+# ---------------- 26.3 data-format checks against the vanilla data (these only fail at world load) ----------------
+def _types(o, acc):
+    if isinstance(o, dict):
+        for k, v in o.items():
+            if k == 'type' and isinstance(v, str): acc.add(v)
+            _types(v, acc)
+    elif isinstance(o, list):
+        for x in o: _types(x, acc)
+VDM = VANILLA + '/data/minecraft'
+vtypes = {'minecraft:advancement_reward'}
+for f in glob.glob(VDM + '/loot_table/**/*.json', recursive=True) + glob.glob(VDM + '/predicate/**/*.json', recursive=True) + glob.glob(VDM + '/item_modifier/**/*.json', recursive=True):
+    _types(json.load(open(f)), vtypes)
+for f in glob.glob(D + '/*/loot_table/**/*.json', recursive=True):
+    t_ = json.load(open(f)); found = set(); _types(t_, found)
+    for t in sorted(found - vtypes): problems.append(f'loot {os.path.relpath(f, D)}: type {t} is not used anywhere in 26.3 vanilla loot')
+    for pr in re.findall(r'"condition": "([^"]+)"', open(f).read()):
+        pns, ppath = pr.split(':')
+        if pns == 'minecraft' and not os.path.exists(f'{VDM}/predicate/{ppath}.json'): problems.append(f'loot {os.path.relpath(f, D)}: unknown predicate {pr}')
+CRAFT_CATS = {'building', 'redstone', 'equipment', 'misc'}; COOK_CATS = {'food', 'blocks', 'misc'}
+for f in glob.glob(D + '/*/recipe/*.json'):
+    r_ = json.load(open(f)); cat = r_.get('category')
+    if cat is None: continue
+    ok = cat in (CRAFT_CATS if r_['type'].startswith('minecraft:crafting') else COOK_CATS if r_['type'] in ('minecraft:smelting', 'minecraft:blasting', 'minecraft:smoking', 'minecraft:campfire_cooking') else CRAFT_CATS | COOK_CATS)
+    if not ok: problems.append(f'recipe {os.path.basename(f)}: category {cat} is not valid for {r_["type"]}')
+for f in glob.glob(D + '/*/worldgen/biome/*.json'):
+    for k, v in json.load(open(f)).get('attributes', {}).items():
+        if isinstance(v, dict) and 'argument' in v and 'modifier' not in v: problems.append(f'biome {os.path.basename(f)}: attribute {k} has "argument" but no "modifier"')
 for f in glob.glob(D+'/stormreach/recipe/*.json'):
     r=json.load(open(f)); ids=[r['result']['id']]
     ids+= list(r.get('key',{}).values()) + r.get('ingredients',[]) + ([r['ingredient']] if 'ingredient' in r else [])

@@ -1,10 +1,7 @@
 {
- "variants": {
-  "hanging=false": {
-   "model": "stormreach:block/storm_lantern"
-  },
-  "hanging=true": {
-   "model": "stormreach:block/storm_lantern_hanging"
+  "variants": {
+    "": {
+      "model": "stormreach:block/storm_lantern"
+    }
   }
- }
 }

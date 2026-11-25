@@ -349,22 +349,6 @@
    "required": false
   },
   {
-   "id": "stormreach:storm_amethyst_cluster",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_large_amethyst_bud",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_medium_amethyst_bud",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_small_amethyst_bud",
-   "required": false
-  },
-  {
    "id": "stormreach:storm_sculk_vein",
    "required": false
   },
@@ -854,10 +838,6 @@
   },
   {
    "id": "stormreach:storm_sulfur",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_potent_sulfur",
    "required": false
   },
   {

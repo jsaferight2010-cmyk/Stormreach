@@ -1,5 +1,7 @@
 package com.stormreach.client.forest;
 
+import com.stormreach.client.anim.RigRenderer;
+import com.stormreach.client.anim.RigState;
 import com.stormreach.client.model.gen.GlimmerstagModel;
 import com.stormreach.client.model.gen.ThistlehopModel;
 
@@ -25,20 +27,20 @@ import net.minecraft.util.Mth;
 public final class ForestModels {
     private ForestModels() {}
 
-    public static class StagRenderer extends MobRenderer<Glimmerstag, LivingEntityRenderState, GlimmerstagModel> {
+    public static class StagRenderer extends RigRenderer<Glimmerstag, GlimmerstagModel> {
         private static final Identifier TEXTURE = Stormreach.id("textures/entity/glimmerstag.png");
         public StagRenderer(EntityRendererProvider.Context c) { super(c, new GlimmerstagModel(GlimmerstagModel.createBodyLayer().bakeRoot()), 0.6f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack p) { if (s.isBaby) p.scale(0.5f, 0.5f, 0.5f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack p) { if (s.isBaby) p.scale(0.5f, 0.5f, 0.5f); }
         @Override protected int getBlockLightLevel(Glimmerstag e, BlockPos pos) { return Math.max(8, super.getBlockLightLevel(e, pos)); }
     }
 
-    public static class HopRenderer extends MobRenderer<Thistlehop, LivingEntityRenderState, ThistlehopModel> {
+    public static class HopRenderer extends RigRenderer<Thistlehop, ThistlehopModel> {
         private static final Identifier TEXTURE = Stormreach.id("textures/entity/thistlehop.png");
         public HopRenderer(EntityRendererProvider.Context c) { super(c, new ThistlehopModel(ThistlehopModel.createBodyLayer().bakeRoot()), 0.3f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack p) { if (s.isBaby) p.scale(0.6f, 0.6f, 0.6f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack p) { if (s.isBaby) p.scale(0.6f, 0.6f, 0.6f); }
     }
 }

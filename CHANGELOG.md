@@ -1,7 +1,27 @@
 # Stormreach patch notes
 
 ## 5.1.0 (the Overhaul)
-Built and tested in sixteen stages.
+Built and tested in seventeen stages.
+
+### Stage 17: the Stranger is you, and every mob is properly animated
+- **The Stranger now looks like you, weathered by the storm.** It uses the player model with a storm-worn copy of the skin of whoever is looking at it, so every player sees themselves:
+  - drained of colour, cold and pale, and soaked darker toward the feet
+  - rain-streaked and salt-flecked, with mud on the boots
+  - the outer layer frayed at the hems and torn in places
+  - the eyes hollowed out: the whites go dark and the pupils pale
+  - It works with any skin, slim or wide, at any resolution.
+  - It stands slumped with its arms hanging, breathes, lets its head drift sideways, and now and then snaps its head to one side. Water drips off it.
+- **Sharper models.** Textures are painted with shaded colour ramps (cool shadows, warm highlights) and bevelled edges, so every part reads clearly. Materials are crisper: lacquered shell plates, clumped fur, rounded overlapping feathers, masonry with glowing runes, folded cloth with ragged hems, billowing fleece.
+- **More detail:** the crab has chewing mandibles and three-jointed legs, birds have flight feathers and a lower beak, and the Keeper has fingers, a hood and robe panels. The Puffling's fleece is lumpy and the Sovereign's cape has three parts. 522 parts across the 17 models.
+- **Proper keyframed animation** (594 tracks), smoothed with splines, for every mob:
+  - **Idle loops:** breathing, swaying, looking around.
+  - **Walk cycles** with real steps, where the stride is quicker than the push and the knees bend on the swing: a tripod scuttle for crabs, a four-beat walk for the stag, a trot for the Puffling, true hops for the Thistlehop, a galumph for the seal, and heavy heel-to-toe steps for the golem.
+  - **Flight:** birds fold their wings on the ground and flap in the air, with a fast downstroke and the wing tips trailing. Skyray wings ripple in a travelling wave.
+  - **Fidgets now and then:** claw snaps, squawks, head tilts, grazing, ear and tail flicks, a sheep shake, flipper claps, the stag looking up, the hare standing on its hind legs, and the Keeper's sudden head jerk.
+  - **Attacks and casts, synced from the server:** crab pinches, talon strikes, the golem's overhead slam and summoning roar, the Sovereign's two-armed gust push and raised-arm cast, the Keeper's claw swipe, the Squall's squash-and-stretch ram, and the Wisp's spikes flaring.
+  - **A flinch when hurt.**
+  - **Smooth blending** between standing, walking, flying and swimming. Heads track what they look at, bodies and tails lean into turns, and birds bank and glide.
+
 
 ### Stage 16: every mob rebuilt
 - **All 17 Stormreach creature models are new**, with more parts, real joints and new animation. Each has its own texture painted to fit it at 4x detail (fur, feathers, shell, scales, crystal, metal, cloud, water).

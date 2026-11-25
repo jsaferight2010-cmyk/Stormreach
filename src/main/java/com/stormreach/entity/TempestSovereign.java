@@ -133,6 +133,7 @@ public class TempestSovereign extends Monster {
                 if (orb != null) {
                     orb.snapTo(getX(), getY() + 2, getZ(), 0f, 0f);
                     orb.setTarget(target);
+                    com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.CAST);
                     server.addFreshEntity(orb);
                     playSound(com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, 2.0f, 1.5f);
                 }
@@ -173,6 +174,7 @@ public class TempestSovereign extends Monster {
             if (squall == null) continue;
             squall.snapTo(getX() + random.nextInt(9) - 4, getY(), getZ() + random.nextInt(9) - 4, random.nextFloat() * 360f, 0f);
             if (target != null) squall.setTarget(target);
+            com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.CAST);
             server.addFreshEntity(squall);
         }
         if (phase == 3) {
@@ -191,6 +193,7 @@ public class TempestSovereign extends Monster {
     }
 
     private void gust(ServerLevel server, double radius, double strength) {
+        com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.ATTACK);
         server.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, getX(), getY(), getZ(), 1, 0, 0, 0, 0);
         playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 3.0f, 0.5f);
         for (Player p : nearbyPlayers(server, radius)) {

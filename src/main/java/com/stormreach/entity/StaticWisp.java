@@ -97,6 +97,7 @@ public class StaticWisp extends Monster {
                     server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, wisp.getX() + (t.getX() - wisp.getX()) * k,
                             wisp.getY() + (t.getY(0.5) - wisp.getY()) * k, wisp.getZ() + (t.getZ() - wisp.getZ()) * k, 1, 0, 0, 0, 0);
                 }
+                com.stormreach.anim.AnimPulse.fire(wisp, com.stormreach.anim.AnimPulse.CAST);
                 t.hurtServer(server, server.damageSources().lightningBolt(), 2.0f);
                 wisp.playSound(com.stormreach.registry.ModSfx.ITEM_SPEAR_HIT, 0.8f, 2.0f);
                 cooldown = 60;

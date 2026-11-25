@@ -20,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 /**
- * The Stranger: a dark, player-shaped figure seen far off among trees, in rain and fog. It only watches.
+ * The Stranger: a storm-weathered copy of whoever sees it, seen far off among trees, in rain and fog. It only watches.
  * It can't be hurt or interacted with, and it's gone the moment you look straight at it or come close.
  */
 public class Stranger extends PathfinderMob {
@@ -50,6 +50,14 @@ public class Stranger extends PathfinderMob {
     @Override
     public void tick() {
         super.tick();
+        if (level().isClientSide()) {
+            // it has been standing in the rain a long time: water runs off it
+            if (random.nextFloat() < 0.35f) {
+                level().addParticle(ParticleTypes.DRIPPING_WATER, getX() + (random.nextFloat() - 0.5f) * 0.6f,
+                        getY() + 0.3f + random.nextFloat() * 1.5f, getZ() + (random.nextFloat() - 0.5f) * 0.6f, 0, 0, 0);
+            }
+            return;
+        }
         if (!(level() instanceof ServerLevel level)) return;
         Player p = watching == null ? null : level.getPlayerByUUID(watching);
         if (p == null || --lifetime <= 0) {

@@ -1,5 +1,16 @@
 package com.stormreach.client.story;
 
+import net.minecraft.client.renderer.state.level.CameraRenderState;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.world.entity.player.PlayerModelType;
+import net.minecraft.world.entity.player.PlayerSkin;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.client.renderer.entity.state.AvatarRenderState;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import com.stormreach.client.anim.RigRenderer;
+import com.stormreach.client.anim.RigState;
 import com.stormreach.client.model.gen.HollowKeeperModel;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.entity.MobRenderer;
@@ -20,15 +31,54 @@ import net.minecraft.resources.Identifier;
 public final class StoryRenderers {
     private StoryRenderers() {}
 
-    public static class StrangerRenderer extends HumanoidMobRenderer<Stranger, HumanoidRenderState, HumanoidModel<HumanoidRenderState>> {
-        private static final Identifier TEXTURE = Stormreach.id("textures/entity/stranger.png");
+    /** Render state for the Stranger: which weathered skin, and whether it has slim arms. */
+    public static class StrangerState extends AvatarRenderState {
+        public Identifier texture;
+        public boolean slim;
+    }
+
+    /**
+     * The Stranger is you, weathered: the player model wearing a storm-worn copy of the viewing player's own skin
+     * (see {@link WeatheredSkins}), posed by {@link WeatheredModel}. Each player who sees it sees themselves.
+     */
+    public static class StrangerRenderer extends LivingEntityRenderer<Stranger, StrangerState, PlayerModel> {
+        private final PlayerModel wide, slim;
 
         public StrangerRenderer(EntityRendererProvider.Context c) {
-            super(c, new HumanoidModel<>(c.bakeLayer(ModelLayers.ZOMBIE)), 0.0f);
+            super(c, new WeatheredModel(c.bakeLayer(ModelLayers.PLAYER), false), 0.0f);
+            this.wide = this.model;
+            this.slim = new WeatheredModel(c.bakeLayer(ModelLayers.PLAYER_SLIM), true);
         }
 
-        @Override public HumanoidRenderState createRenderState() { return new HumanoidRenderState(); }
-        @Override public Identifier getTextureLocation(HumanoidRenderState s) { return TEXTURE; }
+        @Override public StrangerState createRenderState() { return new StrangerState(); }
+
+        @Override
+        public void extractRenderState(Stranger e, StrangerState s, float partial) {
+            super.extractRenderState(e, s, partial);
+            HumanoidMobRenderer.extractHumanoidRenderState(e, s, partial, itemModelResolver);
+            Minecraft mc = Minecraft.getInstance();
+            PlayerSkin skin = mc.player != null ? mc.player.getSkin() : DefaultPlayerSkin.getDefaultSkin();
+            s.skin = skin;
+            s.slim = skin.model() == PlayerModelType.SLIM;
+            s.texture = WeatheredSkins.get(skin);
+            s.id = e.getId();
+            s.showHat = s.showJacket = s.showLeftSleeve = s.showRightSleeve = s.showLeftPants = s.showRightPants = true;
+            s.showCape = false;
+        }
+
+        @Override
+        public void submit(StrangerState s, PoseStack pose, SubmitNodeCollector out, CameraRenderState camera) {
+            this.model = s.slim ? slim : wide;
+            super.submit(s, pose, out, camera);
+        }
+
+        @Override public Identifier getTextureLocation(StrangerState s) { return s.texture; }
+        @Override protected boolean shouldShowName(Stranger e, double d) { return false; }
+
+        @Override
+        protected void scale(StrangerState s, PoseStack pose) {
+            pose.scale(0.9375f, 0.9375f, 0.9375f);
+        }
     }
 
     public static class CyrrusState extends HumanoidRenderState {
@@ -55,15 +105,15 @@ public final class StoryRenderers {
         @Override protected int getBlockLightLevel(CyrrusBoss e, BlockPos pos) { return e.form() > 0 ? 12 : super.getBlockLightLevel(e, pos); }
     }
 
-    public static class KeeperRenderer extends MobRenderer<HollowKeeper, LivingEntityRenderState, HollowKeeperModel> {
+    public static class KeeperRenderer extends RigRenderer<HollowKeeper, HollowKeeperModel> {
         private static final Identifier TEXTURE = Stormreach.id("textures/entity/hollow_keeper.png");
 
         public KeeperRenderer(EntityRendererProvider.Context c) {
             super(c, new HollowKeeperModel(HollowKeeperModel.createBodyLayer().bakeRoot()), 0.7f);
         }
 
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.27f, 1.27f, 1.27f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { pose.scale(1.27f, 1.27f, 1.27f); }
     }
 }

@@ -51,6 +51,7 @@ public class Cyclone extends Monster {
             Vec3 side = new Vec3(random.nextDouble() - 0.5, 0, random.nextDouble() - 0.5).normalize().scale(0.9);
             p.push(side.x, 1.1, side.z);
             p.needsSync = true;
+            com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.ATTACK);
             p.hurtServer(server, damageSources().mobAttack(this), 2.0f);
             playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 1.2f, 1.2f);
             flingCooldown = 40;

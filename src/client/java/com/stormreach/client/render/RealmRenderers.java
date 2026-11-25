@@ -1,5 +1,7 @@
 package com.stormreach.client.render;
 
+import com.stormreach.client.anim.RigRenderer;
+import com.stormreach.client.anim.RigState;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.stormreach.Stormreach;
 import com.stormreach.client.model.gen.*;
@@ -23,61 +25,61 @@ public final class RealmRenderers {
         return Stormreach.id("textures/entity/" + name + ".png");
     }
 
-    public static class SovereignRenderer extends MobRenderer<TempestSovereign, LivingEntityRenderState, SovereignModel> {
+    public static class SovereignRenderer extends RigRenderer<TempestSovereign, SovereignModel> {
         private static final Identifier TEXTURE = tex("tempest_sovereign");
         public SovereignRenderer(EntityRendererProvider.Context c) { super(c, new SovereignModel(SovereignModel.createBodyLayer().bakeRoot()), 1.2f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.6f, 1.6f, 1.6f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { pose.scale(1.6f, 1.6f, 1.6f); }
         @Override protected int getBlockLightLevel(TempestSovereign e, BlockPos pos) { return 15; }
     }
 
-    public static class SkyrayRenderer extends MobRenderer<Skyray, SkyrayModel.State, SkyrayModel> {
+    public static class SkyrayRenderer extends RigRenderer<Skyray, SkyrayModel> {
         private static final Identifier TEXTURE = tex("skyray");
         public SkyrayRenderer(EntityRendererProvider.Context c) { super(c, new SkyrayModel(SkyrayModel.createBodyLayer().bakeRoot()), 0.9f); }
-        @Override public SkyrayModel.State createRenderState() { return new SkyrayModel.State(); }
-        @Override public void extractRenderState(Skyray e, SkyrayModel.State s, float partial) {
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public void extractRenderState(Skyray e, RigState s, float partial) {
             super.extractRenderState(e, s, partial);
             s.saddled = e.isSaddled();
         }
-        @Override public Identifier getTextureLocation(SkyrayModel.State s) { return TEXTURE; }
-        @Override protected void scale(SkyrayModel.State s, PoseStack pose) { float k = s.isBaby ? 0.5f : 1.15f; pose.scale(k, k, k); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { float k = s.isBaby ? 0.5f : 1.15f; pose.scale(k, k, k); }
     }
 
-    public static class PufflingRenderer extends MobRenderer<Puffling, PufflingModel.State, PufflingModel> {
+    public static class PufflingRenderer extends RigRenderer<Puffling, PufflingModel> {
         private static final Identifier TEXTURE = tex("puffling");
         public PufflingRenderer(EntityRendererProvider.Context c) { super(c, new PufflingModel(PufflingModel.createBodyLayer().bakeRoot()), 0.5f); }
-        @Override public PufflingModel.State createRenderState() { return new PufflingModel.State(); }
-        @Override public void extractRenderState(Puffling e, PufflingModel.State s, float partial) {
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public void extractRenderState(Puffling e, RigState s, float partial) {
             super.extractRenderState(e, s, partial);
             s.sheared = e.isSheared();
         }
-        @Override public Identifier getTextureLocation(PufflingModel.State s) { return TEXTURE; }
-        @Override protected void scale(PufflingModel.State s, PoseStack pose) { if (s.isBaby) pose.scale(0.5f, 0.5f, 0.5f); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { if (s.isBaby) pose.scale(0.5f, 0.5f, 0.5f); }
     }
 
-    public static class StaticWispRenderer extends MobRenderer<StaticWisp, LivingEntityRenderState, StaticWispModel> {
+    public static class StaticWispRenderer extends RigRenderer<StaticWisp, StaticWispModel> {
         private static final Identifier TEXTURE = tex("static_wisp");
         public StaticWispRenderer(EntityRendererProvider.Context c) { super(c, new StaticWispModel(StaticWispModel.createBodyLayer().bakeRoot()), 0.0f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(0.8f, 0.8f, 0.8f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { pose.scale(0.8f, 0.8f, 0.8f); }
         @Override protected int getBlockLightLevel(StaticWisp e, BlockPos pos) { return 15; }
     }
 
-    public static class CycloneRenderer extends MobRenderer<Cyclone, LivingEntityRenderState, CycloneModel> {
+    public static class CycloneRenderer extends RigRenderer<Cyclone, CycloneModel> {
         private static final Identifier TEXTURE = tex("cyclone");
         public CycloneRenderer(EntityRendererProvider.Context c) { super(c, new CycloneModel(CycloneModel.createBodyLayer().bakeRoot()), 0.4f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(0.8f, 1.6f, 0.8f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { pose.scale(0.8f, 1.6f, 0.8f); }
     }
 
-    public static class StormhawkRenderer extends MobRenderer<Stormhawk, LivingEntityRenderState, StormhawkModel> {
+    public static class StormhawkRenderer extends RigRenderer<Stormhawk, StormhawkModel> {
         private static final Identifier TEXTURE = tex("stormhawk");
         public StormhawkRenderer(EntityRendererProvider.Context c) { super(c, new StormhawkModel(StormhawkModel.createBodyLayer().bakeRoot()), 0.5f); }
-        @Override public LivingEntityRenderState createRenderState() { return new LivingEntityRenderState(); }
-        @Override public Identifier getTextureLocation(LivingEntityRenderState s) { return TEXTURE; }
-        @Override protected void scale(LivingEntityRenderState s, PoseStack pose) { pose.scale(1.15f, 1.15f, 1.15f); }
+        @Override public RigState createRenderState() { return new RigState(); }
+        @Override public Identifier getTextureLocation(RigState s) { return TEXTURE; }
+        @Override protected void scale(RigState s, PoseStack pose) { pose.scale(1.15f, 1.15f, 1.15f); }
     }
 }

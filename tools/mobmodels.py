@@ -1,12 +1,15 @@
-"""Stormreach 5.1 mob models: every Stormreach creature rebuilt as a detailed jointed model, with a texture painted
-to match it at 4x density (64x-equivalent detail).
+"""Stormreach 5.1 mob models: every Stormreach creature as a detailed jointed model, a texture painted to fit it
+(4x density, shaded colour ramps, bevelled edges, crisp material detail), and keyframed animation.
 
-Each model is described below as parts and boxes (Minecraft model units, y down, 16 units = 1 block). This script
-1. packs every box's UV island into the texture,
-2. paints each island by material (shell, fur, feather, scale, metal, crystal, glow, eye, cloud, water, cloth...)
-   with per-face lighting, edge definition and fine detail, and
-3. writes the Java model class (src/client/java/com/stormreach/client/model/gen), with its animation.
-Don't edit the generated Java or PNGs; change the description here and rerun (run_all.py does).
+Each model is described below as parts and boxes (Minecraft model units, y down, 16 units = 1 block, feet at y 24),
+plus animation clips. A clip is a set of keyframe tracks (part, channel) -> [(t, value)] with t in [0,1]:
+  idle / walk / fly / swim loops, fidgets (idle flourishes now and then), attack / cast (played when the server sends
+  an AnimPulse) and hurt. Channels: rx ry rz (degrees), px py pz (units), s / sx sy sz (scale delta).
+At runtime (client/anim) tracks are sampled with Catmull-Rom splines and blended by how much the mob is moving,
+flying or swimming, then head-look and turn-lean are layered on top.
+
+This script writes client/model/gen/*Model.java and textures/entity/*.png. Don't edit those; change this file and
+rerun it (run_all.py does). tools/preview/mob_preview.py renders contact sheets and animation strips offline.
 """
 import pathlib, math
 import numpy as np
@@ -21,35 +24,138 @@ DENSITY = 4
 # ================================================================================================ description DSL
 class Box:
     def __init__(self, x, y, z, w, h, d, mat, inflate=0.0, mirror=False):
-        self.o = (x, y, z); self.s = (int(w), int(h), int(d)); self.mat = mat; self.inflate = inflate; self.mirror = mirror
-        self.uv = None
+        self.o = (float(x), float(y), float(z)); self.s = (max(1, int(round(w))), max(1, int(round(h))), max(1, int(round(d))))
+        self.mat = mat; self.inflate = inflate; self.mirror = mirror; self.uv = None
 
 
 class Part:
-    def __init__(self, name, pivot=(0, 0, 0), rot=(0, 0, 0), boxes=(), field=None):
-        self.name = name; self.pivot = pivot; self.rot = rot; self.boxes = list(boxes); self.children = []; self.field = field
+    def __init__(self, name, pivot=(0, 0, 0), rot=(0, 0, 0), boxes=()):
+        self.name = name; self.pivot = tuple(float(v) for v in pivot); self.rot = tuple(float(v) for v in rot)
+        self.boxes = list(boxes); self.children = []
 
     def add(self, *parts):
         self.children.extend(parts); return self
 
+    @property
+    def field(self):
+        a = self.name.split('_')
+        return a[0] + ''.join(w.capitalize() for w in a[1:])
 
-class Model:
-    def __init__(self, cls, texture, mats, parts, anim, state='LivingEntityRenderState', doc='', extra='', flags=()):
-        self.cls = cls; self.texture = texture; self.mats = mats; self.parts = parts; self.anim = anim; self.flags = flags
-        self.state = state; self.doc = doc; self.extra = extra
+
+P = Part
 
 
-def mirror_part(p, suffix_from='left', suffix_to='right'):
-    """A mirrored copy (x flipped) of a part tree, renaming left->right."""
-    q = Part(p.name.replace(suffix_from, suffix_to), (-p.pivot[0], p.pivot[1], p.pivot[2]), (p.rot[0], -p.rot[1], -p.rot[2]),
-             [Box(-(b.o[0] + b.s[0]), b.o[1], b.o[2], *b.s, b.mat, b.inflate, not b.mirror) for b in p.boxes],
-             p.field.replace(suffix_from.capitalize(), suffix_to.capitalize()).replace(suffix_from, suffix_to) if p.field else None)
-    q.children = [mirror_part(c, suffix_from, suffix_to) for c in p.children]
+def mirror_part(p):
+    """A mirrored copy (x flipped) of a part tree, renaming left -> right."""
+    q = Part(p.name.replace('left', 'right'), (-p.pivot[0], p.pivot[1], p.pivot[2]), (p.rot[0], -p.rot[1], -p.rot[2]),
+             [Box(-(b.o[0] + b.s[0]), b.o[1], b.o[2], *b.s, b.mat, b.inflate, not b.mirror) for b in p.boxes])
+    q.children = [mirror_part(c) for c in p.children]
     return q
 
 
-# ================================================================================================ materials / painting
+def pair(p):
+    return [p, mirror_part(p)]
+
+
+class Clip:
+    """kind: time (length = ticks per loop), dist (length = cycles per walk-position unit), fidget (length = period,
+    dur), attack / cast (dur ticks), hurt."""
+    def __init__(self, kind, length, tracks, weight='1f', dur=None):
+        self.kind = kind; self.length = length; self.tracks = tracks; self.weight = weight; self.dur = dur
+
+
+class Model:
+    def __init__(self, cls, texture, mats, parts, clips, doc='', look=(), extra='', grounded=True, flags=()):
+        self.cls = cls; self.texture = texture; self.mats = mats; self.parts = parts; self.clips = clips
+        self.doc = doc; self.look = look; self.extra = extra; self.grounded = grounded; self.flags = flags
+
+
+# ---- keyframe helpers ------------------------------------------------------------------------------------------
+def even(*vals):
+    n = len(vals)
+    return [(i / n, v) for i, v in enumerate(vals)]
+
+
+def shift(keys, d):
+    return sorted((((t + d) % 1.0), v) for t, v in keys)
+
+
+def scale(keys, k):
+    return [(t, v * k) for t, v in keys]
+
+
+def add(keys, c):
+    return [(t, v + c) for t, v in keys]
+
+
+def hold(v):
+    return [(0.0, v)]
+
+
+MIRROR_NEG = {'ry', 'rz', 'px'}
+
+
+def sym(tracks):
+    """Copies every left_* track to the matching right_* part (mirrored), unless that track is given."""
+    out = dict(tracks)
+    for (part, ch), keys in tracks.items():
+        if 'left' in part:
+            rk = (part.replace('left', 'right'), ch)
+            if rk not in out:
+                out[rk] = scale(keys, -1) if ch in MIRROR_NEG else list(keys)
+    return out
+
+
+def T(**kw):
+    """T(body_rx=[...], left_leg_ry=[...]) -> {(part, ch): keys}; the channel is the last _xx."""
+    out = {}
+    for k, v in kw.items():
+        part, ch = k.rsplit('_', 1)
+        out[(part, ch)] = v
+    return out
+
+
+def hurt_clip(body, head=None, k=1.0):
+    tr = {(body, 'rx'): [(0, 0), (0.15, -12 * k), (0.4, 4 * k), (0.7, -1), (1, 0)],
+          (body, 'pz'): [(0, 0), (0.12, 0.8 * k), (0.5, -0.1), (1, 0)]}
+    if head:
+        tr[(head, 'rx')] = [(0, 0), (0.18, -16 * k), (0.5, 5), (1, 0)]
+        tr[(head, 'rz')] = [(0, 0), (0.2, 7 * k), (0.55, -3), (1, 0)]
+    return Clip('hurt', 10, tr)
+
+
+def gait_leg(upper, lower, phase, swing=25, knee=40, lift_side=None):
+    """A leg cycle: the upper leg sweeps from forward to back through stance, then swings forward with the knee bent.
+    Stance takes 60% of the cycle, so the swing forward is quicker, like a real step."""
+    tr = {(upper, 'rx'): shift([(0, -swing), (0.3, -swing * 0.05), (0.6, swing), (0.8, swing * 0.15)], phase)}
+    if lower:
+        tr[(lower, 'rx')] = shift([(0, -knee * 0.05), (0.55, knee * 0.05), (0.72, knee), (0.92, knee * 0.2)], phase)
+    return tr
+
+
+def merge(*ds):
+    out = {}
+    for d in ds: out.update(d)
+    return out
+
+
+# ================================================================================================ painting
 def C(h): return np.array([int(h[i:i + 2], 16) for i in (1, 3, 5)], dtype=np.float64)
+
+
+def ramp(base, n=7):
+    """A shading ramp around a base colour: cool, saturated shadows and warm, lighter highlights."""
+    base = np.asarray(base, float)
+    shadow = base * 0.36 + np.array([22, 26, 58]) * 0.3
+    hi = np.minimum(255, base * 1.16 + np.array([255, 246, 220]) * 0.2)
+    out = []
+    for i in range(n):
+        x = i / (n - 1)
+        out.append(shadow + (base - shadow) * (x / 0.5) if x < 0.5 else base + (hi - base) * ((x - 0.5) / 0.5))
+    return np.array(out)
+
+
+BAYER = (np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]]) / 16.0 - 0.47)
 
 
 def value_noise(rng, cells, w, h):
@@ -66,112 +172,167 @@ def fbm(rng, w, h, base=3):
     return (value_noise(rng, base, w, h) + 0.5 * value_noise(rng, base * 2, w, h) + 0.25 * value_noise(rng, base * 4, w, h)) / 1.75
 
 
+FACE_LIGHT = {'top': 0.16, 'front': 0.02, 'left': -0.04, 'right': -0.04, 'back': -0.08, 'bottom': -0.24}
+
+
 def paint_face(img, al, x0, y0, w, h, mat, face, rng):
-    """Paints one face rectangle (pixels) of a box in the given material."""
     if w <= 0 or h <= 0: return
     kind, cols = mat[0], mat[1:]
-    base, second = cols[0], cols[1] if len(cols) > 1 else cols[0] * 0.75
+    base = cols[0]; second = cols[1] if len(cols) > 1 else cols[0] * 0.6
     yy, xx = np.mgrid[0:h, 0:w]
     fy, fx = (yy + 0.5) / h, (xx + 0.5) / w
-    n = fbm(rng, w, h, 2 + (w + h) // 24)
+    n = fbm(rng, w, h, 2 + (w + h) // 28)
+    side = face not in ('top', 'bottom')
     alpha = np.full((h, w), 255.0)
-    if kind == 'fur':
-        # tufts: short strands that lean down, varied per column, with darker roots between them
-        col = rng.random(w)[None, :]
-        phase = (yy + (col * 7).astype(int)) % 5
-        strand = 1.0 - phase / 6.0
-        rgb = base[None, None] * (0.72 + 0.22 * n[..., None] + 0.16 * strand[..., None] + 0.06 * col[..., None])
-        rgb = np.where((phase == 4)[..., None], rgb * 0.8 + second * 0.2, rgb)
-    elif kind == 'shell':
-        plates = ((xx // max(3, w // 3)) + (yy // max(3, h // 2))) % 2
-        rgb = base[None, None] * (0.85 + 0.2 * n[..., None])
-        rgb = np.where(plates[..., None] == 1, rgb * 0.93, rgb)
-        gloss = np.clip(1 - np.hypot(fx - 0.3, fy - 0.25) * 3, 0, 1)
-        rgb = rgb + gloss[..., None] * 60
-    elif kind == 'feather':
-        # overlapping feathers in staggered rows: a light vane that darkens toward its edge, a shaft down the middle
-        FW, FH = 6, 5
-        row = yy // FH
-        lx = (xx + (row % 2) * (FW // 2)) % FW
-        ly = yy % FH
-        vane = 1.0 - np.abs(lx - FW / 2 + 0.5) / (FW / 2)
-        rgb = base[None, None] * (0.7 + 0.25 * vane[..., None] + 0.15 * n[..., None] + 0.08 * (ly / FH)[..., None])
-        rgb = np.where((lx == FW // 2)[..., None], rgb * 0.88, rgb)
-        rgb = np.where((ly == FH - 1)[..., None] | (lx == 0)[..., None], second[None, None] * 0.85 + rgb * 0.15, rgb)
-        rgb = np.where((fy > 0.8)[..., None], rgb * 0.85 + second * 0.15, rgb)
-    elif kind == 'scale':
-        row = yy // 3
-        cx = (xx + (row % 2) * 2) % 4
-        rim = (cx == 0) | (yy % 3 == 0)
-        rgb = base[None, None] * (0.88 + 0.2 * n[..., None])
-        rgb = np.where(rim[..., None], second[None, None], rgb)
-    elif kind == 'metal':
-        brush = value_noise(rng, max(2, w), w, h)[:1].repeat(h, 0)
-        rgb = base[None, None] * (0.8 + 0.25 * brush[..., None] + 0.1 * n[..., None])
-        for (ry, rx) in ((1, 1), (1, w - 2), (h - 2, 1), (h - 2, w - 2)):
-            if 0 <= ry < h and 0 <= rx < w and w > 6 and h > 6: rgb[ry, rx] = second
-    elif kind == 'crystal':
-        k = 0.75 + 0.5 * ((xx * 3 + yy * 5) // 7 % 3) / 3
-        rgb = (base[None, None] * k[..., None]) * 0.8 + second * 0.2
-        edge = (np.abs(fx - fy) < 0.06) | (np.abs(fx + fy - 1) < 0.06)
-        rgb = np.where(edge[..., None], np.minimum(255, base * 1.4), rgb)
-        alpha[:] = 235
-    elif kind == 'glow':
+    over = None  # (mask, rgb) colour overrides painted after shading
+
+    # ---- special, unramped materials --------------------------------------------------------------------------
+    if kind == 'glow':
         d = np.hypot(fx - 0.5, fy - 0.5) * 2
-        rgb = second[None, None] * (1 - np.clip(1 - d, 0, 1)[..., None]) + np.minimum(255, base * 1.25)[None, None] * np.clip(1 - d, 0, 1)[..., None]
-        rgb = np.maximum(rgb, base * 0.8)
-    elif kind == 'eye':
-        rgb = np.broadcast_to(second, (h, w, 3)).copy()
-        if face == 'front':
+        core = np.clip(1 - d, 0, 1) ** 0.8
+        rgb = second[None, None] * (1 - core[..., None]) + np.minimum(255, base * 1.2)[None, None] * core[..., None]
+        sparkle = (rng.random((h, w)) < 0.03)
+        rgb = np.where(sparkle[..., None], np.array([255.0, 255, 255]), rgb)
+        img[y0:y0 + h, x0:x0 + w] = np.clip(rgb, 0, 255); al[y0:y0 + h, x0:x0 + w] = 255
+        return
+    if kind == 'eye':
+        rgb = np.broadcast_to(second * 0.8, (h, w, 3)).copy()
+        if side:
             d = np.hypot(fx - 0.5, fy - 0.5)
-            rgb = np.where((d < 0.42)[..., None], base[None, None], rgb)
-            rgb = np.where((d < 0.18)[..., None], np.array([15.0, 15, 20])[None, None], rgb)
-            rgb = np.where((np.hypot(fx - 0.35, fy - 0.32) < 0.1)[..., None], np.array([255.0, 255, 255])[None, None], rgb)
-    elif kind == 'cloud':
-        rgb = base[None, None] * (0.85 + 0.3 * n[..., None])
-        alpha = 200 + 55 * n
-    elif kind == 'water':
-        waves = np.sin(yy * 0.9 + np.sin(xx * 0.5) * 2 + n * 6) * 0.5 + 0.5
-        rgb = base[None, None] * (0.8 + 0.3 * waves[..., None])
-        alpha = 170 + 70 * waves
+            rgb = np.where((d < 0.46)[..., None], base[None, None], rgb)
+            rgb = np.where((d < 0.46)[..., None] & (fy > 0.55)[..., None], base * 0.7, rgb)
+            rgb = np.where((d < 0.22)[..., None], np.array([12.0, 12, 18]), rgb)
+            rgb = np.where((np.hypot(fx - 0.33, fy - 0.3) < 0.12)[..., None], np.array([255.0, 255, 255]), rgb)
+        img[y0:y0 + h, x0:x0 + w] = rgb; al[y0:y0 + h, x0:x0 + w] = 255
+        return
+
+    # ---- value field: lighting + material pattern, quantized onto the ramp --------------------------------------
+    v = 0.5 + FACE_LIGHT[face] + (n - 0.5) * 0.16
+    if side: v -= 0.12 * fy
+    R = ramp(base)
+    if kind in ('shell', 'claw'):
+        # broad lacquered plates: a few gently curved seams, each plate lit toward its upper edge, with pitting
+        wave = np.sin(xx * 0.18 + (fbm(rng, w, h, 2) - 0.5) * 3) * 2
+        band = (yy + wave) / 18.0
+        seam = (np.abs(band - np.round(band)) < 0.035) & (yy > 2) & (yy < h - 2)
+        v += 0.12 * (1 - (band % 1)) - 0.06
+        v -= 0.26 * seam
+        v -= 0.1 * (rng.random((h, w)) < 0.025)
+        if face == 'top': v += 0.2 * np.clip(1 - np.hypot(fx - 0.35, fy - 0.3) * 2.2, 0, 1)
+    elif kind == 'fur':
+        # tufts: strands in clumps three pixels wide, each lit at the root and darker at the tip
+        clump = (xx // 3)
+        off = (np.sin(clump * 2.3) * 3 + np.sin(clump * 0.7) * 2).astype(int)
+        phase = (yy + off) % 8
+        v += 0.14 * (1 - phase / 7.0) - 0.06 + 0.05 * np.sin(clump * 1.7)
+        v -= 0.12 * ((phase == 7) | (xx % 3 == 0) * (phase > 4))
+    elif kind == 'feather':
+        # overlapping rounded feathers in staggered rows: each lit along its shaft, with a dark curved trailing edge
+        FW, FH = 8, 7
+        row = yy // FH
+        lx = (xx + (row % 2) * (FW // 2)) % FW - (FW - 1) / 2
+        ly = yy % FH
+        arc = ly - (FH - 1.5) + (lx * lx) / (FW * 0.7)
+        v += 0.14 * (1 - np.abs(lx) / (FW / 2)) + 0.05 * (ly / FH) - 0.06
+        v -= 0.08 * (np.abs(lx) < 0.6) * (ly < FH - 2)
+        v -= 0.26 * (np.abs(arc) < 0.75)
+        v += 0.08 * ((arc < -0.75) & (arc > -1.9))
+    elif kind == 'scale':
+        row = yy // 5
+        cx = (xx + (row % 2) * 3) % 6
+        v += 0.12 * (1 - (yy % 5) / 5) - 0.04
+        v -= 0.24 * ((cx == 0) | (yy % 5 == 4))
+    elif kind == 'metal':
+        brush = value_noise(rng, max(2, w // 2), w, h)[:1].repeat(h, 0)
+        v += 0.1 * (brush - 0.5)
+        v += 0.2 * (np.abs((xx - yy * 0.6) % 26 - 6) < 2.5)  # specular streak
+        if w > 10 and h > 10:
+            for ry, rx in ((2, 2), (2, w - 3), (h - 3, 2), (h - 3, w - 3)):
+                over_mask = np.hypot(yy - ry, xx - rx) < 1.6
+                v = np.where(over_mask, 0.85, v)
+                v = np.where((np.hypot(yy - ry, xx - rx) < 2.4) & ~over_mask, 0.2, v)
+    elif kind == 'stone':
+        bw, bh = 14, 9
+        row = yy // bh
+        mortar = (yy % bh == 0) | ((xx + (row % 2) * (bw // 2)) % bw == 0)
+        v -= 0.26 * mortar
+        v += 0.1 * (fbm(rng, w, h, 5) - 0.5)
+        crack = np.abs(np.sin(xx * 0.31 + yy * 0.17 + n * 8)) < 0.035
+        v -= 0.2 * crack
+        rune = (np.abs(np.sin(xx * 0.2 + n * 5) * 6 + h * 0.5 - yy) < 0.7) & (n > 0.52)
+        over = (rune & side, second)
     elif kind == 'cloth':
-        weave = ((xx + yy) % 2) * 0.05
-        rgb = base[None, None] * (0.85 + 0.2 * n[..., None] + weave[..., None])
-        hem = fy > 0.9
-        rgb = np.where(hem[..., None], second[None, None], rgb)
+        fold = np.sin(xx * 0.45 + n * 4)
+        v += 0.12 * fold + 0.03 * ((xx + yy) % 2)
+        if side:
+            hem = fy > 0.88
+            over = (hem & (yy % 3 != 0), second)
+    elif kind == 'tatter':
+        fold = np.sin(xx * 0.45 + n * 4)
+        v += 0.12 * fold
+        if side:
+            jag = fy > 0.72 + 0.22 * value_noise(rng, max(2, w // 3), w, 1)[0][None, :] + 0.05 * np.sin(xx * 1.9)
+            alpha = np.where(jag, 0, 255.0)
     elif kind == 'bone':
-        rgb = base[None, None] * (0.9 + 0.15 * n[..., None])
-        crack = (np.abs(np.sin(xx * 0.8 + yy * 1.3 + n * 5)) < 0.05)
-        rgb = np.where(crack[..., None], rgb * 0.7, rgb)
+        v += 0.1 * (fbm(rng, w, h, 4) - 0.5)
+        v -= 0.22 * (np.abs(np.sin(xx * 0.7 + yy * 1.1 + n * 7)) < 0.04)
+        v -= 0.14 * (rng.random((h, w)) < 0.05)
     elif kind == 'leather':
-        rgb = base[None, None] * (0.85 + 0.2 * n[..., None])
-        stitch = ((yy == 1) | (yy == h - 2)) & (xx % 3 == 0)
-        rgb = np.where(stitch[..., None], second[None, None], rgb)
-    elif kind == 'dark':
-        rgb = base[None, None] * (0.8 + 0.3 * n[..., None])
-    else:  # 'skin' and anything else: soft mottled
-        spots = (fbm(rng, w, h, 4) > 0.62)
-        rgb = base[None, None] * (0.86 + 0.22 * n[..., None])
-        rgb = np.where(spots[..., None], rgb * 0.85 + second * 0.15, rgb)
-    # lighting per face, soft top-to-bottom occlusion, crisp edges
-    light = {'top': 1.12, 'bottom': 0.72, 'front': 1.0, 'back': 0.88, 'left': 0.93, 'right': 0.93}[face]
-    k = light * (1.04 - 0.1 * fy) if face not in ('top', 'bottom') else light
-    rgb = rgb * k[..., None] if np.ndim(k) else rgb * k
-    if kind not in ('glow', 'eye') and w > 2 and h > 2:
-        rgb[0, :] *= 1.08; rgb[:, 0] *= 1.05; rgb[-1, :] *= 0.82; rgb[:, -1] *= 0.86
+        v += 0.06 * (n - 0.5)
+        over = (((yy == 2) | (yy == h - 3)) & (xx % 4 < 2), second)
+    elif kind == 'crystal':
+        k = ((xx * 3 + yy * 5) // 9 % 4) / 3.0
+        v = 0.42 + 0.34 * k + FACE_LIGHT[face]
+        edge = (np.abs(fx - fy) < 0.05) | (np.abs(fx + fy - 1) < 0.05)
+        v = np.where(edge, 1.0, v)
+        alpha[:] = 232
+    elif kind == 'cloud':
+        bl = np.zeros((h, w))
+        for _ in range(max(2, w * h // 90)):
+            cx, cy, r = rng.random() * w, rng.random() * h, 3 + rng.random() * 6
+            bl = np.maximum(bl, np.clip(1 - np.hypot(xx - cx, yy - cy) / r, 0, 1))
+        v = 0.46 + 0.36 * bl + FACE_LIGHT[face] * 0.6 + (n - 0.5) * 0.06
+        alpha = 215 + 40 * np.clip(bl + n * 0.5, 0, 1)
+    elif kind == 'water':
+        wave = np.sin(yy * 0.7 + np.sin(xx * 0.35) * 2.5 + n * 6) * 0.5 + 0.5
+        v = 0.35 + 0.35 * wave + FACE_LIGHT[face] * 0.6
+        foam = wave > 0.93
+        over = (foam, np.array([236.0, 248, 255]))
+        alpha = 165 + 75 * wave
+    elif kind == 'skin':
+        spots = fbm(rng, w, h, 5) > 0.63
+        v += 0.08 * (n - 0.5)
+        over = (spots, R[3] * 0.7 + second * 0.3)
+    # 'dark' and anything else: just shading and noise
+
+    # bevel: lit top edges, shadowed bottoms and sides, so every box reads crisply
+    if side and h > 3 and w > 3:
+        v = v + 0.13 * (yy == 0) - 0.2 * (yy == h - 1) - 0.09 * ((xx == 0) | (xx == w - 1))
+    elif face == 'top' and h > 3 and w > 3:
+        v = v + 0.1 * ((yy == 0) | (xx == 0)) - 0.08 * ((yy == h - 1) | (xx == w - 1))
+    d = BAYER[yy % 4, xx % 4] * 0.9
+    idx = np.clip(np.floor(v * (len(R) - 1) + 0.5 + d), 0, len(R) - 1).astype(int)
+    rgb = R[idx]
+    if over is not None:
+        m, col = over
+        rgb = np.where(m[..., None], np.asarray(col, float)[None, None] if np.ndim(col) == 1 else col, rgb)
     img[y0:y0 + h, x0:x0 + w] = np.clip(rgb, 0, 255)
     al[y0:y0 + h, x0:x0 + w] = np.clip(alpha, 0, 255)
 
 
-def all_boxes(parts):
+def all_parts(parts):
     for p in parts:
-        for b in p.boxes: yield b
-        yield from all_boxes(p.children)
+        yield p
+        yield from all_parts(p.children)
+
+
+def all_boxes(parts):
+    for p in all_parts(parts):
+        yield from p.boxes
 
 
 def pack(model):
-    """Shelf-packs every box's UV island; returns (texture width, height) in units."""
-    boxes = sorted(all_boxes(model.parts), key=lambda b: -(b.s[2] + b.s[1]))
+    boxes = sorted(all_boxes(model.parts), key=lambda b: (-(b.s[2] + b.s[1]), -(b.s[0] + b.s[2])))
     for W in (64, 128, 256):
         x = y = shelf = 0
         ok = True
@@ -184,15 +345,15 @@ def pack(model):
         H = y + shelf
         if ok:
             for Hp in (32, 64, 128, 256):
-                if H <= Hp and Hp <= W: return W, Hp
+                if H <= Hp <= W: return W, Hp
     raise ValueError(f'{model.cls}: does not fit a 256x256 texture')
 
 
 def paint(model):
     W, H = pack(model)
     rng = np.random.default_rng(sum(map(ord, model.cls)))
-    img = np.zeros((H * DENSITY, W * DENSITY, 3)); al = np.zeros((H * DENSITY, W * DENSITY))
     D = DENSITY
+    img = np.zeros((H * D, W * D, 3)); al = np.zeros((H * D, W * D))
     for b in all_boxes(model.parts):
         u, v = b.uv; w, h, d = b.s
         mat = model.mats[b.mat]
@@ -205,15 +366,53 @@ def paint(model):
     return W, H
 
 
+# ================================================================================================ rest-pose geometry
+def rot(rx, ry, rz):
+    cx, sx, cy, sy, cz, sz = math.cos(rx), math.sin(rx), math.cos(ry), math.sin(ry), math.cos(rz), math.sin(rz)
+    X = np.array([[1, 0, 0], [0, cx, -sx], [0, sx, cx]]); Y = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]])
+    Z = np.array([[cz, -sz, 0], [sz, cz, 0], [0, 0, 1]])
+    return Z @ Y @ X
+
+
+def lowest_point(parts, pose=None):
+    low = -1e9
+
+    def walk(p, M, T0):
+        nonlocal low
+        pv = np.array(p.pivot) + (pose.get(p.name, {}).get('p', 0) if pose else 0)
+        R = M @ rot(*p.rot); Pp = T0 + M @ pv
+        for b in p.boxes:
+            for cx in (0, 1):
+                for cy in (0, 1):
+                    for cz in (0, 1):
+                        c = Pp + R @ (np.array(b.o) + np.array(b.s) * (cx, cy, cz))
+                        low = max(low, c[1])
+        for ch in p.children: walk(ch, R, Pp)
+
+    for p in parts: walk(p, np.eye(3), np.zeros(3))
+    return low
+
+
+def ground(model):
+    """Moves the model so its lowest point rests on y = 24."""
+    if not model.grounded: return
+    dy = 24 - lowest_point(model.parts)
+    for p in model.parts: p.pivot = (p.pivot[0], p.pivot[1] + dy, p.pivot[2])
+
+
 # ================================================================================================ Java output
 def jf(v):
     v = float(v)
-    return (f'{v:.4f}'.rstrip('0').rstrip('.') or '0') + 'f'
+    s = f'{v:.4f}'.rstrip('0').rstrip('.')
+    return (s if s not in ('', '-0') else '0') + 'f'
+
+
+CH = {'rx': ('xRot', True), 'ry': ('yRot', True), 'rz': ('zRot', True), 'px': ('x', False), 'py': ('y', False), 'pz': ('z', False)}
 
 
 def java(model, W, H):
     fields, lookups, defs = [], [], []
-
+    names = {p.name for p in all_parts(model.parts)}
     counter = [0]
 
     def walk(p, parent_var, path):
@@ -228,19 +427,66 @@ def java(model, W, H):
         pose = (f'PartPose.offsetAndRotation({jf(p.pivot[0])}, {jf(p.pivot[1])}, {jf(p.pivot[2])}, {jf(p.rot[0])}, {jf(p.rot[1])}, {jf(p.rot[2])})'
                 if any(p.rot) else f'PartPose.offset({jf(p.pivot[0])}, {jf(p.pivot[1])}, {jf(p.pivot[2])})')
         defs.append(f'        PartDefinition {var} = {parent_var}.addOrReplaceChild("{p.name}", {cub}, {pose});')
-        if p.field:
-            fields.append(f'    final ModelPart {p.field};')
-            lookups.append(f'        {p.field} = root' + ''.join(f'.getChild("{n}")' for n in path + [p.name]) + ';')
+        fields.append(f'    final ModelPart {p.field};')
+        lookups.append(f'        {p.field} = root' + ''.join(f'.getChild("{n}")' for n in path + [p.name]) + ';')
         for c in p.children: walk(c, var, path + [p.name])
 
     for p in model.parts: walk(p, 'root', [])
-    state = model.state
-    state_decl = ''
-    if state == 'State':
-        state_decl = ('    /** Extra render state, filled in by the renderer. */\n    public static class State extends LivingEntityRenderState {\n'
-                      + ''.join(f'        public boolean {f};\n' for f in model.flags) + '    }\n\n')
+
+    statics, body = [], []
+    kid = [0]
+
+    def keys_const(keys):
+        kid[0] += 1
+        name = f'K{kid[0]}'
+        flat = ', '.join(f'{jf(t)}, {jf(v)}' for t, v in sorted(keys))
+        statics.append(f'    private static final float[] {name} = {{{flat}}};')
+        return name
+
+    def apply_tracks(tracks, sample, wexpr):
+        out = []
+        for (part, ch), keys in sorted(tracks.items()):
+            if part not in names: raise ValueError(f'{model.cls}: no part {part}')
+            f = next(p.field for p in all_parts(model.parts) if p.name == part)
+            k = keys_const(keys)
+            val = f'Keys.{sample}({k}, ph)'
+            if ch in CH:
+                fld, is_rot = CH[ch]
+                out.append(f'            {f}.{fld} += {"Rig.DEG * " if is_rot else ""}{val} * {wexpr};')
+            elif ch == 's':
+                out.append(f'            {{ float d = {val} * {wexpr}; {f}.xScale += d; {f}.yScale += d; {f}.zScale += d; }}')
+            elif ch in ('sx', 'sy', 'sz'):
+                out.append(f'            {f}.{ch[1]}Scale += {val} * {wexpr};')
+            else:
+                raise ValueError(ch)
+        return out
+
+    for c in model.clips:
+        if c.kind == 'time':
+            body.append(f'        {{ float w = {c.weight}; float ph = t / {jf(c.length)} + s.seed;')
+            body.append('          if (w > 0.002f) {'); body += apply_tracks(c.tracks, 'loop', 'w'); body.append('        } }')
+        elif c.kind == 'dist':
+            body.append(f'        {{ float w = {c.weight}; float ph = s.walkAnimationPos * {jf(c.length)};')
+            body.append('          if (w > 0.002f) {'); body += apply_tracks(c.tracks, 'loop', 'w'); body.append('        } }')
+        elif c.kind == 'fidget':
+            body.append(f'        {{ float w = {c.weight}; float ph = Rig.fidget(t, s.seed, {jf(c.length)}, {jf(c.dur)});')
+            body.append('          if (ph >= 0 && w > 0.002f) {'); body += apply_tracks(c.tracks, 'once', 'w'); body.append('        } }')
+        elif c.kind in ('attack', 'cast'):
+            kind = 'AnimPulse.ATTACK' if c.kind == 'attack' else 'AnimPulse.CAST'
+            body.append(f'        {{ float ph = Rig.pulse(s.attackAge, {jf(c.length)});')
+            body.append(f'          if (ph >= 0 && s.attackKind == {kind}) {{'); body += apply_tracks(c.tracks, 'once', '1f'); body.append('        } }')
+        elif c.kind == 'hurt':
+            body.append(f'        {{ float ph = Rig.pulse(s.hurtAge, {jf(c.length)});')
+            body.append('          if (ph >= 0) {'); body += apply_tracks(c.tracks, 'once', '1f'); body.append('        } }')
+    for part, wy, wx in model.look:
+        f = next(p.field for p in all_parts(model.parts) if p.name == part)
+        body.append(f'        {f}.yRot += s.yRot * Rig.DEG * {jf(wy)}; {f}.xRot += s.xRot * Rig.DEG * {jf(wx)};')
     return f'''package com.stormreach.client.model.gen;
 
+import com.stormreach.anim.AnimPulse;
+import com.stormreach.client.anim.Keys;
+import com.stormreach.client.anim.Rig;
+import com.stormreach.client.anim.RigState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -249,7 +495,6 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.util.Mth;
 
 /**
@@ -257,8 +502,10 @@ import net.minecraft.util.Mth;
  * Generated by tools/mobmodels.py (texture textures/entity/{model.texture}.png, {W}x{H} units at {DENSITY}x). Don't edit.
  */
 @SuppressWarnings("unused")
-public class {model.cls} extends EntityModel<{model.cls + '.State' if state == 'State' else state}> {{
-{state_decl}{chr(10).join(fields)}
+public class {model.cls} extends EntityModel<RigState> {{
+{chr(10).join(statics)}
+
+{chr(10).join(fields)}
 
     public {model.cls}(ModelPart root) {{
         super(root);
@@ -273,380 +520,577 @@ public class {model.cls} extends EntityModel<{model.cls + '.State' if state == '
     }}
 
     @Override
-    public void setupAnim({model.cls + '.State' if state == 'State' else state} s) {{
+    public void setupAnim(RigState s) {{
         super.setupAnim(s);
-        float t = s.ageInTicks, walk = s.walkAnimationPos * 0.6662f, amt = Math.min(1f, s.walkAnimationSpeed);
-{model.anim}
+        float t = s.ageInTicks;
+        float moveW = Rig.ease(Math.min(1f, s.walkAnimationSpeed * 2.2f)), idleW = 1f - moveW;
+        float air = s.air, ground = 1f - air, swim = s.isInWater ? 1f : 0f, dry = 1f - swim;
+        float turn = Mth.clamp(s.turn, -12f, 12f);
+{chr(10).join(body)}
+{model.extra}
     }}
-{model.extra}}}
+}}
 '''
 
 
 # ================================================================================================ the creatures
 M = []
-P = Part
+
 
 # ---- Cliff Crab and Thunder Crab ------------------------------------------------------------------------------
-def crab(cls, tex, k, mats, spines, doc):
-    s = lambda v: v * k
-    body = P('body', (0, 24 - s(5), 0), boxes=[Box(-s(5), -s(2), -s(4), s(10), s(4), s(8), 'shell'),
-                                               Box(-s(4), -s(3), -s(3), s(8), s(1), s(6), 'shell2'),
-                                               Box(-s(4.5), s(2), -s(3.5), s(9), s(1), s(7), 'belly'),
-                                               Box(-s(1.5), 0, -s(4.6), s(3), s(1), 1, 'dark')], field='body')
-    if spines:
-        for i, (x, z) in enumerate(((-3, -2), (0, -1), (3, -2), (-2, 2), (2, 2))):
-            body.add(P(f'spine_{i}', (s(x), -s(3), s(z)), (0.15 * (z < 0) - 0.15 * (z > 0), 0, 0.2 * (x / 3)),
-                       [Box(-1, -s(3), -1, 2, s(3), 2, 'crystal')]))
-        body.add(P('antenna', (0, -s(3), s(1)), boxes=[Box(-0.5, -s(5), -0.5, 1, s(5), 1, 'metal'), Box(-1, -s(6), -1, 2, 2, 2, 'glow')], field='antenna'))
-    eye = P('left_eye', (s(2), -s(2), -s(3.5)), boxes=[Box(-0.5, -s(3), -0.5, 1, s(3), 1, 'shell2'), Box(-1, -s(3) - 2, -1, 2, 2, 2, 'eye')], field='leftEye')
-    body.add(eye, mirror_part(eye))
-    claw = P('left_claw', (s(5), s(0.5), -s(3)), (0, -0.35, 0), [Box(0, -1, -1, s(3), 2, 2, 'shell')], field='leftClaw').add(
-        P('left_hand', (s(3), 0, 0), boxes=[Box(-1, -s(1.5), -s(4), s(3), s(3), s(4), 'claw')]).add(
-            P('left_pincer', (0, s(1.5), -s(4)), boxes=[Box(-0.5, 0, -s(3), s(2), 1, s(3), 'claw2')], field='leftPincer')))
-    body.add(claw, mirror_part(claw))
+def crab(cls, tex, k, mats, thunder, doc):
+    S = lambda v: v * k
+    Bx = lambda x, y, z, w, h, d, m: Box(S(x), S(y), S(z), S(w), S(h), S(d), m)
+    body = P('body', (0, 18, 0), boxes=[Bx(-5, -2, -4, 10, 4, 8, 'shell'), Bx(-4, -3, -3, 8, 1, 6, 'shell2'),
+                                       Bx(-4.5, 2, -3.5, 9, 1, 7, 'belly'), Bx(-2, -1, -4.5, 4, 2, 1, 'mouth'),
+                                       Bx(4.5, -2.5, -2, 1, 1, 1, 'shell2'), Bx(-5.5, -2.5, -2, 1, 1, 1, 'shell2'),
+                                       Bx(4.5, -2.5, 1, 1, 1, 1, 'shell2'), Bx(-5.5, -2.5, 1, 1, 1, 1, 'shell2')])
+    body.add(*pair(P('left_mandible', (S(1), S(1), -S(4.5)), boxes=[Bx(-0.5, -0.5, -1, 1, 1, 1, 'claw2')])))
+    body.add(*pair(P('left_eye', (S(2), -S(3), -S(3)), boxes=[Bx(-0.5, -3, -0.5, 1, 3, 1, 'shell2'), Bx(-1, -5, -1, 2, 2, 2, 'eye')])))
+    claw = P('left_arm', (S(5), S(0.5), -S(2.5)), (0, -0.5, 0.15), [Bx(0, -1, -1, 3, 2, 2, 'shell')]).add(
+        P('left_forearm', (S(3), 0, 0), (0, -0.7, 0), [Bx(0, -1, -1, 3, 2, 2, 'shell')]).add(
+            P('left_hand', (S(3), 0, 0), (0, 1.1, 0), [Bx(-1.5, -1.5, -4, 3, 3, 4, 'claw'), Bx(-1, 0.5, -7, 2, 1, 3, 'claw2')]).add(
+                P('left_pincer', (0, -S(1.5), -S(4)), boxes=[Bx(-1, 0, -3, 2, 1, 3, 'claw2')]))))
+    body.add(*pair(claw))
     for i in range(3):
-        leg = P(f'left_leg_{i}', (s(5), s(1), -s(2) + i * s(2.2)), (0, 0, 0.5), [Box(0, -0.5, -0.5, s(4), 1, 1, 'shell2')], field=f'leftLeg{i}').add(
-            P(f'left_foot_{i}', (s(4), 0, 0), (0, 0, 0.9), [Box(-0.5, 0, -0.5, 1, s(4), 1, 'shell2')]))
-        body.add(leg, mirror_part(leg))
-    anim = '''        body.y = 24f - {h}f + Mth.sin(t * 0.1f) * 0.15f;
-''' .replace('{h}', jf(s(5))[:-1]) + ''.join(f'''        leftLeg{i}.yRot = Mth.cos(walk * 2.4f + {i * 2.1:.1f}f) * 0.5f * amt;
-        rightLeg{i}.yRot = -Mth.cos(walk * 2.4f + {i * 2.1:.1f}f) * 0.5f * amt;
-        leftLeg{i}.zRot = 0.5f + Mth.sin(walk * 2.4f + {i * 2.1:.1f}f) * 0.3f * amt;
-        rightLeg{i}.zRot = -0.5f - Mth.sin(walk * 2.4f + {i * 2.1:.1f}f) * 0.3f * amt;
-''' for i in range(3)) + '''        leftPincer.xRot = 0.15f + Mth.sin(t * 0.25f) * 0.25f;
-        rightPincer.xRot = 0.15f - Mth.sin(t * 0.25f + 1f) * 0.25f;
-        leftClaw.xRot = Mth.sin(t * 0.08f) * 0.1f;
-        rightClaw.xRot = -Mth.sin(t * 0.08f) * 0.1f;
-        leftEye.zRot = Mth.sin(t * 0.07f) * 0.15f;
-        rightEye.zRot = -Mth.cos(t * 0.06f) * 0.15f;
-''' + ('        antenna.zRot = Mth.sin(t * 0.3f) * 0.08f;\n' if spines else '')
-    M.append(Model(cls, tex, mats, [body], anim, doc=doc))
+        leg = P(f'left_leg{i}', (S(4.5), S(1), S(-2 + i * 2.2)), (0, (i - 1) * -0.35, 0.45), [Bx(0, -0.5, -0.5, 3, 1, 1, 'shell2')]).add(
+            P(f'left_shin{i}', (S(3), 0, 0), (0, 0, 0.7), [Bx(0, -0.5, -0.5, 3, 1, 1, 'shell2')]).add(
+                P(f'left_foot{i}', (S(3), 0, 0), (0, 0, 0.35), [Bx(0, -0.5, -0.5, 2, 1, 1, 'dark')])))
+        body.add(*pair(leg))
+    if thunder:
+        for i, (x, z) in enumerate(((-3, -2), (0, -1), (3, -2), (-2, 2), (2, 2))):
+            body.add(P(f'spine{i}', (S(x), -S(3), S(z)), (0.15 * (z < 0) - 0.15 * (z > 0), 0, 0.2 * (x / 3)),
+                       [Box(-1, -S(3), -1, 2, S(3), 2, 'crystal')]))
+        body.add(P('antenna', (0, -S(3), S(1)), boxes=[Box(-0.5, -S(5), -0.5, 1, S(5), 1, 'metal'), Box(-1, -S(5) - 2, -1, 2, 2, 2, 'glow')]))
+    legs = {}
+    for i in range(3):
+        for side, ph in (('left', 0.0 if i != 1 else 0.5), ('right', 0.5 if i != 1 else 0.0)):
+            sg = 1 if side == 'left' else -1
+            legs[(f'{side}_leg{i}', 'ry')] = shift([(0, 18 * sg), (0.5, -18 * sg)], ph)
+            legs[(f'{side}_leg{i}', 'rz')] = shift([(0, 0), (0.45, 0), (0.75, -26 * sg)], ph)
+            legs[(f'{side}_shin{i}', 'rz')] = shift([(0, 0), (0.45, 0), (0.75, 14 * sg)], ph)
+    clips = [
+        Clip('time', 50, sym(T(body_py=[(0, 0), (0.5, 0.25)], left_eye_rz=even(0, 7, 0, -5), left_arm_rx=even(0, -4, 0, 3),
+                                left_mandible_rz=even(0, 18, 0, -6, 12, 0))), 'idleW'),
+        Clip('dist', 0.21 / max(k, 1) ** 0.5, merge(legs, T(body_rz=even(0, 2.5, 0, -2.5), body_py=even(0, -0.3, 0, -0.3),
+                                                       left_arm_rz=hold(-12), right_arm_rz=hold(12))), 'moveW'),
+        Clip('fidget', 150, sym(T(left_pincer_rx=[(0, 0), (0.12, -38), (0.22, 12), (0.32, -32), (0.42, 12), (0.55, 0), (1, 0)],
+                                  left_arm_rz=[(0, 0), (0.12, -28), (0.6, -26), (0.85, 0), (1, 0)],
+                                  left_eye_py=[(0, 0), (0.1, -0.5), (0.7, -0.5), (1, 0)])), 'idleW', dur=36),
+        Clip('attack', 14, merge(sym(T(left_arm_ry=[(0, 0), (0.18, 28), (0.32, -12), (1, 0)], left_arm_rz=[(0, 0), (0.15, -30), (0.5, -10), (1, 0)],
+                                       left_pincer_rx=[(0, 0), (0.12, -42), (0.28, 14), (0.6, 0), (1, 0)])),
+                                 T(body_pz=[(0, 0), (0.22, -S(1.3)), (1, 0)], body_rx=[(0, 0), (0.2, 6), (1, 0)]))),
+        hurt_clip('body', None),
+        Clip('hurt', 10, sym(T(left_eye_py=[(0, 0), (0.15, 2), (0.7, 1), (1, 0)]))),
+    ]
+    extra = '        body.yRot -= turn * 0.02f;\n'
+    if thunder:
+        clips.append(Clip('time', 18, T(antenna_rz=even(0, 6, -3, 4, -6, 2), antenna_rx=even(0, -3, 4, 0, -2, 3)), '1f'))
+    M.append(Model(cls, tex, mats, [body], clips, doc=doc, extra=extra))
 
-crab('CliffCrabModel', 'cliff_crab', 1, {'shell': ('shell', C('#b5522f'), C('#6e2a16')), 'shell2': ('shell', C('#d0703c'), C('#7a3418')),
-     'belly': ('skin', C('#e9c9a0'), C('#c49a6c')), 'dark': ('dark', C('#3a1a10')), 'claw': ('shell', C('#c95f32'), C('#5c2410')),
-     'claw2': ('shell', C('#e6d2b8'), C('#a08060')), 'eye': ('eye', C('#1c1c1c'), C('#2a2a2a'))}, False,
-     'A shore crab: ridged shell, jointed legs, eye stalks that sway, and claws whose pincers snap.')
+
+crab('CliffCrabModel', 'cliff_crab', 1, {'shell': ('shell', C('#b5522f'), C('#6e2a16')), 'shell2': ('shell', C('#cf6a38'), C('#7a3418')),
+     'belly': ('skin', C('#e8c79e'), C('#c49a6c')), 'mouth': ('dark', C('#4a1e12')), 'claw': ('claw', C('#c95f32'), C('#5c2410')),
+     'claw2': ('claw', C('#e6d2b8'), C('#a08060')), 'eye': ('eye', C('#e8c040'), C('#2a1208')), 'dark': ('dark', C('#4a2014'))}, False,
+     'A shore crab: ridged shell, three-jointed legs that scuttle in a tripod gait, swaying eye stalks, chewing mandibles, and claws that snap.')
 crab('ThunderCrabModel', 'thunder_crab', 1.5, {'shell': ('shell', C('#2f4a66'), C('#16243a')), 'shell2': ('shell', C('#3f6488'), C('#1c3048')),
-     'belly': ('skin', C('#9fb6c8'), C('#6a8296')), 'dark': ('dark', C('#0c1420')), 'claw': ('shell', C('#355878'), C('#121e30')),
+     'belly': ('skin', C('#9fb6c8'), C('#6a8296')), 'mouth': ('dark', C('#0c1420')), 'claw': ('claw', C('#355878'), C('#121e30')),
      'claw2': ('metal', C('#b8c4cc'), C('#606a72')), 'eye': ('eye', C('#7fd4ff'), C('#10202c')), 'crystal': ('crystal', C('#7fd4ff'), C('#2a6a96')),
-     'metal': ('metal', C('#9aa4ae'), C('#4a525a')), 'glow': ('glow', C('#c8f0ff'), C('#3a8ac0'))}, True,
-     'The Thunder Crab: a storm-charged giant crab with crystal spines and a lightning antenna.')
+     'metal': ('metal', C('#9aa4ae'), C('#4a525a')), 'glow': ('glow', C('#e0f8ff'), C('#3a8ac0')), 'dark': ('dark', C('#14202e'))}, True,
+     'The Thunder Crab: a storm-charged giant crab with crystal spines and a twitching lightning antenna.')
+
 
 # ---- Storm Gull and Stormhawk --------------------------------------------------------------------------------
 def bird(cls, tex, mats, k, raptor, doc):
-    s = lambda v: v * k
-    body = P('body', (0, 24 - s(6), 0), boxes=[Box(-s(2), -s(2), -s(4), s(4), s(4), s(8), 'feather'), Box(-s(1.5), s(1), -s(3), s(3), 1, s(5), 'belly')], field='body')
-    head = P('head', (0, -s(2), -s(4)), boxes=[Box(-s(1.5), -s(3), -s(3), s(3), s(3), s(3), 'feather2')], field='head').add(
-        P('beak', (0, -s(1.5), -s(3)), (0.2 if raptor else 0, 0, 0), [Box(-0.5, -0.5, -s(2.5), 1, 1 + raptor, s(2.5), 'beak')]),
-        P('left_eye', (s(1.5), -s(2), -s(2)), boxes=[Box(0, -0.5, -0.5, 1, 1, 1, 'eye')]),
-        P('right_eye', (-s(1.5), -s(2), -s(2)), boxes=[Box(-1, -0.5, -0.5, 1, 1, 1, 'eye')]))
+    S = lambda v: v * k
+    Bx = lambda x, y, z, w, h, d, m: Box(S(x), S(y), S(z), S(w), S(h), S(d), m)
+    body = P('body', (0, 17, 0), boxes=[Bx(-2, -2, -4, 4, 4, 7, 'feather'), Bx(-1.5, -1, -5, 3, 3, 2, 'belly'),
+                                       Bx(-1.5, -2.5, -3, 3, 1, 5, 'feather2'), Bx(-1.5, 1.5, -3, 3, 1, 5, 'belly')])
+    head = P('head', (0, -S(2.5), 0), boxes=[Bx(-1.5, -3, -2.5, 3, 3, 4, 'feather2')]).add(
+        *pair(P('left_eye', (S(1.5), -S(2), -S(1)), boxes=[Box(-0.3, -0.5, -0.5, 1, 1, 1, 'eye')])),
+        P('beak', (0, -S(1.5), -S(2.5)), boxes=[Bx(-0.5, -0.5, -3, 1, 1, 3, 'beak')] ).add(
+            *([P('beak_hook', (0, 0, -S(3)), (0.7, 0, 0), [Bx(-0.5, -0.5, -1, 1, 1, 1, 'beak')])] if raptor else [])),
+        P('jaw', (0, -S(1.0) + 0.02, -S(2.5)), boxes=[Bx(-0.5, 0, -2.5, 1, 1, 2.5, 'beak2')]))
     if raptor:
-        head.add(P('crest', (0, -s(3), -s(1)), (-0.5, 0, 0), [Box(-0.5, -s(3), 0, 1, s(3), s(2), 'accent')]))
-    body.add(head)
-    wing = P('left_wing', (s(2), -s(1.5), -s(2)), boxes=[Box(0, 0, 0, s(5), 1, s(6), 'feather')], field='leftWing').add(
-        P('left_wingtip', (s(5), 0, 0), boxes=[Box(0, 0, 0, s(5 if raptor else 6), 1, s(5), 'tip')], field='leftWingtip'))
-    body.add(wing, mirror_part(wing))
-    body.add(P('tail', (0, -s(1), s(4)), (-0.2, 0, 0), [Box(-s(2), 0, 0, s(4), 1, s(4), 'tail')], field='tail'))
-    leg = P('left_leg', (s(1), s(2), s(1)), boxes=[Box(-0.5, 0, -0.5, 1, s(3), 1, 'beak'), Box(-1, s(3), -1.5, 2, 1, 2, 'beak')], field='leftLeg')
-    body.add(leg, mirror_part(leg))
-    anim = f'''        float flap = Mth.sin(t * {0.45 if not raptor else 0.3}f);
-        leftWing.zRot = -0.15f + flap * 0.7f;
-        rightWing.zRot = 0.15f - flap * 0.7f;
-        leftWingtip.zRot = flap * 0.4f;
-        rightWingtip.zRot = -flap * 0.4f;
-        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD;
-        tail.xRot = -0.2f + Mth.sin(t * 0.2f) * 0.1f;
-        leftLeg.xRot = Mth.cos(walk) * 0.8f * amt;
-        rightLeg.xRot = -Mth.cos(walk) * 0.8f * amt;
-        body.y = 24f - {s(6)}f + Mth.sin(t * 0.45f) * 0.4f;
-'''
-    M.append(Model(cls, tex, mats, [body], anim, doc=doc))
+        head.add(P('crest', (0, -S(3), S(0.5)), (-0.7, 0, 0), [Bx(-0.5, -3, 0, 1, 3, 2, 'accent')]),
+                 P('crest2', (0, -S(3), S(1.2)), (-0.35, 0, 0), [Bx(-0.5, -2, 0, 1, 2, 1, 'accent')]))
+    neck = P('neck', (0, -S(1.5), -S(4)), (0.2, 0, 0), [Bx(-1, -2.5, -1.5, 2, 3, 2, 'feather2')]).add(head)
+    body.add(neck)
+    tip = P('left_wing_tip', (S(4), 0, 0), boxes=[Bx(0, -0.5, 0, 4, 1, 3, 'tip')])
+    for i, (z, ry) in enumerate(((0.2, 0.15), (1.2, -0.1), (2.2, -0.35))):
+        tip.add(P(f'left_primary{i}', (S(3.6), 0, S(z)), (0, ry, 0), [Box(0, -0.45, 0, S(3), 1, 1, 'tip')]))
+    wing = P('left_wing', (S(2), -S(1.5), -S(2.5)), boxes=[Bx(0, -0.5, 0, 4, 1, 5, 'feather')]).add(
+        P('left_wing_mid', (S(4), 0, S(0.5)), boxes=[Bx(0, -0.5, 0, 4, 1, 4, 'feather')]).add(tip))
+    body.add(*pair(wing))
+    tail = P('tail', (0, -S(1), S(3)), (-0.15, 0, 0), [Bx(-1, -0.5, 0, 2, 1, 4, 'tail')]).add(
+        *pair(P('left_tail', (S(0.5), 0, 0), (0, 0.3, 0), [Box(0, -0.4, 0, S(1), 1, S(4), 'tail')])))
+    body.add(tail)
+    leg = P('left_leg', (S(1), S(2), S(0.5)), boxes=[Bx(-0.5, -0.5, -0.5, 1, 2, 1, 'feather')]).add(
+        P('left_shank', (0, S(1.5), 0), boxes=[Bx(-0.5, 0, -0.5, 1, 3, 1, 'leg')]).add(
+            P('left_foot', (0, S(3), 0), boxes=[Bx(-1, 0, -2, 2, 1, 3, 'leg')])))
+    body.add(*pair(leg))
+    beat = 18 if raptor else 12
+    fly = sym(T(left_wing_rz=[(0, -36), (0.4, 26), (0.55, 20), (0.8, -24)], left_wing_mid_rz=[(0.08, -12), (0.48, 10), (0.85, -8)],
+                left_wing_tip_rz=[(0.15, -14), (0.55, 13), (0.92, -10)], left_wing_ry=[(0.1, 4), (0.6, -6)],
+                body_py=[(0.05, 0.6), (0.45, -0.7)], body_rx=hold(-6), left_leg_rx=hold(70), left_shank_rx=hold(30),
+                left_tail_ry=hold(12), tail_rx=[(0.1, 4), (0.6, -4)], neck_rx=hold(-12)))
+    fold = sym(T(left_wing_ry=hold(-82), left_wing_rz=hold(12), left_wing_mid_ry=hold(-12), left_wing_tip_ry=hold(-8),
+                 left_wing_mid_rz=hold(-6), left_tail_ry=hold(-10)))
+    clips = [
+        Clip('time', 70, fold, 'ground'),
+        Clip('time', 70, T(body_py=[(0, 0), (0.5, 0.25)], neck_rx=even(0, 3, 0, -2), tail_rx=even(0, 3, -2, 0)), 'idleW * ground'),
+        Clip('dist', 0.2, merge(sym(gait_leg('left_leg', 'left_shank', 0, 30, 35)), gait_leg('right_leg', 'right_shank', 0.5, 30, 35),
+                                T(body_rz=even(5, -5), body_py=even(0, -0.35, 0, -0.35), neck_pz=even(0, -S(0.9), 0, -S(0.9)),
+                                  tail_ry=even(-6, 6))), 'moveW * ground'),
+        Clip('time', beat, fly, 'air'),
+        Clip('fidget', 190, sym(T(neck_rx=[(0, 0), (0.2, -38), (0.7, -36), (1, 0)], jaw_rx=[(0, 0), (0.25, 32), (0.35, 8), (0.45, 32), (0.55, 8), (0.7, 0)],
+                                  left_wing_rz=[(0, 0), (0.25, -22), (0.6, -22), (1, 0)], left_wing_ry=[(0, 0), (0.25, 20), (0.6, 20), (1, 0)])),
+             'idleW * ground', dur=34),
+        Clip('fidget', 120, T(head_rz=[(0, 0), (0.2, 25), (0.45, 25), (0.65, -10), (1, 0)], head_ry=[(0, 0), (0.3, -15), (0.7, 10), (1, 0)]),
+             'idleW * ground', dur=24),
+        hurt_clip('body', 'head', 1.2),
+    ]
+    if raptor:
+        clips.append(Clip('attack', 16, sym(T(left_leg_rx=[(0, 0), (0.15, -75), (0.45, -70), (1, 0)], left_foot_rx=[(0, 0), (0.15, -30), (0.3, 20), (1, 0)],
+                                              left_wing_rz=[(0, 0), (0.15, -50), (0.45, 20), (1, 0)], neck_rx=[(0, 0), (0.2, 28), (0.5, 0)],
+                                              jaw_rx=[(0, 0), (0.12, 35), (0.4, 30), (0.7, 0)], body_rx=[(0, 0), (0.15, -20), (0.5, 10), (1, 0)]))))
+    look = [('neck', 0.35, 0.3), ('head', 0.65, 0.7)]
+    extra = ('        body.zRot -= turn * 0.035f * air;\n        tail.yRot += turn * 0.03f;\n'
+             '        if (s.vy < -0.05f && air > 0.5f) { float g = Math.min(1f, -s.vy * 4f) * air; leftWing.zRot += 0.35f * g; rightWing.zRot -= 0.35f * g; }\n')
+    M.append(Model(cls, tex, mats, [body], clips, doc=doc, look=look, extra=extra))
 
-bird('StormGullModel', 'storm_gull', {'feather': ('feather', C('#e8ecf0'), C('#9aa6b0')), 'feather2': ('feather', C('#f6f8fa'), C('#b0bcc6')),
-     'belly': ('feather', C('#ffffff'), C('#d8dee4')), 'beak': ('shell', C('#f2b13c'), C('#b0701c')), 'eye': ('eye', C('#121212'), C('#202020')),
-     'tail': ('feather', C('#4a5560'), C('#2a3038')), 'tip': ('feather', C('#3a4048'), C('#f0f2f4'))}, 1, False, 'The Storm Gull: a grey-backed gull with two-jointed wings, a fanned tail and webbed feet.')
-bird('StormhawkModel', 'stormhawk', {'feather': ('feather', C('#5a4a8a'), C('#2c2448')), 'feather2': ('feather', C('#6e5ca8'), C('#2c2448')),
-     'belly': ('feather', C('#c8c0e0'), C('#8a80b0')), 'beak': ('shell', C('#f2c94c'), C('#8a6a1e')), 'eye': ('eye', C('#ffd24a'), C('#1a1420')),
-     'tail': ('feather', C('#3a3060'), C('#f2c94c')), 'accent': ('feather', C('#f2c94c'), C('#a07a20')), 'tip': ('feather', C('#7a68c0'), C('#f2c94c'))}, 1.5, True,
-     'The Stormhawk: a violet raptor with a hooked beak, a golden crest, broad jointed wings and a banded tail.')
+
+bird('StormGullModel', 'storm_gull', {'feather': ('feather', C('#9aa6b2'), C('#5a6670')), 'feather2': ('feather', C('#eef2f6'), C('#b0bcc6')),
+     'belly': ('feather', C('#f8fafc'), C('#c8d0d8')), 'beak': ('shell', C('#f2b13c'), C('#b0701c')), 'beak2': ('shell', C('#e8742c'), C('#a04010')),
+     'eye': ('eye', C('#f0e6b0'), C('#202020')), 'tail': ('feather', C('#f2f4f6'), C('#9aa6b0')), 'tip': ('feather', C('#2e343c'), C('#f0f2f4')),
+     'leg': ('skin', C('#f0a848'), C('#b0701c'))}, 1, False,
+     'The Storm Gull: folds its wings on the ground and flaps with real down- and up-strokes in the air; it waddles, squawks and glances about.')
+bird('StormhawkModel', 'stormhawk', {'feather': ('feather', C('#4e3f80'), C('#241c44')), 'feather2': ('feather', C('#6e5ca8'), C('#2c2448')),
+     'belly': ('feather', C('#c8c0e0'), C('#7a70a0')), 'beak': ('shell', C('#f2c94c'), C('#8a6a1e')), 'beak2': ('shell', C('#d8a83a'), C('#7a5a14')),
+     'eye': ('eye', C('#ffd24a'), C('#1a1420')), 'tail': ('feather', C('#3a3060'), C('#f2c94c')), 'accent': ('feather', C('#f2c94c'), C('#a07a20')),
+     'tip': ('feather', C('#7a68c0'), C('#f2c94c')), 'leg': ('scale', C('#e8b840'), C('#8a6a1e'))}, 1.4, True,
+     'The Stormhawk: a violet raptor with a hooked beak and golden crest; it strikes with its talons swung forward and wings flared.')
+
 
 # ---- Harbor Seal ---------------------------------------------------------------------------------------------
-seal = P('body', (0, 20, 0), boxes=[Box(-4, -3, -6, 8, 6, 8, 'skin'), Box(-3.5, 2.5, -5.5, 7, 1, 7, 'belly')], field='body').add(
-    P('rear', (0, 0, 2), boxes=[Box(-3, -2.5, 0, 6, 5, 6, 'skin')], field='rear').add(
-        P('tail', (0, 0.5, 6), boxes=[Box(-3, -0.5, 0, 6, 1, 3, 'dark')], field='tail')),
-    P('head', (0, -2, -6), boxes=[Box(-3, -3, -4, 6, 5, 5, 'skin'), Box(-1.5, -1, -6, 3, 2, 2, 'snout'),
-                                  Box(-3.5, -1, -5.5, 1, 1, 1, 'whisker'), Box(2.5, -1, -5.5, 1, 1, 1, 'whisker')], field='head').add(
-        P('left_eye', (2, -2, -4), boxes=[Box(-0.5, -0.5, -0.5, 1, 1, 1, 'eye')]), P('right_eye', (-2, -2, -4), boxes=[Box(-0.5, -0.5, -0.5, 1, 1, 1, 'eye')])))
-flip = P('left_flipper', (4, 2, -3), (0, 0, 0.6), [Box(0, -0.5, -1.5, 4, 1, 3, 'dark')], field='leftFlipper')
-seal.add(flip, mirror_part(flip))
-M.append(Model('HarborSealModel', 'harbor_seal', {'skin': ('skin', C('#8a8e94'), C('#5a5e66')), 'belly': ('skin', C('#c4c6c8'), C('#9a9ca0')),
+seal = P('body', (0, 19, 0), boxes=[Box(-4, -3, -5, 8, 6, 7, 'skin'), Box(-3.5, 2.5, -4.5, 7, 1, 6, 'belly')]).add(
+    P('rear', (0, 0, 2), boxes=[Box(-3.5, -2.5, 0, 7, 5, 5, 'skin'), Box(-3, 2, 0.5, 6, 1, 4, 'belly')]).add(
+        P('rear2', (0, 0.5, 5), boxes=[Box(-2.5, -2, 0, 5, 4, 4, 'skin')]).add(
+            P('tail', (0, 0.5, 4), boxes=[Box(-1, -0.5, 0, 2, 1, 1, 'dark')]).add(
+                *pair(P('left_fluke', (0.5, 0, 0.5), (0, 0.45, 0), [Box(0, -0.5, 0, 2, 1, 3, 'dark')]))))),
+    P('head', (0, -2, -5), boxes=[Box(-3, -3, -4, 6, 5, 5, 'skin'), Box(-2, -1, -6, 4, 3, 2, 'snout'), Box(-1, -1.3, -6.4, 2, 1, 1, 'nose'),
+                                  Box(1, -2, -4.3, 1, 1, 1, 'eye'), Box(-2, -2, -4.3, 1, 1, 1, 'eye'),
+                                  Box(2, -0.5, -5.5, 1, 1, 1, 'whisker'), Box(-3, -0.5, -5.5, 1, 1, 1, 'whisker')]).add(
+        P('jaw', (0, 1.5, -4), boxes=[Box(-1.5, 0, -2, 3, 1, 2, 'snout')])))
+seal.add(*pair(P('left_flipper', (4, 2, -3), (0, 0.3, 0.6), [Box(0, -0.5, -1.5, 3, 1, 3, 'dark')]).add(
+    P('left_flipper_tip', (3, 0, 0), (0, 0, 0.2), [Box(0, -0.5, -1.5, 2, 1, 3, 'dark')]))))
+M.append(Model('HarborSealModel', 'harbor_seal', {'skin': ('skin', C('#8a8e94'), C('#4a4e56')), 'belly': ('skin', C('#c4c6c8'), C('#9a9ca0')),
     'dark': ('skin', C('#5a5e66'), C('#3a3e44')), 'snout': ('skin', C('#a6a8ac'), C('#6a6c70')), 'whisker': ('bone', C('#e8e8e0')),
-    'eye': ('eye', C('#101010'), C('#202020'))}, [seal], '''        rear.yRot = Mth.sin(walk * 1.5f) * 0.25f * amt + Mth.sin(t * 0.05f) * 0.05f;
-        tail.xRot = Mth.sin(t * 0.15f) * 0.2f;
-        leftFlipper.zRot = 0.6f + Mth.sin(walk * 2f) * 0.5f * amt;
-        rightFlipper.zRot = -0.6f - Mth.sin(walk * 2f) * 0.5f * amt;
-        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD;''', doc='The Harbor Seal: a round two-part body that wiggles, whiskered snout, front flippers and a tail fluke.'))
+    'nose': ('dark', C('#1a1a1e')), 'eye': ('eye', C('#1a1a1a'), C('#101010'))}, [seal], [
+    Clip('time', 90, sym(T(body_py=[(0, 0), (0.5, 0.2)], rear_ry=even(0, 4, 0, -4), left_fluke_ry=even(0, 12, 0, -6),
+                           left_flipper_rz=even(0, 6, 0, -3), rear2_ry=shift(even(0, 5, 0, -5), 0.1))), 'idleW * dry'),
+    Clip('dist', 0.17, merge(T(body_rx=[(0, -7), (0.5, 7)], body_py=[(0, -0.7), (0.3, 0.1), (0.5, 0.5), (0.8, 0)],
+                               rear_rx=shift([(0, 9), (0.5, -9)], 0.2), rear2_rx=shift([(0, 8), (0.5, -8)], 0.35),
+                               tail_rx=shift([(0, 15), (0.5, -12)], 0.5), head_rx=shift([(0, 5), (0.5, -5)], 0.1)),
+                             sym(T(left_flipper_ry=[(0, 30), (0.45, -35), (0.7, -20)], left_flipper_rz=[(0, 0.0), (0.45, -15), (0.75, 10)]))),
+         'moveW * dry'),
+    Clip('time', 28, merge(T(rear_ry=[(0, -16), (0.5, 16)], rear2_ry=shift([(0, -18), (0.5, 18)], 0.12), tail_ry=shift([(0, -22), (0.5, 22)], 0.24),
+                             body_ry=shift([(0, 5), (0.5, -5)], 0.4)), sym(T(left_flipper_ry=hold(-55), left_flipper_rz=hold(-10)))), 'swim'),
+    Clip('fidget', 220, sym(T(left_flipper_ry=[(0, 0), (0.15, -55), (0.25, -30), (0.35, -55), (0.45, -30), (0.55, -55), (0.8, 0)],
+                              head_rx=[(0, 0), (0.15, -28), (0.7, -26), (1, 0)], jaw_rx=[(0, 0), (0.6, 0), (0.66, 30), (0.74, 4), (0.8, 30), (0.9, 0)])),
+         'idleW * dry', dur=44),
+    hurt_clip('body', 'head')],
+    doc='The Harbor Seal: a three-part body that humps along on land and sways side to side in water, flipper claps and a bark.',
+    look=[('head', 1.0, 1.0)], extra='        rear.yRot -= turn * 0.03f;\n        rear2.yRot -= turn * 0.04f;\n'))
 
-# ---- Squall and Stormwarden ----------------------------------------------------------------------------------
-squall = P('core', (0, 14, 0), boxes=[Box(-3, -3, -3, 6, 6, 6, 'glow')], field='core').add(
-    P('face', (0, 0, -3), boxes=[Box(-2, -1, -0.5, 1, 1, 1, 'eye'), Box(1, -1, -0.5, 1, 1, 1, 'eye')]))
-for r, (y, rad, n) in enumerate(((-4, 6, 6), (1, 8, 8), (6, 5, 5))):
-    ring = P(f'ring_{r}', (0, y, 0), field=f'ring{r}')
+
+# ---- Squall --------------------------------------------------------------------------------------------------
+squall = P('core', (0, 12, 0), boxes=[Box(-3, -3, -3, 6, 6, 6, 'glow'), Box(-2, -1.5, -3.3, 1, 1, 1, 'face'), Box(1, -1.5, -3.3, 1, 1, 1, 'face'),
+                                      Box(-1, 0.5, -3.3, 2, 1, 1, 'face')])
+for r, (y, rad, n) in enumerate(((-4, 6, 5), (1, 8, 7), (6, 5, 4))):
+    ring = P(f'ring{r}', (0, y, 0))
     for i in range(n):
         a = i * 2 * math.pi / n
-        ring.add(P(f'puff_{r}_{i}', (math.cos(a) * rad, 0, math.sin(a) * rad), (0, -a, 0), [Box(-1.5, -1, -1, 3, 2, 2, 'cloud')]))
+        ring.add(P(f'puff{r}_{i}', (math.cos(a) * rad, 0, math.sin(a) * rad), (0, -a, 0),
+                   [Box(-2, -1.5, -1.5, 4, 3, 3, 'cloud'), Box(-1, -2.5, -1, 2, 1, 2, 'cloud2')]))
     squall.add(ring)
-tail = P('wisp_0', (0, 3, 0), boxes=[Box(-2, 0, -2, 4, 3, 4, 'cloud')], field='wisp0').add(
-    P('wisp_1', (0, 3, 0), boxes=[Box(-1.5, 0, -1.5, 3, 3, 3, 'cloud')], field='wisp1').add(
-        P('wisp_2', (0, 3, 0), boxes=[Box(-1, 0, -1, 2, 3, 2, 'cloud')])))
-squall.add(tail)
-M.append(Model('SquallModel', 'squall', {'glow': ('glow', C('#e8f6ff'), C('#7fb0d0')), 'eye': ('eye', C('#1a3448'), C('#1a3448')),
-    'cloud': ('cloud', C('#c8d4dc'), C('#8a98a4'))}, [squall], '''        ring0.yRot = t * 0.3f;
-        ring1.yRot = -t * 0.22f;
-        ring2.yRot = t * 0.4f;
-        core.y = 14f + Mth.sin(t * 0.15f) * 1.2f;
-        wisp0.zRot = Mth.sin(t * 0.2f) * 0.2f;
-        wisp1.xRot = Mth.cos(t * 0.25f) * 0.25f;''', doc='The Squall: a glowing storm-core in three counter-spinning rings of cloud, trailing a wispy tail.'))
+squall.add(P('wisp0', (0, 3, 0), boxes=[Box(-2, 0, -2, 4, 3, 4, 'cloud')]).add(
+    P('wisp1', (0, 3, 0), boxes=[Box(-1.5, 0, -1.5, 3, 3, 3, 'cloud')]).add(
+        P('wisp2', (0, 3, 0), boxes=[Box(-1, 0, -1, 2, 3, 2, 'cloud2')]).add(P('wisp3', (0, 3, 0), boxes=[Box(-0.5, 0, -0.5, 1, 2, 1, 'cloud2')])))))
+M.append(Model('SquallModel', 'squall', {'glow': ('glow', C('#f0faff'), C('#7fb0d0')), 'face': ('dark', C('#1a3448')),
+    'cloud': ('cloud', C('#c0ccd6'), C('#8a98a4')), 'cloud2': ('cloud', C('#e2e8ee'), C('#9aa6b0'))}, [squall], [
+    Clip('time', 40, T(core_py=[(0, 0), (0.5, -1.2)], core_s=[(0, 0), (0.5, 0.06)], wisp0_rz=even(0, 10, 0, -10), wisp1_rz=shift(even(0, 14, 0, -14), 0.12),
+                       wisp2_rz=shift(even(0, 18, 0, -18), 0.24), wisp3_rz=shift(even(0, 24, 0, -24), 0.36), wisp1_rx=shift(even(0, 10, 0, -10), 0.3)), '1f'),
+    Clip('attack', 15, T(core_pz=[(0, 0), (0.08, 1), (0.22, -3), (1, 0)], core_sz=[(0, 0), (0.08, -0.15), (0.22, 0.3), (0.45, -0.1), (0.7, 0)],
+                         core_sx=[(0, 0), (0.08, 0.12), (0.22, -0.15), (0.45, 0.06), (0.7, 0)], ring1_ry=[(0, 0), (1, 220)], ring0_ry=[(0, 0), (1, -260)],
+                         wisp0_rx=[(0, 0), (0.25, 40), (0.6, -10), (1, 0)], wisp1_rx=[(0, 0), (0.3, 35), (0.7, -10), (1, 0)])),
+    Clip('hurt', 10, T(core_s=[(0, 0), (0.15, -0.2), (0.4, 0.08), (1, 0)], core_rz=[(0, 0), (0.15, 15), (0.5, -5), (1, 0)]))],
+    doc='The Squall: a glowing storm-core with a face, in three counter-spinning cloud rings, trailing a four-jointed wispy tail; it squashes and lunges when it rams.',
+    grounded=False, extra='        ring0.yRot += t * 0.3f;\n        ring1.yRot -= t * 0.22f;\n        ring2.yRot += t * 0.4f;\n        wisp0.zRot -= turn * 0.04f;\n'))
 
-warden = P('body', (0, 2, 0), boxes=[Box(-7, -12, -4, 14, 12, 8, 'stone'), Box(-3, -9, -4.5, 6, 6, 1, 'glow')], field='body')
-warden.add(P('head', (0, -12, 0), boxes=[Box(-4, -7, -4, 8, 7, 8, 'stone'), Box(-3, -5, -4.5, 6, 2, 1, 'glow')], field='head').add(
-    P('crown_0', (-3, -7, 0), (0, 0, -0.3), [Box(-1, -4, -1, 2, 4, 2, 'crystal')]), P('crown_1', (3, -7, 0), (0, 0, 0.3), [Box(-1, -4, -1, 2, 4, 2, 'crystal')]),
-    P('crown_2', (0, -7, 2), (0.3, 0, 0), [Box(-1, -5, -1, 2, 5, 2, 'crystal')])))
-arm = P('left_arm', (7, -10, 0), boxes=[Box(0, -2, -3, 5, 5, 6, 'metal'), Box(0.5, 3, -2.5, 4, 8, 5, 'stone')], field='leftArm').add(
-    P('left_forearm', (2.5, 11, 0), boxes=[Box(-2.5, 0, -3, 5, 9, 6, 'stone'), Box(-3, 9, -3.5, 6, 3, 7, 'metal')], field='leftForearm'),
-    P('left_spike', (2.5, -2, 0), (0, 0, 0.4), [Box(-1, -4, -1, 2, 4, 2, 'crystal')]))
-warden.add(arm, mirror_part(arm))
-leg = P('left_leg', (3.5, 2, 0), boxes=[Box(-3, 0, -3, 6, 10, 6, 'stone')], field='leftLeg').add(
-    P('left_foot', (0, 10, 0), boxes=[Box(-3.5, 0, -4, 7, 12, 7, 'stone'), Box(-3.5, 10, -5, 7, 2, 1, 'metal')]))
-root_w = [warden, leg, mirror_part(leg)]
-M.append(Model('StormwardenModel', 'stormwarden', {'stone': ('shell', C('#5a6270'), C('#2c3038')), 'glow': ('glow', C('#bdf0ff'), C('#3a8ac0')),
-    'crystal': ('crystal', C('#7fd4ff'), C('#2a6a96')), 'metal': ('metal', C('#8a9298'), C('#40464c'))}, root_w, '''        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD;
-        leftLeg.xRot = Mth.cos(walk * 0.6f) * 0.9f * amt;
-        rightLeg.xRot = -Mth.cos(walk * 0.6f) * 0.9f * amt;
-        leftArm.xRot = -Mth.cos(walk * 0.6f) * 0.7f * amt + Mth.sin(t * 0.06f) * 0.05f;
-        rightArm.xRot = Mth.cos(walk * 0.6f) * 0.7f * amt - Mth.sin(t * 0.06f) * 0.05f;
-        leftForearm.xRot = -0.25f - Math.abs(Mth.cos(walk * 0.6f)) * 0.3f * amt;
-        rightForearm.xRot = -0.25f - Math.abs(Mth.sin(walk * 0.6f)) * 0.3f * amt;''',
-    doc='The Stormwarden: a towering storm-stone golem with a crystal crown, plated shoulders, glowing visor and core.'))
+
+# ---- Stormwarden ---------------------------------------------------------------------------------------------
+hips = P('hips', (0, 4, 0), boxes=[Box(-6, -2, -3.5, 12, 4, 7, 'stone')])
+torso = P('torso', (0, -2, 0), boxes=[Box(-7, -11, -4, 14, 11, 8, 'stone'), Box(-6, -10, -4.6, 12, 6, 1, 'metal'), Box(-2, -8, -5.2, 4, 4, 1, 'glow')])
+for i, (x, z, rx, rz) in enumerate(((-4, 2, 0.5, -0.3), (0, 3, 0.7, 0), (4, 2, 0.5, 0.3))):
+    torso.add(P(f'back_crystal{i}', (x, -9, z), (rx, 0, rz), [Box(-1, -5, -1, 2, 5, 2, 'crystal')]))
+head = P('head', (0, -11, -1), boxes=[Box(-4, -7, -4, 8, 7, 8, 'stone'), Box(-4.5, -5.5, -4.6, 9, 1, 2, 'metal'), Box(-3, -4, -4.4, 6, 2, 1, 'glow'),
+                                      Box(-3, -1.5, -4.6, 6, 2, 2, 'stone2')])
+for i, (x, z, rx, rz, hgt) in enumerate(((-3, 0, 0, -0.35, 4), (3, 0, 0, 0.35, 4), (0, 1.5, 0.35, 0, 5), (-1.5, -2, -0.2, -0.15, 3), (1.5, -2, -0.2, 0.15, 3))):
+    head.add(P(f'crown{i}', (x, -7, z), (rx, 0, rz), [Box(-1, -hgt, -1, 2, hgt, 2, 'crystal')]))
+torso.add(head)
+arm = P('left_arm', (8, -9, 0), boxes=[Box(-2, -3, -3.5, 6, 4, 7, 'metal')]).add(
+    P('left_spike', (2, -3, 0), (0, 0, 0.4), [Box(-1, -4, -1, 2, 4, 2, 'crystal')]),
+    P('left_upper', (1, 1, 0), boxes=[Box(-2.5, 0, -2.5, 5, 8, 5, 'stone')]).add(
+        P('left_fore', (0, 8, 0), boxes=[Box(-3, 0, -3, 6, 8, 6, 'stone'), Box(-3.5, 4, -3.5, 7, 3, 7, 'metal')]).add(
+            P('left_fist', (0, 8, 0), boxes=[Box(-3, 0, -3, 6, 5, 6, 'stone2')]))))
+torso.add(*pair(arm))
+hips.add(torso)
+leg = P('left_leg', (3.5, 6, 0), boxes=[Box(-3, 0, -3, 6, 8, 6, 'stone')]).add(
+    P('left_shin', (0, 8, 0), boxes=[Box(-3, 0, -3, 6, 8, 6, 'stone'), Box(-3.5, 0, -3.6, 7, 3, 1, 'metal')]).add(
+        P('left_foot', (0, 8, -0.5), boxes=[Box(-3.5, 0, -4.5, 7, 3, 8, 'metal')])))
+wslam = [(0, 0), (0.28, -150), (0.4, -165), (0.5, -15), (0.62, -8), (1, 0)]
+M.append(Model('StormwardenModel', 'stormwarden', {'stone': ('stone', C('#5a6270'), C('#8fe0ff')), 'stone2': ('stone', C('#4a505c'), C('#8fe0ff')),
+    'glow': ('glow', C('#d8f6ff'), C('#3a8ac0')), 'crystal': ('crystal', C('#7fd4ff'), C('#2a6a96')), 'metal': ('metal', C('#8a9298'), C('#40464c'))},
+    [hips, *pair(leg)], [
+    Clip('time', 80, sym(T(torso_rx=[(0, 0), (0.5, -2.5)], torso_py=[(0, 0), (0.5, -0.3)], left_arm_rx=even(0, 3, 0, -2), left_arm_rz=even(-4, -6),
+                           left_fore_rx=even(-8, -12), head_rz=even(0, 2, 0, -2))), 'idleW'),
+    Clip('dist', 0.12, merge(sym(gait_leg('left_leg', 'left_shin', 0, 24, 40)), gait_leg('right_leg', 'right_shin', 0.5, 24, 40),
+                             T(left_foot_rx=shift([(0, 12), (0.3, 0), (0.6, -14), (0.8, 10)], 0), right_foot_rx=shift([(0, 12), (0.3, 0), (0.6, -14), (0.8, 10)], 0.5),
+                               hips_py=even(0, 1.0, 0, 1.0), hips_rz=even(3, -3), torso_ry=even(-7, 7), head_ry=even(5, -5),
+                               left_arm_rx=[(0, 22), (0.5, -22)], right_arm_rx=[(0, -22), (0.5, 22)],
+                               left_fore_rx=shift([(0, -10), (0.5, -28)], 0.1), right_fore_rx=shift([(0, -28), (0.5, -10)], 0.1))), 'moveW'),
+    Clip('attack', 32, merge(sym(T(left_arm_rx=wslam, left_arm_rz=[(0, 0), (0.28, -12), (0.5, 8), (1, 0)], left_fore_rx=[(0, 0), (0.28, -35), (0.5, 0), (1, 0)])),
+                             T(torso_rx=[(0, 0), (0.28, -16), (0.5, 26), (0.72, 24), (1, 0)], hips_py=[(0, 0), (0.28, -0.5), (0.5, 2.8), (0.72, 2.6), (1, 0)],
+                               left_leg_rx=[(0, 0), (0.5, -18), (0.72, -18), (1, 0)], right_leg_rx=[(0, 0), (0.5, -18), (0.72, -18), (1, 0)],
+                               left_shin_rx=[(0, 0), (0.5, 36), (0.72, 36), (1, 0)], right_shin_rx=[(0, 0), (0.5, 36), (0.72, 36), (1, 0)],
+                               head_rx=[(0, 0), (0.28, -20), (0.5, 15), (1, 0)]))),
+    Clip('cast', 40, sym(T(left_arm_rz=[(0, 0), (0.3, -72), (0.7, -76), (1, 0)], left_arm_rx=[(0, 0), (0.3, -40), (0.7, -45), (1, 0)],
+                           head_rx=[(0, 0), (0.25, -28), (0.75, -28), (1, 0)], torso_rx=[(0, 0), (0.3, -10), (0.75, -10), (1, 0)]))),
+    hurt_clip('torso', 'head', 0.7)],
+    doc='The Stormwarden: a towering storm-stone golem with a crystal crown and back, a glowing visor and core; heavy heel-to-toe steps, an overhead slam and a summoning roar.',
+    look=[('head', 0.8, 0.8), ('torso', 0.2, 0.0)], extra='        hips.yRot -= turn * 0.015f;\n'))
+
 
 # ---- Ball Lightning and Static Wisp --------------------------------------------------------------------------
 orb = P('core', (0, 16, 0), boxes=[Box(-3, -3, -3, 6, 6, 6, 'glow'), Box(-4, -2, -2, 8, 4, 4, 'glow2'), Box(-2, -4, -2, 4, 8, 4, 'glow2'),
-                                   Box(-2, -2, -4, 4, 4, 8, 'glow2')], field='core')
+                                   Box(-2, -2, -4, 4, 4, 8, 'glow2')])
 for i in range(3):
-    arc = P(f'arc_{i}', (0, 0, 0), (i * 1.0, i * 0.7, 0), field=f'arc{i}')
+    arc = P(f'arc{i}', (0, 0, 0), (i * 1.0, i * 0.7, 0))
     for j in range(6):
         a = j * math.pi / 3
-        arc.add(P(f'bolt_{i}_{j}', (math.cos(a) * 6, 0, math.sin(a) * 6), (0, -a, 0.3 * (j % 2)), [Box(-1, -0.5, -0.5, 2, 1, 1, 'spark')]))
+        arc.add(P(f'bolt{i}_{j}', (math.cos(a) * 6, 0, math.sin(a) * 6), (0, -a, 0.35 * (1 if j % 2 else -1)),
+                  [Box(-1.5, -0.5, -0.5, 2, 1, 1, 'spark'), Box(0.3, -1.3, -0.5, 1, 1, 1, 'spark')]))
     orb.add(arc)
-M.append(Model('BallLightningModel', 'ball_lightning', {'glow': ('glow', C('#ffffff'), C('#9fe0ff')), 'glow2': ('glow', C('#bfeaff'), C('#4a9ad0')),
-    'spark': ('glow', C('#fff6c0'), C('#c0e8ff'))}, [orb], '''        core.y = 16f + Mth.sin(t * 0.3f) * 0.8f;
-        core.yRot = t * 0.2f;
-        arc0.yRot = t * 0.6f; arc1.xRot = t * 0.5f; arc2.zRot = t * 0.7f;''', doc='Ball Lightning: a white-hot core in three spinning arcs of sparks.'))
+M.append(Model('BallLightningModel', 'ball_lightning', {'glow': ('glow', C('#ffffff'), C('#9fe0ff')), 'glow2': ('glow', C('#c8eeff'), C('#4a9ad0')),
+    'spark': ('glow', C('#fff6c0'), C('#c0e8ff'))}, [orb], [
+    Clip('time', 7, T(core_px=[(0, 0), (0.2, 0.4), (0.45, -0.3), (0.7, 0.2)], core_pz=[(0, 0), (0.3, -0.3), (0.55, 0.4), (0.8, -0.1)],
+                      core_s=[(0, 0), (0.2, 0.12), (0.35, -0.05), (0.6, 0.15), (0.8, 0)]), '1f'),
+    Clip('time', 40, T(core_py=[(0, 0), (0.5, -0.8)]), '1f'),
+    Clip('attack', 10, T(core_s=[(0, 0), (0.25, 0.6), (1, 0)])), Clip('cast', 10, T(core_s=[(0, 0), (0.25, 0.6), (1, 0)])),
+    Clip('hurt', 10, T(core_s=[(0, 0), (0.2, -0.3), (1, 0)]))],
+    doc='Ball Lightning: a white-hot, jittering core in three spinning arcs of zig-zag sparks.', grounded=False,
+    extra='        core.yRot += t * 0.2f;\n        arc0.yRot += t * 0.6f; arc1.xRot += t * 0.5f; arc2.zRot += t * 0.7f;\n'))
 
-wisp = P('core', (0, 14, 0), boxes=[Box(-2.5, -2.5, -2.5, 5, 5, 5, 'glow'), Box(-1.5, -1, -2.8, 1, 1, 1, 'eye'), Box(0.5, -1, -2.8, 1, 1, 1, 'eye')], field='core')
-for i in range(5):
-    a = i * 2 * math.pi / 5
-    wisp.add(P(f'spike_{i}', (math.cos(a) * 2.5, -2.5, math.sin(a) * 2.5), (math.sin(a) * 0.5, 0, -math.cos(a) * 0.5), [Box(-0.5, -4, -0.5, 1, 4, 1, 'spark')]))
-trail = P('trail_0', (0, 2.5, 0), boxes=[Box(-1.5, 0, -1.5, 3, 3, 3, 'glow2')], field='trail0').add(
-    P('trail_1', (0, 3, 0), boxes=[Box(-1, 0, -1, 2, 3, 2, 'glow2')], field='trail1').add(P('trail_2', (0, 3, 0), boxes=[Box(-0.5, 0, -0.5, 1, 3, 1, 'spark')])))
-wisp.add(trail)
+wisp = P('core', (0, 14, 0), boxes=[Box(-2.5, -2.5, -2.5, 5, 5, 5, 'glow'), Box(-1.5, -1, -2.8, 1, 1, 1, 'face'), Box(0.5, -1, -2.8, 1, 1, 1, 'face')])
+wtr = {}
+for i in range(7):
+    a = i * 2 * math.pi / 7
+    tier = i % 2
+    wisp.add(P(f'spike{i}', (math.cos(a) * 2.3, -2.3 + tier * 1.5, math.sin(a) * 2.3), (math.sin(a) * (0.55 + 0.4 * tier), 0, -math.cos(a) * (0.55 + 0.4 * tier)),
+               [Box(-0.5, -4 + tier, -0.5, 1, 4 - tier, 1, 'spark')]))
+    wtr[(f'spike{i}', 'sy')] = shift([(0, 0), (0.15, 0.35), (0.3, -0.1), (0.5, 0)], i / 7)
+wisp.add(P('trail0', (0, 2.5, 0), boxes=[Box(-1.5, 0, -1.5, 3, 3, 3, 'glow2')]).add(
+    P('trail1', (0, 3, 0), boxes=[Box(-1, 0, -1, 2, 3, 2, 'glow2')]).add(P('trail2', (0, 3, 0), boxes=[Box(-0.5, 0, -0.5, 1, 3, 1, 'spark')]))))
+flare = {(f'spike{i}', 'sy'): [(0, 0), (0.2, 0.8), (0.5, 0.3), (1, 0)] for i in range(7)}
 M.append(Model('StaticWispModel', 'static_wisp', {'glow': ('glow', C('#fff2a8'), C('#d0a020')), 'glow2': ('glow', C('#ffe070'), C('#a07010')),
-    'spark': ('glow', C('#ffffff'), C('#ffe070')), 'eye': ('eye', C('#3a2a00'), C('#3a2a00'))}, [wisp], '''        core.y = 14f + Mth.sin(t * 0.2f) * 1.5f;
-        core.yRot = t * 0.15f;
-        trail0.xRot = Mth.sin(t * 0.3f) * 0.3f;
-        trail1.zRot = Mth.cos(t * 0.35f) * 0.35f;''', doc='The Static Wisp: a crackling golden spark with a crown of spikes and a trailing tail.'))
+    'spark': ('glow', C('#ffffff'), C('#ffe070')), 'face': ('dark', C('#3a2a00'))}, [wisp], [
+    Clip('time', 30, merge(T(core_py=[(0, 0), (0.5, -1.4)], trail0_rx=even(0, 18, 0, -18), trail1_rx=shift(even(0, 24, 0, -24), 0.15),
+                             trail2_rx=shift(even(0, 30, 0, -30), 0.3), trail0_rz=shift(even(0, 12, 0, -12), 0.25)), wtr), '1f'),
+    Clip('cast', 14, merge(flare, T(core_s=[(0, 0), (0.2, 0.35), (1, 0)]))), Clip('attack', 14, merge(flare, T(core_s=[(0, 0), (0.2, 0.35), (1, 0)]))),
+    Clip('hurt', 10, T(core_s=[(0, 0), (0.2, -0.3), (1, 0)]))],
+    doc='The Static Wisp: a golden spark with a flickering two-tier crown of spikes and a whipping tail; the spikes flare when it zaps.',
+    grounded=False, extra='        core.yRot += t * 0.15f;\n'))
 
-# ---- Waterspout (mob) and Cyclone: stacked rings of spinning water or wind --------------------------------------
-def spout(cls, tex, mats, doc):
-    parts = []
+
+# ---- Waterspout (mob) and Cyclone ----------------------------------------------------------------------------
+def spout(cls, tex, mats, attack, doc):
+    parts, tr = [], {}
     for i in range(6):
         rad = 2 + i * 1.3
-        ring = P(f'ring_{i}', (0, 24 - i * 4, 0), field=f'ring{i}')
+        ring = P(f'ring{i}', (0, 24 - i * 4, 0))
         n = 6 + i
         for j in range(n):
             a = j * 2 * math.pi / n
-            ring.add(P(f'seg_{i}_{j}', (math.cos(a) * rad, 0, math.sin(a) * rad), (0, -a, 0), [Box(-1.5, -2, -0.5, 3, 4, 1, 'a' if (i + j) % 2 else 'b')]))
+            ring.add(P(f'seg{i}_{j}', (math.cos(a) * rad, 0, math.sin(a) * rad), (0, -a, 0.12), [Box(-1.5, -2, -0.5, 3, 4, 1, 'a' if (i + j) % 2 else 'b')]))
+        if i == 3:
+            for j in range(3):
+                a = j * 2.1
+                ring.add(P(f'debris{j}', (math.cos(a) * (rad + 1.5), -1, math.sin(a) * (rad + 1.5)), (0.4 * j, a, 0.3), [Box(-0.5, -0.5, -0.5, 1, 1, 1, 'debris')]))
         parts.append(ring)
-    anim = ''.join(f'        ring{i}.yRot = t * {0.35 - i * 0.03:.2f}f + {i * 0.4:.1f}f;\n        ring{i}.x = Mth.sin(t * 0.1f + {i * 0.5:.1f}f) * {i * 0.3:.1f}f;\n' for i in range(6))
-    M.append(Model(cls, tex, mats, parts, anim, doc=doc))
+        tr[(f'ring{i}', 'px')] = shift([(0, -0.35 * i), (0.5, 0.35 * i)], i * 0.1)
+        tr[(f'ring{i}', 'pz')] = shift([(0, -0.35 * i), (0.5, 0.35 * i)], i * 0.1 + 0.25)
+        tr[(f'ring{i}', 'sy')] = shift([(0, 0), (0.5, 0.1)], i * 0.15)
+    clips = [Clip('time', 50, tr, '1f')]
+    if attack:
+        clips.append(Clip('attack', 12, {(f'ring{i}', 's'): shift([(0, 0), (0.3, 0.25), (1, 0)], 0) for i in range(6)}))
+    extra = ''.join(f'        ring{i}.yRot += t * {0.35 - i * 0.03:.2f}f;\n' for i in range(6))
+    M.append(Model(cls, tex, mats, parts, clips, doc=doc, grounded=False, extra=extra))
 
-spout('WaterspoutModel', 'waterspout', {'a': ('water', C('#7fbfe0'), C('#3a7aa0')), 'b': ('water', C('#bfe6f6'), C('#5a9ac0'))},
-      'The Waterspout: six rings of spinning water, wider toward the top, that sway as they turn.')
-spout('CycloneModel', 'cyclone', {'a': ('cloud', C('#b8c4cc'), C('#7a8892')), 'b': ('cloud', C('#dde4ea'), C('#9aa6b0'))},
-      'The Cyclone: six rings of spinning wind and cloud, wider toward the top, that sway as they turn.')
+
+spout('WaterspoutModel', 'waterspout', {'a': ('water', C('#7fbfe0'), C('#3a7aa0')), 'b': ('water', C('#bfe6f6'), C('#5a9ac0')),
+      'debris': ('dark', C('#4a5a50'))}, False, 'The Waterspout: six rings of spinning water, wider toward the top, that corkscrew as they turn.')
+spout('CycloneModel', 'cyclone', {'a': ('cloud', C('#b8c4cc'), C('#7a8892')), 'b': ('cloud', C('#dde4ea'), C('#9aa6b0')),
+      'debris': ('dark', C('#5a5048'))}, True, 'The Cyclone: six rings of spinning wind with debris caught in them; it swells when it flings you.')
+
 
 # ---- Tempest Sovereign ---------------------------------------------------------------------------------------
-sov = P('body', (0, -3, 0), boxes=[Box(-5, -2, -3, 10, 12, 6, 'armor'), Box(-5.5, -2.5, -3.5, 11, 3, 7, 'metal'), Box(-2, 1, -3.6, 4, 4, 1, 'glow')], field='body')
-sov.add(P('head', (0, -2, 0), boxes=[Box(-4, -8, -4, 8, 8, 8, 'skin'), Box(-4.5, -9, -4.5, 9, 2, 9, 'metal'), Box(-3, -5, -4.2, 2, 1, 1, 'eye'),
-                                     Box(1, -5, -4.2, 2, 1, 1, 'eye')], field='head').add(
-    *[P(f'horn_{i}', (x, -9, z), (rx, 0, rz), [Box(-0.5, -5, -0.5, 1, 5, 1, 'crystal')]) for i, (x, z, rx, rz) in
-      enumerate(((-3.5, -3.5, -0.3, -0.3), (3.5, -3.5, -0.3, 0.3), (-3.5, 3.5, 0.3, -0.3), (3.5, 3.5, 0.3, 0.3), (0, -4, -0.4, 0)))]))
-arm = P('left_arm', (6.5, -1, 0), boxes=[Box(-1.5, 0, -1.5, 3, 7, 3, 'armor'), Box(-2, -1.5, -2, 4, 3, 4, 'metal')], field='leftArm').add(
-    P('left_hand', (0, 7, 0), boxes=[Box(-1.5, 0, -1.5, 3, 5, 3, 'skin'), Box(-2, 3, -2, 4, 2, 4, 'glow')], field='leftHand'))
-sov.add(arm, mirror_part(arm))
-cape = P('cape', (0, -1.5, 3), boxes=[Box(-5, 0, 0, 10, 14, 1, 'cloth')], field='cape').add(P('cape_low', (0, 14, 0), boxes=[Box(-5, 0, 0, 10, 8, 1, 'cloth')], field='capeLow'))
-sov.add(cape)
-vortex = P('skirt', (0, 10, 0), boxes=[Box(-6, 0, -4, 12, 5, 8, 'cloth')], field='skirt').add(
-    P('vortex_0', (0, 5, 0), boxes=[Box(-5, 0, -3.5, 10, 4, 7, 'cloud')], field='vortex0').add(
-        P('vortex_1', (0, 4, 0), boxes=[Box(-3.5, 0, -2.5, 7, 4, 5, 'cloud')], field='vortex1').add(
-            P('vortex_2', (0, 4, 0), boxes=[Box(-2, 0, -1.5, 4, 4, 3, 'cloud')], field='vortex2'))))
-sov.add(vortex)
-halo = P('ring', (0, -17, 0), field='ring')
+sov = P('body', (0, -3, 0), boxes=[Box(-5, -2, -3, 10, 12, 6, 'armor'), Box(-5.5, -2.5, -3.5, 11, 5, 7, 'metal'), Box(-2, 0, -4, 4, 4, 1, 'glow'),
+                                   Box(-5.5, 8, -3.5, 11, 2, 7, 'metal')])
+sov.add(*pair(P('left_pauldron', (5.5, -2, 0), (0, 0, -0.15), [Box(0, -2, -3, 4, 3, 6, 'metal')]).add(
+    P('left_pspike0', (2, -2, -1.5), (-0.3, 0, 0.45), [Box(-0.5, -4, -0.5, 1, 4, 1, 'crystal')]),
+    P('left_pspike1', (2.5, -2, 1.5), (0.3, 0, 0.6), [Box(-0.5, -3, -0.5, 1, 3, 1, 'crystal')]))))
+shead = P('head', (0, -2.5, 0), boxes=[Box(-4, -8, -4, 8, 8, 8, 'skin'), Box(-3.5, -6, -4.6, 7, 5, 1, 'mask'), Box(-3, -5, -4.9, 2, 1, 1, 'eye'),
+                                      Box(1, -5, -4.9, 2, 1, 1, 'eye'), Box(-4.5, -9, -4.5, 9, 2, 9, 'metal'), Box(-1, -10, -5, 2, 2, 1, 'glow')])
+for i, (x, z, rx, rz, h) in enumerate(((-3.5, -3.5, -0.3, -0.3, 4), (3.5, -3.5, -0.3, 0.3, 4), (-3.5, 3.5, 0.3, -0.3, 3), (3.5, 3.5, 0.3, 0.3, 3))):
+    shead.add(P(f'crown{i}', (x, -9, z), (rx, 0, rz), [Box(-0.5, -h, -0.5, 1, h, 1, 'metal')]))
+shead.add(*pair(P('left_horn', (3, -8, 0), (0, 0, 0.6), [Box(-1, -5, -1, 2, 5, 2, 'crystal')]).add(
+    P('left_horn_tip', (0, -5, 0), (0, 0, -0.5), [Box(-0.5, -4, -0.5, 1, 4, 1, 'crystal')]))))
+sov.add(shead)
+sov.add(*pair(P('left_arm', (6.5, -1, 0), boxes=[Box(-1.5, 0, -1.5, 3, 6, 3, 'armor')]).add(
+    P('left_fore', (0, 6, 0), boxes=[Box(-1.5, 0, -1.5, 3, 5, 3, 'armor'), Box(-2, 1, -2, 4, 3, 4, 'metal')]).add(
+        P('left_hand', (0, 5, 0), boxes=[Box(-1.5, 0, -1.5, 3, 3, 3, 'skin'), Box(-1, 3, -1, 2, 2, 2, 'glow')])))))
+sov.add(P('cape', (0, -1.5, 3.2), boxes=[Box(-5, 0, 0, 10, 10, 1, 'cloth')]).add(
+    P('cape_mid', (0, 10, 0), boxes=[Box(-5, 0, 0, 10, 8, 1, 'cloth')]).add(P('cape_low', (0, 8, 0), boxes=[Box(-5, 0, 0, 10, 6, 1, 'cloth_hem')]))))
+sov.add(P('skirt', (0, 10, 0), boxes=[Box(-6, 0, -4, 12, 5, 8, 'cloth')]).add(
+    P('vortex0', (0, 5, 0), boxes=[Box(-5, 0, -3.5, 10, 4, 7, 'cloud')]).add(
+        P('vortex1', (0, 4, 0), boxes=[Box(-3.5, 0, -2.5, 7, 4, 5, 'cloud')]).add(
+            P('vortex2', (0, 4, 0), boxes=[Box(-2, 0, -1.5, 4, 4, 3, 'cloud')]).add(P('vortex3', (0, 4, 0), boxes=[Box(-1, 0, -1, 2, 3, 2, 'cloud')]))))))
+halo = P('ring', (0, -17, 0))
 for i in range(12):
     a = i * math.pi / 6
-    halo.add(P(f'halo_{i}', (math.cos(a) * 7, 0, math.sin(a) * 7), (0, -a, 0), [Box(-1, -1, -0.5, 2, 2, 1, 'glow' if i % 3 == 0 else 'crystal')]))
-orbs = [P('orb_a', (12, 2, 0), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 3, 'glow')], field='orbA'), P('orb_b', (-12, 2, 0), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 3, 'glow')], field='orbB')]
+    halo.add(P(f'halo{i}', (math.cos(a) * 7, 0, math.sin(a) * 7), (0, -a, 0), [Box(-1, -1, -0.5, 2, 2, 1, 'glow' if i % 3 == 0 else 'crystal')]))
+orbs = [P('orb_a', (12, 2, 0), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 3, 'glow')]), P('orb_b', (-12, 2, 0), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 3, 'glow')])]
 M.append(Model('SovereignModel', 'tempest_sovereign', {'armor': ('metal', C('#3a3460'), C('#f2c94c')), 'metal': ('metal', C('#c8a440'), C('#6a5418')),
-    'skin': ('skin', C('#9aa6c8'), C('#5a6688')), 'eye': ('glow', C('#ffffff'), C('#7fd4ff')), 'glow': ('glow', C('#e8f8ff'), C('#5ab0e8')),
-    'crystal': ('crystal', C('#7fd4ff'), C('#2a6a96')), 'cloth': ('cloth', C('#2c2450'), C('#f2c94c')), 'cloud': ('cloud', C('#8a96b0'), C('#4a5670'))},
-    [sov, halo] + orbs, '''        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD;
-        leftArm.zRot = -0.35f - Mth.sin(t * 0.08f) * 0.25f;
-        rightArm.zRot = 0.35f + Mth.sin(t * 0.08f) * 0.25f;
-        leftArm.xRot = Mth.cos(t * 0.06f) * 0.3f - 0.4f;
-        rightArm.xRot = -Mth.cos(t * 0.06f) * 0.3f - 0.4f;
-        leftHand.xRot = -0.3f + Mth.sin(t * 0.1f) * 0.2f;
-        rightHand.xRot = -0.3f - Mth.sin(t * 0.1f) * 0.2f;
-        cape.xRot = 0.12f + Mth.sin(t * 0.09f) * 0.08f;
-        capeLow.xRot = 0.1f + Mth.sin(t * 0.09f + 0.8f) * 0.12f;
-        skirt.zRot = Mth.sin(t * 0.1f) * 0.06f;
-        vortex0.yRot = t * 0.2f; vortex1.yRot = -t * 0.3f; vortex2.yRot = t * 0.45f;
-        ring.yRot = t * 0.12f;
+    'skin': ('skin', C('#9aa6c8'), C('#5a6688')), 'mask': ('metal', C('#dfe6f0'), C('#7a8496')), 'eye': ('glow', C('#ffffff'), C('#7fd4ff')),
+    'glow': ('glow', C('#e8f8ff'), C('#5ab0e8')), 'crystal': ('crystal', C('#7fd4ff'), C('#2a6a96')), 'cloth': ('cloth', C('#2c2450'), C('#f2c94c')),
+    'cloth_hem': ('tatter', C('#2c2450'), C('#f2c94c')), 'cloud': ('cloud', C('#8a96b0'), C('#4a5670'))}, [sov, halo] + orbs, [
+    Clip('time', 64, merge(sym(T(left_arm_rz=even(-22, -30), left_arm_rx=even(-16, -24), left_fore_rx=shift(even(-18, -30), 0.1),
+                                 left_hand_rx=shift(even(-6, -16), 0.2))),
+                           T(body_py=[(0, 0), (0.5, -1.4)], cape_rx=[(0, 8), (0.5, 15)], cape_mid_rx=shift([(0, 5), (0.5, 13)], 0.15),
+                             cape_low_rx=shift([(0, 4), (0.5, 16)], 0.3), skirt_rz=even(-3, 3), vortex0_rx=shift(even(-4, 4), 0.1),
+                             vortex1_rx=shift(even(-6, 6), 0.2), vortex2_rx=shift(even(-9, 9), 0.3), vortex3_rx=shift(even(-12, 12), 0.4),
+                             head_rz=even(0, 2, 0, -2))), '1f'),
+    Clip('dist', 0.08, T(body_rx=hold(12), cape_rx=hold(25), cape_mid_rx=hold(12), skirt_rx=hold(-10), vortex0_rx=hold(-8)), 'moveW'),
+    Clip('attack', 26, merge(sym(T(left_arm_rx=[(0, 0), (0.25, 35), (0.45, -88), (0.7, -80), (1, 0)], left_arm_rz=[(0, 0), (0.25, -40), (0.45, -8), (1, 0)],
+                                   left_fore_rx=[(0, 0), (0.25, -40), (0.45, 0), (1, 0)])),
+                             T(body_rx=[(0, 0), (0.25, -12), (0.45, 15), (1, 0)], cape_rx=[(0, 0), (0.3, -10), (0.5, 45), (1, 0)],
+                               cape_mid_rx=[(0, 0), (0.35, -6), (0.55, 30), (1, 0)]))),
+    Clip('cast', 40, merge(sym(T(left_arm_rx=[(0, 0), (0.3, -160), (0.75, -165), (1, 0)], left_arm_rz=[(0, 0), (0.3, -24), (0.75, -30), (1, 0)])),
+                           T(head_rx=[(0, 0), (0.3, -22), (0.75, -22), (1, 0)], ring_s=[(0, 0), (0.35, 0.35), (0.75, 0.35), (1, 0)],
+                             body_py=[(0, 0), (0.3, -2), (0.75, -2.5), (1, 0)]))),
+    hurt_clip('body', 'head', 0.6)],
+    doc='The Tempest Sovereign: a crowned, armoured storm lord with crystal horns, a halo of lightning, a three-part cape and a body that trails into a spinning vortex; it pushes gusts out with both arms and raises them to cast.',
+    grounded=False, look=[('head', 1.0, 1.0)],
+    extra='''        vortex0.yRot += t * 0.2f; vortex1.yRot -= t * 0.3f; vortex2.yRot += t * 0.45f; vortex3.yRot -= t * 0.6f;
+        ring.yRot += t * (s.attackAge < 40 && s.attackKind == AnimPulse.CAST ? 0.45f : 0.12f);
         orbA.x = Mth.cos(t * 0.1f) * 12; orbA.z = Mth.sin(t * 0.1f) * 12; orbA.y = 2 + Mth.sin(t * 0.2f) * 2;
-        orbB.x = -orbA.x; orbB.z = -orbA.z; orbB.y = 2 - Mth.sin(t * 0.2f) * 2;''',
-    doc='The Tempest Sovereign: a crowned, armoured storm lord with crystal horns, a halo of lightning, a flowing cape, and a body that trails away into a spinning vortex.'))
+        orbB.x = -orbA.x; orbB.z = -orbA.z; orbB.y = 2 - Mth.sin(t * 0.2f) * 2;
+        cape.xRot += Math.min(0.6f, s.speed * 3f);
+'''))
+
 
 # ---- Skyray ------------------------------------------------------------------------------------------------
-ray = P('body', (0, 20, 0), boxes=[Box(-6, -1.5, -6, 12, 3, 12, 'skin'), Box(-5, 1.5, -5, 10, 1, 10, 'belly'), Box(-4, -2.5, -4, 8, 1, 8, 'skin2')], field='body')
-ray.add(P('head', (0, 0, -6), boxes=[Box(-3, -1, -3, 6, 2, 3, 'skin')]).add(
-    P('left_fin', (2.5, 0, -3), (0, -0.3, 0), [Box(-0.5, -0.5, -3, 1, 1, 3, 'skin2')]), P('right_fin', (-2.5, 0, -3), (0, 0.3, 0), [Box(-0.5, -0.5, -3, 1, 1, 3, 'skin2')]),
-    P('left_eye', (3, -0.5, -1.5), boxes=[Box(0, -0.5, -0.5, 1, 1, 1, 'eye')]), P('right_eye', (-3, -0.5, -1.5), boxes=[Box(-1, -0.5, -0.5, 1, 1, 1, 'eye')])))
-wing = P('left_wing', (6, 0, 0), boxes=[Box(0, -1, -5, 6, 2, 10, 'skin')], field='leftWing').add(
-    P('left_wingtip', (6, 0, 0), boxes=[Box(0, -0.5, -3.5, 6, 1, 7, 'skin2')], field='leftWingtip'))
-ray.add(wing, mirror_part(wing))
-ray.add(P('tail', (0, 0, 6), boxes=[Box(-1, -1, 0, 2, 2, 6, 'skin2')], field='tail').add(
-    P('tail_mid', (0, 0, 6), boxes=[Box(-0.5, -0.5, 0, 1, 1, 6, 'skin2')], field='tailMid').add(
-        P('tail_tip', (0, 0, 6), boxes=[Box(-0.5, -0.5, 0, 1, 1, 5, 'glow')], field='tailTip'))))
-ray.add(P('saddle', (0, -2.5, 0), boxes=[Box(-3.5, -1, -3, 7, 1, 6, 'leather')], field='saddle'))
-M.append(Model('SkyrayModel', 'skyray', {'skin': ('skin', C('#4a6aa0'), C('#2a3c66')), 'skin2': ('skin', C('#5a7ec0'), C('#2a3c66')),
+ray = P('body', (0, 20, 0), boxes=[Box(-6, -1.5, -6, 12, 3, 12, 'skin'), Box(-4, -2.5, -4, 8, 1, 8, 'skin2'), Box(-5, 1.5, -5, 10, 1, 10, 'belly')])
+ray.add(P('head', (0, 0, -6), boxes=[Box(-3, -1, -3, 6, 2, 3, 'skin'), Box(-2, 0.5, -3.3, 4, 1, 1, 'mouth')]).add(
+    *pair(P('left_horn', (2.5, 0, -3), (0, -0.3, 0), [Box(-0.5, -0.5, -3, 1, 1, 3, 'skin2')]).add(
+        P('left_horn_tip', (0, 0, -3), (0.5, 0, 0), [Box(-0.5, -0.5, -2, 1, 1, 2, 'glow')]))),
+    *pair(P('left_eye', (3, -0.5, -1.5), boxes=[Box(-0.3, -0.5, -0.5, 1, 1, 1, 'eye')]))))
+ray.add(*pair(P('left_wing', (6, 0, 0), boxes=[Box(0, -1, -5, 5, 2, 10, 'skin')]).add(
+    P('left_wing_mid', (5, 0, 0.5), boxes=[Box(0, -0.5, -4, 5, 1, 8, 'skin2')]).add(
+        P('left_wing_tip', (5, 0, 1), boxes=[Box(0, -0.5, -2.5, 4, 1, 5, 'skin2'), Box(3, -0.45, -2.5, 1, 1, 5, 'glow')])))))
+ray.add(P('tail', (0, 0, 6), boxes=[Box(-1, -1, 0, 2, 2, 5, 'skin2')]).add(
+    P('tail_mid', (0, 0, 5), boxes=[Box(-0.5, -0.5, 0, 1, 1, 5, 'skin2')]).add(
+        P('tail_end', (0, 0, 5), boxes=[Box(-0.5, -0.5, 0, 1, 1, 4, 'skin2')]).add(P('stinger', (0, 0, 4), boxes=[Box(-1, -1, 0, 2, 2, 2, 'glow')])))))
+ray.add(P('saddle', (0, -2.5, 0), boxes=[Box(-3.5, -1, -3, 7, 1, 6, 'leather'), Box(-0.5, -2, -3, 1, 1, 1, 'leather'), Box(3.5, -1, -1, 1, 4, 2, 'leather'),
+                                         Box(-4.5, -1, -1, 1, 4, 2, 'leather')]))
+M.append(Model('SkyrayModel', 'skyray', {'skin': ('skin', C('#4a6aa0'), C('#d8e8ff')), 'skin2': ('skin', C('#5a7ec0'), C('#2a3c66')),
     'belly': ('skin', C('#d8e4f2'), C('#a0b4cc')), 'eye': ('eye', C('#f2e070'), C('#101828')), 'glow': ('glow', C('#c8f0ff'), C('#4a8ac0')),
-    'leather': ('leather', C('#7a4a2a'), C('#d8b070'))}, [ray], '''        float flap = Mth.sin(t * 0.15f);
-        leftWing.zRot = flap * 0.35f;
-        rightWing.zRot = -flap * 0.35f;
-        leftWingtip.zRot = Mth.sin(t * 0.15f - 0.6f) * 0.45f;
-        rightWingtip.zRot = -Mth.sin(t * 0.15f - 0.6f) * 0.45f;
-        tail.yRot = Mth.sin(t * 0.1f) * 0.25f;
-        tailMid.yRot = Mth.sin(t * 0.1f - 0.7f) * 0.3f;
-        tailTip.yRot = Mth.sin(t * 0.1f - 1.4f) * 0.35f;
-        tail.xRot = Mth.cos(t * 0.12f) * 0.08f;
-        saddle.visible = s.saddled;''', state='State', flags=('saddled',), doc='The Skyray: a broad manta of the storm sky, with two-jointed wing fins, head fins, and a three-jointed glowing whip tail.'))
+    'leather': ('leather', C('#7a4a2a'), C('#d8b070')), 'mouth': ('dark', C('#1a2438'))}, [ray], [
+    Clip('time', 38, sym(T(left_wing_rz=[(0, -24), (0.5, 24)], left_wing_mid_rz=shift([(0, -28), (0.5, 28)], 0.12),
+                           left_wing_tip_rz=shift([(0, -34), (0.5, 34)], 0.24), body_py=shift([(0, 0.7), (0.5, -0.7)], 0.3),
+                           body_rx=shift(even(2, -2), 0.3), tail_ry=even(-10, 10), tail_mid_ry=shift(even(-14, 14), 0.12),
+                           tail_end_ry=shift(even(-18, 18), 0.24), left_horn_tip_rx=even(10, 30))), '0.55f + 0.45f * air'),
+    Clip('fidget', 160, sym(T(left_wing_rz=[(0, 0), (0.25, -40), (0.5, 40), (0.75, -20), (1, 0)], body_rz=[(0, 0), (0.25, 10), (0.6, -6), (1, 0)])),
+         'idleW', dur=30),
+    hurt_clip('body', None, 0.8)],
+    doc='The Skyray: a broad manta of the storm sky whose wings ripple in a travelling wave, with curling head fins and a four-jointed glowing tail; it banks into turns. Its saddle shows when saddled.',
+    grounded=False,
+    extra='        body.zRot -= turn * 0.04f;\n        tail.yRot += turn * 0.05f; tailMid.yRot += turn * 0.04f;\n        saddle.visible = s.saddled;\n'))
 
-# ---- Puffling (keeps its sheared state) ----------------------------------------------------------------------
-puff = [P('body', (0, 16, 0), boxes=[Box(-4, -3, -5, 8, 6, 10, 'skin')], field='body'),
-        P('fluff', (0, 16, 0), boxes=[Box(-6, -5, -7, 12, 9, 14, 'cloud')], field='fluff').add(
-            P('fluff_top', (0, -5, 0), boxes=[Box(-4, -3, -5, 8, 3, 10, 'cloud')]),
-            P('fluff_spark', (0, -8, 0), boxes=[Box(-1, -2, -1, 2, 2, 2, 'glow')], field='spark')),
-        P('head', (0, 13, -5), boxes=[Box(-3, -4, -6, 6, 6, 6, 'skin'), Box(-2, -2, -7, 4, 2, 1, 'snout')], field='head').add(
-            P('left_ear', (3, -3, -3), (0, 0, 0.5), [Box(0, -0.5, -1, 3, 1, 2, 'skin')], field='leftEar'),
-            P('right_ear', (-3, -3, -3), (0, 0, -0.5), [Box(-3, -0.5, -1, 3, 1, 2, 'skin')], field='rightEar'),
-            P('left_eye', (2, -2, -6), boxes=[Box(-0.5, -0.5, -0.5, 1, 1, 1, 'eye')]), P('right_eye', (-2, -2, -6), boxes=[Box(-0.5, -0.5, -0.5, 1, 1, 1, 'eye')]))]
+
+# ---- Puffling ------------------------------------------------------------------------------------------------
+puff = [P('body', (0, 16, 0), boxes=[Box(-4, -3, -5, 8, 6, 10, 'skin')]),
+        P('fluff', (0, 16, 0), boxes=[Box(-6, -5, -7, 12, 9, 14, 'cloud')]).add(
+            P('fluff_top', (0, -5, 0), boxes=[Box(-4, -3, -5, 8, 3, 10, 'cloud2'), Box(-2, -4, -2, 4, 1, 4, 'cloud2')]),
+            *pair(P('left_fluff', (6, -1, 0), boxes=[Box(-0.5, -3, -4, 2, 5, 8, 'cloud2')])),
+            P('lump0', (-4, -5.5, -5), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 3, 'cloud2')]),
+            P('lump1', (3, -5.5, -4), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 4, 'cloud2')]),
+            P('lump2', (-1, -6, 1), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 4, 'cloud2')]),
+            P('lump3', (4, -5, 3), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 3, 'cloud2')]),
+            P('lump4', (-4.5, -5, 4), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 4, 'cloud2')]),
+            P('lump5', (6, -3, -5), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 4, 'cloud2')]),
+            P('lump6', (-7, -2, -4), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 3, 'cloud2')]),
+            P('lump7', (6, 1, 4), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 4, 'cloud2')]),
+            P('lump8', (-7, 0, 3), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 4, 'cloud2')]),
+            P('lump9', (0, -3, 7), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 3, 'cloud2')]),
+            P('lump10', (-3, 0, 7), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 4, 'cloud2')]),
+            P('lump11', (3, -4, -7.5), boxes=[Box(-1.5, -1.5, -1.5, 3, 3, 4, 'cloud2')]),
+            P('lump12', (-2, -1, -7.5), boxes=[Box(-1.5, -1.5, -1.5, 4, 3, 3, 'cloud2')]),
+            P('spark', (0, -9, 0), boxes=[Box(-1, -2, -1, 2, 2, 2, 'glow')])),
+        P('head', (0, 12, -6), boxes=[Box(-3, -4, -5, 6, 6, 6, 'skin'), Box(-3.5, -5, -4, 7, 2, 4, 'cloud2'), Box(-2, -1, -6, 4, 3, 1, 'snout'),
+                                      Box(1, -2.5, -5.3, 1, 1, 1, 'eye'), Box(-2, -2.5, -5.3, 1, 1, 1, 'eye')]).add(
+            *pair(P('left_ear', (3, -3, -2), (0, 0, 0.5), [Box(0, -0.5, -1, 3, 1, 2, 'skin')]).add(P('left_ear_tip', (3, 0, 0), boxes=[Box(0, -0.5, -1, 1, 1, 2, 'pink')]))))]
 for i in range(4):
-    x, z = (-2.5 if i % 2 == 0 else 2.5), (-3.5 if i < 2 else 3.5)
-    puff.append(P(f'leg_{i}', (x, 19, z), boxes=[Box(-1, 0, -1, 2, 5, 2, 'skin'), Box(-1.2, 4, -1.2, 2, 1, 2, 'dark')], field=f'leg{i}'))
-M.append(Model('PufflingModel', 'puffling', {'skin': ('skin', C('#e6d6ee'), C('#a890b8')), 'cloud': ('cloud', C('#f4f6fa'), C('#c0c8d4')),
-    'glow': ('glow', C('#fff2a8'), C('#c0a040')), 'snout': ('skin', C('#f2b8c8'), C('#c08898')), 'eye': ('eye', C('#1a1028'), C('#1a1028')),
-    'dark': ('dark', C('#5a4a66'))}, puff, '''        fluff.visible = !s.sheared;
-        spark.y = -8f + Mth.sin(t * 0.2f) * 0.5f;
-        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD;
-        leftEar.zRot = 0.5f + Mth.sin(t * 0.1f) * 0.15f;
-        rightEar.zRot = -0.5f - Mth.sin(t * 0.1f) * 0.15f;
-        leg0.xRot = Mth.cos(walk) * 1.4f * amt;
-        leg3.xRot = Mth.cos(walk) * 1.4f * amt;
-        leg1.xRot = Mth.cos(walk + Mth.PI) * 1.4f * amt;
-        leg2.xRot = Mth.cos(walk + Mth.PI) * 1.4f * amt;''', state='State', flags=('sheared',),
-    doc='The Puffling: a little sky lamb in a thundercloud fleece with a spark on top, floppy ears and a pink snout.'))
+    x, z = (2.5 if i % 2 == 0 else -2.5), (-3.5 if i < 2 else 3.5)
+    puff.append(P(f'leg{i}', (x, 19, z), boxes=[Box(-1, 0, -1, 2, 3, 2, 'skin')]).add(
+        P(f'shin{i}', (0, 3, 0), boxes=[Box(-1, 0, -1, 2, 1, 2, 'skin')]).add(P(f'hoof{i}', (0, 1, 0), boxes=[Box(-1, 0, -1, 2, 1, 2, 'dark')]))))
+ptrot = merge(*[gait_leg(f'leg{i}', f'shin{i}', ph, 32, 40) for i, ph in ((0, 0), (3, 0), (1, 0.5), (2, 0.5))])
+M.append(Model('PufflingModel', 'puffling', {'skin': ('skin', C('#e6d6ee'), C('#a890b8')), 'cloud': ('cloud', C('#e8ecf4'), C('#a8b0c0')),
+    'cloud2': ('cloud', C('#f8fafe'), C('#c0c8d4')), 'glow': ('glow', C('#fff2a8'), C('#c0a040')), 'snout': ('skin', C('#f2b8c8'), C('#c08898')),
+    'pink': ('skin', C('#f2a8c0'), C('#b07088')), 'eye': ('eye', C('#1a1028'), C('#2a1a38')), 'dark': ('dark', C('#5a4a66'))}, puff, [
+    Clip('time', 80, sym(T(fluff_s=[(0, 0), (0.5, 0.035)], left_ear_rz=even(0, 6, 0, -4), spark_py=[(0, 0), (0.5, -0.8)], spark_s=[(0, 0), (0.5, 0.25)])), '1f'),
+    Clip('dist', 0.2, merge(ptrot, sym(T(fluff_py=even(0, -0.6, 0, -0.6), body_py=even(0, -0.5, 0, -0.5), head_py=shift(even(0, -0.5, 0, -0.5), 0.06),
+                                         head_rx=shift(even(0, 4, 0, 4), 0.06), left_ear_rz=shift(even(0, 18, 0, 18), 0.15),
+                                         fluff_rz=even(2, -2)))), 'moveW'),
+    Clip('fidget', 240, T(head_rx=[(0, 0), (0.15, 58), (0.3, 54), (0.45, 60), (0.6, 54), (0.85, 58), (1, 0)],
+                          head_py=[(0, 0), (0.15, 2), (0.85, 2), (1, 0)], head_ry=[(0, 0), (0.3, 8), (0.55, -8), (0.85, 0), (1, 0)]), 'idleW', dur=70),
+    Clip('fidget', 170, sym(T(fluff_rz=[(0, 0), (0.1, 12), (0.2, -12), (0.3, 10), (0.4, -9), (0.5, 6), (0.6, -3), (0.75, 0), (1, 0)],
+                              head_rz=[(0, 0), (0.12, -14), (0.22, 14), (0.32, -12), (0.42, 10), (0.55, -5), (0.75, 0), (1, 0)],
+                              left_ear_rz=[(0, 0), (0.12, 30), (0.22, -20), (0.32, 25), (0.42, -15), (0.6, 0)])), 'idleW', dur=24),
+    hurt_clip('body', 'head')],
+    doc='The Puffling: a little sky lamb in a thundercloud fleece with a spark on top; it trots, grazes and gives itself a shake. Shearing removes the fleece.',
+    look=[('head', 1.0, 1.0)], flags=('sheared',),
+    extra='        fluff.visible = !s.sheared;\n'))
+
 
 # ---- Glimmerstag and Thistlehop ------------------------------------------------------------------------------
-stag = [P('body', (0, 11, 0), boxes=[Box(-4, -4, -8, 8, 8, 16, 'fur'), Box(-3.5, 3, -7, 7, 1, 13, 'belly')], field='body').add(
-            P('tail', (0, -3, 8), (0.5, 0, 0), [Box(-1, 0, 0, 2, 3, 1, 'belly')], field='tail')),
-        P('neck', (0, 8, -7), boxes=[Box(-2, -9, -2, 4, 10, 4, 'fur')], field='neck').add(
-            P('head', (0, -9, 0), boxes=[Box(-2.5, -3, -6, 5, 4, 7, 'fur'), Box(-1.5, -1, -8, 3, 2, 2, 'nose'),
-                                         Box(-2.8, -2.5, -3.5, 1, 1, 1, 'eye'), Box(1.8, -2.5, -3.5, 1, 1, 1, 'eye')], field='head').add(
-                P('left_ear', (2.5, -2.5, -1), (0, 0, 0.6), [Box(0, -0.5, -0.5, 3, 1, 2, 'fur')], field='leftEar'),
-                P('right_ear', (-2.5, -2.5, -1), (0, 0, -0.6), [Box(-3, -0.5, -0.5, 3, 1, 2, 'fur')], field='rightEar'),
-                *[P(f'antler_{"left" if side > 0 else "right"}', (side * 1.5, -3, -1), (0, 0, side * 0.25), [Box(-0.5, -7, -0.5, 1, 7, 1, 'crystal')]).add(
-                    P(f'tine_{"left" if side > 0 else "right"}_0', (0, -3, 0), (0, 0, side * 0.9), [Box(-0.5, -3, -0.5, 1, 3, 1, 'crystal')]),
-                    P(f'tine_{"left" if side > 0 else "right"}_1', (0, -5.5, 0), (-0.6, 0, side * 0.5), [Box(-0.5, -3, -0.5, 1, 3, 1, 'crystal')]),
-                    P(f'tip_{"left" if side > 0 else "right"}', (0, -7, 0), boxes=[Box(-1, -2, -1, 2, 2, 2, 'glow')])) for side in (-1, 1)]))]
-for i in range(4):
-    x, z = (-2.5 if i % 2 == 0 else 2.5), (-6 if i < 2 else 6)
-    stag.append(P(f'leg{i}', (x, 14, z), boxes=[Box(-1, 0, -1, 2, 5, 2, 'fur')], field=f'leg{i}').add(
-        P(f'shin{i}', (0, 5, 0), boxes=[Box(-1, 0, -1, 2, 5, 2, 'fur'), Box(-1.2, 4, -1.2, 2, 1, 2, 'hoof')])))
-M.append(Model('GlimmerstagModel', 'glimmerstag', {'fur': ('fur', C('#6a8a7a'), C('#3a5048')), 'belly': ('fur', C('#d8e6dc'), C('#a0b4a8')),
-    'nose': ('dark', C('#2a2a2a')), 'eye': ('eye', C('#1a1a1a'), C('#1a1a1a')), 'crystal': ('crystal', C('#9ff0e0'), C('#3a9a88')),
-    'glow': ('glow', C('#e8fff8'), C('#6ad8c0')), 'hoof': ('dark', C('#3a3430'))}, stag, '''        neck.yRot = s.yRot * Mth.DEG_TO_RAD * 0.5f;
-        neck.xRot = s.xRot * Mth.DEG_TO_RAD * 0.5f;
-        leftEar.zRot = 0.6f + Mth.sin(t * 0.13f) * 0.12f;
-        rightEar.zRot = -0.6f - Mth.sin(t * 0.13f) * 0.12f;
-        tail.xRot = 0.5f + Mth.sin(t * 0.3f) * 0.2f;
-        for (int i = 0; i < 4; i++) {
-            ModelPart l = i == 0 ? leg0 : i == 1 ? leg1 : i == 2 ? leg2 : leg3;
-            l.xRot = Mth.cos(walk + (i == 0 || i == 3 ? 0 : Mth.PI)) * 1.1f * amt;
-        }''', doc='The Glimmerstag: an elderstorm deer with jointed legs and branching crystal antlers that glow at the tips.'))
-
-hop = [P('body', (0, 20, 0), boxes=[Box(-3, -3, -4, 6, 5, 8, 'fur'), Box(-2.5, 1.5, -3.5, 5, 1, 7, 'belly')], field='body').add(
-           *[P(f'thistle_{i}', (x, -3, z), (rx, 0, rz), [Box(-0.5, -3, -0.5, 1, 3, 1, 'thorn'), Box(-1, -4, -1, 2, 1, 2, 'bloom')]) for i, (x, z, rx, rz) in
-             enumerate(((-1.5, -2, -0.3, -0.2), (1.5, -1, -0.2, 0.2), (0, 1, 0.1, 0), (-1.5, 2.5, 0.3, -0.2), (1.5, 3, 0.3, 0.2)))],
-           P('tail', (0, -1, 4), boxes=[Box(-1.5, -1.5, 0, 3, 3, 2, 'belly')])),
-       P('head', (0, 17, -4), boxes=[Box(-2.5, -3, -4, 5, 4, 4, 'fur'), Box(-1, -1, -4.5, 2, 1, 1, 'nose'),
-                                     Box(-2.7, -2, -3, 1, 1, 1, 'eye'), Box(1.7, -2, -3, 1, 1, 1, 'eye')], field='head').add(
-           P('left_ear', (1.2, -3, -1.5), (-0.2, 0, 0.15), [Box(-0.5, -5, -0.5, 2, 5, 1, 'fur')], field='leftEar'),
-           P('right_ear', (-1.2, -3, -1.5), (-0.2, 0, -0.15), [Box(-1.5, -5, -0.5, 2, 5, 1, 'fur')], field='rightEar'))]
+stag = [P('body', (0, 10, 0), boxes=[Box(-4, -4, -6, 8, 8, 12, 'fur'), Box(-3.5, -4.5, -8.5, 7, 8, 3, 'fur'), Box(-4, -4.5, 5, 8, 8, 3, 'fur'),
+                                     Box(-3.5, 3.5, -6, 7, 1, 11, 'belly'), Box(-1, -5, -5, 2, 1, 10, 'fur2')]).add(
+            P('tail', (0, -3.5, 8), (0.4, 0, 0), [Box(-1, 0, 0, 2, 3, 1, 'belly')]))]
+shead = P('head', (0, -9, 0), boxes=[Box(-2.5, -3, -5, 5, 4, 6, 'fur'), Box(-1.5, -2, -8, 3, 3, 3, 'fur2'), Box(-1, -2.2, -8.5, 2, 1, 1, 'nose'),
+                                     Box(2.2, -2.5, -3.5, 1, 1, 1, 'eye'), Box(-3.2, -2.5, -3.5, 1, 1, 1, 'eye')]).add(
+    P('jaw', (0, 1, -5), boxes=[Box(-1.5, 0, -3, 3, 1, 3, 'fur2')]),
+    *pair(P('left_ear', (2.3, -2.5, -0.5), (0, 0, 0.6), [Box(0, -0.5, -0.5, 3, 1, 2, 'fur')])))
 for side in (1, -1):
     nm = 'left' if side > 0 else 'right'
-    hop.append(P(f'{nm}_hind', (side * 2.5, 20, 2), boxes=[Box(-1, 0, -2, 2, 4, 4, 'fur'), Box(-1, 3, -3, 2, 1, 4, 'belly')], field=f'{nm}Hind'))
-    hop.append(P(f'{nm}_front', (side * 1.8, 20, -3), boxes=[Box(-0.5, 0, -0.5, 1, 4, 1, 'fur')], field=f'{nm}Front'))
-M.append(Model('ThistlehopModel', 'thistlehop', {'fur': ('fur', C('#8a7a5a'), C('#5a4a34')), 'belly': ('fur', C('#e8dcc4'), C('#b8a888')),
-    'nose': ('skin', C('#d08898'), C('#905060')), 'eye': ('eye', C('#1a1408'), C('#1a1408')), 'thorn': ('shell', C('#5a7a3a'), C('#2a3a1a')),
-    'bloom': ('fur', C('#b06ad6'), C('#6a3a8a'))}, hop, '''        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD;
-        float hopk = Math.abs(Mth.sin(walk)) * amt;
-        body.y = 20f - hopk * 2f;
-        head.y = 17f - hopk * 2f;
-        leftHind.xRot = -hopk * 1.2f; rightHind.xRot = -hopk * 1.2f;
-        leftFront.xRot = hopk * 0.9f; rightFront.xRot = hopk * 0.9f;
-        leftEar.xRot = -0.2f + Mth.sin(t * 0.2f) * 0.1f - hopk * 0.4f;
-        rightEar.xRot = -0.2f + Mth.cos(t * 0.2f) * 0.1f - hopk * 0.4f;''', doc='The Thistlehop: a hare-like forest hopper with long ears and blooming thistles on its back.'))
+    shead.add(P(f'{nm}_antler', (side * 1.5, -3, -1), (0.1, 0, side * 0.3), [Box(-0.5, -6, -0.5, 1, 6, 1, 'crystal')]).add(
+        P(f'{nm}_tine0', (0, -2.5, 0), (-0.8, 0, side * 0.4), [Box(-0.5, -3, -0.5, 1, 3, 1, 'crystal')]),
+        P(f'{nm}_beam2', (0, -6, 0), (0.3, 0, -side * 0.25), [Box(-0.5, -4, -0.5, 1, 4, 1, 'crystal')]).add(
+            P(f'{nm}_tine1', (0, -2, 0), (0, 0, side * 0.9), [Box(-0.5, -3, -0.5, 1, 3, 1, 'crystal')]),
+            P(f'{nm}_tip', (0, -4, 0), boxes=[Box(-1, -2, -1, 2, 2, 2, 'glow')]))))
+stag.append(P('neck', (0, 7, -7), (0.35, 0, 0), [Box(-2, -9, -2, 4, 10, 4, 'fur'), Box(-1, -9, 1.6, 2, 9, 1, 'fur2')]).add(shead))
+for i in range(4):
+    front = i < 2
+    x = 2.5 if i % 2 == 0 else -2.5
+    if front:
+        stag.append(P(f'leg{i}', (x, 13, -6), boxes=[Box(-1, -1, -1.5, 2, 6, 3, 'fur')]).add(
+            P(f'shin{i}', (0, 5, 0), boxes=[Box(-1, 0, -1, 2, 5, 2, 'fur')]).add(P(f'hoof{i}', (0, 5, 0), boxes=[Box(-1, 0, -1, 2, 1, 2, 'hoof')]))))
+    else:
+        stag.append(P(f'leg{i}', (x, 12, 6), boxes=[Box(-1.5, -1, -2, 3, 6, 4, 'fur')]).add(
+            P(f'shin{i}', (0, 5, 1), boxes=[Box(-1, 0, -1, 2, 6, 2, 'fur')]).add(P(f'hoof{i}', (0, 6, 0), boxes=[Box(-1, 0, -1, 2, 1, 2, 'hoof')]))))
+swalk = merge(*[gait_leg(f'leg{i}', f'shin{i}', ph, 24, 45) for i, ph in ((2, 0), (0, 0.25), (3, 0.5), (1, 0.75))])
+M.append(Model('GlimmerstagModel', 'glimmerstag', {'fur': ('fur', C('#6a8a7a'), C('#3a5048')), 'fur2': ('fur', C('#587466'), C('#2e423a')),
+    'belly': ('fur', C('#d8e6dc'), C('#a0b4a8')), 'nose': ('dark', C('#2a2a2a')), 'eye': ('eye', C('#2a1a10'), C('#101010')),
+    'crystal': ('crystal', C('#9ff0e0'), C('#3a9a88')), 'glow': ('glow', C('#e8fff8'), C('#6ad8c0')), 'hoof': ('dark', C('#3a3430'))}, stag, [
+    Clip('time', 100, sym(T(body_py=[(0, 0), (0.5, 0.2)], neck_rx=even(0, 2, 0, -1), tail_rx=even(0, 6, 0, -3),
+                            left_tip_s=even(0, 0.2), right_tip_s=shift(even(0, 0.2), 0.5))), '1f'),
+    Clip('dist', 0.13, merge(swalk, T(body_py=even(0, -0.4, 0, -0.4), neck_rx=even(0, 4, 0, 4), tail_rx=even(10, 0))), 'moveW'),
+    Clip('fidget', 260, T(neck_rx=[(0, 0), (0.18, 60), (0.82, 60), (1, 0)], head_rx=[(0, 0), (0.2, 18), (0.8, 18), (1, 0)],
+                          jaw_rx=[(0, 0), (0.3, 0), (0.36, 14), (0.42, 0), (0.48, 14), (0.54, 0), (0.6, 14), (0.66, 0), (1, 0)]), 'idleW', dur=80),
+    Clip('fidget', 70, T(left_ear_rz=[(0, 0), (0.25, 35), (0.5, -10), (0.75, 20), (1, 0)]), 'idleW', dur=12),
+    Clip('fidget', 90, T(right_ear_rz=[(0, 0), (0.25, -35), (0.5, 10), (1, 0)], tail_rx=[(0, 0), (0.3, 35), (0.6, -5), (1, 0)]), 'idleW', dur=14),
+    hurt_clip('body', 'head')],
+    doc='The Glimmerstag: an elderstorm deer with jointed legs in a four-beat walk, flicking ears and tail, grazing, and branching crystal antlers whose tips pulse.',
+    look=[('neck', 0.4, 0.3), ('head', 0.6, 0.7)], extra='        neck.yRot -= turn * 0.02f;\n'))
+
+hop = [P('body', (0, 19, 0), boxes=[Box(-3, -3, -4, 6, 5, 8, 'fur'), Box(-2.5, 1.5, -3.5, 5, 1, 7, 'belly'), Box(-3.5, -2, 1, 7, 4, 3, 'fur')]).add(
+           *[P(f'thistle{i}', (x, -3, z), (rx, 0, rz), [Box(-0.5, -3, -0.5, 1, 3, 1, 'thorn'), Box(-1, -4, -1, 2, 1, 2, 'bloom'),
+                                                         Box(-0.5, -5, -0.5, 1, 1, 1, 'bloom2')]) for i, (x, z, rx, rz) in
+             enumerate(((-1.5, -2, -0.3, -0.2), (1.5, -1, -0.2, 0.2), (0, 1, 0.1, 0), (-1.5, 2.5, 0.3, -0.2), (1.5, 3, 0.3, 0.2)))],
+           P('tail', (0, -1, 4), boxes=[Box(-1.5, -1.5, 0, 3, 3, 2, 'belly')]))]
+hhead = P('head', (0, 17, -4), boxes=[Box(-2.5, -3, -4, 5, 4, 4, 'fur'), Box(-3, -1.5, -3.5, 6, 2, 2, 'belly'),
+                                     Box(2.1, -2, -3, 1, 1, 1, 'eye'), Box(-3.1, -2, -3, 1, 1, 1, 'eye')]).add(
+    P('nose', (0, -1.2, -4), boxes=[Box(-1, -0.5, -0.6, 2, 1, 1, 'nose')]),
+    *pair(P('left_ear', (1.2, -3, -1.5), (-0.2, 0, 0.15), [Box(-0.5, -4, -0.5, 2, 4, 1, 'fur')]).add(
+        P('left_ear_tip', (0, -4, 0), boxes=[Box(-0.5, -3, -0.5, 2, 3, 1, 'fur2')]))))
+hop.append(hhead)
+hop += pair(P('left_hind', (2.5, 19, 2), boxes=[Box(-1, -1, -2, 2, 4, 4, 'fur')]).add(P('left_hind_foot', (0, 3, -1), boxes=[Box(-1, 0, -3, 2, 1, 5, 'belly')])))
+hop += pair(P('left_front', (1.8, 20, -3), boxes=[Box(-0.5, 0, -0.5, 1, 4, 1, 'fur')]))
+hopk = [(0, 0), (0.12, 0.4), (0.42, -3.6), (0.7, -1.2), (0.86, 0)]
+M.append(Model('ThistlehopModel', 'thistlehop', {'fur': ('fur', C('#8a7a5a'), C('#5a4a34')), 'fur2': ('fur', C('#5a4a34'), C('#3a2e20')),
+    'belly': ('fur', C('#e8dcc4'), C('#b8a888')), 'nose': ('skin', C('#d08898'), C('#905060')), 'eye': ('eye', C('#1a1408'), C('#0a0804')),
+    'thorn': ('shell', C('#5a7a3a'), C('#2a3a1a')), 'bloom': ('fur', C('#b06ad6'), C('#6a3a8a')), 'bloom2': ('fur', C('#d898f0'), C('#8a4ab0'))}, hop, [
+    Clip('time', 40, sym(T(body_py=[(0, 0), (0.5, 0.15)], left_ear_rx=even(0, 4, 0, -3), left_ear_tip_rx=shift(even(0, 6, 0, -4), 0.1))), 'idleW'),
+    Clip('fidget', 22, T(nose_py=[(0, 0), (0.25, -0.3), (0.5, 0), (0.75, -0.3), (1, 0)], nose_s=[(0, 0), (0.25, 0.15), (0.5, 0), (0.75, 0.15), (1, 0)]),
+         'idleW', dur=8),
+    Clip('dist', 0.16, sym(T(body_py=hopk, head_py=shift(hopk, 0.03), left_hind_py=shift(hopk, -0.04), left_front_py=shift(hopk, 0.02), body_rx=[(0, 5), (0.3, -20), (0.55, 12), (0.8, 4)],
+                             head_rx=[(0, 0), (0.35, 12), (0.6, -6)], left_hind_rx=[(0, 0), (0.3, 62), (0.6, -22), (0.9, -5)],
+                             left_hind_foot_rx=[(0, 0), (0.3, 30), (0.6, -10)], left_front_rx=[(0, 10), (0.3, -30), (0.55, 42), (0.8, 5)],
+                             left_ear_rx=[(0.1, 0), (0.42, 28), (0.75, -12)], left_ear_tip_rx=[(0.15, 0), (0.48, 22), (0.8, -10)])), 'moveW'),
+    Clip('fidget', 210, sym(T(body_rx=[(0, 0), (0.2, -45), (0.8, -45), (1, 0)], body_py=[(0, 0), (0.2, -2.6), (0.8, -2.6), (1, 0)], head_py=[(0, 0), (0.2, -6.5), (0.8, -6.5), (1, 0)],
+                              head_pz=[(0, 0), (0.2, 2.2), (0.8, 2.2), (1, 0)], head_rx=[(0, 0), (0.2, -10), (0.5, -18), (0.8, -10), (1, 0)],
+                              head_ry=[(0, 0), (0.35, 30), (0.6, -30), (0.8, 0)], left_front_rx=[(0, 0), (0.2, -50), (0.8, -50), (1, 0)],
+                              left_front_py=[(0, 0), (0.2, -5.5), (0.8, -5.5), (1, 0)], left_front_pz=[(0, 0), (0.2, 1.5), (0.8, 1.5), (1, 0)],
+                              left_ear_rx=[(0, 0), (0.25, -12), (0.8, -12), (1, 0)])), 'idleW', dur=56),
+    hurt_clip('body', 'head')],
+    doc='The Thistlehop: a hare-like forest hopper with long jointed ears and blooming thistles on its back; it really hops, twitches its nose and stands up to look around.',
+    look=[('head', 1.0, 1.0)]))
+
 
 # ---- Hollow Keeper (the Labyrinth's guardian) ----------------------------------------------------------------
-keeper = [P('body', (0, -6, 0), boxes=[Box(-4, 0, -2, 8, 14, 4, 'cloth'), Box(-4.5, 0, -2.5, 9, 4, 5, 'metal'), Box(-1.5, 5, -2.6, 3, 3, 1, 'glow')], field='body').add(
-              P('tatters', (0, 14, 0), boxes=[Box(-4, 0, -2, 8, 6, 4, 'cloth')], field='tatters'),
-              P('lantern', (3, 11, -3), boxes=[Box(-1.5, 0, -1.5, 3, 4, 3, 'glow'), Box(-0.5, -2, -0.5, 1, 2, 1, 'metal')], field='lantern')),
-          P('head', (0, -6, 0), boxes=[Box(-3.5, -9, -3.5, 7, 9, 7, 'bone'), Box(-4, -9.5, -4, 8, 3, 8, 'cloth'),
-                                        Box(-2.5, -6, -3.8, 2, 2, 1, 'eye'), Box(0.5, -6, -3.8, 2, 2, 1, 'eye')], field='head')]
-arm = P('left_arm', (5, -5, 0), boxes=[Box(-1, -1, -1.5, 3, 14, 3, 'cloth')], field='leftArm').add(
-    P('left_claw', (0.5, 13, 0), boxes=[Box(-1.5, 0, -1.5, 3, 8, 3, 'bone')], field='leftClaw'))
-keeper += [arm, mirror_part(arm)]
-legk = P('left_leg', (2, 8, 0), boxes=[Box(-1.5, 0, -1.5, 3, 16, 3, 'cloth')], field='leftLeg')
-keeper += [legk, mirror_part(legk)]
-M.append(Model('HollowKeeperModel', 'hollow_keeper', {'cloth': ('cloth', C('#3a3448'), C('#1a1622')), 'metal': ('metal', C('#6a6458'), C('#2e2a24')),
-    'glow': ('glow', C('#bff0ff'), C('#3a8ab0')), 'bone': ('bone', C('#d8d2c0'), C('#8a8270')), 'eye': ('glow', C('#7fe0ff'), C('#0a1a24'))}, keeper,
-    '''        head.yRot = s.yRot * Mth.DEG_TO_RAD;
-        head.xRot = s.xRot * Mth.DEG_TO_RAD - 0.15f;
-        leftLeg.xRot = Mth.cos(walk) * 0.9f * amt;
-        rightLeg.xRot = -Mth.cos(walk) * 0.9f * amt;
-        leftArm.xRot = -Mth.cos(walk) * 0.6f * amt - 0.1f + Mth.sin(t * 0.05f) * 0.05f;
-        rightArm.xRot = Mth.cos(walk) * 0.6f * amt - 0.1f - Mth.sin(t * 0.05f) * 0.05f;
-        leftArm.zRot = -0.08f; rightArm.zRot = 0.08f;
-        leftClaw.xRot = -0.3f - Mth.sin(t * 0.07f) * 0.1f;
-        rightClaw.xRot = -0.3f - Mth.cos(t * 0.07f) * 0.1f;
-        tatters.xRot = Mth.sin(t * 0.1f) * 0.08f + amt * 0.25f;
-        lantern.zRot = Mth.sin(t * 0.12f + walk) * 0.25f;''',
-    doc='The Hollow Keeper: a gaunt robed figure, three blocks tall, with a bone mask, glowing eyes, long clawed arms and a swinging lantern.'))
+kleg = P('left_leg', (2, 8, 0), boxes=[Box(-1.5, 0, -1.5, 3, 8, 3, 'cloth')]).add(
+    P('left_shin', (0, 8, 0), boxes=[Box(-1, 0, -1, 2, 7, 2, 'bone')]).add(P('left_foot', (0, 7, 0), boxes=[Box(-1.5, 0, -3, 3, 1, 4, 'bone')])))
+khips = P('hips', (0, 7, 0), boxes=[Box(-4, -1, -2.5, 8, 3, 5, 'cloth')]).add(
+    P('robe_front', (0, 2, -2.7), boxes=[Box(-4, 0, -0.5, 8, 7, 1, 'cloth')]).add(P('robe_front_low', (0, 7, 0), boxes=[Box(-3.5, 0, -0.5, 7, 7, 1, 'rags')])),
+    P('robe_back', (0, 2, 2.7), boxes=[Box(-4, 0, -0.5, 8, 7, 1, 'cloth')]).add(P('robe_back_low', (0, 7, 0), boxes=[Box(-4, 0, -0.5, 8, 8, 1, 'rags')])),
+    P('lantern', (4.5, 1, -1), boxes=[Box(-0.5, 0, -0.5, 1, 3, 1, 'metal')]).add(
+        P('lantern_cage', (0, 3, 0), boxes=[Box(-1.5, 0, -1.5, 3, 1, 3, 'metal'), Box(-1, 1, -1, 2, 3, 2, 'glow'), Box(-1.5, 4, -1.5, 3, 1, 3, 'metal')])))
+ktorso = P('torso', (0, -1, 0), (0.25, 0, 0), [Box(-4, -12, -2.5, 8, 12, 5, 'cloth'), Box(-3, -11, -3.1, 6, 6, 1, 'bone'), Box(-1, -9, -3.5, 2, 2, 1, 'glow')])
+khead = P('head', (0, -3, 0), boxes=[Box(-3.5, -8, -3.5, 7, 8, 7, 'bone'), Box(-4, -9, -2.5, 8, 9, 7, 'hood'), Box(-3, -6.5, -4.1, 6, 5, 1, 'mask'),
+                                    Box(-2.5, -5.5, -4.4, 2, 2, 1, 'eye'), Box(0.5, -5.5, -4.4, 2, 2, 1, 'eye')]).add(
+    P('jaw', (0, -1.5, -1), boxes=[Box(-2.5, 0, -3, 5, 2, 4, 'bone')]))
+ktorso.add(P('neck', (0, -12, -1), (0.2, 0, 0), [Box(-1, -3, -1, 2, 3, 2, 'bone')]).add(khead))
+karm = P('left_arm', (5, -11, 0), (0, 0, -0.06), [Box(-1, -1, -1.5, 3, 10, 3, 'cloth'), Box(-1.5, 6, -2, 4, 4, 4, 'rags')]).add(
+    P('left_fore', (0.5, 9, 0), boxes=[Box(-1, 0, -1, 2, 9, 2, 'bone')]).add(
+        P('left_hand', (0, 9, 0), boxes=[Box(-1.5, 0, -1.5, 3, 2, 3, 'bone')]).add(
+            *[P(f'left_finger{i}', (x, 2, z), (0.25, 0, 0), [Box(-0.5, 0, -0.5, 1, 4, 1, 'claw')]) for i, (x, z) in enumerate(((-1, -1), (0, -1), (1, -1), (0.5, 1)))])))
+ktorso.add(*pair(karm))
+khips.add(ktorso)
+fingers = {(f'left_finger{i}', 'rx'): [(0, 0), (0.2, -25), (0.4, 40), (1, 0)] for i in range(4)}
+M.append(Model('HollowKeeperModel', 'hollow_keeper', {'cloth': ('cloth', C('#3a3448'), C('#1a1622')), 'rags': ('tatter', C('#34303e'), C('#1a1622')),
+    'hood': ('cloth', C('#2a2634'), C('#141018')), 'metal': ('metal', C('#6a6458'), C('#2e2a24')), 'glow': ('glow', C('#bff0ff'), C('#3a8ab0')),
+    'bone': ('bone', C('#d8d2c0'), C('#8a8270')), 'mask': ('bone', C('#e8e2d0'), C('#8a8270')), 'claw': ('bone', C('#9a9280'), C('#4a4438')),
+    'eye': ('glow', C('#9fe8ff'), C('#0a1a24'))}, [khips, *pair(kleg)], [
+    Clip('time', 90, sym(T(torso_rx=[(0, 0), (0.5, 3)], hips_py=[(0, 0), (0.5, 0.2)], head_rz=even(-4, 4), left_arm_rx=even(-3, 3),
+                           left_fore_rx=shift(even(-6, -2), 0.1), lantern_rz=even(-6, 6), lantern_cage_rz=shift(even(-5, 5), 0.15),
+                           robe_front_low_rx=even(-2, 2), left_finger0_rx=even(0, 8, 0, -4))), 'idleW'),
+    Clip('fidget', 140, T(head_rz=[(0, 0), (0.08, 30), (0.6, 27), (0.75, 0), (1, 0)], head_rx=[(0, 0), (0.08, 8), (0.6, 8), (1, 0)],
+                          jaw_rx=[(0, 0), (0.1, 20), (0.6, 18), (0.8, 0)]), 'idleW', dur=24),
+    Clip('dist', 0.15, merge(sym(gait_leg('left_leg', 'left_shin', 0, 28, 50)), gait_leg('right_leg', 'right_shin', 0.5, 28, 50),
+                             T(left_foot_rx=[(0, 14), (0.3, 0), (0.6, -16), (0.8, 8)], right_foot_rx=shift([(0, 14), (0.3, 0), (0.6, -16), (0.8, 8)], 0.5),
+                               hips_py=even(0, 0.7, 0, 0.7), hips_rz=even(3, -3), torso_ry=even(-8, 8), head_ry=even(6, -6),
+                               left_arm_rx=[(0, 26), (0.5, -26)], right_arm_rx=[(0, -26), (0.5, 26)],
+                               left_fore_rx=shift([(0, -6), (0.5, -26)], 0.12), right_fore_rx=shift([(0, -26), (0.5, -6)], 0.12),
+                               robe_front_rx=even(-10, 6), robe_front_low_rx=shift(even(-14, 8), 0.15), robe_back_rx=even(8, -6),
+                               robe_back_low_rx=shift(even(16, -6), 0.15), lantern_rx=shift(even(-18, 18), 0.2), lantern_cage_rx=shift(even(-12, 12), 0.35))),
+         'moveW'),
+    Clip('attack', 18, merge(fingers, T(left_arm_rx=[(0, 0), (0.25, -150), (0.45, -15), (0.6, 12), (1, 0)], left_arm_rz=[(0, 0), (0.25, -32), (0.45, 28), (1, 0)],
+                                        left_fore_rx=[(0, 0), (0.25, -30), (0.45, 0), (1, 0)], torso_ry=[(0, 0), (0.25, -28), (0.45, 32), (1, 0)],
+                                        torso_rx=[(0, 0), (0.25, -8), (0.45, 14), (1, 0)], jaw_rx=[(0, 0), (0.18, 38), (0.6, 36), (1, 0)]))),
+    hurt_clip('torso', 'head', 0.8)],
+    doc='The Hollow Keeper: a gaunt hooded figure three blocks tall with a bone mask, glowing eyes, long clawed arms, tattered robes and a swinging lantern; it stalks with long strides, twitches its head, and swipes.',
+    look=[('neck', 0.3, 0.3), ('head', 0.7, 0.7)], extra='        torso.yRot -= turn * 0.02f;\n'))
 
 MOB_TEXTURES = {m.texture for m in M}
 
@@ -655,9 +1099,11 @@ def main():
     JAVA.mkdir(parents=True, exist_ok=True)
     for old in JAVA.glob('*.java'): old.unlink()
     for m in M:
+        ground(m)
         W, H = paint(m)
         (JAVA / f'{m.cls}.java').write_text(java(m, W, H))
-    print(f'mobmodels: {len(M)} models and textures')
+    print(f'mobmodels: {len(M)} models, {sum(len(list(all_parts(m.parts))) for m in M)} parts, '
+          f'{sum(len(c.tracks) for m in M for c in m.clips)} animation tracks')
 
 
 if __name__ == '__main__':

@@ -106,6 +106,7 @@ public class Stormwarden extends Monster {
                 if (squall == null) continue;
                 squall.snapTo(getX() + random.nextInt(9) - 4, getY(), getZ() + random.nextInt(9) - 4, random.nextFloat() * 360f, 0f);
                 squall.setTarget(target);
+                com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.CAST);
                 server.addFreshEntity(squall);
             }
             playSound(com.stormreach.registry.ModSfx.CREATURE_TITAN_ROAR, 3.0f, 1.4f);
@@ -114,6 +115,7 @@ public class Stormwarden extends Monster {
 
     /** Knocks every nearby player away from the boss. */
     private void gust(ServerLevel server) {
+        com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.ATTACK);
         server.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, getX(), getY(), getZ(), 1, 0, 0, 0, 0);
         playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 3.0f, 0.6f);
         for (Player p : server.getEntitiesOfClass(Player.class, new AABB(blockPosition()).inflate(10.0), p -> !p.isSpectator() && !p.isCreative())) {

@@ -324,3 +324,29 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
   - Renderer scales were re-fitted to the hitboxes.
   - `tools/preview/mob_preview.py` draws an offline contact sheet of the textured models, as a source check only.
 - run_all order: ... guidebooks, mobmodels, remaster64, fixorder.
+
+### 5.1.0 stage 17 (the user asked for better models, real animation, and the Stranger as a weathered player)
+- Animation runtime (client/anim):
+  - `RigState` holds attack/hurt ages, smoothed air, speed and turn, a per-entity seed, and the saddled/sheared flags.
+  - `RigRenderer` fills it, smoothing per entity in a WeakHashMap.
+  - `Keys` samples Catmull-Rom tracks: loop for cycles, once for one-shots.
+  - `Rig` provides the easing, fidget and pulse helpers.
+- Attack sync: `anim/AnimPulse` broadcasts entity events 113 (attack) and 114 (cast).
+  - `MobMixin` fires it on every doHurtTarget, and the Stormwarden, Sovereign, Cyclone and Wisp fire it at their custom attacks.
+  - `LivingEntityMixin.handleEntityEvent` records it on the client, for stormreach mobs only.
+- `tools/mobmodels.py` rewrite:
+  - `Clip`s (time, dist, fidget, attack, cast, hurt) are made of tracks per part channel (degrees, units, scale delta), blended by moveW/idleW/air/ground/swim/dry, plus look and an `extra` Java block.
+  - Every part gets a field.
+  - Grounded models are auto-placed so their lowest point sits at y=24.
+  - The painter quantizes a value field onto a 7-tone ramp with Bayer dithering and bevels.
+- `tools/preview/mob_preview.py` modes:
+  - `sheet`: the rest-pose sheet.
+  - `anim`: per-clip frame strips, evaluated exactly like the Java. The Java Keys output was checked against the Python sampler, with a max difference of 5e-5.
+  - `gif`: an animated GIF of one clip.
+- Stranger:
+  - `client/story/WeatheredSkins` reads the viewer's skin from the DynamicTexture or a resource, and `weather(int[] argb, ...)` is pure.
+  - It was checked offline on the vanilla default skins.
+  - `WeatheredModel` extends PlayerModel and adds the slump, breath, head drift and snap.
+  - `StrangerRenderer` is now a LivingEntityRenderer that swaps between the wide and slim models.
+  - Client-side drip particles were added in `Stranger.tick`.
+- Renderers moved to RigRenderer. The Puffling and Skyray `State` classes are replaced by RigState.

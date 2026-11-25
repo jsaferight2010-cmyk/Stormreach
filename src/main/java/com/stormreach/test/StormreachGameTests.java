@@ -449,4 +449,22 @@ public class StormreachGameTests {
         Check.isTrue(h, BackpackStorage.read(back, 27).items.get(0).is(Items.EMERALD), "the backpack lost its contents");
         h.succeed();
     }
+
+    @GameTest(maxTicks = 20)
+    public void weatherScreensMeasureAndTheirDataSurvivesTheNetwork(GameTestHelper h) {
+        Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 1)));
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), at.add(30, 0, 0), stationary(TornadoFormation.SUPERCELL, EFScale.EF2, 120, 10));
+        var r = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.TORNADO_RADAR.ordinal(), BlockPos.containing(at));
+        Check.isTrue(h, t == null || !r.contacts().isEmpty(), "the Doppler radar screen didn't see a tornado 30 blocks away");
+        Check.isTrue(h, r.range() >= 512, "the Doppler radar's range is too short");
+        var buf = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        com.stormreach.tornado.WeatherUi.ReportPayload.CODEC.encode(buf, new com.stormreach.tornado.WeatherUi.ReportPayload(true, r));
+        var back = com.stormreach.tornado.WeatherUi.ReportPayload.CODEC.decode(buf);
+        Check.isTrue(h, back.report().contacts().size() == r.contacts().size() && back.report().pos().equals(r.pos())
+                && Math.abs(back.report().tempC() - r.tempC()) < 1e-3, "the weather report changed on its way over the network");
+        var anemo = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.ANEMOMETER.ordinal(), BlockPos.containing(at));
+        Check.isTrue(h, anemo.contacts().isEmpty(), "an anemometer shouldn't report radar contacts");
+        if (t != null) t.discard();
+        h.succeed();
+    }
 }

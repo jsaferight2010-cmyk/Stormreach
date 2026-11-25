@@ -71,7 +71,9 @@ public final class WeatherItems {
 
     private WeatherItems() {}
 
-    public static void init() {}
+    public static void init() {
+        WeatherUi.init();
+    }
 
     private static Block block(String name, InstrumentBlock.Kind kind) {
         ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Stormreach.id(name));
@@ -100,7 +102,9 @@ public final class WeatherItems {
 
         @Override
         public InteractionResult use(Level level, Player player, InteractionHand hand) {
-            if (level instanceof ServerLevel server) {
+            if (level instanceof ServerLevel server && player instanceof net.minecraft.server.level.ServerPlayer sp && !player.isSecondaryUseActive()) {
+                WeatherUi.open(sp, radar ? WeatherUi.STORM_RADAR_ITEM : WeatherUi.WEATHER_RADIO_ITEM, sp.blockPosition());
+            } else if (level instanceof ServerLevel server) {
                 if (radar) InstrumentBlock.radar(server, player.position(), player, 512, false);
                 else {
                     player.sendSystemMessage(Component.translatable("instrument.stormreach.radio", Instruments.forecast(server),

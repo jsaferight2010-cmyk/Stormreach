@@ -80,7 +80,11 @@ public class InstrumentBlock extends Block {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (level instanceof ServerLevel server) report(kind, server, pos, player);
+        // its own screen; sneak + use prints the old one-line reading in chat
+        if (level instanceof ServerLevel server) {
+            if (player.isSecondaryUseActive() || !(player instanceof net.minecraft.server.level.ServerPlayer sp)) report(kind, server, pos, player);
+            else WeatherUi.open(sp, kind.ordinal(), pos);
+        }
         return InteractionResult.SUCCESS;
     }
 
@@ -115,6 +119,11 @@ public class InstrumentBlock extends Block {
                 else player.sendSystemMessage(line("monitor.unlinked").withStyle(ChatFormatting.GRAY));
             }
         }
+    }
+
+    /** True when a Weather Station and a Doppler radar are within 8 blocks of a Weather Monitor. */
+    public static boolean monitorLinked(ServerLevel level, BlockPos pos) {
+        return nearby(level, pos, kindBlock(Kind.WEATHER_STATION)) && nearby(level, pos, kindBlock(Kind.TORNADO_RADAR));
     }
 
     private static Block kindBlock(Kind k) {

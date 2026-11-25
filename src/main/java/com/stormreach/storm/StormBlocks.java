@@ -71,7 +71,7 @@ public final class StormBlocks {
             Identifier id = BuiltInRegistries.BLOCK.getKey(b);
             if (id.getNamespace().equals("minecraft") && wanted.contains(id.getPath())) vanilla.add(b);
         }
-        int skipped = 0;
+        int skipped = 0, itemFailures = 0;
         java.util.Set<Object> holdersBefore = pendingIntrusiveHolders();
         for (Block v : vanilla) {
             try {
@@ -88,11 +88,13 @@ public final class StormBlocks {
             try {
                 registerItem(e.getKey(), e.getValue());
             } catch (Throwable t) {
-                Stormreach.LOGGER.debug("No storm item for {}: {}", BuiltInRegistries.BLOCK.getKey(e.getKey()), t.toString());
+                if (itemFailures++ < 5) Stormreach.LOGGER.warn("No storm item for {}", BuiltInRegistries.BLOCK.getKey(e.getKey()), t);
             }
         }
-        Stormreach.LOGGER.info("Stormreach: generated {} storm blocks ({} skipped)", STORM_OF.size(), skipped);
+        Stormreach.LOGGER.info("Stormreach: generated {} storm blocks ({} skipped), {} items ({} failed)", STORM_OF.size(), skipped, ITEMS.size(), itemFailures);
     }
+
+    private static int noItem;
 
     private static Set<String> readList(String resource) {
         Set<String> names = new HashSet<>();
@@ -170,10 +172,12 @@ public final class StormBlocks {
     }
 
     private static void registerItem(Block vanilla, Block storm) throws Exception {
-        Item v = vanilla.asItem();
-        if (v == Items.AIR) return;
+        Identifier bid = BuiltInRegistries.BLOCK.getKey(vanilla);
+        // the vanilla item with the same name (Block.asItem() can't be trusted this early in 26.x)
+        Item v = BuiltInRegistries.ITEM.getOptional(bid).orElse(vanilla.asItem());
+        if (v == Items.AIR) { if (noItem++ < 3) Stormreach.LOGGER.info("Stormreach: no vanilla item for {}", bid); return; }
         Identifier vid = BuiltInRegistries.ITEM.getKey(v);
-        if (!vid.getPath().equals(BuiltInRegistries.BLOCK.getKey(vanilla).getPath())) return;
+        if (!vid.getPath().equals(bid.getPath())) return;
         Identifier sid = BuiltInRegistries.BLOCK.getKey(storm);
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, sid);
         Item.Properties props = new Item.Properties().setId(key).useBlockDescriptionPrefix().stacksTo(v.getDefaultMaxStackSize());

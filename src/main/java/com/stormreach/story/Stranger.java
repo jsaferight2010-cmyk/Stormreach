@@ -24,6 +24,9 @@ import java.util.UUID;
  * It can't be hurt or interacted with, and it's gone the moment you look straight at it or come close.
  */
 public class Stranger extends PathfinderMob {
+    /** The player this one is a copy of (UUID string, empty if none), synced so their skin can be worn. */
+    private static final net.minecraft.network.syncher.EntityDataAccessor<String> MIRROR =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(Stranger.class, net.minecraft.network.syncher.EntityDataSerializers.STRING);
     private UUID watching;
     private int lifetime = 200 + 200;
 
@@ -37,8 +40,21 @@ public class Stranger extends PathfinderMob {
         return PathfinderMob.createMobAttributes().add(Attributes.MAX_HEALTH, 20).add(Attributes.MOVEMENT_SPEED, 0.0);
     }
 
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder b) {
+        super.defineSynchedData(b);
+        b.define(MIRROR, "");
+    }
+
+    /** The UUID of the player whose skin this Stranger wears (the player it follows), or null. */
+    public UUID mirrored() {
+        String v = entityData.get(MIRROR);
+        try { return v.isEmpty() ? null : UUID.fromString(v); } catch (IllegalArgumentException e) { return null; }
+    }
+
     public void watch(ServerPlayer p, int ticks) {
         this.watching = p.getUUID();
+        entityData.set(MIRROR, p.getUUID().toString());
         this.lifetime = ticks;
     }
 

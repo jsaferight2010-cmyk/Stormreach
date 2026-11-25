@@ -59,6 +59,8 @@ import java.util.Random;
  */
 public class CyrrusBoss extends Monster {
     private static final EntityDataAccessor<Integer> FORM = SynchedEntityData.defineId(CyrrusBoss.class, EntityDataSerializers.INT);
+    /** The player Cyrrus has become a storm-twisted copy of (the one who called it), as a UUID string. */
+    private static final EntityDataAccessor<String> MIRROR = SynchedEntityData.defineId(CyrrusBoss.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> CINEMATIC = SynchedEntityData.defineId(CyrrusBoss.class, EntityDataSerializers.BOOLEAN);
 
     private final ServerBossEvent bar = new ServerBossEvent(java.util.UUID.randomUUID(), Component.translatable("entity.stormreach.cyrrus"),
@@ -98,10 +100,21 @@ public class CyrrusBoss extends Monster {
     protected void defineSynchedData(SynchedEntityData.Builder b) {
         super.defineSynchedData(b);
         b.define(FORM, 0);
+        b.define(MIRROR, "");
         b.define(CINEMATIC, false);
     }
 
     /** 0 = the Stranger's shape, 1 = corrupted giant, 2 = final storm form. */
+    /** Makes Cyrrus wear this player's likeness: the thing that followed them all game, now in its true form. */
+    public void mirror(net.minecraft.world.entity.player.Player p) {
+        entityData.set(MIRROR, p.getUUID().toString());
+    }
+
+    public java.util.UUID mirrored() {
+        String v = entityData.get(MIRROR);
+        try { return v.isEmpty() ? null : java.util.UUID.fromString(v); } catch (IllegalArgumentException e) { return null; }
+    }
+
     public int form() {
         return entityData.get(FORM);
     }
@@ -427,6 +440,7 @@ public class CyrrusBoss extends Monster {
     protected void addAdditionalSaveData(ValueOutput out) {
         super.addAdditionalSaveData(out);
         out.putInt("Form", form());
+        out.putString("Mirror", entityData.get(MIRROR));
         out.putInt("Phase", phase);
         out.putInt("Scale100", (int) Math.round(targetScale * 100));
     }
@@ -435,6 +449,7 @@ public class CyrrusBoss extends Monster {
     protected void readAdditionalSaveData(ValueInput in) {
         super.readAdditionalSaveData(in);
         entityData.set(FORM, in.getIntOr("Form", 1));
+        entityData.set(MIRROR, in.getStringOr("Mirror", ""));
         phase = in.getIntOr("Phase", 1);
         targetScale = in.getIntOr("Scale100", 400) / 100.0;
         phaseLines = ModSounds.loadScript("cyrrus_phases");

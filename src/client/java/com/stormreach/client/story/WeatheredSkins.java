@@ -18,40 +18,61 @@ import java.util.Map;
  * hollow (whites dark, pupils pale). Works on any skin, at any resolution, at runtime; results are cached per skin.
  */
 public final class WeatheredSkins {
-    private static final Map<Identifier, Identifier> CACHE = new HashMap<>();
-    private static final Map<Identifier, Integer> FAILED_AT = new HashMap<>();
+    private static final Map<String, Identifier[]> CACHE = new HashMap<>();
+    private static final Map<String, Integer> FAILED_AT = new HashMap<>();
+    /** Stages: 0 the Stranger (weathered); 1 and 2 Cyrrus's forms (storm-corrupted, with glowing veins). */
+    public static final int STRANGER = 0, CORRUPTED = 1, FINAL = 2;
 
     private WeatheredSkins() {}
 
     /** The weathered texture for this skin, or the plain skin while the original isn't available yet. */
     public static Identifier get(PlayerSkin skin) {
+        return get(skin, STRANGER)[0];
+    }
+
+    /**
+     * {skin texture, glow texture or null} for this skin at a stage. While the player's skin isn't available yet,
+     * returns the plain skin (and tries again a few seconds later).
+     */
+    public static Identifier[] get(PlayerSkin skin, int stage) {
         Identifier src = skin.body().texturePath();
-        Identifier done = CACHE.get(src);
+        String key = src + "#" + stage;
+        Identifier[] done = CACHE.get(key);
         if (done != null) return done;
         Minecraft mc = Minecraft.getInstance();
         int now = mc.player == null ? 0 : mc.player.tickCount;
-        Integer failed = FAILED_AT.get(src);
-        if (failed != null && now - failed < 100) return src;
+        Integer failed = FAILED_AT.get(key);
+        if (failed != null && now - failed < 100) return new Identifier[] {src, null};
         NativeImage img = read(mc, src);
         if (img == null) {
-            FAILED_AT.put(src, now);
-            return src;
+            FAILED_AT.put(key, now);
+            return new Identifier[] {src, null};
         }
         try {
             int w = img.getWidth(), h = img.getHeight();
             int[] px = new int[w * h];
             for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) px[y * w + x] = img.getPixel(x, y);
-            weather(px, w, h, src.hashCode());
+            int[] glow = stage > STRANGER ? new int[w * h] : null;
+            weather(px, w, h, src.hashCode(), stage, glow);
             for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) img.setPixel(x, y, px[y * w + x]);
-            Identifier id = Stormreach.id("weathered/" + Integer.toHexString(src.hashCode() & 0x7fffffff));
+            String tag = Integer.toHexString(src.hashCode() & 0x7fffffff) + "_" + stage;
+            Identifier id = Stormreach.id("weathered/" + tag);
             mc.getTextureManager().register(id, new DynamicTexture(() -> "stormreach weathered skin", img));
-            CACHE.put(src, id);
-            return id;
+            Identifier glowId = null;
+            if (glow != null) {
+                NativeImage g = new NativeImage(w, h, true);
+                for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) g.setPixel(x, y, glow[y * w + x]);
+                glowId = Stormreach.id("weathered/" + tag + "_glow");
+                mc.getTextureManager().register(glowId, new DynamicTexture(() -> "stormreach storm veins", g));
+            }
+            Identifier[] out = {id, glowId};
+            CACHE.put(key, out);
+            return out;
         } catch (RuntimeException e) {
             Stormreach.LOGGER.warn("Couldn't weather skin {}", src, e);
             img.close();
-            FAILED_AT.put(src, now);
-            return src;
+            FAILED_AT.put(key, now);
+            return new Identifier[] {src, null};
         }
     }
 
@@ -102,16 +123,26 @@ public final class WeatheredSkins {
         return new float[] {v < 16 ? 0.05f : 0.5f, 0, outer ? 1 : 0, 0};
     }
 
-    /** Weathers ARGB pixels in place (pure: no game classes, so it can be tested offline). */
+    /** Stage 0 only (the Stranger). */
     public static void weather(int[] img, int w, int h, int seed) {
+        weather(img, w, h, seed, STRANGER, null);
+    }
+
+    /**
+     * Weathers ARGB pixels in place (pure: no game classes, so it can be tested offline). Stages above 0 also darken
+     * the skin toward storm-indigo and grow branching lightning veins over it, written into {@code glow} too (the
+     * emissive layer), along with the eyes, which burn instead of going pale.
+     */
+    public static void weather(int[] img, int w, int h, int seed, int stage, int[] glow) {
         float sc = w / 64f;
-        hollowEyes(img, w, sc, 8, 8);
-        hollowEyes(img, w, sc, 40, 8);
+        int[] eye = new int[w * h];
+        hollowEyes(img, eye, w, sc, 8, 8);
+        hollowEyes(img, eye, w, sc, 40, 8);
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
                 int c = img[y * w + x];
                 int a = c >>> 24;
-                if (a == 0) continue;
+                if (a == 0 || eye[y * w + x] != 0) continue;
                 int u = (int) (x / sc), v = (int) (y / sc);
                 float[] loc = locate(u, v);
                 float down = loc[0];
@@ -152,14 +183,53 @@ public final class WeatheredSkins {
                     if (loc[3] > fray) a = 0;
                     else if (hash(x / Math.max(1, (int) sc), y / Math.max(1, (int) sc), seed + 3) % 53 == 0) a = 0;
                 }
+                if (stage > STRANGER) {
+                    float k = stage == FINAL ? 0.42f : 0.24f;
+                    r += (34 - r) * k; g += (38 - g) * k; b += (78 - b) * k;
+                }
                 int ri = clamp(r), gi = clamp(g), bi = clamp(b);
                 img[y * w + x] = a << 24 | ri << 16 | gi << 8 | bi;
+            }
+        }
+        for (int i = 0; i < img.length; i++) {
+            if (eye[i] == 1) img[i] = stage > STRANGER ? 0xFF0E1018 : 0xFF16181E;
+            else if (eye[i] == 2) {
+                img[i] = stage > STRANGER ? 0xFFBFF4FF : 0xFFC4D2DC;
+                if (glow != null) glow[i] = 0xFFBFF4FF;
+            }
+        }
+        if (stage > STRANGER && glow != null) veins(img, glow, w, h, sc, seed, stage);
+    }
+
+    /** Branching lightning veins: short jagged walks down the body, arms, legs and face. */
+    private static void veins(int[] img, int[] glow, int w, int h, float sc, int seed, int stage) {
+        int[][] starts = {{10, 9}, {13, 10}, {21, 21}, {25, 22}, {23, 26}, {44, 21}, {37, 53}, {5, 21}, {21, 53}, {33, 21}, {48, 21}, {2, 21}};
+        int walkers = stage == FINAL ? 14 : 7;
+        int px = Math.max(1, Math.round(sc));
+        for (int n = 0; n < walkers; n++) {
+            int[] st = starts[n % starts.length];
+            int u = st[0] + hash(n, 1, seed) % 3 - 1, v = st[1] + hash(n, 2, seed) % 2;
+            int len = 3 + hash(n, 3, seed) % (stage == FINAL ? 7 : 5);
+            for (int i = 0; i < len; i++) {
+                for (int dy = 0; dy < px; dy++) for (int dx = 0; dx < px; dx++) {
+                    int x = (int) (u * sc) + dx, y = (int) (v * sc) + dy;
+                    if (x < 0 || y < 0 || x >= w || y >= h) continue;
+                    int idx = y * w + x;
+                    if ((img[idx] >>> 24) == 0) continue;
+                    // bright where the bolt is young, fading toward its tip
+                    boolean core = i < len / 2;
+                    img[idx] = core ? 0xFF8FE4FF : 0xFF4A86B0;
+                    glow[idx] = core ? 0xFF9FEAFF : 0x804A9AD0;
+                }
+                v++;
+                int turn = hash(n, i + 10, seed) % 5;
+                u += turn == 0 ? -1 : turn == 1 ? 1 : 0;
             }
         }
     }
 
     /** In the face (front of the head, or of the hat), eye whites go dark and the pupils beside them go pale. */
-    private static void hollowEyes(int[] img, int w, float sc, int fx, int fy) {
+    private static void hollowEyes(int[] img, int[] eye, int w, float sc, int fx, int fy) {
         int x0 = (int) (fx * sc), y0 = (int) ((fy + 1) * sc), x1 = (int) ((fx + 8) * sc), y1 = (int) ((fy + 7) * sc);
         boolean[][] white = new boolean[x1 - x0][y1 - y0];
         int found = 0, minX = Integer.MAX_VALUE, maxX = -1, minY = Integer.MAX_VALUE, maxY = -1;
@@ -183,10 +253,10 @@ public final class WeatheredSkins {
                 int c = img[y * w + x];
                 if (c >>> 24 < 128) continue;
                 if (white[x - x0][y - y0]) {
-                    img[y * w + x] = 0xFF16181E;
+                    eye[y * w + x] = 1;
                 } else {
                     int r = c >> 16 & 255, g = c >> 8 & 255, b = c & 255;
-                    if (r + g + b < 360) img[y * w + x] = 0xFFC4D2DC;
+                    if (r + g + b < 360) eye[y * w + x] = 2;
                 }
             }
         }

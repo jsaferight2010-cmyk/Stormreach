@@ -1,5 +1,9 @@
 package com.stormreach.client.story;
 
+import net.minecraft.util.Mth;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.resources.DefaultPlayerSkin;
@@ -38,8 +42,8 @@ public final class StoryRenderers {
     }
 
     /**
-     * The Stranger is you, weathered: the player model wearing a storm-worn copy of the viewing player's own skin
-     * (see {@link WeatheredSkins}), posed by {@link WeatheredModel}. Each player who sees it sees themselves.
+     * The Stranger is you, weathered: the player model wearing a storm-worn copy of the in-game skin of the player it
+     * follows (see {@link MirrorSkins} and {@link WeatheredSkins}), posed by {@link WeatheredModel}.
      */
     public static class StrangerRenderer extends LivingEntityRenderer<Stranger, StrangerState, PlayerModel> {
         private final PlayerModel wide, slim;
@@ -57,7 +61,8 @@ public final class StoryRenderers {
             super.extractRenderState(e, s, partial);
             HumanoidMobRenderer.extractHumanoidRenderState(e, s, partial, itemModelResolver);
             Minecraft mc = Minecraft.getInstance();
-            PlayerSkin skin = mc.player != null ? mc.player.getSkin() : DefaultPlayerSkin.getDefaultSkin();
+            // the player it has been following: its skin, worn and weathered
+            PlayerSkin skin = MirrorSkins.of(e.mirrored());
             s.skin = skin;
             s.slim = skin.model() == PlayerModelType.SLIM;
             s.texture = WeatheredSkins.get(skin);
@@ -81,16 +86,32 @@ public final class StoryRenderers {
         }
     }
 
-    public static class CyrrusState extends HumanoidRenderState {
+    public static class CyrrusState extends StrangerState {
         public int form;
+        public Identifier glow;
     }
 
-    public static class CyrrusRenderer extends HumanoidMobRenderer<CyrrusBoss, CyrrusState, HumanoidModel<CyrrusState>> {
-        private static final Identifier[] TEXTURES = {Stormreach.id("textures/entity/stranger.png"),
-                Stormreach.id("textures/entity/cyrrus.png"), Stormreach.id("textures/entity/cyrrus_final.png")};
+    /**
+     * Cyrrus, the Hollow Storm: the thing that followed you all game, in its true form. It wears the in-game skin of
+     * the player who called it, storm-corrupted (indigo, with lightning veins that glow in the dark and burning eyes),
+     * and more so in its final form. Scaled by its Scale attribute.
+     */
+    public static class CyrrusRenderer extends LivingEntityRenderer<CyrrusBoss, CyrrusState, PlayerModel> {
+        private final PlayerModel wide, slim;
 
         public CyrrusRenderer(EntityRendererProvider.Context c) {
-            super(c, new HumanoidModel<>(c.bakeLayer(ModelLayers.ZOMBIE)), 0.6f);
+            super(c, new CyrrusModel(c.bakeLayer(ModelLayers.PLAYER), false), 0.6f);
+            this.wide = this.model;
+            this.slim = new CyrrusModel(c.bakeLayer(ModelLayers.PLAYER_SLIM), true);
+            addLayer(new RenderLayer<CyrrusState, PlayerModel>(this) {
+                @Override
+                public void submit(PoseStack pose, SubmitNodeCollector out, int light, CyrrusState s, float yRot, float xRot) {
+                    if (s.glow == null || s.isInvisible) return;
+                    float pulse = 0.75f + 0.25f * Mth.sin(s.ageInTicks * 0.25f);
+                    int a = (int) (255 * pulse);
+                    out.submitModel(getParentModel(), s, pose, RenderTypes.eyes(s.glow), 0xF000F0, OverlayTexture.NO_OVERLAY, a << 24 | 0xFFFFFF);
+                }
+            });
         }
 
         @Override public CyrrusState createRenderState() { return new CyrrusState(); }
@@ -98,11 +119,28 @@ public final class StoryRenderers {
         @Override
         public void extractRenderState(CyrrusBoss e, CyrrusState s, float partial) {
             super.extractRenderState(e, s, partial);
+            HumanoidMobRenderer.extractHumanoidRenderState(e, s, partial, itemModelResolver);
             s.form = e.form();
+            PlayerSkin skin = MirrorSkins.of(e.mirrored());
+            Identifier[] tex = WeatheredSkins.get(skin, Math.min(2, s.form));
+            s.skin = skin;
+            s.slim = skin.model() == PlayerModelType.SLIM;
+            s.texture = tex[0];
+            s.glow = tex[1];
+            s.id = e.getId();
+            s.showHat = s.showJacket = s.showLeftSleeve = s.showRightSleeve = s.showLeftPants = s.showRightPants = true;
+            s.showCape = false;
         }
 
-        @Override public Identifier getTextureLocation(CyrrusState s) { return TEXTURES[Math.max(0, Math.min(2, s.form))]; }
+        @Override
+        public void submit(CyrrusState s, PoseStack pose, SubmitNodeCollector out, CameraRenderState camera) {
+            this.model = s.slim ? slim : wide;
+            super.submit(s, pose, out, camera);
+        }
+
+        @Override public Identifier getTextureLocation(CyrrusState s) { return s.texture; }
         @Override protected int getBlockLightLevel(CyrrusBoss e, BlockPos pos) { return e.form() > 0 ? 12 : super.getBlockLightLevel(e, pos); }
+        @Override protected void scale(CyrrusState s, PoseStack pose) { pose.scale(0.9375f, 0.9375f, 0.9375f); }
     }
 
     public static class KeeperRenderer extends RigRenderer<HollowKeeper, HollowKeeperModel> {

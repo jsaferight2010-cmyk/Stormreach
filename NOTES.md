@@ -350,3 +350,12 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
   - `StrangerRenderer` is now a LivingEntityRenderer that swaps between the wide and slim models.
   - Client-side drip particles were added in `Stranger.tick`.
 - Renderers moved to RigRenderer. The Puffling and Skyray `State` classes are replaced by RigState.
+- Mirror skins (the user then asked for the follower to adapt to the player's own in-game skin):
+  - `Stranger` and `CyrrusBoss` sync a MIRROR UUID string. The Stranger gets it from `watch(p)`, and Cyrrus from `mirror(player)` at the Hollow Altar. Cyrrus saves it as "Mirror".
+  - Client `MirrorSkins.of(uuid)` looks in the tab list, then the loaded player, then the default skin for that UUID.
+  - `WeatheredSkins.get(skin, stage)` returns {texture, glow}:
+    - Stage 0 is the Stranger.
+    - Stages 1 and 2 are Cyrrus's forms: an indigo shift, branching vein walkers, and burning eyes.
+    - The glow texture is drawn by a `RenderTypes.eyes` layer, pulsing.
+    - It was checked offline on the default skins (Steve, Alex, Efe) at all three stages.
+  - `CyrrusModel` extends PlayerModel and layers poses by form over the walk and attack swings.

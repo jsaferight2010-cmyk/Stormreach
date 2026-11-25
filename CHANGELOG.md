@@ -4,13 +4,14 @@
 Built and tested in seventeen stages.
 
 ### Stage 17: the Stranger is you, and every mob is properly animated
-- **The Stranger now looks like you, weathered by the storm.** It uses the player model with a storm-worn copy of the skin of whoever is looking at it, so every player sees themselves:
-  - drained of colour, cold and pale, and soaked darker toward the feet
-  - rain-streaked and salt-flecked, with mud on the boots
-  - the outer layer frayed at the hems and torn in places
-  - the eyes hollowed out: the whites go dark and the pupils pale
-  - It works with any skin, slim or wide, at any resolution.
-  - It stands slumped with its arms hanging, breathes, lets its head drift sideways, and now and then snaps its head to one side. Water drips off it.
+- **The thing that follows you wears your skin.** The game reads your in-game skin, slim or wide and at any resolution, and the creature that stalks you through the playthrough becomes a storm-worn copy of you. In multiplayer, each Stranger copies the player it is following, and everyone else sees that player's likeness too.
+  - **The Stranger:**
+    - drained of colour, cold and pale, and soaked darker toward the feet
+    - rain-streaked and salt-flecked, with mud on the boots
+    - the outer layer frayed at the hems and torn in places
+    - the eyes hollowed out: the whites go dark and the pupils pale
+    - It stands slumped with its arms hanging, breathes, lets its head drift sideways, and now and then snaps its head to one side. Water drips off it.
+  - **Cyrrus, its true form, becomes the player who called it at the Hollow Altar.** First it is the Stranger, slumped. When corrupted, it turns storm-indigo, lightning veins run over the body, the eyes burn, and veins and eyes glow in the dark. It stands tall with arms held out, trembling with charge. In its final form it is darker, more veined and stronger.
 - **Sharper models.** Textures are painted with shaded colour ramps (cool shadows, warm highlights) and bevelled edges, so every part reads clearly. Materials are crisper: lacquered shell plates, clumped fur, rounded overlapping feathers, masonry with glowing runes, folded cloth with ragged hems, billowing fleece.
 - **More detail:** the crab has chewing mandibles and three-jointed legs, birds have flight feathers and a lower beak, and the Keeper has fingers, a hood and robe panels. The Puffling's fleece is lumpy and the Sovereign's cape has three parts. 522 parts across the 17 models.
 - **Proper keyframed animation** (594 tracks), smoothed with splines, for every mob:

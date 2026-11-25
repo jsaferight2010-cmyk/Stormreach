@@ -175,6 +175,7 @@ public final class ShrineBlocks {
             CyrrusBoss boss = StoryRegistry.CYRRUS.create(server, EntitySpawnReason.EVENT);
             if (boss == null) return InteractionResult.FAIL;
             boss.snapTo(pos.getX() + 0.5, pos.getY() - 4, pos.getZ() + 0.5, 0, 0);
+            boss.mirror(player);
             boss.beginCinematic(pos);
             server.addFreshEntity(boss);
             if (player instanceof ServerPlayer sp) StormAdvancements.award(sp, "shrine_ritual");

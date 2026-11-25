@@ -535,4 +535,18 @@ public class StormreachGameTests {
         Check.isTrue(h, min <= 2 && max >= 10, "lamp light should both gutter and flare over time (" + min + ".." + max + ")");
         h.succeed();
     }
+
+    @GameTest
+    public void guidebooksAreGivenOnceAndNeverLost(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        Check.isTrue(h, com.stormreach.guide.Guidebooks.giveOnce(p), "the first join should give the guidebooks");
+        int books = 0;
+        for (int i = 0; i < p.getInventory().getContainerSize(); i++) {
+            var it = p.getInventory().getItem(i);
+            if (it.is(com.stormreach.guide.Guidebooks.FIELD_GUIDE_ITEM) || it.is(com.stormreach.guide.Guidebooks.CRAFTING_ITEM)) books++;
+        }
+        Check.isTrue(h, books == 2, "expected both guidebooks, found " + books);
+        Check.isFalse(h, com.stormreach.guide.Guidebooks.giveOnce(p), "guidebooks were given twice");
+        h.succeed();
+    }
 }

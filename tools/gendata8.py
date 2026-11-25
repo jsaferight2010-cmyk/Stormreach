@@ -102,6 +102,7 @@ EVENT_KINDS = ['supercell', 'downburst', 'hailstorm', 'ball_lightning', 'dispel'
 for k in SPAWNER_KINDS: gen_item(f'tornado_spawner_{k}')
 for k in EVENT_KINDS: gen_item(f'weather_event_{k}')
 gen_item('tornado_director')
+gen_item('stormreach_field_guide'); gen_item('storm_crafters_handbook')
 # GameTest environment for tests that change world-wide state (weather, every tornado): its own batch, run apart
 w(f'{D}/test_environment/isolated.json', {'type': 'minecraft:all_of', 'definitions': []})
 # ---- 5.1 stage 3: hail on the ground, puddles
@@ -396,6 +397,18 @@ MSG = {
  'item.stormreach.labyrinth_key_gale.tooltip': 'One of three keys to the Vault Door at the heart of the maze. It fits only the Gale lock.',
  'item.stormreach.labyrinth_key_thunder.tooltip': 'One of three keys to the Vault Door at the heart of the maze. It fits only the Thunder lock.',
  'item.stormreach.labyrinth_key_hollow.tooltip': 'One of three keys to the Vault Door at the heart of the maze. It fits only the Hollow lock.',
+ 'item.stormreach.stormreach_field_guide': 'Stormreach Field Guide',
+ 'item.stormreach.storm_crafters_handbook': "Storm Crafter's Handbook",
+ 'item.stormreach.stormreach_field_guide.tooltip': 'Everything in Stormreach: weather, tornadoes, the Labyrinth, the realm, rarity tables.',
+ 'item.stormreach.storm_crafters_handbook.tooltip': 'Every Stormreach recipe, with the real items.',
+ 'item.stormreach.guidebooks.given': "You received the Stormreach Field Guide and the Storm Crafter's Handbook. Use them to read.",
+ 'gui.stormreach.guide.kind.shaped': 'Crafting table',
+ 'gui.stormreach.guide.kind.shapeless': 'Crafting (any arrangement)',
+ 'gui.stormreach.guide.kind.smelting': 'Furnace',
+ 'gui.stormreach.guide.kind.blasting': 'Blast furnace',
+ 'gui.stormreach.guide.kind.smoking': 'Smoker',
+ 'gui.stormreach.guide.kind.campfire_cooking': 'Campfire',
+ 'gui.stormreach.guide.kind.stonecutting': 'Stonecutter',
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',
@@ -609,6 +622,9 @@ shaped('elderstorm_trapdoor', ['###', '###'], {'#': 'elderstorm_planks'}, 'elder
 shapeless('elderstorm_button', ['elderstorm_planks'], 'elderstorm_button', 1, 'redstone')
 shaped('elderstorm_pressure_plate', ['##'], {'#': 'elderstorm_planks'}, 'elderstorm_pressure_plate', 1, 'redstone')
 shapeless('yellow_dye_from_thunderbloom', ['thunderbloom'], 'minecraft:yellow_dye', 1, 'misc')
+# 5.1 guidebooks can always be re-crafted
+shapeless('stormreach_field_guide', ['minecraft:book', 'storm_shard'], 'stormreach_field_guide')
+shapeless('storm_crafters_handbook', ['minecraft:book', 'minecraft:crafting_table'], 'storm_crafters_handbook')
 
 # =====================================================================================
 # TAGS

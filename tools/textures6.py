@@ -275,4 +275,21 @@ for kind, col in KEYC.items():
             img.putpixel((14 + t, 14 + t + w), col + (255,)); img.putpixel((14 + t + w, 14 + t), dark)
     for bx, by in ((22, 26), (23, 27), (26, 22), (27, 23), (24, 28), (28, 24)): img.putpixel((bx, by), dark)
     img.save(f'{OUT}/item/labyrinth_key_{kind}.png')
+# guidebooks (32x item textures): a storm-blue field guide with a lightning clasp, a brown handbook with a grid
+for name, cover, mark in (('stormreach_field_guide', (44, 70, 110), 'bolt'), ('storm_crafters_handbook', (110, 70, 40), 'grid')):
+    img = Image.new('RGBA', (32, 32), (0, 0, 0, 0))
+    for y in range(4, 29):
+        for x in range(6, 26):
+            edge = x in (6, 25) or y in (4, 28)
+            img.putpixel((x, y), tuple(int(c * (0.6 if edge else 1)) for c in cover) + (255,))
+        for x in range(26, 28): img.putpixel((x, y), (236, 226, 200, 255))          # page edges
+    for y in range(4, 29): img.putpixel((8, y), tuple(int(c * 0.75) for c in cover) + (255,))  # spine crease
+    if mark == 'bolt':
+        for i, (x, y) in enumerate([(17, 8), (16, 9), (15, 10), (14, 11), (13, 12), (15, 12), (16, 12), (17, 12), (16, 13), (15, 14), (14, 15), (13, 16), (12, 17), (12, 18), (13, 18)]):
+            img.putpixel((x, y), (242, 201, 76, 255))
+    else:
+        for gy in range(9, 22):
+            for gx in range(11, 24):
+                if (gx - 11) % 4 == 0 or (gy - 9) % 4 == 0: img.putpixel((gx, gy), (230, 200, 140, 255))
+    img.save(f'{OUT}/item/{name}.png')
 print('textures6 done')

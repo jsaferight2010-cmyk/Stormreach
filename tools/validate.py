@@ -111,7 +111,7 @@ for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'st
 # 5.1: hail and puddles, and the Doppler radar (its block and item are registered by hand, not through block())
 src51 = jsrc('weather/precip/PrecipContent.java')
 nb += re.findall(r'\bblock\("([a-z_0-9]+)"', src51); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src51)
-nb += ['tornado_radar', 'radar_part']; ni += ['tornado_radar']
+nb += ['tornado_radar', 'radar_part']; ni += ['tornado_radar', 'stormreach_field_guide', 'storm_crafters_handbook']
 ni = [i for i in ni if not i.endswith('_')]
 ni += ['tornado_spawner_' + k.strip().lower() for k in re.findall(r'enum SpawnerKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
 ni = [i.strip() for i in ni]

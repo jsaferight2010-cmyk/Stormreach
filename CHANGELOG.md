@@ -3,6 +3,12 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 8: two guidebooks
+- **Every player gets two books the first time they join**, once only. If your inventory is full they drop at your feet.
+  - **Stormreach Field Guide**: the whole player guide in a book, chapter by chapter, with headings, lists and the rarity tables.
+  - **Storm Crafter's Handbook**: every Stormreach recipe drawn as a crafting grid with **the real item icons**, plus furnace, blast furnace, smoker, campfire and stonecutter recipes. Ingredients that accept several items cycle through them, and you can hover any icon to see its name.
+- Lost one? Craft the Field Guide from a book and a Storm Shard, or the Handbook from a book and a crafting table.
+
 ### Stage 7: the Labyrinth goes deep
 - **The Hollow Labyrinth is now buried deep in the deepslate**, just above the bedrock. There's no stairway or ruin on the surface any more: you have to find it, with `/locate`, by tunnelling or by following the story.
 - **The Vault Door**: the treasure chamber is sealed by a massive 5 x 5 door of unbreakable vault plating with **three locks built into it**.

@@ -268,3 +268,24 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
   - the guidebooks
   - the full 64x art pass for everything else
   - particles
+
+### 5.1 stages 7–10 (code-only; Minecraft not launched)
+- Stage 7, Labyrinth:
+  - `LabyrinthStructure` places the maze at minY + 9 with no stair piece.
+  - `LabyrinthPiece` is one block taller and deeper, for the vault shell. It handles treasureShell, the door with built-in `KeyholeBlock` locks (KIND 0–2, FILLED), `vaultFor` (one key per corner vault), `treasureRoom`, and `HollowLampBlock` ceiling lamps.
+  - `VaultDoor` checks the locks and sinks the door a row at a time (ticked from `LabyrinthTracker`). The new blocks are VAULT_DOOR, VAULT_WALL and HOLLOW_LAMP, plus KEYS[3]; the old LABYRINTH_KEY is kept but no lock takes it.
+  - Not runtime-tested: actual world generation of the new maze (only the door and lamps have GameTests).
+- Stage 8, guidebooks:
+  - `guide/Guidebooks` handles the items and the give-once tag `stormreach.guidebooks_given`.
+  - `tools/guidebooks.py` builds `assets/stormreach/guide/{guide,crafting}.json` from GUIDE.md and the recipes.
+  - The client `guide/GuidebookScreen` renders it. Gson stubs were extended for compiling.
+- Stage 9, sounds:
+  - `tools/sfx_list.py` holds 41 ids and the vanilla sounds each replaces; `tools/sfx51.py` synthesises them and writes the Labyrinth score "Hollow Halls" (three 96 s layers). Run it by hand, like audio5.py.
+  - `registry/ModSfx` is generated from sfx_list (the Holder wrapper is for equip sounds). Every `SoundEvents.*` use in the code was replaced by a codemod.
+- Stage 10, particles: `particle/ModParticles` (via FabricParticleTypes.simple) and the client `particle/StormParticle` (via ParticleProviderRegistry, PendingParticleProvider and FabricSpriteSet; names confirmed from the CI Fabric jar). Textures and definitions come from textures6.py.
+- GameTests in their own environment: `stormreach:isolated` (data/stormreach/test_environment) for tests that change world-wide state. Tornado tests must stay inside the test area's ticking chunks.
+- Remaining from the overhaul spec:
+  - Hollow Keeper (guardian) improvements
+  - the temple redesign and optional boss arena
+  - the full 64x art pass for the remaining 4.0/5.0 blocks, items, mobs and armour, possibly with Meshy for 3D references
+  - the GameTests still run on a headless server in GitHub Actions (the user's "no server" constraint applies to this session, not CI; flag in the final report)

@@ -216,6 +216,10 @@ for f in glob.glob(D + '/stormreach/worldgen/feature/*.json'):
     for i in re.findall(r'"(?:id|block_provider)": "(stormreach:[a-z_]+)"', open(f).read()):
         if i not in ours and not os.path.exists(f"{D}/stormreach/worldgen/block_state_provider/{i.split(':')[1]}.json"): problems.append(f'feature {os.path.basename(f)}: unknown {i}')
 
+# nested placed features must not carry biome filters, every reference must resolve (see worldgen_check.py)
+import sys as _sys; _sys.path.insert(0, ROOT + '/tools')
+import worldgen_check as _wg
+problems += _wg.problems()
 # ---------------- 26.3 data-format checks against the vanilla data (these only fail at world load) ----------------
 def _types(o, acc):
     if isinstance(o, dict):

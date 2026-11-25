@@ -956,4 +956,24 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    /** 5.5.0 crash: a placed feature nested in the Thunderspire tree selector carried a biome filter. Placing the
+     *  selector itself (never top-level) used to throw "Tried to biome check an unregistered feature". */
+    @GameTest(maxTicks = 20)
+    public void thunderspireTreesPlaceWithoutABiomeCheckCrash(GameTestHelper h) {
+        var level = h.getLevel();
+        var reg = level.registryAccess().lookupOrThrow(Registries.FEATURE);
+        var gen = level.getChunkSource().getGenerator();
+        for (String id : new String[]{"trees_thunderspire", "trees_galewood", "trees_elderstorm"}) {
+            var f = reg.getValue(net.minecraft.resources.Identifier.fromNamespaceAndPath(Stormreach.MOD_ID, id));
+            Check.isTrue(h, f != null, "configured feature stormreach:" + id + " should be registered");
+            var rnd = net.minecraft.util.RandomSource.create(1234);
+            for (int x = 0; x < 6; x++) h.setBlock(new BlockPos(x, 1, 0), Blocks.GRASS_BLOCK);
+            for (int i = 0; i < 200; i++) {   // the driftwood branch is 5%: 200 tries hit it with near certainty
+                try { f.place(level, gen, rnd, h.absolutePos(new BlockPos(i % 6, 2, 0))); }
+                catch (IllegalStateException e) { throw new AssertionError("stormreach:" + id + " threw during placement: " + e.getMessage(), e); }
+            }
+        }
+        h.succeed();
+    }
 }

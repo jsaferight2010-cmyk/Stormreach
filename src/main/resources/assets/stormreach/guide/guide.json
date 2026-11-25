@@ -101,7 +101,7 @@
     },
     {
      "s": "p",
-     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 16) list how often each shape appears at each rating."
+     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 17) list how often each shape appears at each rating."
     },
     {
      "s": "bullet",
@@ -1253,7 +1253,116 @@
    ]
   },
   {
-   "title": "11. The Stranger (spoilers)",
+   "title": "11. Live Wire: storm power and captured water",
+   "lines": [
+    {
+     "s": "h",
+     "t": "Power"
+    },
+    {
+     "s": "p",
+     "t": "Electricity is measured in Storm Units (SU). Generators make it and Copper Cable carries it (it joins on all six sides). Generators send power to machines first, then to Storm Capacitors, and capacitors feed machines. Use a Multimeter on anything for a reading."
+    },
+    {
+     "s": "table",
+     "t": "Block  |  Recipe  |  Makes, stores or uses"
+    },
+    {
+     "s": "table",
+     "t": "Wind Turbine  |  (see Skyward)  |  Makes 2 SU a tick per level of wind, up to 30 in a gale. Open sky only."
+    },
+    {
+     "s": "table",
+     "t": "Water Wheel  |  Planks, sticks, iron ingot  |  Makes 4 SU a tick per side (or bottom) with moving water against it, up to 16; moving Stormwater doubles it."
+    },
+    {
+     "s": "table",
+     "t": "Storm Capacitor  |  Iron, copper, glass, a Storm Cell  |  Stores 100,000 SU. Lightning within 24 blocks adds 50,000 at once."
+    },
+    {
+     "s": "table",
+     "t": "Copper Cable  |  6 dried kelp, 3 copper ingots (makes 8)  |  Carries power."
+    },
+    {
+     "s": "table",
+     "t": "Arc Lamp  |  Iron nuggets, glowstone, cable (makes 2)  |  Uses 1 SU a tick for light level 15."
+    },
+    {
+     "s": "table",
+     "t": "Shock Plate  |  2 copper ingots, cable  |  Uses 100 SU per shock: 4 damage to a hostile mob on it, up to twice a second. Players and animals are safe."
+    },
+    {
+     "s": "table",
+     "t": "Electric Pump  |  Iron, cable, pistons, bucket  |  Uses 80 SU to lift 250 mB a second from the water under it into a tank beside or above it. Ponds, rivers and the sea never run dry."
+    },
+    {
+     "s": "table",
+     "t": "Sprinkler  |  Iron nuggets, iron ingot, cable  |  Every 2 seconds uses 80 SU and 50 mB from a tank it sits on or beside to water a 9x9 area."
+    },
+    {
+     "s": "table",
+     "t": "Tesla Coil  |  (see Thunderfront)  |  Now also charges from a power network (20 SU per point of charge)."
+    },
+    {
+     "s": "h",
+     "t": "Water"
+    },
+    {
+     "s": "table",
+     "t": "Block  |  Recipe  |  What it does"
+    },
+    {
+     "s": "table",
+     "t": "Rain Barrel  |  Planks, a wooden slab  |  Holds 4 buckets. Under open sky it catches 25 mB of rain a second, or 60 mB of Stormwater in a thunderstorm. It drains into a tank below it."
+    },
+    {
+     "s": "table",
+     "t": "Cistern  |  Stone bricks, a bucket  |  Holds 32 buckets."
+    },
+    {
+     "s": "p",
+     "t": "On either tank: use a bucket for a bucket of water (or Stormwater), a glass bottle for a water bottle, or pour a bucket in. Comparators read how full they are."
+    },
+    {
+     "s": "h",
+     "t": "JEI"
+    },
+    {
+     "s": "p",
+     "t": "With Just Enough Items installed (or EMI or REI, which load JEI plugins), every Stormreach crafting, smelting and brewing recipe shows up. Stormreach also adds four pages:"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Storm Power: what makes, stores, carries and uses SU, and how much."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Water Capture: where captured water comes from and goes."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Catching and Gathering: bottling Stormflies, lightning and Dust Devils; Storm Cells from a collector; what creatures give you."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Creature Drops: every Stormreach mob's drops with counts and chances."
+    },
+    {
+     "s": "p",
+     "t": "Every Stormreach item also has an information page with its description and how to use it."
+    },
+    {
+     "s": "p",
+     "t": "New achievements: Live Wire, Every Drop Counts and Green Thumb."
+    }
+   ]
+  },
+  {
+   "title": "12. The Stranger (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -1340,7 +1449,7 @@
    ]
   },
   {
-   "title": "12. The Hollow Shrine (spoilers)",
+   "title": "13. The Hollow Shrine (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -1428,7 +1537,7 @@
    ]
   },
   {
-   "title": "13. Cyrrus, the Hollow Storm (spoilers)",
+   "title": "14. Cyrrus, the Hollow Storm (spoilers)",
    "lines": [
     {
      "s": "h",
@@ -1566,7 +1675,7 @@
    ]
   },
   {
-   "title": "14. Achievements",
+   "title": "15. Achievements",
    "lines": [
     {
      "s": "p",
@@ -1623,7 +1732,7 @@
    ]
   },
   {
-   "title": "15. Settings",
+   "title": "16. Settings",
    "lines": [
     {
      "s": "p",
@@ -1723,7 +1832,7 @@
    ]
   },
   {
-   "title": "16. Rarity and drop-rate tables",
+   "title": "17. Rarity and drop-rate tables",
    "lines": [
     {
      "s": "p",
@@ -2724,7 +2833,7 @@
    ]
   },
   {
-   "title": "17. Credits and licences",
+   "title": "18. Credits and licences",
    "lines": [
     {
      "s": "bullet",

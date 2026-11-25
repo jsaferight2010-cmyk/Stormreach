@@ -268,8 +268,13 @@ pine['trunk_placer']['base_height'] = 7
 w(f'{WG}/feature/stormpine.json', pine)
 w(f'{WG}/placed_feature/stormpine_checked.json', {'feature': 'stormreach:stormpine', 'placement': [
    {'type': 'minecraft:block_predicate_filter', 'predicate': {'type': 'minecraft:would_survive', 'state': 'stormreach:stormpine_sapling'}}]})
+# Placed features nested inside a selector must never carry a minecraft:biome filter: the biome check needs the
+# top-level placed feature, which a nested one is not, and Minecraft throws "Tried to biome check an unregistered
+# feature". The coastal fallen_driftwood keeps its biome filter; the tree selector gets its own filter-free variant.
+w(f'{WG}/placed_feature/fallen_driftwood_checked.json', {'feature': 'stormreach:fallen_driftwood', 'placement': [
+   {'type': 'minecraft:block_predicate_filter', 'predicate': {'type': 'minecraft:would_survive', 'state': 'minecraft:oak_sapling'}}]})
 w(f'{WG}/feature/trees_thunderspire.json', {'type': 'minecraft:random_selector', 'default': 'stormreach:stormpine_checked',
-   'features': [{'chance': 0.05, 'feature': 'stormreach:fallen_driftwood'}]})
+   'features': [{'chance': 0.05, 'feature': 'stormreach:fallen_driftwood_checked'}]})
 w(f'{WG}/placed_feature/trees_thunderspire.json', {'feature': 'stormreach:trees_thunderspire', 'placement': [
    {'type': 'minecraft:count', 'count': {'type': 'minecraft:weighted_list', 'distribution': [{'data': 1, 'weight': 6}, {'data': 3, 'weight': 3}, {'data': 0, 'weight': 2}]}},
    {'type': 'minecraft:in_square'}, {'type': 'minecraft:surface_water_depth_filter', 'max_water_depth': 0},

@@ -443,6 +443,195 @@
     ],
     "subtitle": "subtitles.stormreach.block.radar_ping"
   },
+  "block.mat.stone.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_stone_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.stone.break"
+  },
+  "block.mat.stone.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_stone_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.stone.step"
+  },
+  "block.mat.stone.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_stone_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.stone.place"
+  },
+  "block.mat.crystal.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_crystal_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.crystal.break"
+  },
+  "block.mat.crystal.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_crystal_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.crystal.step"
+  },
+  "block.mat.crystal.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_crystal_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.crystal.place"
+  },
+  "block.mat.metal.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_metal_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.metal.break"
+  },
+  "block.mat.metal.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_metal_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.metal.step"
+  },
+  "block.mat.metal.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_metal_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.metal.place"
+  },
+  "block.mat.soft.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_soft_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.soft.break"
+  },
+  "block.mat.soft.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_soft_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.soft.step"
+  },
+  "block.mat.soft.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_soft_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.soft.place"
+  },
+  "block.mat.plant.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_plant_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.plant.break"
+  },
+  "block.mat.plant.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_plant_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.plant.step"
+  },
+  "block.mat.plant.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_plant_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.plant.place"
+  },
+  "block.mat.loose.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_loose_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.loose.break"
+  },
+  "block.mat.loose.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_loose_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.loose.step"
+  },
+  "block.mat.loose.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_loose_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.loose.place"
+  },
+  "block.mat.glass.break": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_glass_break",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.glass.break"
+  },
+  "block.mat.glass.step": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_glass_step",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.glass.step"
+  },
+  "block.mat.glass.place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_mat_glass_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.mat.glass.place"
+  },
   "voice.cyrrus.l01": {
     "sounds": [
       {

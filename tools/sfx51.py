@@ -178,6 +178,27 @@ def splash():
     return x
 def radar_ping(): t = t_(1.2); return reverb(np.sin(2 * np.pi * 1760 * t) * np.exp(-t * 6) + np.sin(2 * np.pi * 3520 * t) * np.exp(-t * 12) * 0.3, 1.0, 0.4)
 
+# ---- block material sounds: break (a crunch with debris), step (a short footfall), place (a solid set-down)
+def knock(lo, hi, sec, k): return bp(noise(sec), lo, hi) * expdecay(sec, k)
+def tone_hit(f, sec, k): return np.sin(2 * np.pi * f * t_(sec)) * expdecay(sec, k)
+def debris(n, lo, hi, spread=0.25):
+    out = np.zeros(int((spread + 0.2) * SR))
+    for i in range(n): place(out, knock(lo, hi, 0.08, 55) * (0.3 + rng.random() * 0.7), rng.random() * spread)
+    return out
+MAT = {
+    'stone': (lambda: mix(knock(150, 2500, 0.3, 14), debris(9, 800, 5000)), lambda: mix(knock(200, 1800, 0.09, 45), tone_hit(140, 0.06, 60) * 0.3),
+              lambda: mix(knock(120, 1500, 0.25, 18), tone_hit(95, 0.2, 20) * 0.5)),
+    'crystal': (lambda: mix(shatter()[:int(0.6 * SR)], bell(1760, 0.6, 0.8) * 0.3), lambda: mix(tone_hit(2637, 0.12, 30) * 0.4, knock(2000, 8000, 0.05, 70) * 0.4),
+                lambda: mix(bell(1318.5, 0.5, 0.6) * 0.5, knock(1000, 6000, 0.08, 50) * 0.4)),
+    'metal': (lambda: mix(metal_hit(520, 0.6, 9), debris(5, 1500, 7000)), lambda: metal_hit(880, 0.12, 40) * 0.5, lambda: metal_hit(340, 0.45, 10)),
+    'soft': (lambda: knock(150, 1800, 0.3, 12), lambda: knock(250, 2500, 0.1, 40) * 0.6, lambda: knock(100, 1200, 0.2, 18)),
+    'plant': (lambda: mix(debris(14, 1500, 7000, 0.3), knock(400, 3000, 0.2, 14) * 0.5), lambda: debris(4, 2000, 7000, 0.08),
+              lambda: debris(8, 1200, 6000, 0.15)),
+    'loose': (lambda: mix(debris(18, 300, 4000, 0.3), knock(80, 900, 0.3, 12)), lambda: debris(5, 400, 4000, 0.1), lambda: debris(10, 200, 3000, 0.2)),
+    'glass': (lambda: shatter(), lambda: mix(tone_hit(3100, 0.08, 45) * 0.4, knock(3000, 9000, 0.04, 80) * 0.5), lambda: mix(tone_hit(2200, 0.25, 18) * 0.5, knock(2000, 8000, 0.06, 60) * 0.4)),
+}
+MAT_SYNTH = {f'block.mat.{m}.{ev}': fns[i] for m, fns in MAT.items() for i, ev in enumerate(('break', 'step', 'place'))}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -188,6 +209,7 @@ SYNTH = {
     'creature.wind_hurt': wind_hurt, 'creature.wind_death': wind_death, 'creature.titan_ambient': titan_ambient, 'creature.titan_roar': titan_roar,
     'creature.titan_hurt': titan_hurt, 'creature.titan_death': titan_death, 'creature.titan_charge': titan_charge, 'creature.titan_blast': titan_blast,
     'weather.hail': hail, 'weather.puddle_splash': splash, 'block.radar_ping': radar_ping,
+    **MAT_SYNTH,
 }
 
 # ---------------------------------------------------------------------------------------------- the Labyrinth score

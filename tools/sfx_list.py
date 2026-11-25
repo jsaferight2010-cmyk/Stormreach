@@ -43,6 +43,28 @@ SFX = {
     'weather.hail': ('Hail clatters', [], 24),
     'weather.puddle_splash': ('Water splashes', [], 12),
     'block.radar_ping': ('Radar pings', [], 24),
+    # 5.1: block sounds for every Stormreach block (see ModSoundTypes)
+    'block.mat.stone.break': ('Stone breaks', [], 16),
+    'block.mat.stone.step': ('Footsteps', [], 12),
+    'block.mat.stone.place': ('Stone placed', [], 16),
+    'block.mat.crystal.break': ('Crystal breaks', [], 16),
+    'block.mat.crystal.step': ('Footsteps', [], 12),
+    'block.mat.crystal.place': ('Crystal placed', [], 16),
+    'block.mat.metal.break': ('Metal breaks', [], 16),
+    'block.mat.metal.step': ('Footsteps', [], 12),
+    'block.mat.metal.place': ('Metal placed', [], 16),
+    'block.mat.soft.break': ('Soft block breaks', [], 16),
+    'block.mat.soft.step': ('Footsteps', [], 12),
+    'block.mat.soft.place': ('Soft block placed', [], 16),
+    'block.mat.plant.break': ('Plant breaks', [], 16),
+    'block.mat.plant.step': ('Footsteps', [], 12),
+    'block.mat.plant.place': ('Plant placed', [], 16),
+    'block.mat.loose.break': ('Loose ground breaks', [], 16),
+    'block.mat.loose.step': ('Footsteps', [], 12),
+    'block.mat.loose.place': ('Loose ground placed', [], 16),
+    'block.mat.glass.break': ('Glass breaks', [], 16),
+    'block.mat.glass.step': ('Footsteps', [], 12),
+    'block.mat.glass.place': ('Glass placed', [], 16),
 }
 
 def java_const(sid):

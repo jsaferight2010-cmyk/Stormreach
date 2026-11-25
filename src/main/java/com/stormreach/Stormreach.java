@@ -42,6 +42,7 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.realm.RealmItems.init();
         com.stormreach.registry.ModSounds.init();
         com.stormreach.registry.ModSfx.init();
+        com.stormreach.registry.ModSoundTypes.init();
         com.stormreach.particle.ModParticles.init();
         com.stormreach.tornado.TornadoTypes.init();
         com.stormreach.tornado.WeatherItems.init();

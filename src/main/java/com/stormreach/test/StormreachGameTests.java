@@ -583,4 +583,38 @@ public class StormreachGameTests {
         com.stormreach.StormreachConfig.sovereignArena = was;
         h.succeed();
     }
+
+    @GameTest(maxTicks = 40)
+    public void theHollowKeeperEnragesAndDimsTheLamps(GameTestHelper h) {
+        for (int x = 0; x < 7; x++) for (int z = 0; z < 7; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        h.setBlock(new BlockPos(3, 5, 3), LabyrinthRegistry.HOLLOW_LAMP.defaultBlockState().setValue(com.stormreach.labyrinth.HollowLampBlock.LIGHT, 10));
+        var keeper = h.spawn(LabyrinthRegistry.HOLLOW_KEEPER, new BlockPos(3, 2, 3));
+        keeper.setHome(new net.minecraft.world.level.levelgen.structure.BoundingBox(h.absolutePos(BlockPos.ZERO).getX() - 2, h.absolutePos(BlockPos.ZERO).getY(),
+                h.absolutePos(BlockPos.ZERO).getZ() - 2, h.absolutePos(BlockPos.ZERO).getX() + 9, h.absolutePos(BlockPos.ZERO).getY() + 8, h.absolutePos(BlockPos.ZERO).getZ() + 9));
+        double speed = keeper.getAttributeBaseValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+        keeper.setHealth(keeper.getMaxHealth() * 0.4f);
+        int[] dimmest = {99};
+        h.onEachTick(() -> {
+            var st = h.getBlockState(new BlockPos(3, 5, 3));
+            if (st.is(LabyrinthRegistry.HOLLOW_LAMP)) dimmest[0] = Math.min(dimmest[0], st.getValue(com.stormreach.labyrinth.HollowLampBlock.LIGHT));
+        });
+        h.runAfterDelay(20, () -> {
+            Check.isTrue(h, keeper.enraged(), "a badly wounded Keeper should enrage");
+            Check.isTrue(h, keeper.getAttributeBaseValue(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED) > speed, "an enraged Keeper should be faster");
+            Check.isTrue(h, dimmest[0] <= 1, "lamps should gutter as the Keeper passes");
+            keeper.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest
+    public void stormreachBlocksUseTheirOwnSounds(GameTestHelper h) {
+        var vault = LabyrinthRegistry.VAULT_DOOR.defaultBlockState().getSoundType();
+        Check.isTrue(h, vault == com.stormreach.registry.ModSoundTypes.METAL, "the vault door should use Stormreach's metal sounds");
+        Check.isTrue(h, LabyrinthRegistry.HOLLOW_LAMP.defaultBlockState().getSoundType() == com.stormreach.registry.ModSoundTypes.GLASS, "the lamp should use Stormreach's glass sounds");
+        Check.isTrue(h, Blocks.STONE.defaultBlockState().getSoundType() == net.minecraft.world.level.block.SoundType.STONE, "vanilla blocks must keep their own sounds");
+        Check.isTrue(h, com.stormreach.registry.ModSoundTypes.familyFor("DEEPSLATE_TILES") == com.stormreach.registry.ModSoundTypes.STONE
+                && com.stormreach.registry.ModSoundTypes.familyFor("AZALEA_LEAVES") == com.stormreach.registry.ModSoundTypes.PLANT, "sound families mis-sorted");
+        h.succeed();
+    }
 }

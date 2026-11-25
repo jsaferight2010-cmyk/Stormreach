@@ -52,6 +52,27 @@ public final class ModSfx {
     public static final SoundEvent WEATHER_HAIL = ModSounds.register("weather.hail");
     public static final SoundEvent WEATHER_PUDDLE_SPLASH = ModSounds.register("weather.puddle_splash");
     public static final SoundEvent BLOCK_RADAR_PING = ModSounds.register("block.radar_ping");
+    public static final SoundEvent BLOCK_MAT_STONE_BREAK = ModSounds.register("block.mat.stone.break");
+    public static final SoundEvent BLOCK_MAT_STONE_STEP = ModSounds.register("block.mat.stone.step");
+    public static final SoundEvent BLOCK_MAT_STONE_PLACE = ModSounds.register("block.mat.stone.place");
+    public static final SoundEvent BLOCK_MAT_CRYSTAL_BREAK = ModSounds.register("block.mat.crystal.break");
+    public static final SoundEvent BLOCK_MAT_CRYSTAL_STEP = ModSounds.register("block.mat.crystal.step");
+    public static final SoundEvent BLOCK_MAT_CRYSTAL_PLACE = ModSounds.register("block.mat.crystal.place");
+    public static final SoundEvent BLOCK_MAT_METAL_BREAK = ModSounds.register("block.mat.metal.break");
+    public static final SoundEvent BLOCK_MAT_METAL_STEP = ModSounds.register("block.mat.metal.step");
+    public static final SoundEvent BLOCK_MAT_METAL_PLACE = ModSounds.register("block.mat.metal.place");
+    public static final SoundEvent BLOCK_MAT_SOFT_BREAK = ModSounds.register("block.mat.soft.break");
+    public static final SoundEvent BLOCK_MAT_SOFT_STEP = ModSounds.register("block.mat.soft.step");
+    public static final SoundEvent BLOCK_MAT_SOFT_PLACE = ModSounds.register("block.mat.soft.place");
+    public static final SoundEvent BLOCK_MAT_PLANT_BREAK = ModSounds.register("block.mat.plant.break");
+    public static final SoundEvent BLOCK_MAT_PLANT_STEP = ModSounds.register("block.mat.plant.step");
+    public static final SoundEvent BLOCK_MAT_PLANT_PLACE = ModSounds.register("block.mat.plant.place");
+    public static final SoundEvent BLOCK_MAT_LOOSE_BREAK = ModSounds.register("block.mat.loose.break");
+    public static final SoundEvent BLOCK_MAT_LOOSE_STEP = ModSounds.register("block.mat.loose.step");
+    public static final SoundEvent BLOCK_MAT_LOOSE_PLACE = ModSounds.register("block.mat.loose.place");
+    public static final SoundEvent BLOCK_MAT_GLASS_BREAK = ModSounds.register("block.mat.glass.break");
+    public static final SoundEvent BLOCK_MAT_GLASS_STEP = ModSounds.register("block.mat.glass.step");
+    public static final SoundEvent BLOCK_MAT_GLASS_PLACE = ModSounds.register("block.mat.glass.place");
 
     /** For APIs that take a sound holder (equip sounds, some mob sounds). */
     public static Holder<SoundEvent> holder(SoundEvent e) {

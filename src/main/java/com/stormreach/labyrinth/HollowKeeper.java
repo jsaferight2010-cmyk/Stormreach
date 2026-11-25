@@ -26,13 +26,23 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 /**
- * The Hollow Keeper: the Labyrinth's guardian. It exists only while someone is inside the maze, can't leave it,
- * hunts by sound when it can't see you, and checks lockers where it last saw you.
+ * The Hollow Keeper: the Labyrinth's guardian. It exists only while someone is inside the maze and can't leave it.
+ * <ul>
+ * <li>It hunts by sound when it can't see you (see {@link com.stormreach.sim.KeeperSenses}): standing still is
+ *     silent, sneaking nearly so, sprinting and fighting carry far, and its guess sharpens as it closes in.</li>
+ * <li>It leaps at prey it can see from a few blocks away, and searches the lockers where it last had you.</li>
+ * <li>Wounded below half health it roars, moves faster and listens harder.</li>
+ * <li>It guards the vault: with no lead it patrols near the heart of the maze more often than the edges.</li>
+ * <li>Hollow Lamps gutter as it passes, so a dimming corridor is a warning.</li>
+ * </ul>
  */
 public class HollowKeeper extends Monster {
     private BoundingBox home;
     private Vec3 lastKnown;
     private int searchTicks;
+    private int lungeCooldown;
+    private boolean enraged;
+    private final java.util.Map<java.util.UUID, Vec3> lastHeardPos = new java.util.HashMap<>();
 
     public HollowKeeper(EntityType<? extends HollowKeeper> type, Level level) {
         super(type, level);
@@ -73,7 +83,25 @@ public class HollowKeeper extends Monster {
             teleportTo(home.getCenter().getX() + 0.5, home.minY() + 1, home.getCenter().getZ() + 0.5);
             getNavigation().stop();
         }
+        if (lungeCooldown > 0) lungeCooldown--;
+        if (!enraged && getHealth() < getMaxHealth() * 0.5f) {
+            enraged = true;
+            var speed = getAttribute(Attributes.MOVEMENT_SPEED);
+            if (speed != null) speed.setBaseValue(speed.getBaseValue() * 1.25);
+            playSound(com.stormreach.registry.ModSfx.CREATURE_TITAN_ROAR, 3f, 0.7f);
+        }
+        if (tickCount % 10 == 0) {
+            // the lamps gutter as it passes
+            BlockPos at = blockPosition();
+            for (BlockPos p : BlockPos.betweenClosed(at.offset(-4, -2, -4), at.offset(4, 6, 4))) {
+                var st = server.getBlockState(p);
+                if (st.is(LabyrinthRegistry.HOLLOW_LAMP) && st.getValue(HollowLampBlock.LIGHT) > 1)
+                    server.setBlock(p, st.setValue(HollowLampBlock.LIGHT, 1), 2);
+            }
+        }
     }
+
+    public boolean enraged() { return enraged; }
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
@@ -137,14 +165,22 @@ public class HollowKeeper extends Monster {
                 k.lastKnown = visible.position();
                 k.getNavigation().moveTo(visible, HidingRules.huntSpeed(true, Math.sqrt(best)));
                 k.getLookControl().setLookAt(visible, 30, 30);
+                if (com.stormreach.sim.KeeperSenses.lunge(Math.sqrt(best), k.lungeCooldown)) {
+                    // leap at it
+                    Vec3 d = visible.position().subtract(k.position()).normalize();
+                    k.setDeltaMovement(d.x * 1.25, 0.45, d.z * 1.25);
+                    k.needsSync = true;
+                    k.lungeCooldown = k.enraged ? 70 : 110;
+                    k.playSound(ModSounds.GUARDIAN_SCREECH, 2.5f, 1.1f);
+                }
                 if (best < 3.2 && k.tickCount % 12 == 0) k.doHurtTarget(level, visible);
                 k.searchTicks = 0;
                 return;
             }
             k.setAggressive(false);
             k.setTarget(null);
-            // it hears footsteps: every few seconds it learns roughly where the nearest moving player is
-            if (++listen >= 80) {
+            // it listens: whoever is making noise within earshot gives themselves away, roughly
+            if (++listen >= com.stormreach.sim.KeeperSenses.listenInterval(k.getHealth() / k.getMaxHealth())) {
                 listen = 0;
                 ServerPlayer heard = null;
                 double hd = Double.MAX_VALUE;
@@ -158,11 +194,16 @@ public class HollowKeeper extends Monster {
                         }
                         continue;
                     }
+                    Vec3 before = k.lastHeardPos.put(p.getUUID(), p.position());
+                    boolean moving = before != null && before.distanceToSqr(p.position()) > 0.09;
+                    double radius = com.stormreach.sim.KeeperSenses.noiseRadius(moving, p.isShiftKeyDown(), p.isSprinting(), p.isSwinging());
+                    if (!com.stormreach.sim.KeeperSenses.hears(Math.sqrt(d), radius, k.enraged)) continue;
                     if (d < hd) { hd = d; heard = p; }
                 }
                 if (heard != null) {
-                    double noise = heard.isSprinting() ? 2 : heard.isShiftKeyDown() ? 10 : 5;
-                    k.lastKnown = heard.position().add((level.getRandom().nextDouble() - 0.5) * noise * 2, 0, (level.getRandom().nextDouble() - 0.5) * noise * 2);
+                    double err = com.stormreach.sim.KeeperSenses.guessError(Math.sqrt(hd));
+                    k.lastKnown = heard.position().add((level.getRandom().nextDouble() - 0.5) * err * 2, 0, (level.getRandom().nextDouble() - 0.5) * err * 2);
+                    k.getNavigation().stop();
                 }
             }
             if (k.lastKnown != null) {
@@ -180,8 +221,10 @@ public class HollowKeeper extends Monster {
                     if (k.searchTicks > 200) { k.lastKnown = null; k.searchTicks = 0; }
                 }
             } else if (k.getNavigation().isDone() && k.tickCount % 60 == 0) {
+                // patrol: half the time it keeps close to the vault at the heart of the maze
                 BlockPos c = k.home.getCenter();
-                k.getNavigation().moveTo(c.getX() + level.getRandom().nextInt(120) - 60, k.home.minY() + 1, c.getZ() + level.getRandom().nextInt(120) - 60, 0.7);
+                int span = level.getRandom().nextBoolean() ? 24 : 120;
+                k.getNavigation().moveTo(c.getX() + level.getRandom().nextInt(span) - span / 2, k.home.minY() + 1, c.getZ() + level.getRandom().nextInt(span) - span / 2, 0.7);
             }
         }
     }

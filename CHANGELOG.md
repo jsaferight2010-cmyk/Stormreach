@@ -3,6 +3,15 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 13: the Hollow Keeper hunts by sound, and blocks sound like Stormreach
+- **A smarter Hollow Keeper:**
+  - **It hears noise, not just players.** Standing still is silent and sneaking almost silent. Walking carries about 14 blocks, sprinting 28, and fighting or breaking blocks 32. Its guess of where you are sharpens the closer it gets.
+  - **It leaps** at prey it can see from 4–9 blocks away.
+  - **Below half health it roars and enrages:** it moves faster, listens twice as often and hears further.
+  - **It guards the vault**, patrolling near the heart of the maze half the time.
+  - **Hollow Lamps gutter as it passes**, so a corridor going dark is your warning.
+- **Every Stormreach block has its own sounds.** 21 new block sounds for breaking, footsteps and placing, in seven families: stone, crystal, metal, soft, plant, loose ground and glass. They cover the storm versions of vanilla blocks too. Vanilla and other mods' blocks keep their sounds.
+
 ### Stage 12: 64x blocks
 - **Every Stormreach block texture is now 64x64** (animated ones keep their animation): 170 textures in all.
   - The 5.1 additions were drawn at 64x: radar, vault, lamps, locks.

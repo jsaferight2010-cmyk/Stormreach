@@ -30,10 +30,12 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * blowing (about one level per 4 mph, so a gale gives full power). It must stand under open sky. Right-click to read
  * the wind speed.
  */
-public class WindTurbineBlock extends Block implements EntityBlock {
+public class WindTurbineBlock extends Block implements EntityBlock, com.stormreach.structure.Multiblock {
+    /** 6.0: a utility-scale turbine: a 16-block tower (parts 1..15 above the base) carrying a 13-block rotor. */
+    public static final int TOWER = 15;
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final IntegerProperty POWER = IntegerProperty.create("power", 0, 15);
-    private static final VoxelShape SHAPE = Block.box(5, 0, 5, 11, 16, 11);
+    private static final VoxelShape SHAPE = Block.box(1, 0, 1, 15, 16, 15);
 
     public WindTurbineBlock(Properties p) {
         super(p);
@@ -47,7 +49,27 @@ public class WindTurbineBlock extends Block implements EntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext ctx) {
+        // the whole tower must fit, or nothing is placed (the hologram shows red where it would not)
+        if (!com.stormreach.structure.Multiblock.blocked(ctx.getLevel(), ctx.getClickedPos(), TOWER).isEmpty()) return null;
         return defaultBlockState().setValue(FACING, ctx.getHorizontalDirection().getOpposite());
+    }
+
+    @Override public int partHeight(BlockState s) { return TOWER; }
+
+    @Override
+    public com.stormreach.structure.MachinePartBlock.Shape partShape(BlockState s, int dy) {
+        return dy == TOWER ? com.stormreach.structure.MachinePartBlock.Shape.BOX : com.stormreach.structure.MachinePartBlock.Shape.MAST;
+    }
+
+    @Override
+    protected void onPlace(BlockState s, Level level, BlockPos pos, BlockState old, boolean moved) {
+        if (!level.isClientSide() && !old.is(this)) com.stormreach.structure.Multiblock.buildParts(level, pos, s, this);
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState s, ServerLevel level, BlockPos pos, boolean moved) {
+        com.stormreach.structure.Multiblock.removeParts(level, pos, TOWER);
+        super.affectNeighborsAfterRemoval(s, level, pos, moved);
     }
 
     @Override

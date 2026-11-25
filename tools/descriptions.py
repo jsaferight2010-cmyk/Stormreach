@@ -311,7 +311,7 @@ DETAILS = {
     'block.stormreach.stormheart': ['Wake it with a Storm Cell, lightning or redstone.', 'The radius is set in the config.'],
     'block.stormreach.skylight_lantern': ['Light 15.'],
     'item.stormreach.weather_balloon': ['Use outdoors to launch it. The sounding comes back as it climbs.'],
-    'item.stormreach.intercept_vehicle': ['Right-click to drive: W/S throttle, A/D steer, sneak to get out.', 'Stop for two seconds and the anchors drop: no tornado can move it.',
+    'item.stormreach.intercept_vehicle': ['Right-click to drive: W/S throttle, A/D steer, sneak to get out.', 'Press the anchor key (default Z) to drop the hydraulic spikes: no tornado can move it. Press again to raise them.',
                                           'Sneak + right-click from outside to pack it up.'],
 }
 

@@ -36,7 +36,7 @@ public final class ChaseRegistry {
             Stormreach.id("tornado_probe"), new BlockEntityType<>(TornadoProbeBlockEntity::new, Set.of(TORNADO_PROBE)));
 
     public static final EntityType<InterceptVehicle> INTERCEPT_VEHICLE_ENTITY = entity("intercept_vehicle",
-            EntityType.Builder.of(InterceptVehicle::new, MobCategory.MISC).sized(2.4f, 2.0f).eyeHeight(1.6f).passengerAttachments(1.05f)
+            EntityType.Builder.of(InterceptVehicle::new, MobCategory.MISC).sized(2.4f, 2.6f).eyeHeight(1.6f).passengerAttachments(0.25f)   /* 6.0: the driver sits inside the armoured cab, eyes at the slit window */
                     .fireImmune().clientTrackingRange(12));
     public static final EntityType<WeatherBalloon> WEATHER_BALLOON_ENTITY = entity("weather_balloon",
             EntityType.Builder.of(WeatherBalloon::new, MobCategory.MISC).sized(0.9f, 1.8f).eyeHeight(1.0f).clientTrackingRange(16));

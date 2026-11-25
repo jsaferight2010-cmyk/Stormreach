@@ -197,39 +197,22 @@ public class WeatherScreen extends Screen {
         int cx = l + 100, cy = t + 110, r = 82;
         float range = report.range();
         disc(g, cx, cy, r, 0xFF06140A);
-        for (int k = 1; k <= 4; k++) ring(g, cx, cy, r * k / 4, 0xFF1E4A2A);
-        g.fill(cx - r, cy, cx + r, cy + 1, 0xFF163A20);
-        g.fill(cx, cy - r, cx + 1, cy + r, 0xFF163A20);
-        // echoes
-        for (WeatherUi.Cell c : report.cells()) {
-            int px = cx + Math.round(c.dx() / range * r), py = cy + Math.round(c.dz() / range * r);
-            float size = Math.max(2, c.width() * (0.4f + c.growth()) / range * r);
-            if (velocity) { disc(g, px, py, Math.round(size), 0x3050A050); continue; }
-            float strength = (float) Math.sin(Math.PI * Math.min(1, c.growth() * 1.2)) * (c.severe() ? 1.2f : 0.85f);
-            disc(g, px, py, Math.round(size), 0xA020C040);
-            if (strength > 0.35f) disc(g, px, py, Math.round(size * 0.65f), 0xC0E0E030);
-            if (strength > 0.7f) disc(g, px, py, Math.round(size * 0.35f), 0xE0F03020);
-            if (strength > 1.0f) disc(g, px, py, Math.max(1, Math.round(size * 0.15f)), 0xFFE020E0);
-        }
-        for (WeatherUi.Core c : report.cores()) {
-            int px = cx + Math.round(c.dx() / range * r), py = cy + Math.round(c.dz() / range * r);
-            int rad = Math.max(2, Math.round(c.radius() / range * r));
-            if (c.kind() == 0) disc(g, px, py, rad, velocity ? 0x40FFFFFF : 0xD0F0F0FF);      // hail: white/pink core
-            else ring(g, px, py, rad, c.kind() == 1 ? 0xFF4080FF : 0xFFC0A060);              // downburst outflow
-        }
+        // the scan itself: reflectivity (dBZ) or radial velocity, painted gate by gate from the server's scan
+        if (RadarImage.prepare(report.scan(), r, velocity))
+            g.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, RadarImage.ID, cx - r, cy - r, 0f, 0f, 2 * r, 2 * r, 2 * r, 2 * r);
+        for (int k = 1; k <= 4; k++) ring(g, cx, cy, r * k / 4, 0x701E4A2A);
+        g.fill(cx - r, cy, cx + r, cy + 1, 0x60163A20);
+        g.fill(cx, cy - r, cx + 1, cy + r, 0x60163A20);
         for (WeatherUi.Contact c : report.contacts()) {
             int px = cx + Math.round(c.dx() / range * r), py = cy + Math.round(c.dz() / range * r);
             if (Math.hypot(px - cx, py - cy) > r) continue;
-            if (velocity) {
-                // rotation couplet: inbound (green) beside outbound (red), brighter for stronger rotation
-                int a = Mth.clamp((int) (c.coupletMph() / 300f * 255), 90, 255);
-                disc(g, px - 3, py, 3, (a << 24) | 0x20FF40);
-                disc(g, px + 3, py, 3, (a << 24) | 0xFF3030);
-            } else {
+            if (velocity) ring(g, px, py, 5, 0xFFFFFFFF);    // circle the couplet so it is easy to find
+            else {
                 g.fill(px - 3, py - 3, px + 4, py + 4, 0xFFFF2020);
                 g.fill(px - 1, py - 1, px + 2, py + 2, 0xFFFFFFFF);
             }
         }
+        legend(g, l + 192, t + 120);
         // the sweep, with a fading trail
         double sweep = (ticks + partial) * 0.06;
         for (int k = 0; k < 10; k++) {
@@ -251,6 +234,21 @@ public class WeatherScreen extends Screen {
             g.text(font, "moving " + Instruments.compass(c.headingDeg()) + " " + Math.round(c.motionMph()) + " mph", x + 4, y + 20, 0xFFB0B0B0);
             y += 34;
             if (y > t + 160) break;
+        }
+    }
+
+    /** Colour key under the contact list: dBZ steps, or inbound/outbound speeds in the player's units. */
+    private void legend(GuiGraphicsExtractor g, int x, int y) {
+        if (velocity) {
+            int[] steps = {-50, -35, -20, -8, -2, 0, 2, 8, 20, 35, 50};
+            for (int i = 0; i < steps.length; i++) g.fill(x + i * 9, y, x + i * 9 + 9, y + 8, com.stormreach.sim.RadarMath.velocityColour(steps[i]));
+            g.text(font, Component.translatable("gui.stormreach.weather.inbound"), x, y + 10, 0xFF60FF90);
+            g.text(font, Component.translatable("gui.stormreach.weather.outbound"), x + 56, y + 10, 0xFFFF7070);
+            g.text(font, com.stormreach.client.ClientUnits.speed(50 / 0.44704), x, y + 22, 0xFFB0B0B0);
+        } else {
+            int[] steps = {5, 15, 25, 35, 45, 55, 65, 75};
+            for (int i = 0; i < steps.length; i++) g.fill(x + i * 12, y, x + i * 12 + 12, y + 8, com.stormreach.sim.RadarMath.dbzColour(steps[i]));
+            g.text(font, "5", x, y + 10, 0xFFB0B0B0); g.text(font, "75 dBZ", x + 64, y + 10, 0xFFB0B0B0);
         }
     }
 

@@ -45,7 +45,6 @@ public final class ChaserGear {
         if (server.getTickCount() % 40 != 0) return;
         for (ServerPlayer p : server.getPlayerList().getPlayers()) {
             ServerLevel level = p.level();
-            if (wears(p, EquipmentSlot.HEAD, SkyRegistry.CHASER_GOGGLES) && !(p.getVehicle() instanceof InterceptVehicle)) goggles(level, p);
             if ((wears(p, EquipmentSlot.FEET, SkyRegistry.CHASER_BOOTS) || wears(p, EquipmentSlot.LEGS, SkyRegistry.CHASER_TROUSERS))
                     && level.isRainingAt(p.blockPosition())) {
                 p.addEffect(new MobEffectInstance(MobEffects.SPEED, 60, 0, true, false, true));
@@ -54,6 +53,10 @@ public final class ChaserGear {
         }
     }
 
+    /** 6.0: the goggles' readout is now the top-corner HUD panel (WeatherHud); this stays for reference by tests. */
+    public static boolean wearsGoggles(LivingEntity e) { return wears(e, EquipmentSlot.HEAD, SkyRegistry.CHASER_GOGGLES); }
+
+    @SuppressWarnings("unused")
     private static void goggles(ServerLevel level, ServerPlayer p) {
         TornadoEntity best = null;
         double bestD = 1024;

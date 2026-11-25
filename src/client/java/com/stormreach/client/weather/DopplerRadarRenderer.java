@@ -13,7 +13,11 @@ import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.phys.Vec3;
 
-/** Draws the Doppler radar's dish, turning steadily (one revolution every ~8 seconds), on top of its pedestal. */
+/**
+ * 6.0: draws the whole Doppler radar installation from its controller (the pedestal block): concrete pad, equipment
+ * shelter, galvanised lattice tower with ladder and cable tray, railed platform and the white panelled radome, the way
+ * a NEXRAD site looks. The parts below and around are invisible collision cells.
+ */
 public class DopplerRadarRenderer implements BlockEntityRenderer<DopplerRadarBlockEntity, DopplerRadarRenderer.State> {
     private static final Identifier TEXTURE = Stormreach.id("textures/block/radar_dish.png");
 
@@ -38,7 +42,8 @@ public class DopplerRadarRenderer implements BlockEntityRenderer<DopplerRadarBlo
         pose.pushPose();
         pose.translate(0.5, 0, 0.5);
         int light = s.lightCoords;
-        collector.submitCustomGeometry(pose, RenderTypes.entityCutout(TEXTURE), (p, vc) -> RadarMesh.build(HailstoneRenderer.sink(p, vc, light), s.yaw));
+        collector.submitCustomGeometry(pose, RenderTypes.entityCutout(com.stormreach.client.render.Mesh.white()),
+                (p, vc) -> com.stormreach.client.render.Machines.dopplerRadar(com.stormreach.client.render.Mesh.to(p, vc, light)));
         pose.popPose();
     }
 

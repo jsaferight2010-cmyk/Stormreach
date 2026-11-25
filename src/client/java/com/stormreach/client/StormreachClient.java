@@ -49,7 +49,11 @@ public final class StormreachClient implements ClientModInitializer {
         com.stormreach.client.labyrinth.LockerClient.init();
         com.stormreach.client.tornado.TornadoSeeThrough.init();
         com.stormreach.client.weather.WeatherScreen.registerReceiver();
-        com.stormreach.client.weather.RadarPlacementOutline.init();
+        com.stormreach.client.render.PlacementHologram.init();   // 6.0: replaces the particle outline (RadarPlacementOutline)
+        com.stormreach.client.ClientWeather.init();
+        com.stormreach.client.TivKeys.init();
+        com.stormreach.client.hud.StormHudPanel.init();
+        net.minecraft.client.renderer.blockentity.BlockEntityRenderers.register(com.stormreach.structure.StructureRegistry.INSTRUMENT_ENTITY, com.stormreach.client.render.InstrumentMachineRenderer::new);
         com.stormreach.client.guide.GuidebookScreen.registerOpener();
         com.stormreach.client.particle.StormParticle.register();
         net.minecraft.client.renderer.blockentity.BlockEntityRenderers.register(com.stormreach.tornado.radar.RadarContent.RADAR_ENTITY,

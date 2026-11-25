@@ -37,13 +37,19 @@ public class TurbineRenderer implements BlockEntityRenderer<WindTurbineBlockEnti
         BlockEntityRenderState.extractBase(be, s, crumbling);
         var st = be.getBlockState();
         int power = st.hasProperty(WindTurbineBlock.POWER) ? st.getValue(WindTurbineBlock.POWER) : 0;
-        float rate = 0.02f + power * 0.035f;
+        float rate = 0.01f + power * 0.012f;   // a big rotor turns slowly
         long now = be.getLevel() == null ? 0 : be.getLevel().getGameTime();
         if (be.spunAt < 0) be.spunAt = now;
         if (now > be.spunAt) { be.spin += rate * Math.min(40, now - be.spunAt); be.spunAt = now; }
         s.spin = be.spin + rate * partial;
         Direction f = st.hasProperty(WindTurbineBlock.FACING) ? st.getValue(WindTurbineBlock.FACING) : Direction.NORTH;
-        s.facingYaw = (180f - f.toYRot()) * (float) Math.PI / 180f;
+        // the nacelle yaws to keep the rotor (local -z) facing into the wind, easing round slowly like the real thing
+        float[] w = com.stormreach.client.ClientWeather.windDir();
+        float target = (float) Math.atan2(w[0], w[1]);
+        if (Float.isNaN(be.yawNow)) be.yawNow = (180f - f.toYRot()) * (float) Math.PI / 180f;
+        float diff = (float) Math.atan2(Math.sin(target - be.yawNow), Math.cos(target - be.yawNow));
+        be.yawNow += diff * Math.min(1f, 0.004f * Math.max(1, now - be.yawAt)); be.yawAt = now;
+        s.facingYaw = be.yawNow;
     }
 
     @Override
@@ -51,7 +57,8 @@ public class TurbineRenderer implements BlockEntityRenderer<WindTurbineBlockEnti
         pose.pushPose();
         pose.translate(0.5, 0, 0.5);
         int light = s.lightCoords;
-        collector.submitCustomGeometry(pose, RenderTypes.entityCutout(TEXTURE), (p, vc) -> build(HailstoneRenderer.sink(p, vc, light), s.spin, s.facingYaw));
+        collector.submitCustomGeometry(pose, RenderTypes.entityCutout(com.stormreach.client.render.Mesh.white()),
+                (p, vc) -> com.stormreach.client.render.Machines.windTurbine(com.stormreach.client.render.Mesh.to(p, vc, light), s.facingYaw, s.spin, com.stormreach.sky.WindTurbineBlock.TOWER));
         pose.popPose();
     }
 
@@ -106,5 +113,5 @@ public class TurbineRenderer implements BlockEntityRenderer<WindTurbineBlockEnti
     }
 
     @Override public boolean shouldRenderOffScreen() { return true; }
-    @Override public int getViewDistance() { return 96; }
+    @Override public int getViewDistance() { return 256; }
 }

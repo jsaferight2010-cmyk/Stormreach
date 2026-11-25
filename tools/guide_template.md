@@ -321,7 +321,7 @@ Gilded Stormfruit is also needed for the Aurorite Backpack upgrade and the Hollo
   - **To drive:** right-click to get in, W/S for throttle and brake, A/D to steer, sneak to get out.
   - **To pick it up:** sneak + right-click from outside.
   - **Dashboard:** the action bar tracks the nearest tornado: its rating, distance and bearing, which way and how fast it's moving, its peak wind, and the wind where you are.
-  - **Anchors:** stop for two seconds and its hydraulic anchors drop. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you.
+  - **Anchors:** press the anchor key (default **Z**, change it under Controls) and four hydraulic spikes slam down from the armour skirts at once. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you. Press the key again to raise them before you drive off.
 - **Weather Balloon:** use it to launch a radiosonde. It climbs with the wind, bursts at the storm tops, and radios back a **sounding**:
   - temperature and dew point
   - cloud base and freezing level

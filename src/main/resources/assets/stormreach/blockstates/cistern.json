@@ -1,7 +1,34 @@
 {
   "variants": {
-    "": {
-      "model": "stormreach:block/cistern"
+    "level=0,storm=false": {
+      "model": "stormreach:block/cistern_0"
+    },
+    "level=0,storm=true": {
+      "model": "stormreach:block/cistern_0_storm"
+    },
+    "level=1,storm=false": {
+      "model": "stormreach:block/cistern_1"
+    },
+    "level=1,storm=true": {
+      "model": "stormreach:block/cistern_1_storm"
+    },
+    "level=2,storm=false": {
+      "model": "stormreach:block/cistern_2"
+    },
+    "level=2,storm=true": {
+      "model": "stormreach:block/cistern_2_storm"
+    },
+    "level=3,storm=false": {
+      "model": "stormreach:block/cistern_3"
+    },
+    "level=3,storm=true": {
+      "model": "stormreach:block/cistern_3_storm"
+    },
+    "level=4,storm=false": {
+      "model": "stormreach:block/cistern_4"
+    },
+    "level=4,storm=true": {
+      "model": "stormreach:block/cistern_4_storm"
     }
   }
 }

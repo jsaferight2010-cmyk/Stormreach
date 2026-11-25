@@ -41,7 +41,7 @@ public final class WeatherUi {
 
     public record Report(int device, BlockPos pos, float windAvg, float windGust, String windFrom, float tempC, float humidity, float dewC,
                          float pressure, int sky, float wetness, String forecast, String risk, float range, boolean linked,
-                         List<Contact> contacts, List<Cell> cells, List<Core> cores) {}
+                         List<Contact> contacts, List<Cell> cells, List<Core> cores, RadarScan.Grid scan) {}
 
     private static void writeStr(FriendlyByteBuf b, String s) { b.writeUtf(s, 512); }
 
@@ -59,6 +59,8 @@ public final class WeatherUi {
         for (Cell c : r.cells()) { b.writeFloat(c.dx()); b.writeFloat(c.dz()); b.writeFloat(c.growth()); b.writeFloat(c.width()); b.writeBoolean(c.severe()); }
         b.writeVarInt(r.cores().size());
         for (Core c : r.cores()) { b.writeFloat(c.dx()); b.writeFloat(c.dz()); b.writeFloat(c.radius()); b.writeVarInt(c.kind()); }
+        b.writeBoolean(r.scan() != null);
+        if (r.scan() != null) { b.writeByteArray(r.scan().dbz()); b.writeByteArray(r.scan().velocity()); }
     }
 
     static Report read(FriendlyByteBuf b) {
@@ -76,7 +78,13 @@ public final class WeatherUi {
         n = Math.min(64, b.readVarInt());
         List<Core> cores = new ArrayList<>();
         for (int i = 0; i < n; i++) cores.add(new Core(b.readFloat(), b.readFloat(), b.readFloat(), b.readVarInt()));
-        return new Report(device, pos, wa, wg, from, t, rh, dew, p, sky, wet, fc, risk, range, linked, contacts, cells, cores);
+        RadarScan.Grid scan = null;
+        if (b.readBoolean()) {
+            int n2 = com.stormreach.sim.RadarMath.AZIMUTHS * com.stormreach.sim.RadarMath.GATES;
+            byte[] dbz = b.readByteArray(n2), vel = b.readByteArray(n2);
+            if (dbz.length == n2 && vel.length == n2) scan = new RadarScan.Grid(dbz, vel);
+        }
+        return new Report(device, pos, wa, wg, from, t, rh, dew, p, sky, wet, fc, risk, range, linked, contacts, cells, cores, scan);
     }
 
     /** Server to client: open (or refresh) the weather screen with this reading. */
@@ -161,9 +169,18 @@ public final class WeatherUi {
                 if (cores.size() >= 32) break;
             }
         }
+        RadarScan.Grid scan = null;
+        if (radar) {
+            List<TornadoEntity> tors = new ArrayList<>();
+            for (TornadoEntity tor : TornadoManager.live(level)) if (tor.position().distanceTo(c) < range * 1.2) tors.add(tor);
+            List<StormCellEntity> sc = level.getEntitiesOfClass(StormCellEntity.class, new AABB(pos).inflate(range * 1.1, 400, range * 1.1));
+            List<WeatherEvents.ActiveEvent> ev = new ArrayList<>();
+            for (WeatherEvents.ActiveEvent e : TornadoManager.events()) if (e.level == level && e.centre.distanceTo(c) < range * 1.2) ev.add(e);
+            scan = RadarScan.scan(level, c, range, tors, sc, ev);
+        }
         int sky = level.isThundering() ? 2 : level.isRaining() ? 1 : 0;
         return new Report(device, pos, (float) wind[0], (float) wind[1], Instruments.windFrom(), (float) t, (float) rh, (float) Instruments.dewPointC(t, rh),
                 (float) Instruments.pressureHpa(level, pos), sky, (float) RainAccumulation.wetness(level), Instruments.forecast(level),
-                Instruments.stormRisk(level, pos), range, linked, contacts, cells, cores);
+                Instruments.stormRisk(level, pos), range, linked, contacts, cells, cores, scan);
     }
 }

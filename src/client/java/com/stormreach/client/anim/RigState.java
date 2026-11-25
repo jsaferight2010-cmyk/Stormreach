@@ -16,6 +16,8 @@ public class RigState extends LivingEntityRenderState {
     /** A per-entity constant in [0,1), so a herd doesn't move in lockstep. */
     public float seed;
     public boolean saddled, sheared, charged, anchored;
+    /** 6.0: the local player is driving this vehicle in first person (draw the cockpit, not the cab). */
+    public boolean firstPerson;
     /** A smoothed 0..1 value a renderer can drive (a hermit crab pulling into its shell, a vehicle's anchors). */
     public float hide;
 }

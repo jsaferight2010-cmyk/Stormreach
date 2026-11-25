@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "stormreach:item/cistern"
-  }
+  "parent": "stormreach:block/cistern_3"
 }

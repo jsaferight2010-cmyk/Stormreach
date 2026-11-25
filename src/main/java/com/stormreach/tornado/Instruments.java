@@ -33,10 +33,21 @@ public final class Instruments {
         return new double[]{Math.max(sustained, Math.max(tornado, burst) * 0.75), Math.max(gust, Math.max(tornado, burst))};
     }
 
+    /** Background wind speed (mph) at a column without touching any blocks: the radar uses this for every gate. */
+    public static double ambientMph(ServerLevel level, double x, double z) {
+        long hour = level.getGameTime() / 1000;
+        double n = noise(hour, Mth.floor(x) >> 6, Mth.floor(z) >> 6);
+        double base = level.isThundering() ? 28 + 14 * n : level.isRaining() ? 16 + 12 * n : 3 + 9 * n;
+        if (level.dimension() != Level.OVERWORLD) base = com.stormreach.realm.TempestRealm.isRealm(level) ? 22 + 18 * n : 2 + 4 * n;
+        return base;
+    }
+
     /** Direction the wind blows FROM (meteorological convention), as a 16-point compass label. */
     public static String windFrom() {
         Vec3 w = StormWeather.windVector();
-        return compass(Math.toDegrees(Math.atan2(-w.x, w.z)) + 180);
+        // bearing the air moves toward is atan2(x, -z) (0 = north, 90 = east); it comes FROM the opposite side.
+        // (5.x had both signs flipped, so a wind blowing east read "from E".)
+        return compass(Math.toDegrees(Math.atan2(w.x, -w.z)) + 180);
     }
 
     /** Station pressure in hPa (altitude-corrected), with any tornado's pressure deficit. */

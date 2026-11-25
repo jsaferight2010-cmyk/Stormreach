@@ -1,6 +1,3 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "stormreach:block/salt_crystal"
-  }
+  "parent": "stormreach:block/salt_crystal"
 }

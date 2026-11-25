@@ -397,7 +397,7 @@ def all_boxes(parts):
 
 def pack(model):
     boxes = sorted(all_boxes(model.parts), key=lambda b: (-(b.s[2] + b.s[1]), -(b.s[0] + b.s[2])))
-    for W in (64, 128, 256):
+    for W in (64, 128, 256, 512):
         x = y = shelf = 0
         ok = True
         for b in boxes:
@@ -408,9 +408,9 @@ def pack(model):
             b.uv = (x, y); x += iw; shelf = max(shelf, ih)
         H = y + shelf
         if ok:
-            for Hp in (32, 64, 128, 256):
+            for Hp in (32, 64, 128, 256, 512):
                 if H <= Hp <= W: return W, Hp
-    raise ValueError(f'{model.cls}: does not fit a 256x256 texture')
+    raise ValueError(f'{model.cls}: does not fit a 512x512 texture')
 
 
 def paint(model):
@@ -1332,44 +1332,70 @@ M[-1].clips.append(Clip('cast', 24, sym(T(left_wing_rz=[(0, 0), (0.3, -70), (0.7
                                          left_tail_ry=[(0, 0), (0.3, 25), (0.75, 25), (1, 0)]))))
 
 # ---- Tornado Intercept Vehicle --------------------------------------------------------------------------------
-tiv = P('body', (0, 17, 0), boxes=[Box(-13, -9, -20, 26, 9, 40, 'armor'), Box(-12, -12, -20, 24, 3, 12, 'hood'), Box(-11, -8, -21, 22, 6, 1, 'grille'),
-                                  Box(-12.5, -9.5, 10, 25, 1, 10, 'armor2'), Box(-13.5, -4, -19, 1, 4, 38, 'metal'), Box(12.5, -4, -19, 1, 4, 38, 'metal'),
-                                  Box(-10, -7, -21.4, 3, 2, 1, 'light'), Box(7, -7, -21.4, 3, 2, 1, 'light'),
-                                  Box(-11, -7, 20.2, 3, 2, 1, 'tail_light'), Box(8, -7, 20.2, 3, 2, 1, 'tail_light')])
-tiv.add(P('plow', (0, -2, -21), (0.5, 0, 0), [Box(-14, -4, -3, 28, 5, 3, 'metal')]))
-for i, (x, z) in enumerate(((-12, -8), (11, -8), (-12, 9), (11, 9), (-12, 0.5), (11, 0.5))):
-    tiv.add(P(f'pillar{i}', (x + 0.5, -9, z), boxes=[Box(-1, -14, -1, 2, 14, 2, 'armor2')]))
-tiv.add(P('roof', (0, -23, 0.5), boxes=[Box(-13, -2, -10, 26, 2, 21, 'armor'), Box(-11, -3, -6, 22, 1, 14, 'armor2'),
-                                         Box(-9, -3.6, -10.4, 18, 1, 2, 'beacon')]).add(
-    P('mast', (0, -3, 7), boxes=[Box(-0.5, -9, -0.5, 1, 9, 1, 'metal')]).add(
-        P('anemometer', (0, -9, 0), boxes=[Box(-0.5, -1, -0.5, 1, 1, 1, 'metal')] + [Box(-0.5 + dx * 3, -1.5, -0.5 + dz * 3, 1, 2, 1, 'cup')
-                                                                                       for dx, dz in ((1, 0), (-0.5, 0.86), (-0.5, -0.86))]),
-        P('vane', (0, -6, 0), boxes=[Box(-0.5, -0.5, -3, 1, 1, 6, 'metal'), Box(-0.5, -1.5, 2, 1, 3, 2, 'hood')])),
-    P('dome', (-7, -3, 3), boxes=[Box(-2.5, -3, -2.5, 5, 3, 5, 'dome'), Box(-1.5, -4, -1.5, 3, 1, 3, 'dome')])))
-for i, (x, z) in enumerate(((-6.5, -11), (6.5, -11))):
-    tiv.add(P(f'slat{i}', (x, -15, -8.9), boxes=[Box(-5.5, 0, -0.5, 11, 1, 1, 'armor2')]))
-for side, sx in (('left', 13), ('right', -13)):
-    tiv.add(P(f'{side}_door_bar', (sx * 0.985, -15, 1), boxes=[Box(-0.5, 0, -8, 1, 1, 16, 'armor2')]))
+# 6.0: modelled on a real armoured intercept vehicle: a long low gunmetal hull, armour skirts nearly to the ground
+# over the wheels, a sloped glacis, a tall armoured cab with narrow slit windows, a roof turret with a camera port,
+# a light bar and an instrument mast; four hydraulic spikes drop from the skirt corners on command (the anchor key).
+# 'shell' is the exterior cab; in first person the driver sees the 'cockpit' (dash, wheel, window frame) instead.
+tiv = P('body', (0, 17, 0), boxes=[
+    Box(-15, -9, -26, 30, 9, 52, 'armor'),                                            # hull
+    Box(-16, -8, -24, 1.5, 12, 48, 'armor2'), Box(14.5, -8, -24, 1.5, 12, 48, 'armor2'),  # skirts
+    Box(-16.4, -5.5, -24, 0.6, 1.6, 48, 'stripe'), Box(15.8, -5.5, -24, 0.6, 1.6, 48, 'stripe'),
+    Box(-15, -4, -29.5, 30, 4, 3.5, 'metal'),                                          # front bumper / ram
+    Box(-12.5, -7.5, -26.6, 4, 2, 0.8, 'light'), Box(8.5, -7.5, -26.6, 4, 2, 0.8, 'light'),
+    Box(-13, -7.5, 25.6, 4, 2, 0.8, 'tail_light'), Box(9, -7.5, 25.6, 4, 2, 0.8, 'tail_light'),
+    Box(-13, -13, 18, 26, 4, 8, 'armor2'),                                             # rear equipment box
+])
+tiv.add(P('glacis', (0, -9, -26), (-1.05, 0, 0), [Box(-15, -13.5, -1, 30, 13.5, 1.5, 'armor'), Box(-13, -10, -1.5, 26, 2, 0.5, 'stripe')]))
+shell = P('shell', (0, -9, 0), boxes=[
+    Box(-13, -17, -14, 26, 17, 32, 'armor'),                                           # armoured cab
+    Box(-13.5, -18, -14.5, 27, 1, 33, 'armor2'),                                       # roof plate
+    Box(-11, -13.6, -14.6, 22, 2, 0.6, 'glass'),                                       # front slit
+    Box(-13.6, -13.6, -10, 0.6, 2, 22, 'glass'), Box(13, -13.6, -10, 0.6, 2, 22, 'glass'),   # side slits
+    Box(-10, -19.2, -14.2, 20, 1.2, 1.6, 'beacon'),                                    # light bar
+    Box(-13.4, -9, -6, 0.4, 7, 8, 'armor2'), Box(13, -9, -6, 0.4, 7, 8, 'armor2'),     # doors
+])
+shell.add(P('turret', (0, -18, 4), boxes=[Box(-5, -7, -5, 10, 7, 10, 'armor'), Box(-4, -8, -4, 8, 1, 8, 'armor2'),
+                                          Box(-2.5, -5, -5.6, 5, 2.5, 0.6, 'glass'), Box(-1, -4.4, -6.4, 2, 1.4, 0.8, 'metal')]))
+shell.add(P('mast', (8, -18, 14), boxes=[Box(-0.5, -12, -0.5, 1, 12, 1, 'metal')]).add(
+    P('anemometer', (0, -12, 0), boxes=[Box(-0.5, -1, -0.5, 1, 1, 1, 'metal')] + [Box(-0.5 + dx * 3, -1.5, -0.5 + dz * 3, 1, 2, 1, 'cup')
+                                                                                   for dx, dz in ((1, 0), (-0.5, 0.86), (-0.5, -0.86))]),
+    P('vane', (0, -8, 0), boxes=[Box(-0.5, -0.5, -3, 1, 1, 6, 'metal'), Box(-0.5, -1.5, 2, 1, 3, 2, 'stripe')])))
+shell.add(P('antenna', (-9, -18, 14), boxes=[Box(-0.3, -14, -0.3, 0.6, 14, 0.6, 'metal')]))
+tiv.add(shell)
+cockpit = P('cockpit', (0, -9, 0), boxes=[
+    Box(-12.5, -6, -13.5, 25, 4, 5, 'armor2'),                                         # dashboard
+    Box(-7, -6.6, -12, 6, 0.6, 3, 'screen'), Box(1.5, -6.6, -12, 5, 0.6, 3, 'screen'), # dash displays
+    Box(-13, -18, -14.5, 3, 17, 3, 'armor'), Box(10, -18, -14.5, 3, 17, 3, 'armor'),   # A-pillars
+    Box(-13, -18.5, -14.5, 26, 4.5, 3, 'armor'),                                       # roof rim above the slit
+    Box(-13, -11.6, -14.5, 26, 5.6, 1.2, 'armor'),                                     # cowl below the slit
+])
+cockpit.add(P('steering', (0, -8, -9.5), (0.6, 0, 0), [Box(-3, -3, -0.5, 6, 6, 1, 'tire'), Box(-0.5, -0.5, -0.5, 1, 1, 4, 'metal')]))
+tiv.add(cockpit)
 wheels = []
-for nm, x, z in (('wheel_fl', 12.5, -12), ('wheel_fr', -12.5, -12), ('wheel_bl', 12.5, 12), ('wheel_br', -12.5, 12)):
-    wheels.append(P(nm, (x, 19.5, z), boxes=[Box(-2, -4.5, -4.5, 4, 9, 9, 'tire'), Box(-2.5 if x > 0 else -2.5, -2, -2, 5, 4, 4, 'hub')]))
-anchors = [P(f'anchor{i}', (x, 15, z), boxes=[Box(-1, 0, -1, 2, 6, 2, 'metal'), Box(-1.5, 5, -1.5, 3, 1, 3, 'metal')]) for i, (x, z) in
-           enumerate(((10, -17), (-10, -17), (10, 17), (-10, 17)))]
-M.append(Model('InterceptVehicleModel', 'intercept_vehicle', {'armor': ('decal', C('#4a5058'), C('#e07a2a')), 'armor2': ('metal', C('#3a3f46'), C('#20242a')),
-    'hood': ('decal', C('#e07a2a'), C('#f2f2f2')), 'grille': ('grille', C('#2a2e34'), C('#101214')), 'metal': ('metal', C('#8a929a'), C('#3a4048')),
+for nm, x, z in (('wheel_fl', 12.5, -16), ('wheel_fr', -12.5, -16), ('wheel_bl', 12.5, 16), ('wheel_br', -12.5, 16)):
+    wheels.append(P(nm, (x, 19, z), boxes=[Box(-2.5, -5, -5, 5, 10, 10, 'tire'), Box(-3, -2.2, -2.2, 6, 4.4, 4.4, 'hub')]))
+anchors = [P(f'anchor{i}', (x, 8, z), boxes=[Box(-1.25, 0, -1.25, 2.5, 8, 2.5, 'metal'), Box(-2.5, 8, -2.5, 5, 1, 5, 'armor2'),
+                                             Box(-0.75, 9, -0.75, 1.5, 3, 1.5, 'metal')])
+           for i, (x, z) in enumerate(((15.2, -21), (-15.2, -21), (15.2, 21), (-15.2, 21)))]
+M.append(Model('InterceptVehicleModel', 'intercept_vehicle', {'armor': ('metal', C('#5a626b'), C('#2c3137')), 'armor2': ('metal', C('#3d434a'), C('#1c2024')),
+    'stripe': ('decal', C('#e07a2a'), C('#f2f2f2')), 'glass': ('shell', C('#2c4658'), C('#0c1620')), 'metal': ('metal', C('#9aa2aa'), C('#3a4048')),
     'light': ('glow', C('#fffbe0'), C('#e0c060')), 'tail_light': ('glow', C('#ff6a5a'), C('#a01a10')), 'beacon': ('glow', C('#ffb84a'), C('#c06010')),
-    'cup': ('shell', C('#d8dde2'), C('#6a7078')), 'dome': ('shell', C('#e8ecf0'), C('#9aa4ae')), 'tire': ('tread', C('#2a2a2c'), C('#101010')),
+    'cup': ('shell', C('#d8dde2'), C('#6a7078')), 'screen': ('glow', C('#4fe08a'), C('#1a5a34')), 'tire': ('tread', C('#2a2a2c'), C('#101010')),
     'hub': ('metal', C('#b0b8c0'), C('#505860'))}, [tiv, *wheels, *anchors], [
     Clip('time', 30, T(body_py=[(0, 0), (0.5, 0.15)]), 'moveW'),
     hurt_clip('body', None, 0.3)],
-    doc='The Tornado Intercept Vehicle: an armoured chase truck with a storm-orange hood, a plow, slit-armoured windows, a roof beacon bar, a radar dome and an instrument mast whose anemometer spins in the wind; four hydraulic anchors drop when it is parked.',
+    doc='The Tornado Intercept Vehicle: a long armoured hull with skirts to the ground, a sloped glacis, an armoured cab with slit windows, a camera turret, a light bar and an instrument mast; four hydraulic spikes drop from the skirt corners when anchored. In first person only the cockpit is drawn.',
     extra='''        float roll = s.walkAnimationPos * 1.1f;
         wheelFl.xRot = roll; wheelFr.xRot = roll; wheelBl.xRot = roll; wheelBr.xRot = roll;
         wheelFl.yRot = Mth.clamp(-turn * 0.08f, -0.5f, 0.5f); wheelFr.yRot = wheelFl.yRot;
         anemometer.yRot = t * (0.35f + s.speed * 3f);
         vane.yRot = Mth.sin(t * 0.02f) * 0.3f;
+        turret.yRot = Mth.sin(t * 0.008f) * 1.2f;
+        steering.zRot = Mth.clamp(-turn * 0.15f, -1.2f, 1.2f);
         body.zRot += Mth.clamp(turn * 0.01f, -0.06f, 0.06f);
-        for (ModelPart a : new ModelPart[] {anchor0, anchor1, anchor2, anchor3}) { a.visible = s.hide > 0.02f; a.y += s.hide * 4f; }
+        shell.visible = !s.firstPerson;
+        for (ModelPart w : new ModelPart[] {wheelFl, wheelFr, wheelBl, wheelBr}) w.visible = !s.firstPerson;
+        for (ModelPart a : new ModelPart[] {anchor0, anchor1, anchor2, anchor3}) { a.visible = !s.firstPerson; a.y += s.hide * 6.5f; }
 '''))
 
 # ---- Weather Balloon ------------------------------------------------------------------------------------------

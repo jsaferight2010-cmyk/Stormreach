@@ -20,6 +20,9 @@ public class WindTurbineBlockEntity extends BlockEntity implements PowerNode {
     /** Client-side rotor angle (radians) and the game time it was last advanced. */
     public float spin;
     public long spunAt = -1;
+    /** Client-side nacelle yaw (radians, eased toward the wind) and when it was last updated. */
+    public float yawNow = Float.NaN;
+    public long yawAt;
     private int stored, rate;
 
     public WindTurbineBlockEntity(BlockPos pos, BlockState state) {
@@ -35,11 +38,12 @@ public class WindTurbineBlockEntity extends BlockEntity implements PowerNode {
 
     static void serverTick(ServerLevel level, BlockPos pos, BlockState state) {
         if (level.getGameTime() % 20 != Math.floorMod(pos.asLong(), 20)) return;
-        double[] wind = com.stormreach.tornado.Instruments.windMph(level, pos.above());
-        int power = WindTurbineBlock.powerFor(wind[0], level.canSeeSky(pos.above()));
+        BlockPos hub = pos.above(WindTurbineBlock.TOWER + 1);   // the rotor sits at the top of the tower, in the stronger wind aloft
+        double[] wind = com.stormreach.tornado.Instruments.windMph(level, hub);
+        int power = WindTurbineBlock.powerFor(wind[0], level.canSeeSky(hub));
         if (power != state.getValue(WindTurbineBlock.POWER)) level.setBlock(pos, state.setValue(WindTurbineBlock.POWER, power), Block.UPDATE_ALL);
         if (level.getBlockEntity(pos) instanceof WindTurbineBlockEntity be) {
-            be.rate = power * 2;
+            be.rate = power * 6;   // 6.0: the utility-scale rotor makes three times the old output
             be.insert(be.rate * 20);
             PowerNet.share(level, pos, be);
         }

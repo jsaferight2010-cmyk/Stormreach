@@ -424,3 +424,31 @@ boot the headless test server in GitHub Actions as before.
   biome-filtered placed features that no biome uses. Self-tests against vanilla data. It flagged exactly the two
   crash paths above and nothing else.
 - GameTest `thunderspireTreesPlaceWithoutABiomeCheckCrash` places the three tree selectors 200x each.
+
+### Stage 2: visuals (models, armour, machines, radar data, HUD)
+- Armour: `tools/armor60.py` paints each set piece by piece on the humanoid UV layout (helmet with eye slit and nose
+  guard, cuirass that stops above the belt, pauldrons and bracers, boots on the lower leg only, belt/tassets/knee
+  guards on the leggings layer) with transparency between pieces. The 5.x layers flooded every box with one noisy
+  colour, which is why a full set read as a speckled blob. Preview: `python3 ~/scratch/armor_preview.py set...`.
+- Machines are procedural meshes in `client/render/Machines.java` drawn by their BERs and by the placement hologram:
+  NEXRAD-style Doppler radar (pad, shelter, lattice tower, railed platform, panelled radome), 16-block utility wind
+  turbine (yaws into the synced wind), Indianapolis-style rotating siren on a wooden pole, 3-block weather-station
+  mast (spinning cups, live vane, radiation shield, solar panel, rain gauge). `client/render/Mesh.java` is the
+  shape kit. Tall machines use `structure/Multiblock` + invisible `machine_part` cells (placement refused when
+  blocked, any part breaks the whole, parts self-remove without a controller). Icons in tools/art were rendered
+  from the same meshes by an offline rasteriser (~/scratch/prev/MeshPreview.java).
+- `client/render/PlacementHologram` (Fabric LevelRenderEvents.COLLECT_SUBMITS) replaces the particle outline:
+  translucent cyan/red copy of the real model + red cells where blocked.
+- Radar velocity was never real (faint discs + two dots). Now `tornado/RadarScan` builds a 90x40 polar scan of dBZ
+  and radial velocity from cells, hail cores, downbursts (radial outflow), tornado wind fields and the ambient wind;
+  `sim/RadarMath` holds the geometry and NWS colour scales (unit-tested); the client paints it into a texture
+  (`client/weather/RadarImage`). Same scope for the Doppler radar, Portable Storm Radar and Weather Monitor.
+- Units: `sim/Units` (imperial default, metric option, unit-tested), `units=` in stormreach.properties.
+- HUD: `weather/WeatherHud` sends one packet a second (wind, temp, pressure, nearest tornado for goggles/TIV); the
+  client draws `client/hud/StormHudPanel` top-left. Wind "from" was inverted in 5.x (`Instruments.windFrom`): fixed.
+- Salt crystal: halite cube cluster (hopper faces), hitbox 12 px tall. Cistern: open tank, grate, real water surface
+  and a sight glass on every side (levels 0-4, water or Stormwater). Umbrella and Stormkite: 3D held models (flat icon
+  in GUI via a display_context select). Held transforms are computed, not seen: need an in-game look.
+- TIV: new armoured model (skirts, glacis, slit-window cab, camera turret, light bar, mast), first-person cockpit
+  (cab hidden for the driver), passenger seat lowered into the cab, hitbox 2.4x2.6. Anchor key (default Z) toggles the
+  spikes immediately (TivControls payload); the 2 s auto-anchor is gone.

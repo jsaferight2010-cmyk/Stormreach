@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
  * anemometer (wind speed / 10 mph), storm detector (storm nearby), tornado radar (tornado within 256 blocks).
  * A tornado siren sounds while powered.
  */
-public class InstrumentBlock extends Block {
+public class InstrumentBlock extends Block implements com.stormreach.structure.Multiblock, net.minecraft.world.level.block.EntityBlock {
     public enum Kind { ANEMOMETER, THERMOMETER, WEATHER_STATION, STORM_DETECTOR, TORNADO_RADAR, TORNADO_SIREN, WEATHER_MONITOR, BAROMETER, WIND_VANE }
 
     public static final IntegerProperty POWER = BlockStateProperties.POWER;
@@ -45,8 +45,56 @@ public class InstrumentBlock extends Block {
     }
 
     @Override
+    public net.minecraft.world.level.block.entity.BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return partHeight(state) > 0 ? new InstrumentBlockEntity(pos, state) : null;
+    }
+
+    private static final net.minecraft.world.phys.shapes.VoxelShape POLE_BASE = Block.box(4, 0, 4, 12, 16, 12),
+            STATION_BASE = Block.box(1, 0, 1, 15, 14, 15);
+
+    @Override
+    protected net.minecraft.world.phys.shapes.VoxelShape getShape(BlockState s, BlockGetter level, BlockPos pos, net.minecraft.world.phys.shapes.CollisionContext ctx) {
+        return kind == Kind.TORNADO_SIREN ? POLE_BASE : kind == Kind.WEATHER_STATION ? STATION_BASE : net.minecraft.world.phys.shapes.Shapes.block();
+    }
+
+    @Override
+    protected net.minecraft.world.level.block.RenderShape getRenderShape(BlockState s) {
+        return partHeight(s) > 0 ? net.minecraft.world.level.block.RenderShape.INVISIBLE : net.minecraft.world.level.block.RenderShape.MODEL;
+    }
+
+    public Kind kind() { return kind; }
+
+    /** 6.0: the siren stands on a 6-block utility pole; the weather station is a 3-block instrument mast. */
+    @Override
+    public int partHeight(BlockState s) {
+        return kind == Kind.TORNADO_SIREN ? 5 : kind == Kind.WEATHER_STATION ? 2 : 0;
+    }
+
+    @Override
+    public com.stormreach.structure.MachinePartBlock.Shape partShape(BlockState s, int dy) {
+        if (kind == Kind.TORNADO_SIREN) return dy == 5 ? com.stormreach.structure.MachinePartBlock.Shape.MAST : com.stormreach.structure.MachinePartBlock.Shape.POLE;
+        return dy == 2 ? com.stormreach.structure.MachinePartBlock.Shape.NONE : com.stormreach.structure.MachinePartBlock.Shape.THIN;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(net.minecraft.world.item.context.BlockPlaceContext ctx) {
+        BlockState s = super.getStateForPlacement(ctx);
+        if (s != null && !com.stormreach.structure.Multiblock.blocked(ctx.getLevel(), ctx.getClickedPos(), partHeight(s)).isEmpty()) return null;
+        return s;
+    }
+
+    @Override
     protected void onPlace(BlockState state, Level level, BlockPos pos, BlockState old, boolean moved) {
-        if (!level.isClientSide()) level.scheduleTick(pos, this, 5);
+        if (!level.isClientSide()) {
+            level.scheduleTick(pos, this, 5);
+            if (!old.is(this) && partHeight(state) > 0) com.stormreach.structure.Multiblock.buildParts(level, pos, state, this);
+        }
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean moved) {
+        if (partHeight(state) > 0) com.stormreach.structure.Multiblock.removeParts(level, pos, partHeight(state));
+        super.affectNeighborsAfterRemoval(state, level, pos, moved);
     }
 
     @Override
@@ -63,7 +111,7 @@ public class InstrumentBlock extends Block {
         };
         if (state.getValue(POWER) != power) level.setBlock(pos, state.setValue(POWER, power), Block.UPDATE_ALL);
         if (kind == Kind.TORNADO_SIREN && power > 0 && level.getGameTime() % 60 < 20) {
-            level.playSound(null, pos, WeatherSounds.SIREN, SoundSource.BLOCKS, 6.0f, 1.0f);
+            level.playSound(null, pos.above(5), WeatherSounds.SIREN, SoundSource.BLOCKS, 8.0f, 1.0f);   // from the siren head atop the pole
         }
         level.scheduleTick(pos, this, kind == Kind.TORNADO_SIREN ? 20 : 40);
     }

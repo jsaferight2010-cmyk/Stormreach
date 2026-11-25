@@ -117,7 +117,7 @@ public final class ModBlocks {
     // ---------- Salt (Brinewater Marsh) ----------
     public static final Block SALT_BLOCK = register("salt_block", Block::new,
             BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).strength(0.8f).sound(SoundType.CALCITE), true);
-    public static final Block SALT_CRYSTAL = register("salt_crystal", p -> new AmethystClusterBlock(5.0f, 3.0f, p),
+    public static final Block SALT_CRYSTAL = register("salt_crystal", p -> new AmethystClusterBlock(12.0f, 1.5f, p),   // 6.0: hitbox matches the cube cluster
             BlockBehaviour.Properties.of().mapColor(MapColor.SNOW).noOcclusion().strength(0.6f).sound(SoundType.SMALL_AMETHYST_BUD)
                     .lightLevel(s -> 2).pushReaction(PushReaction.POPPED), true);
 

@@ -163,6 +163,7 @@ public final class SkyRegistry {
             StormArrivals.tick(server);
             WeatherRadio.tick(server);
             ChaserGear.tick(server);
+            com.stormreach.weather.WeatherHud.tick(server);
         });
     }
 }

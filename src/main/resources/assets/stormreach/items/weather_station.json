@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "stormreach:block/weather_station"
+    "model": "stormreach:item/weather_station"
   }
 }

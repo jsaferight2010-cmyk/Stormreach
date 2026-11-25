@@ -976,4 +976,67 @@ public class StormreachGameTests {
         }
         h.succeed();
     }
+
+    /** 6.0 (test list 14): the radar's velocity scan is real Doppler data: a tornado shows an inbound/outbound couplet. */
+    @GameTest(maxTicks = 20)
+    public void dopplerVelocityShowsATornadoCouplet(GameTestHelper h) {
+        Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 1)));
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), at.add(0, 0, -200), stationary(TornadoFormation.SUPERCELL, EFScale.EF3, 150, 0));
+        if (t == null) { h.succeed(); return; }
+        var r = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.TORNADO_RADAR.ordinal(), BlockPos.containing(at));
+        Check.isTrue(h, r.scan() != null, "the Doppler radar sent no scan");
+        int in = 0, out = 0;
+        double range = r.range();
+        for (int az = 0; az < com.stormreach.sim.RadarMath.AZIMUTHS; az++) for (int g = 0; g < com.stormreach.sim.RadarMath.GATES; g++) {
+            double[] o = com.stormreach.sim.RadarMath.gateOffset(az, g, range);
+            if (Math.hypot(o[0] - (t.getX() - at.x), o[1] - (t.getZ() - at.z)) > 120) continue;
+            byte v = r.scan().velocity()[com.stormreach.sim.RadarMath.index(az, g)];
+            if (v == com.stormreach.sim.RadarMath.NO_DATA) continue;
+            if (v < -15) in++;
+            if (v > 15) out++;
+        }
+        t.discard();
+        Check.isTrue(h, in > 0 && out > 0, "no velocity couplet around the tornado: inbound gates " + in + ", outbound " + out);
+        // the scan survives the network
+        var buf = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        com.stormreach.tornado.WeatherUi.ReportPayload.CODEC.encode(buf, new com.stormreach.tornado.WeatherUi.ReportPayload(true, r));
+        var back = com.stormreach.tornado.WeatherUi.ReportPayload.CODEC.decode(buf);
+        Check.isTrue(h, back.report().scan() != null && java.util.Arrays.equals(back.report().scan().velocity(), r.scan().velocity()), "the velocity scan changed over the network");
+        h.succeed();
+    }
+
+    /** 6.0: tall machines build their whole column, refuse to place when blocked, and come down together. */
+    @GameTest(maxTicks = 20)
+    public void tallMachinesBuildAndComeDownWhole(GameTestHelper h) {
+        BlockPos base = new BlockPos(1, 1, 1);
+        h.setBlock(base, com.stormreach.sky.SkyRegistry.WIND_TURBINE);
+        for (int dy = 1; dy <= com.stormreach.sky.WindTurbineBlock.TOWER; dy++)
+            Check.isTrue(h, h.getBlockState(base.above(dy)).is(com.stormreach.structure.StructureRegistry.MACHINE_PART), "turbine tower cell " + dy + " missing");
+        h.getLevel().destroyBlock(h.absolutePos(base.above(7)), false);
+        Check.isTrue(h, h.getBlockState(base).isAir(), "breaking the tower didn't take the turbine down");
+        for (int dy = 1; dy <= com.stormreach.sky.WindTurbineBlock.TOWER; dy++)
+            Check.isTrue(h, !h.getBlockState(base.above(dy)).is(com.stormreach.structure.StructureRegistry.MACHINE_PART), "a turbine part was left floating at " + dy);
+        BlockPos siren = new BlockPos(3, 1, 1);
+        h.setBlock(siren, com.stormreach.tornado.WeatherItems.TORNADO_SIREN);
+        Check.isTrue(h, h.getBlockState(siren.above(5)).is(com.stormreach.structure.StructureRegistry.MACHINE_PART), "the siren has no pole");
+        Check.isTrue(h, h.getLevel().getBlockEntity(h.absolutePos(siren)) instanceof com.stormreach.tornado.InstrumentBlockEntity, "the siren has no renderer entity");
+        h.succeed();
+    }
+
+    /** 6.0: the TIV anchors respond to the key immediately (no two-second wait) and lock the truck in place. */
+    @GameTest(maxTicks = 20)
+    public void tivAnchorsDropOnCommand(GameTestHelper h) {
+        for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        var v = h.spawn(com.stormreach.chase.ChaseRegistry.INTERCEPT_VEHICLE_ENTITY, new BlockPos(2, 2, 2));
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { v.discard(); h.succeed(); return; }
+        p.startRiding(v, true, true);
+        h.runAfterDelay(3, () -> {
+            v.toggleAnchors(p);
+            Check.isTrue(h, v.isAnchored(), "the anchors didn't drop on the first press");
+            v.toggleAnchors(p);
+            Check.isTrue(h, !v.isAnchored(), "the anchors didn't rise on the second press");
+            p.stopRiding(); v.discard();
+            h.succeed();
+        });
+    }
 }

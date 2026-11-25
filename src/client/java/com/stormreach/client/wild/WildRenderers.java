@@ -76,7 +76,9 @@ public final class WildRenderers {
         @Override public void extractRenderState(InterceptVehicle e, RigState s, float partial) {
             super.extractRenderState(e, s, partial);
             s.anchored = e.isAnchored();
-            s.hide = smooth(e, s.anchored ? 1f : 0f, 0.2f);
+            s.hide = smooth(e, s.anchored ? 1f : 0f, 0.35f);   // spikes slam down in about a third of a second
+            var mc = net.minecraft.client.Minecraft.getInstance();
+            s.firstPerson = mc.player != null && e.hasPassenger(mc.player) && mc.getCameraEntity() == mc.player && mc.options.getCameraType().isFirstPerson();
         }
     }
 

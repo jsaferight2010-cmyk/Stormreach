@@ -38,8 +38,8 @@ import net.minecraft.world.phys.Vec3;
 /**
  * The Tornado Intercept Vehicle: an armoured storm-chasing truck. Right-click to drive (W/S throttle and brake, A/D steer,
  * sneak to get out); sneak + right-click from outside to pack it back into an item. Its dashboard (the action bar)
- * tracks the nearest tornado: rating, range, bearing, motion and wind. Stop for two seconds and its hydraulic anchors
- * drop, so even a violent tornado can't move it - the way to intercept one and log it from inside the core.
+ * tracks the nearest tornado: rating, range, bearing, motion and wind. Press the anchor key (default Z) to drop its
+ * hydraulic spikes at once so even a violent tornado can't move it, and again to raise them.
  */
 public class InterceptVehicle extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> ANCHORED = SynchedEntityData.defineId(InterceptVehicle.class, EntityDataSerializers.BOOLEAN);
@@ -99,8 +99,7 @@ public class InterceptVehicle extends PathfinderMob {
         double rate = (target == 0 || Math.signum(target) != Math.signum(speed)) && speed != 0 ? BRAKE : ACCEL;
         speed += Mth.clamp(target - speed, -rate, rate);
         if (Math.abs(speed) < 0.003 && target == 0) speed = 0;
-        if (isAnchored() && throttle != 0) entityData.set(ANCHORED, false);
-        if (isAnchored()) speed = 0;
+        if (isAnchored()) speed = 0;   // spikes down: the throttle does nothing until they are raised again
         float turn = steer * 4.0f * (float) Math.min(1.0, Math.abs(speed) * 5 + 0.15) * (speed < 0 ? -1 : 1);
         setYRot(getYRot() - turn);
         yRotO = getYRot();
@@ -125,11 +124,7 @@ public class InterceptVehicle extends PathfinderMob {
                         getZ() - Math.cos(getYRot() * Mth.DEG_TO_RAD) * 1.6, 0, 0.02, 0);
             return;
         }
-        stillTicks = Math.abs(speed) < 0.01 && onGround() ? stillTicks + 1 : 0;
-        if (stillTicks == 40 && isVehicle() && !isAnchored()) {
-            entityData.set(ANCHORED, true);
-            server.playSound(null, blockPosition(), ModSfx.BLOCK_METAL_PLACE, SoundSource.NEUTRAL, 1.5f, 0.6f);
-        }
+        // 6.0: the spikes are on their own key now (no more two-second wait); see toggleAnchors
         if (tickCount % 10 == 0 && getControllingPassenger() instanceof ServerPlayer driver) dashboard(server, driver);
     }
 
@@ -162,8 +157,25 @@ public class InterceptVehicle extends PathfinderMob {
             if (bestD < 40 && isAnchored() && peak > 85) StormAdvancements.award(driver, "tiv_intercept");
             ChaserLog.recordIntercept(driver, best, bestD, isAnchored());
         }
-        driver.sendOverlayMessage(msg);
+        // 6.0: the dashboard is drawn by the HUD panel (WeatherHud); msg is kept for the advancement/log logic above
     }
+
+    /**
+     * The anchor key: drops the four hydraulic spikes at once (the truck stops dead where it stands, and nothing
+     * short of the ground giving way moves it), or raises them again. Server side; called from the key packet.
+     */
+    public void toggleAnchors(ServerPlayer driver) {
+        if (getControllingPassenger() != driver) return;
+        boolean down = !isAnchored();
+        if (down && !onGround()) return;                 // nothing to bite into in mid-air
+        entityData.set(ANCHORED, down);
+        if (down) { speed = 0; setDeltaMovement(0, getDeltaMovement().y, 0); }
+        if (level() instanceof ServerLevel server)
+            server.playSound(null, blockPosition(), ModSfx.BLOCK_METAL_PLACE, SoundSource.NEUTRAL, 1.5f, down ? 0.6f : 0.8f);
+    }
+
+    /** Ground speed in mph (for the dashboard). */
+    public double speedMph() { return Math.abs(speed) * 20 * 2.237; }
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {

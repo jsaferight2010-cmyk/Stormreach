@@ -268,8 +268,12 @@ public class TornadoEntity extends Entity {
             // directed: turn toward the target (a few degrees a tick, so it curves rather than snaps) and stop on it
             double dx = steerTarget.x - getX(), dz = steerTarget.z - getZ(), dist = Math.hypot(dx, dz);
             double want = Math.toDegrees(Math.atan2(dz, dx));
-            headingDeg += Mth.clamp(Mth.wrapDegrees(want - headingDeg), -4, 4);
+            double err = Mth.wrapDegrees(want - headingDeg);
+            double turn = dist < 10 ? 30 : 4; // close in, turn sharply so it doesn't circle the target
+            headingDeg += Mth.clamp(err, -turn, turn);
             speed = Math.min(Math.max(speed, 0.4), dist * 0.1); // at least ~8 m/s so a slow tornado still gets there
+            speed *= Math.max(0, Math.cos(Math.toRadians(Math.min(90, Math.abs(err))))); // slow down while turning
+            if (dist < 0.5) speed = 0;
         } else {
             // meander, and in the decaying stage curve to the left (as occluding tornadoes often do)
             headingDeg += (random.nextDouble() - 0.5) * 0.6;

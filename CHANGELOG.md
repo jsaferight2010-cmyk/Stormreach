@@ -3,6 +3,21 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 5: weather screens
+- **Every weather device opens its own screen** instead of printing to chat. Sneak + use still prints the old chat reading.
+  - The anemometer and wind vane show the Wind tab: a compass rose with the wind's direction, average and gusts, and the Beaufort scale.
+  - The thermometer and barometer show the Air tab: temperature, dew point, humidity, pressure and ground wetness.
+  - The weather station shows Overview, Wind, Air and Forecast.
+  - The storm detector, siren and weather radio show an overview with tornado warnings.
+  - The Doppler radar and the portable Storm Radar show a **live radar scope**:
+    - a rotating sweep over range rings
+    - storm cloud echoes coloured green → yellow → red → magenta as they strengthen
+    - hail cores and downburst outflows
+    - tornado markers with a contact list: bearing, distance, estimated rating, rotational shear and motion
+    - switch to **Velocity** to see each tornado's rotation couplet
+- **The Weather Monitor is the central weather interface.** It has every tab, and the radar too once a weather station and a Doppler radar are within 8 blocks.
+- The screens refresh once a second while open, from the server's own readings, so everyone sees the same weather.
+
 ### Stage 4: backpacks get their own slot
 - **A backpack slot** in the inventory, just above the offhand slot. It's separate from the chestplate, so you can wear armour and a backpack together.
   - Shift-click a backpack to put it on or take it off, or sneak + use with one in hand.

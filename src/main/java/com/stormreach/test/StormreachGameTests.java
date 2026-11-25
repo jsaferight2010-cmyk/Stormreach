@@ -490,4 +490,49 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    @GameTest(maxTicks = 100)
+    public void theVaultDoorNeedsAllThreeRightKeys(GameTestHelper h) {
+        var level = h.getLevel();
+        for (int x = 1; x <= 5; x++) for (int y = 1; y <= 5; y++) h.setBlock(new BlockPos(x, y, 3), LabyrinthRegistry.VAULT_DOOR);
+        BlockPos[] locks = {new BlockPos(2, 3, 3), new BlockPos(3, 3, 3), new BlockPos(4, 3, 3)};
+        for (int k = 0; k < 3; k++) h.setBlock(locks[k], LabyrinthRegistry.KEYHOLE.defaultBlockState()
+                .setValue(com.stormreach.labyrinth.KeyholeBlock.FACING, Direction.NORTH).setValue(com.stormreach.labyrinth.KeyholeBlock.KIND, k));
+        Check.isTrue(h, LabyrinthRegistry.VAULT_DOOR.defaultBlockState().getDestroySpeed(level, BlockPos.ZERO) < 0, "the Vault Door must be unbreakable");
+        Check.isTrue(h, LabyrinthRegistry.VAULT_WALL.defaultBlockState().getDestroySpeed(level, BlockPos.ZERO) < 0, "the vault plating must be unbreakable");
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        java.util.function.BiConsumer<BlockPos, net.minecraft.world.item.Item> use = (rel, key) -> {
+            BlockPos abs = h.absolutePos(rel);
+            ItemStack stack = new ItemStack(key);
+            p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, stack);
+            level.getBlockState(abs).useItemOn(stack, level, p, net.minecraft.world.InteractionHand.MAIN_HAND,
+                    new net.minecraft.world.phys.BlockHitResult(Vec3.atCenterOf(abs), Direction.NORTH, abs, false));
+        };
+        use.accept(locks[0], LabyrinthRegistry.KEYS[1]); // the Thunder key in the Gale lock
+        Check.isFalse(h, h.getBlockState(locks[0]).getValue(com.stormreach.labyrinth.KeyholeBlock.FILLED), "a lock accepted the wrong key");
+        use.accept(locks[0], LabyrinthRegistry.KEYS[0]);
+        use.accept(locks[1], LabyrinthRegistry.KEYS[1]);
+        Check.isTrue(h, h.getBlockState(new BlockPos(3, 5, 3)).is(LabyrinthRegistry.VAULT_DOOR), "the door opened with only two keys");
+        use.accept(locks[2], LabyrinthRegistry.KEYS[2]);
+        h.runAfterDelay(70, () -> {
+            for (int x = 1; x <= 5; x++) for (int y = 1; y <= 5; y++) {
+                var st = h.getBlockState(new BlockPos(x, y, 3));
+                Check.isFalse(h, st.is(LabyrinthRegistry.VAULT_DOOR) || st.is(LabyrinthRegistry.KEYHOLE), "the Vault Door didn't open fully");
+            }
+            h.succeed();
+        });
+    }
+
+    @GameTest
+    public void hollowLampsDriftButStayInRange(GameTestHelper h) {
+        var r = h.getLevel().getRandom();
+        int light = 7, min = 99, max = -1;
+        for (int i = 0; i < 2000; i++) {
+            light = com.stormreach.labyrinth.HollowLampBlock.next(light, r);
+            min = Math.min(min, light); max = Math.max(max, light);
+            Check.isTrue(h, light >= 1 && light <= 12, "lamp light out of range: " + light);
+        }
+        Check.isTrue(h, min <= 2 && max >= 10, "lamp light should both gutter and flare over time (" + min + ".." + max + ")");
+        h.succeed();
+    }
 }

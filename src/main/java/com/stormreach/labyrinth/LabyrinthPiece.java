@@ -32,6 +32,7 @@ public class LabyrinthPiece extends StructurePiece {
     private final boolean stair;
     private MazeLayout layout;
 
+    static final ResourceKey<LootTable>[] VAULTS = new ResourceKey[]{loot("labyrinth_vault_gale"), loot("labyrinth_vault_thunder"), loot("labyrinth_vault_hollow")};
     static final ResourceKey<LootTable> VAULT = loot("labyrinth_vault"), TREASURE = loot("labyrinth_treasure"), ROOM = loot("labyrinth_room");
 
     private static ResourceKey<LootTable> loot(String n) {
@@ -56,7 +57,7 @@ public class LabyrinthPiece extends StructurePiece {
         int x0 = o.getX() + gx * C, z0 = o.getZ() + gz * C;
         int x1 = o.getX() + Math.min(S * C, (gx + LabyrinthStructure.PIECE_CELLS) * C);
         int z1 = o.getZ() + Math.min(S * C, (gz + LabyrinthStructure.PIECE_CELLS) * C);
-        return new BoundingBox(x0, o.getY(), z0, x1, o.getY() + H - 1, z1);
+        return new BoundingBox(x0, o.getY() - 1, z0, x1, o.getY() + H, z1); // one extra layer for the vault's shell
     }
 
     @Override
@@ -122,14 +123,25 @@ public class LabyrinthPiece extends StructurePiece {
                 int ix = lx - cx * C, iz = lz - cz * C; // 0..6 for the last cell
                 int section = m.section[m.i(cx, cz)];
                 boolean treasure = m.isTreasure(cx, cz);
+                boolean shell = treasureShell(m, cx, cz, ix, iz);
+                if (treasure || shell) {
+                    // the vault is sealed in unbreakable plating above and below too, so it can't be dug into
+                    set(level, chunkBox, x, oy - 1, z, LabyrinthRegistry.VAULT_WALL.defaultBlockState());
+                    set(level, chunkBox, x, oy + H, z, LabyrinthRegistry.VAULT_WALL.defaultBlockState());
+                }
                 for (int y = 0; y < H; y++) {
                     long h = hash(x, y, z);
                     BlockState s;
-                    if (y == 0) s = treasure ? (Math.floorMod(h, 5) == 0 ? Blocks.GILDED_BLACKSTONE.defaultBlockState() : Blocks.POLISHED_DEEPSLATE.defaultBlockState()) : floor(section, h);
+                    if ((y == 0 || y == H - 1) && shell && !treasure) s = LabyrinthRegistry.VAULT_WALL.defaultBlockState();
+                    else if (y == H - 1 && treasure) s = LabyrinthRegistry.VAULT_WALL.defaultBlockState();
+                    else if (y == 0) s = treasure ? (Math.floorMod(h, 5) == 0 ? Blocks.GILDED_BLACKSTONE.defaultBlockState() : Blocks.POLISHED_DEEPSLATE.defaultBlockState()) : floor(section, h);
                     else if (y == H - 1) s = Blocks.DEEPSLATE_TILES.defaultBlockState();
                     else if (solidAt(m, cx, cz, ix, iz)) {
                         boolean door = isTreasureDoor(m, cx, cz, ix, iz, c);
-                        s = door ? LabyrinthRegistry.SEAL.defaultBlockState() : treasure ? Blocks.CHISELED_DEEPSLATE.defaultBlockState() : wall(section, h);
+                        if (door && y == 3 && ix >= 2 && ix <= 4) s = LabyrinthRegistry.KEYHOLE.defaultBlockState()
+                                .setValue(KeyholeBlock.FACING, Direction.NORTH).setValue(KeyholeBlock.KIND, ix - 2);
+                        else if (door) s = LabyrinthRegistry.VAULT_DOOR.defaultBlockState();
+                        else s = treasure || shell ? LabyrinthRegistry.VAULT_WALL.defaultBlockState() : wall(section, h);
                     } else s = Blocks.CAVE_AIR.defaultBlockState();
                     set(level, chunkBox, x, oy + y, z, s);
                 }
@@ -147,6 +159,14 @@ public class LabyrinthPiece extends StructurePiece {
         return false;
     }
 
+    /** Wall blocks that border the treasure chamber from outside (its east and south walls belong to the next cells). */
+    private static boolean treasureShell(MazeLayout m, int cx, int cz, int ix, int iz) {
+        if (m.isTreasure(cx, cz)) return true;
+        if (ix == 0 && cx > 0 && m.isTreasure(cx - 1, cz)) return true;
+        if (iz == 0 && cz > 0 && m.isTreasure(cx, cz - 1)) return true;
+        return ix == 0 && iz == 0 && cx > 0 && cz > 0 && m.isTreasure(cx - 1, cz - 1);
+    }
+
     private static boolean isTreasureDoor(MazeLayout m, int cx, int cz, int ix, int iz, int c) {
         return cx == c && cz == m.treasureMin && iz == 0 && ix > 0;
     }
@@ -157,22 +177,22 @@ public class LabyrinthPiece extends StructurePiece {
                 int bx = ox + cx * C, bz = oz + cz * C;
                 long h = hash(bx, 7, bz);
                 MazeLayout.CellType type = m.typeAt(cx, cz);
-                // sparse, dim lighting
-                if (Math.floorMod(h, 4) == 0 || type != MazeLayout.CellType.CORRIDOR) {
-                    set(level, chunkBox, bx + 3, oy + H - 2, bz + 3, Blocks.SOUL_LANTERN.defaultBlockState().setValue(BlockStateProperties.HANGING, true));
+                // sparse lighting that drifts: Hollow Lamps in the ceiling, the odd soul lantern
+                if (type != MazeLayout.CellType.TREASURE) {
+                    if (Math.floorMod(h, 3) == 0 || type != MazeLayout.CellType.CORRIDOR) {
+                        set(level, chunkBox, bx + 3, oy + H - 1, bz + 3, LabyrinthRegistry.HOLLOW_LAMP.defaultBlockState()
+                                .setValue(HollowLampBlock.LIGHT, 3 + (int) Math.floorMod(h >> 3, 8)));
+                    } else if (Math.floorMod(h, 7) == 1) {
+                        set(level, chunkBox, bx + 3, oy + H - 2, bz + 3, Blocks.SOUL_LANTERN.defaultBlockState().setValue(BlockStateProperties.HANGING, true));
+                    }
                 }
                 if (Math.floorMod(h >> 8, 6) == 0) set(level, chunkBox, bx + 1, oy + H - 2, bz + 1, Blocks.COBWEB.defaultBlockState());
                 if (Math.floorMod(h >> 12, 9) == 0) set(level, chunkBox, bx + 5, oy + 1, bz + 5, Blocks.BONE_BLOCK.defaultBlockState());
                 switch (type) {
-                    case KEY_VAULT -> chest(level, chunkBox, random, bx + 3, bz + 3, VAULT);
-                    case TREASURE -> { if (cx == c && cz == c) chest(level, chunkBox, random, bx + 3, bz + 3, TREASURE); }
+                    case KEY_VAULT -> chest(level, chunkBox, random, bx + 3, bz + 3, vaultFor(m, cx, cz));
+                    case TREASURE -> treasureRoom(level, chunkBox, random, m, cx, cz, bx, bz, c);
                     case ROOM -> { if (Math.floorMod(h >> 4, 10) < 3) chest(level, chunkBox, random, bx + 3, bz + 3, ROOM); }
                     default -> {}
-                }
-                if (cx == c && cz == m.treasureMin - 1) {
-                    BlockPos key = new BlockPos(bx + 3, oy + 2, bz + C - 1);
-                    if (chunkBox.isInside(key)) level.setBlock(key, LabyrinthRegistry.KEYHOLE.defaultBlockState()
-                            .setValue(KeyholeBlock.FACING, Direction.NORTH), Block.UPDATE_CLIENTS);
                 }
             }
         }
@@ -189,6 +209,35 @@ public class LabyrinthPiece extends StructurePiece {
             BlockState lower = LabyrinthRegistry.LOCKER.defaultBlockState().setValue(LockerBlock.FACING, facing).setValue(LockerBlock.HALF, DoubleBlockHalf.LOWER);
             set(level, chunkBox, bx + lx, oy + 1, bz + lz, lower);
             set(level, chunkBox, bx + lx, oy + 2, bz + lz, lower.setValue(LockerBlock.HALF, DoubleBlockHalf.UPPER));
+        }
+    }
+
+    /** Each corner vault holds a different key: the first Gale, the second Thunder, the third Hollow. */
+    private static ResourceKey<LootTable> vaultFor(MazeLayout m, int cx, int cz) {
+        for (int i = 0; i < m.keyVaults.size(); i++) {
+            int[] k = m.keyVaults.get(i);
+            if (k[0] == cx && k[1] == cz) return VAULTS[i % 3];
+        }
+        return VAULTS[0];
+    }
+
+    /**
+     * The treasure chamber, 3 x 3 cells behind the Vault Door: gilded pillars at the cell corners, braziers, and in
+     * the centre a raised dais with the great chest; side chests in the east and west halls, candles everywhere.
+     */
+    private void treasureRoom(WorldGenLevel level, BoundingBox chunkBox, RandomSource random, MazeLayout m, int cx, int cz, int bx, int bz, int c) {
+        for (int y = 1; y < H - 1; y++) set(level, chunkBox, bx + 1, oy + y, bz + 1, y % 2 == 0 ? Blocks.GILDED_BLACKSTONE.defaultBlockState()
+                : Blocks.CHISELED_POLISHED_BLACKSTONE.defaultBlockState());
+        set(level, chunkBox, bx + 5, oy + 1, bz + 5, Blocks.SOUL_CAMPFIRE.defaultBlockState());
+        set(level, chunkBox, bx + 4, oy + 1, bz + 2, Blocks.CANDLE.defaultBlockState().setValue(BlockStateProperties.CANDLES, 3).setValue(BlockStateProperties.LIT, true));
+        set(level, chunkBox, bx + 3, oy + H - 2, bz + 3, Blocks.SOUL_LANTERN.defaultBlockState().setValue(BlockStateProperties.HANGING, true));
+        if (cx == c && cz == c) {
+            for (int dx = 1; dx <= 5; dx++) for (int dz = 1; dz <= 5; dz++) set(level, chunkBox, bx + dx, oy + 1, bz + dz,
+                    (dx == 1 || dx == 5 || dz == 1 || dz == 5) ? Blocks.POLISHED_BLACKSTONE_BRICK_STAIRS.defaultBlockState() : Blocks.GILDED_BLACKSTONE.defaultBlockState());
+            BlockPos p = new BlockPos(bx + 3, oy + 2, bz + 3);
+            if (chunkBox.isInside(p)) createChest(level, chunkBox, random, p, TREASURE, Blocks.CHEST.defaultBlockState().setValue(ChestBlock.FACING, Direction.NORTH));
+        } else if (cz == c && (cx == m.treasureMin || cx == m.treasureMax)) {
+            chest(level, chunkBox, random, bx + 3, bz + 3, ROOM);
         }
     }
 

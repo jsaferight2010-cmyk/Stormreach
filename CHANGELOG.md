@@ -3,6 +3,20 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 7: the Labyrinth goes deep
+- **The Hollow Labyrinth is now buried deep in the deepslate**, just above the bedrock. There's no stairway or ruin on the surface any more: you have to find it, with `/locate`, by tunnelling or by following the story.
+- **The Vault Door**: the treasure chamber is sealed by a massive 5 x 5 door of unbreakable vault plating with **three locks built into it**.
+  - **Three different keys**, one in each corner vault: the **Gale Key** (cyan), the **Thunder Key** (gold) and the **Hollow Key** (violet).
+  - Each lock takes only its own key and lights up when set. The game checks everything on the server.
+  - Once all three are set, the door sinks into the floor row by row, with grinding stone and a deep boom.
+- **The vault can't be dug into.** The treasure chamber is sealed in unbreakable plating on every side, above and below.
+- **A real treasure chamber**:
+  - gilded pillars in every hall, soul braziers, candles and hanging lanterns
+  - a raised gilded dais in the centre with the great chest
+  - side chests in the east and west halls
+- **Lighting that shifts.** Hollow Lamps set in the ceiling slowly brighten and dim, and now and then gutter almost out, so the maze never looks quite the same twice.
+- Old single Labyrinth Keys are kept but no longer fit; the corner vaults now hold the three new keys.
+
 ### Stage 6: the Doppler radar is a real radar
 - **The Doppler Radar is now a multi-block structure**: a 3x3 concrete pad with hazard edging, a lattice mast, a pedestal, and a 3-block parabolic dish with its feed horn. The dish turns steadily, once every 8 seconds.
 - Place it from the one item; it needs a clear 3x3 space, 7 blocks tall. Using any part opens the radar scope. Breaking any part takes the whole radar down and gives back one radar.

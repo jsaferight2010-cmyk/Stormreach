@@ -220,4 +220,59 @@ def panels(img, rnd):
         for x in range(64):
             if x % 16 == 0 or y % 16 == 0: img.putpixel((x, y), (190, 196, 202, 255))
 tex64('radar_dish', (236, 239, 242), 2004, panels)
+# ---- 5.1 labyrinth vault (64x)
+def plate(img, rnd, band, rivet):
+    for y in range(64):
+        for x in range(64):
+            if y % 32 in (0, 1) or x % 32 in (0, 1): img.putpixel((x, y), (40, 42, 48, 255))
+            if y % 32 in (14, 15, 16, 17): img.putpixel((x, y), band)
+    for cy in (6, 26, 38, 58):
+        for cx in (6, 26, 38, 58):
+            for dy in (-1, 0, 1):
+                for dx in (-1, 0, 1):
+                    img.putpixel((cx + dx, cy + dy), rivet if dx + dy < 1 else (60, 60, 64, 255))
+tex64('vault_door', (92, 96, 104), 2101, lambda img, rnd: plate(img, rnd, (176, 140, 58, 255), (200, 204, 210, 255)))
+def vwall(img, rnd):
+    for y in range(64):
+        for x in range(64):
+            if y % 16 == 0 or (x + (8 if (y // 16) % 2 else 0)) % 32 == 0: img.putpixel((x, y), (22, 22, 28, 255))
+tex64('vault_wall', (58, 58, 66), 2102, vwall)
+def lamp(img, rnd):
+    for y in range(64):
+        for x in range(64):
+            d = ((x - 31.5) ** 2 + (y - 31.5) ** 2) ** 0.5
+            if x < 6 or x > 57 or y < 6 or y > 57: img.putpixel((x, y), (48, 44, 40, 255))
+            else:
+                k = max(0.0, 1 - d / 34)
+                img.putpixel((x, y), (int(60 + 150 * k), int(150 + 100 * k), int(170 + 85 * k), 255))
+            if (x in (20, 43) or y in (20, 43)) and 6 <= x <= 57 and 6 <= y <= 57: img.putpixel((x, y), (48, 44, 40, 255))
+tex64('hollow_lamp', (100, 180, 200), 2103, lamp)
+KEYC = {'gale': (111, 220, 255), 'thunder': (242, 201, 76), 'hollow': (176, 110, 240)}
+for kind, col in KEYC.items():
+    for filled in (False, True):
+        def hole(img, rnd, col=col, filled=filled):
+            plate(img, rnd, (176, 140, 58, 255), (200, 204, 210, 255))
+            for y in range(12, 52):
+                for x in range(12, 52):
+                    d = ((x - 31.5) ** 2 + (y - 31.5) ** 2) ** 0.5
+                    if 17 <= d <= 20: img.putpixel((x, y), col + (255,))                       # coloured ring
+                    elif d < 17: img.putpixel((x, y), (30, 30, 36, 255) if not filled else tuple(int(c * 0.55) for c in col) + (255,))
+            for y in range(20, 44):                                                            # the key slot
+                for x in range(29, 35):
+                    if y < 30 or 30 <= x <= 33:
+                        img.putpixel((x, y), (6, 6, 8, 255) if not filled else tuple(min(255, c + 60) for c in col) + (255,))
+        tex64(f'labyrinth_keyhole_{kind}' + ('_set' if filled else ''), (92, 96, 104), 2110 + len(kind) + filled, hole)
+    # the key itself (32x item texture): ring bow, shaft and bit, coloured by its lock
+    img = Image.new('RGBA', (32, 32), (0, 0, 0, 0))
+    dark = tuple(int(c * 0.55) for c in col) + (255,)
+    for y in range(32):
+        for x in range(32):
+            d = ((x - 9) ** 2 + (y - 9) ** 2) ** 0.5
+            if 4.5 <= d <= 7.5: img.putpixel((x, y), col + (255,) if (x + y) % 5 else dark)
+            if 11 <= x <= 13 and 11 <= y <= 13: img.putpixel((x, y), dark)
+    for t in range(0, 15):                                                                    # the diagonal shaft
+        for w in (0, 1):
+            img.putpixel((14 + t, 14 + t + w), col + (255,)); img.putpixel((14 + t + w, 14 + t), dark)
+    for bx, by in ((22, 26), (23, 27), (26, 22), (27, 23), (24, 28), (28, 24)): img.putpixel((bx, by), dark)
+    img.save(f'{OUT}/item/labyrinth_key_{kind}.png')
 print('textures6 done')

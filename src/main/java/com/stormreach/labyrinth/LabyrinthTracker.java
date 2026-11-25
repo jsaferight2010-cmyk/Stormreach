@@ -39,6 +39,7 @@ public final class LabyrinthTracker {
     }
 
     public static void tick(ServerLevel level) {
+        VaultDoor.tick(level);
         HidingTracker.tick(level);
         if (level.getGameTime() % 20 != 0) return;
         long now = level.getGameTime();

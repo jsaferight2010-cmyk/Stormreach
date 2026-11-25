@@ -130,12 +130,20 @@ gen_item('storm_chasers_pack')
 
 # ---- labyrinth
 cube('labyrinth_seal')
-for k in range(4):
-    model(f'labyrinth_keyhole_{k}', {'parent': 'minecraft:block/orientable', 'textures': {'front': f'stormreach:block/labyrinth_keyhole_{k}',
-           'side': 'stormreach:block/labyrinth_keyhole_side', 'top': 'stormreach:block/labyrinth_keyhole_side'}})
-w(f'{A}/blockstates/labyrinth_keyhole.json', {'variants': {f'facing={f},keys={k}': {'model': f'stormreach:block/labyrinth_keyhole_{k}', **({'y': y} if y else {})}
-    for f, y in FACING_Y.items() for k in range(4)}})
-item_def('labyrinth_keyhole', 'block/labyrinth_keyhole_0')
+# 5.1: the three locks built into the Vault Door, each for its own key, lit once set
+for kind in ('gale', 'thunder', 'hollow'):
+    for filled in (False, True):
+        model(f'labyrinth_keyhole_{kind}{"_set" if filled else ""}', {'parent': 'minecraft:block/orientable', 'textures': {
+            'front': f'stormreach:block/labyrinth_keyhole_{kind}{"_set" if filled else ""}', 'side': 'stormreach:block/vault_door',
+            'top': 'stormreach:block/vault_door'}})
+w(f'{A}/blockstates/labyrinth_keyhole.json', {'variants': {f'facing={f},filled={str(fl).lower()},kind={i}':
+    {'model': f'stormreach:block/labyrinth_keyhole_{k}{"_set" if fl else ""}', **({'y': y} if y else {})}
+    for f, y in FACING_Y.items() for i, k in enumerate(('gale', 'thunder', 'hollow')) for fl in (False, True)}})
+cube('vault_door'); cube('vault_wall'); cube('hollow_lamp')
+w(f'{D}/loot_table/blocks/hollow_lamp.json', {'type': 'minecraft:block', 'pools': [{'rolls': 1, 'condition': {'type': 'minecraft:survives_explosion'}, 'entries': [{'type': 'minecraft:item', 'name': 'stormreach:hollow_lamp'}]}]})
+for k in ('gale', 'thunder', 'hollow'): gen_item(f'labyrinth_key_{k}')
+item_def('vault_door', 'block/vault_door'); item_def('vault_wall', 'block/vault_wall'); item_def('hollow_lamp', 'block/hollow_lamp')
+item_def('labyrinth_keyhole', 'block/labyrinth_keyhole_gale')
 for half in ('lower', 'upper'):
     # open box: back, sides and a floor or roof, plus a two-sided grate across the front (so it reads from inside too)
     side = 'stormreach:block/rusted_locker_bottom'; grate = f'stormreach:block/rusted_locker_grate_{half}'
@@ -285,7 +293,7 @@ for k, v in ITEM_NAMES.items(): L(f'item.stormreach.{k}', v)
 for k, v in {'tornado': 'Tornado', 'hollow_keeper': 'Hollow Keeper', 'stranger': '???', 'cyrrus': 'Cyrrus, the Hollow Storm',
              'glimmerstag': 'Glimmerstag', 'thistlehop': 'Thistlehop'}.items(): L(f'entity.stormreach.{k}', v)
 TIPS = {
- 'labyrinth_key': ['One of three. The keyhole at the heart of the maze is waiting.'],
+ 'labyrinth_key': ['An old Labyrinth Key. Since the Vault Door was rebuilt, each lock needs its own key: Gale, Thunder or Hollow.'],
  'heart_of_the_labyrinth': ['It beats, slowly, out of time with yours.', 'Someone left it here on purpose.'],
  'gilded_stormfruit': ['A Stormfruit dipped in gold. Something old would like it.'],
  'journal_page_1': ['"Day 3. The Stormreach coast never sleeps. At night I hear the wind say a name.', 'Not mine. Not yet."'],
@@ -377,6 +385,17 @@ MSG = {
  'block.stormreach.tornado_radar.blocked': 'Not enough room: the Doppler radar needs a clear 3x3 space, 7 blocks tall.',
  'block.stormreach.radar_part': 'Doppler Radar',
  'item.stormreach.tornado_radar.tooltip': 'Places a 3x3, 7-block-tall radar with a rotating dish. Use any part to open the radar scope.',
+ 'item.stormreach.labyrinth_key_gale': 'Gale Key',
+ 'item.stormreach.labyrinth_key_thunder': 'Thunder Key',
+ 'item.stormreach.labyrinth_key_hollow': 'Hollow Key',
+ 'block.stormreach.vault_door': 'Vault Door',
+ 'block.stormreach.vault_wall': 'Vault Plating',
+ 'block.stormreach.hollow_lamp': 'Hollow Lamp',
+ 'block.stormreach.labyrinth_keyhole.wrong': 'This lock only takes the %s.',
+ 'block.stormreach.labyrinth_keyhole.set': 'The %s is set in this lock.',
+ 'item.stormreach.labyrinth_key_gale.tooltip': 'One of three keys to the Vault Door at the heart of the maze. It fits only the Gale lock.',
+ 'item.stormreach.labyrinth_key_thunder.tooltip': 'One of three keys to the Vault Door at the heart of the maze. It fits only the Thunder lock.',
+ 'item.stormreach.labyrinth_key_hollow.tooltip': 'One of three keys to the Vault Door at the heart of the maze. It fits only the Hollow lock.',
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',
@@ -405,7 +424,7 @@ MSG = {
  'block.stormreach.rusted_locker.occupied': 'Someone is already hiding in there.',
  'block.stormreach.rusted_locker.found': 'The locker door is torn open.',
  'block.stormreach.labyrinth_keyhole.keys': '%s / 3 keys set',
- 'block.stormreach.labyrinth_keyhole.hint': 'Three keys, three vaults, three corners of the maze. %s set so far.',
+ 'block.stormreach.labyrinth_keyhole.hint': 'A lock in the Vault Door. It takes the %s.',
  # shrine
  'block.stormreach.relic_pedestal.accepted': 'The pedestal takes the relic and begins to glow.',
  'block.stormreach.relic_pedestal.lit': 'The relic rests here, glowing.',
@@ -511,6 +530,11 @@ chest('labyrinth_vault', [{'rolls': 1, 'entries': [entry('labyrinth_key', 1, 1, 
                               entry('minecraft:emerald', 10, 2, 5), entry('storm_cell', 8, 1, 2), entry('minecraft:golden_apple', 5, 1, 1),
                               entry('minecraft:book', 8, 1, 1, ENCH), entry('minecraft:iron_sword', 5, 1, 1, ENCH), entry('minecraft:name_tag', 4, 1, 1),
                               entry('charged_stormstone', 10, 2, 6)]}])
+for _k in ('gale', 'thunder', 'hollow'):
+    chest(f'labyrinth_vault_{_k}', [{'rolls': 1, 'entries': [entry(f'labyrinth_key_{_k}', 1, 1, 1)]},
+                                    {'rolls': rolls(2, 4), 'entries': [entry('minecraft:gold_ingot', 14, 2, 6), entry('minecraft:diamond', 6, 1, 3),
+                                        entry('minecraft:emerald', 10, 2, 5), entry('storm_cell', 8, 1, 2), entry('minecraft:golden_apple', 5, 1, 1),
+                                        entry('minecraft:book', 8, 1, 1, ENCH), entry('minecraft:name_tag', 4, 1, 1), entry('charged_stormstone', 10, 2, 6)]}])
 chest('labyrinth_treasure', [{'rolls': 1, 'entries': [entry('heart_of_the_labyrinth', 1, 1, 1)]},
                              {'rolls': 1, 'entries': [entry('journal_page_4', 1, 1, 1)]},
                              {'rolls': rolls(3, 5), 'entries': [entry('minecraft:diamond', 12, 2, 5), entry('minecraft:netherite_scrap', 4, 1, 2),

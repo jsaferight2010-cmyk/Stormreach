@@ -13,48 +13,63 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 
-/** The treasure chamber's lock. It takes the three Labyrinth Keys from the corner vaults; then the seal crumbles. */
+/**
+ * One of the three locks built into the Vault Door. Each takes one particular key (Gale, Thunder or Hollow, found
+ * in the three corner vaults); everything is checked on the server. When all three locks in the door are set, the
+ * door opens (see {@link VaultDoor}).
+ */
 public class KeyholeBlock extends HorizontalDirectionalBlock {
-    public static final IntegerProperty KEYS = IntegerProperty.create("keys", 0, 3);
+    /** 0 Gale, 1 Thunder, 2 Hollow. */
+    public static final IntegerProperty KIND = IntegerProperty.create("kind", 0, 2);
+    public static final BooleanProperty FILLED = BooleanProperty.create("filled");
+    public static final String[] KEY_NAMES = {"item.stormreach.labyrinth_key_gale", "item.stormreach.labyrinth_key_thunder", "item.stormreach.labyrinth_key_hollow"};
 
     public KeyholeBlock(Properties p) {
         super(p);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(KEYS, 0));
+        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(KIND, 0).setValue(FILLED, false));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> b) {
-        b.add(FACING, KEYS);
+        b.add(FACING, KIND, FILLED);
+    }
+
+    public static Item keyFor(int kind) {
+        return LabyrinthRegistry.KEYS[Math.max(0, Math.min(2, kind))];
     }
 
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!stack.is(LabyrinthRegistry.LABYRINTH_KEY)) return InteractionResult.TRY_WITH_EMPTY_HAND;
+        boolean anyKey = false;
+        for (Item k : LabyrinthRegistry.KEYS) anyKey |= stack.is(k);
+        if (!anyKey) return InteractionResult.TRY_WITH_EMPTY_HAND;
         if (!(level instanceof ServerLevel server)) return InteractionResult.SUCCESS;
-        int keys = state.getValue(KEYS);
-        if (keys >= 3) return InteractionResult.FAIL;
+        int kind = state.getValue(KIND);
+        if (state.getValue(FILLED)) return InteractionResult.FAIL;
+        if (!stack.is(keyFor(kind))) {
+            player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.wrong",
+                    Component.translatable(KEY_NAMES[kind])).withStyle(ChatFormatting.RED));
+            server.playSound(null, pos, SoundEvents.CHAIN_HIT, SoundSource.BLOCKS, 1f, 0.6f);
+            return InteractionResult.FAIL;
+        }
         stack.consume(1, player);
-        keys++;
-        server.setBlock(pos, state.setValue(KEYS, keys), Block.UPDATE_ALL);
-        server.playSound(null, pos, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1f, 0.5f + keys * 0.15f);
-        player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.keys", keys).withStyle(ChatFormatting.GOLD));
-        if (keys == 3) {
-            for (BlockPos p : BlockPos.betweenClosed(pos.offset(-6, -3, -6), pos.offset(6, 5, 6))) {
-                if (server.getBlockState(p).is(LabyrinthRegistry.SEAL)) {
-                    server.destroyBlock(p, false);
-                    server.sendParticles(ParticleTypes.SCULK_SOUL, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 3, 0.3, 0.3, 0.3, 0.02);
-                }
-            }
-            server.playSound(null, pos, SoundEvents.WARDEN_EMERGE, SoundSource.BLOCKS, 2f, 1.4f);
+        server.setBlock(pos, state.setValue(FILLED, true), Block.UPDATE_ALL);
+        server.playSound(null, pos, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1.2f, 0.55f + kind * 0.15f);
+        server.sendParticles(ParticleTypes.ENCHANT, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.4, 0.4, 0.4, 0.4);
+        int set = VaultDoor.locksSet(server, pos);
+        player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.keys", set).withStyle(ChatFormatting.GOLD));
+        if (set == 3 && VaultDoor.open(server, pos)) {
             if (player instanceof ServerPlayer sp) StormAdvancements.award(sp, "labyrinth_unsealed");
         }
         return InteractionResult.SUCCESS_SERVER;
@@ -62,7 +77,8 @@ public class KeyholeBlock extends HorizontalDirectionalBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide()) player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.hint", state.getValue(KEYS)));
+        if (!level.isClientSide()) player.sendOverlayMessage(Component.translatable(state.getValue(FILLED) ? "block.stormreach.labyrinth_keyhole.set"
+                : "block.stormreach.labyrinth_keyhole.hint", Component.translatable(KEY_NAMES[state.getValue(KIND)])));
         return InteractionResult.SUCCESS;
     }
 }

@@ -29,15 +29,15 @@ public class LabyrinthStructure extends Structure {
         int oz = ctx.chunkPos().getMinBlockZ();
         int surface = ctx.chunkGenerator().getBaseHeight(ox + 3, oz + 3, Heightmap.Types.WORLD_SURFACE_WG, ctx.heightAccessor(), ctx.randomState());
         int minY = ctx.heightAccessor().getMinY();
-        int oy = Math.max(minY + 12, Math.min(surface - 38, 24));
-        if (surface - oy < 12) return Optional.empty();
+        // 5.1: deep in the deepslate, just above the bedrock, with no way down from the surface: it has to be found
+        int oy = minY + 9;
+        if (surface - oy < 30) return Optional.empty();
         long seed = ctx.random().nextLong();
         BlockPos origin = new BlockPos(ox, oy, oz);
         return Optional.of(new GenerationStub(origin, builder -> {
             for (int px = 0; px < SIZE / PIECE_CELLS; px++)
                 for (int pz = 0; pz < SIZE / PIECE_CELLS; pz++)
                     builder.addPiece(new LabyrinthPiece(origin, seed, px * PIECE_CELLS, pz * PIECE_CELLS, false, surface));
-            builder.addPiece(new LabyrinthPiece(origin, seed, 0, 0, true, surface));
         }));
     }
 

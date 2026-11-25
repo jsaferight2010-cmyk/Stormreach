@@ -53,23 +53,23 @@ public class StormreachGameTests {
     public void datapackContentLoaded(GameTestHelper h) {
         MinecraftServer server = h.getLevel().getServer();
         // the GameTest server only creates the Overworld, so check the realm's data instead of a loaded level
-        h.assertTrue(server.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE)
+        Check.isTrue(h, server.registryAccess().lookupOrThrow(Registries.DIMENSION_TYPE)
                 .get(ResourceKey.create(Registries.DIMENSION_TYPE, Stormreach.id("tempest_realm"))).isPresent(), "the Tempest Realm dimension type is missing");
         String[] advancements = {"root", "meteorology", "enter_labyrinth", "stranger_seen", "defeat_cyrrus", "ef5_tornado", "backpack_maelstrom",
                 "struck_by_lightning", "elderstorm_grove", "stormreach_complete"};
-        for (String a : advancements) h.assertTrue(server.getAdvancements().get(Stormreach.id(a)) != null, "advancement missing: " + a);
+        for (String a : advancements) Check.isTrue(h, server.getAdvancements().get(Stormreach.id(a)) != null, "advancement missing: " + a);
         String[] tables = {"chests/labyrinth_vault", "chests/labyrinth_treasure", "chests/labyrinth_room", "chests/hollow_shrine", "ach/ef5",
                 "ach/cyrrus", "entities/cyrrus", "entities/hollow_keeper", "blocks/elderstorm_leaves"};
         for (String t : tables) {
             LootTable table = server.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Stormreach.id(t)));
-            h.assertTrue(table != LootTable.EMPTY, "loot table missing or failed to parse: " + t);
+            Check.isTrue(h, table != LootTable.EMPTY, "loot table missing or failed to parse: " + t);
         }
         var reg = server.registryAccess();
         for (String e : new String[]{"capacity", "magnetism", "organization", "soulbound", "resilience"})
-            h.assertTrue(reg.lookupOrThrow(Registries.ENCHANTMENT).get(ResourceKey.create(Registries.ENCHANTMENT, Stormreach.id(e))).isPresent(), "enchantment missing: " + e);
+            Check.isTrue(h, reg.lookupOrThrow(Registries.ENCHANTMENT).get(ResourceKey.create(Registries.ENCHANTMENT, Stormreach.id(e))).isPresent(), "enchantment missing: " + e);
         for (String s : new String[]{"hollow_labyrinth", "hollow_shrine", "tempest_spire", "sky_vault"})
-            h.assertTrue(reg.lookupOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, Stormreach.id(s))).isPresent(), "structure missing: " + s);
-        h.assertTrue(reg.lookupOrThrow(Registries.BIOME).get(ResourceKey.create(Registries.BIOME, Stormreach.id("elderstorm_grove"))).isPresent(), "Elderstorm Grove biome missing");
+            Check.isTrue(h, reg.lookupOrThrow(Registries.STRUCTURE).get(ResourceKey.create(Registries.STRUCTURE, Stormreach.id(s))).isPresent(), "structure missing: " + s);
+        Check.isTrue(h, reg.lookupOrThrow(Registries.BIOME).get(ResourceKey.create(Registries.BIOME, Stormreach.id("elderstorm_grove"))).isPresent(), "Elderstorm Grove biome missing");
         h.succeed();
     }
 
@@ -77,8 +77,8 @@ public class StormreachGameTests {
     public void cinematicScriptsAndVoiceEventsExist(GameTestHelper h) {
         for (String name : ModSounds.SCRIPTS) {
             DialogueScript s = ModSounds.loadScript(name);
-            h.assertFalse(s.cues.isEmpty(), "script is empty or missing: " + name);
-            for (DialogueScript.Cue c : s.cues) if (c.sound() != null) h.assertTrue(ModSounds.get(c.sound()) != null, "voice line not registered: " + c.sound());
+            Check.isFalse(h, s.cues.isEmpty(), "script is empty or missing: " + name);
+            for (DialogueScript.Cue c : s.cues) if (c.sound() != null) Check.isTrue(h, ModSounds.get(c.sound()) != null, "voice line not registered: " + c.sound());
         }
         h.succeed();
     }
@@ -89,15 +89,15 @@ public class StormreachGameTests {
         BackpackStorage s = BackpackStorage.read(pack, 54);
         s.items.set(0, new ItemStack(Items.DIAMOND, 64));
         s.items.set(53, new ItemStack(Items.TORCH, 12));
-        h.assertTrue(s.insert(new ItemStack(Backpacks.BY_TIER.get(BackpackTier.DIAMOND))).getCount() == 1, "a backpack went inside a backpack");
+        Check.isTrue(h, s.insert(new ItemStack(Backpacks.BY_TIER.get(BackpackTier.DIAMOND))).getCount() == 1, "a backpack went inside a backpack");
         s.write(pack);
         BackpackStorage back = BackpackStorage.read(pack, 54);
-        h.assertTrue(back.items.get(0).is(Items.DIAMOND) && back.items.get(0).getCount() == 64, "slot 0 lost its diamonds");
-        h.assertTrue(back.items.get(53).is(Items.TORCH) && back.items.get(53).getCount() == 12, "last slot lost its torches");
+        Check.isTrue(h, back.items.get(0).is(Items.DIAMOND) && back.items.get(0).getCount() == 64, "slot 0 lost its diamonds");
+        Check.isTrue(h, back.items.get(53).is(Items.TORCH) && back.items.get(53).getCount() == 12, "last slot lost its torches");
         // shrinking (e.g. a datapack changing sizes) must never delete items
         BackpackStorage small = BackpackStorage.read(pack, 27);
-        h.assertTrue(small.items.stream().anyMatch(i -> i.is(Items.TORCH)), "items were lost when a backpack shrank");
-        h.assertTrue(((BackpackItem) pack.getItem()).slots(h.getLevel(), pack) >= 54, "Netherite backpack should have at least 54 slots");
+        Check.isTrue(h, small.items.stream().anyMatch(i -> i.is(Items.TORCH)), "items were lost when a backpack shrank");
+        Check.isTrue(h, ((BackpackItem) pack.getItem()).slots(h.getLevel(), pack) >= 54, "Netherite backpack should have at least 54 slots");
         h.succeed();
     }
 
@@ -106,10 +106,10 @@ public class StormreachGameTests {
         Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 1, 1)));
         TornadoProfile p = TornadoProfile.rollWith(new Random(7), TornadoFormation.SUPERCELL, EFScale.EF2, null, 0.35, 0.05, 90);
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), at, p);
-        h.assertTrue(t != null, "tornado did not spawn");
-        h.assertTrue(TornadoManager.live(h.getLevel()).contains(t), "tornado not tracked");
+        Check.isTrue(h, t != null, "tornado did not spawn");
+        Check.isTrue(h, TornadoManager.live(h.getLevel()).contains(t), "tornado not tracked");
         h.runAfterDelay(40, () -> {
-            h.assertTrue(t.position().distanceTo(at) > 0.5 || t.isRemoved(), "tornado never moved");
+            Check.isTrue(h, t.position().distanceTo(at) > 0.5 || t.isRemoved(), "tornado never moved");
             t.discard();
             h.succeed();
         });
@@ -123,10 +123,10 @@ public class StormreachGameTests {
         h.setBlock(lower.above(), base.setValue(com.stormreach.labyrinth.LockerBlock.HALF, DoubleBlockHalf.UPPER));
         if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
         HidingTracker.enter(p, h.absolutePos(lower), Direction.NORTH);
-        h.assertTrue(HidingTracker.isHidden(p), "player is not hidden");
-        h.assertTrue(p.hasEffect(ModEffects.HIDDEN), "no Hidden effect");
+        Check.isTrue(h, HidingTracker.isHidden(p), "player is not hidden");
+        Check.isTrue(h, p.hasEffect(ModEffects.HIDDEN), "no Hidden effect");
         HidingTracker.leave(p, true);
-        h.assertFalse(HidingTracker.isHidden(p), "player still hidden after leaving");
+        Check.isFalse(h, HidingTracker.isHidden(p), "player still hidden after leaving");
         h.succeed();
     }
 
@@ -138,11 +138,11 @@ public class StormreachGameTests {
         BlockPos[] con = {new BlockPos(0, 1, 4), new BlockPos(3, 1, 4), new BlockPos(6, 1, 4), new BlockPos(9, 1, 4)};
         for (int i = 0; i < 4; i++) h.setBlock(con[i], StoryRegistry.STORM_CONDUIT.defaultBlockState().setValue(ShrineBlocks.Conduit.ORDER, i + 1));
         ShrineBlocks.onLightning(h.getLevel(), h.absolutePos(con[0]).above());
-        h.assertTrue(h.getBlockState(con[0]).getValue(ShrineBlocks.Conduit.STRUCK), "first conduit not struck");
+        Check.isTrue(h, h.getBlockState(con[0]).getValue(ShrineBlocks.Conduit.STRUCK), "first conduit not struck");
         ShrineBlocks.onLightning(h.getLevel(), h.absolutePos(con[2]).above()); // wrong: third before second
-        h.assertFalse(h.getBlockState(con[0]).getValue(ShrineBlocks.Conduit.STRUCK), "wrong order did not reset the conduits");
+        Check.isFalse(h, h.getBlockState(con[0]).getValue(ShrineBlocks.Conduit.STRUCK), "wrong order did not reset the conduits");
         for (BlockPos c : con) ShrineBlocks.onLightning(h.getLevel(), h.absolutePos(c).above());
-        for (BlockPos c : con) h.assertTrue(h.getBlockState(c).getValue(ShrineBlocks.Conduit.STRUCK), "conduit not struck in order");
+        for (BlockPos c : con) Check.isTrue(h, h.getBlockState(c).getValue(ShrineBlocks.Conduit.STRUCK), "conduit not struck in order");
         h.succeed();
     }
 
@@ -165,9 +165,9 @@ public class StormreachGameTests {
         BlockPos sky = h.absolutePos(new BlockPos(1, 1, 1)).atY(h.getLevel().getMaxY() - 20);
         for (int i = 0; i < 16; i++) {
             BlockPos aim = com.stormreach.realm.SovereignAltarBlock.ritualStrike(h.getLevel(), sky, i * Math.PI / 8, 6);
-            h.assertTrue(aim != null, "ritual strike had no target over the void");
+            Check.isTrue(h, aim != null, "ritual strike had no target over the void");
         }
-        h.assertTrue(com.stormreach.weather.StormWeather.surfaceOr(h.getLevel(), sky, 24) != null, "surfaceOr returned null");
+        Check.isTrue(h, com.stormreach.weather.StormWeather.surfaceOr(h.getLevel(), sky, 24) != null, "surfaceOr returned null");
         h.succeed();
     }
 
@@ -180,11 +180,11 @@ public class StormreachGameTests {
         com.stormreach.weather.StormWeather.strike(h.getLevel(), h.absolutePos(spot), null, true);
         h.runAfterDelay(12, () -> {
             for (int x = -2; x <= 6; x++) for (int y = 0; y <= 3; y++) for (int z = -2; z <= 6; z++)
-                h.assertFalse(h.getBlockState(new BlockPos(x, y, z)).is(Blocks.FIRE), "the staff's lightning lit a fire");
+                Check.isFalse(h, h.getBlockState(new BlockPos(x, y, z)).is(Blocks.FIRE), "the staff's lightning lit a fire");
             if (cow.isAlive()) {
-                h.assertFalse(cow.isOnFire(), "the staff's lightning set the target on fire");
-                h.assertFalse(cow.hasEffect(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE), "fire resistance was applied");
-                h.assertTrue(cow.getHealth() < hp, "the staff's lightning did no damage");
+                Check.isFalse(h, cow.isOnFire(), "the staff's lightning set the target on fire");
+                Check.isFalse(h, cow.hasEffect(net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE), "fire resistance was applied");
+                Check.isTrue(h, cow.getHealth() < hp, "the staff's lightning did no damage");
             }
             h.succeed();
         });
@@ -199,11 +199,11 @@ public class StormreachGameTests {
                 TornadoProfile.rollWith(new Random(3), TornadoFormation.SUPERCELL, EFScale.EF1, null, 0.3, 0.05, 90));
         if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { if (t != null) t.discard(); h.succeed(); return; }
         int n = com.stormreach.tornado.WeatherEvents.dispel(h.getLevel(), p);
-        h.assertTrue(n > 0, "dispel reported nothing cleared");
-        h.assertFalse(server.getWeatherData().isRaining(), "rain still set after dispel");
-        h.assertFalse(server.getWeatherData().isThundering(), "thunder still set after dispel");
-        h.assertTrue(server.getWeatherData().getClearWeatherTime() >= 12000, "no clear-weather window after dispel");
-        h.assertTrue(t == null || t.isDissipating(), "tornado not dissipating after dispel");
+        Check.isTrue(h, n > 0, "dispel reported nothing cleared");
+        Check.isFalse(h, server.getWeatherData().isRaining(), "rain still set after dispel");
+        Check.isFalse(h, server.getWeatherData().isThundering(), "thunder still set after dispel");
+        Check.isTrue(h, server.getWeatherData().getClearWeatherTime() >= 12000, "no clear-weather window after dispel");
+        Check.isTrue(h, t == null || t.isDissipating(), "tornado not dissipating after dispel");
         if (t != null) t.discard();
         h.succeed();
     }
@@ -218,16 +218,16 @@ public class StormreachGameTests {
         BlockPos abs = h.absolutePos(lower);
         HidingTracker.enter(a, abs, Direction.NORTH);
         HidingTracker.enter(b, abs, Direction.NORTH);
-        h.assertTrue(HidingTracker.isHidden(a), "first player not hidden");
-        h.assertFalse(HidingTracker.isHidden(b), "two players hid in one locker");
+        Check.isTrue(h, HidingTracker.isHidden(a), "first player not hidden");
+        Check.isFalse(h, HidingTracker.isHidden(b), "two players hid in one locker");
         a.teleportTo(a.getX() + 2, a.getY(), a.getZ()); // try to walk out
         h.runAfterDelay(3, () -> {
             // mock players aren't in the level's entity list, so the level tick can't reach them: run its hold step
             if (h.getLevel().getEntity(a.getUUID()) == null) HidingTracker.hold(a);
-            h.assertTrue(a.position().distanceTo(Vec3.atBottomCenterOf(abs)) < 0.1, "the locker did not hold its hider in place");
+            Check.isTrue(h, a.position().distanceTo(Vec3.atBottomCenterOf(abs)) < 0.1, "the locker did not hold its hider in place");
             HidingTracker.leave(a, true);
-            h.assertFalse(HidingTracker.isHidden(a), "still hidden after the exit request");
-            h.assertFalse(a.hasEffect(ModEffects.HIDDEN), "Hidden effect left behind");
+            Check.isFalse(h, HidingTracker.isHidden(a), "still hidden after the exit request");
+            Check.isFalse(h, a.hasEffect(ModEffects.HIDDEN), "Hidden effect left behind");
             h.succeed();
         });
     }
@@ -242,11 +242,11 @@ public class StormreachGameTests {
         for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.OAK_PLANKS);
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(2, 2, 2))),
                 stationary(TornadoFormation.SUPERCELL, EFScale.EF5, 230, 20));
-        h.assertTrue(t != null, "tornado did not spawn");
+        Check.isTrue(h, t != null, "tornado did not spawn");
         t.simulateWithoutPlayers();
         h.runAfterDelay(20, () -> {
-            h.assertTrue(t.funnelReach() < 0.5f, "the funnel should still be coming down, reach=" + t.funnelReach());
-            h.assertTrue(t.damagedBlocks() == 0, "the tornado did damage before touching down");
+            Check.isTrue(h, t.funnelReach() < 0.5f, "the funnel should still be coming down, reach=" + t.funnelReach());
+            Check.isTrue(h, t.damagedBlocks() == 0, "the tornado did damage before touching down");
             for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.assertBlockPresent(Blocks.OAK_PLANKS, new BlockPos(x, 1, z));
             t.discard();
             h.succeed();
@@ -260,7 +260,7 @@ public class StormreachGameTests {
         double startY = zombie.getY();
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(4, 3, 4))),
                 stationary(TornadoFormation.SUPERCELL, EFScale.EF5, 240, 8));
-        h.assertTrue(t != null, "tornado did not spawn");
+        Check.isTrue(h, t != null, "tornado did not spawn");
         t.simulateWithoutPlayers();
         t.skipTo(0.4); // mature and on the ground
         double[] maxY = {startY};
@@ -269,9 +269,9 @@ public class StormreachGameTests {
             int gone = 0;
             for (int x = 0; x < 9; x++) for (int z = 0; z < 9; z++) for (int y = 1; y <= 2; y++)
                 if (!h.getBlockState(new BlockPos(x, y, z)).is(Blocks.OAK_PLANKS)) gone++;
-            h.assertTrue(t.damagedBlocks() > 0, "an EF5 did no damage at all");
-            h.assertTrue(gone >= 40, "an EF5 should tear up most of a plank floor in 4 seconds, removed " + gone + " of 162");
-            h.assertTrue(maxY[0] > startY + 4 || !zombie.isAlive(), "an EF5 core should lift (or kill) a zombie; it rose " + (maxY[0] - startY));
+            Check.isTrue(h, t.damagedBlocks() > 0, "an EF5 did no damage at all");
+            Check.isTrue(h, gone >= 40, "an EF5 should tear up most of a plank floor in 4 seconds, removed " + gone + " of 162");
+            Check.isTrue(h, maxY[0] > startY + 4 || !zombie.isAlive(), "an EF5 core should lift (or kill) a zombie; it rose " + (maxY[0] - startY));
             t.discard();
             h.succeed();
         });
@@ -285,18 +285,22 @@ public class StormreachGameTests {
         }
         TornadoProfile p = new TornadoProfile(TornadoFormation.WATERSPOUT, EFScale.EF0, 75, com.stormreach.sim.TornadoMorphology.NEEDLE,
                 com.stormreach.sim.VortexStructure.SINGLE, 0, 4, 12.0, 0, 1, 6000, com.stormreach.sim.TornadoRelation.NONE);
-        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 3, 6))), p);
-        h.assertTrue(t != null, "waterspout did not spawn over water");
+        BlockPos c = h.absolutePos(new BlockPos(6, 3, 6));
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(c), p);
+        Check.isTrue(h, t != null, "waterspout did not spawn over water: overWater=" + TornadoEntity.overWater(h.getLevel(), c.getX() + 0.5, c.getZ() + 0.5)
+                + " surface=" + h.getLevel().getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, c.getX(), c.getZ())
+                + " pool y=" + h.absolutePos(new BlockPos(6, 2, 6)).getY() + " state=" + h.getBlockState(new BlockPos(6, 2, 6))
+                + " active=" + com.stormreach.tornado.TornadoManager.active(h.getLevel()) + " cap=" + com.stormreach.StormreachConfig.maxActiveTornadoes);
         t.simulateWithoutPlayers();
         h.onEachTick(() -> {
             if (!t.isRemoved() && !t.isDissipating())
-                h.assertTrue(TornadoEntity.overWater(h.getLevel(), t.getX(), t.getZ()), "the waterspout went ashore at " + t.position());
+                Check.isTrue(h, TornadoEntity.overWater(h.getLevel(), t.getX(), t.getZ()), "the waterspout went ashore at " + t.position());
         });
         h.runAfterDelay(100, () -> {
             t.discard();
             // and one can't be made on dry land at all
             for (int x = 0; x < 13; x++) for (int z = 0; z < 13; z++) h.setBlock(new BlockPos(x, 2, z), Blocks.GRASS_BLOCK);
-            h.assertTrue(TornadoEntity.findWater(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 3, 6))), 6) == null,
+            Check.isTrue(h, TornadoEntity.findWater(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 3, 6))), 6) == null,
                     "found water where there is none");
             h.succeed();
         });
@@ -307,14 +311,14 @@ public class StormreachGameTests {
         for (int x = 0; x < 14; x++) for (int z = 0; z < 6; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 2))),
                 stationary(TornadoFormation.SUPERCELL, EFScale.EF0, 70, 4));
-        h.assertTrue(t != null, "tornado did not spawn");
+        Check.isTrue(h, t != null, "tornado did not spawn");
         Vec3 target = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(12, 2, 2)));
         t.steerTo(target);
         h.runAfterDelay(80, () -> {
             double d = Math.hypot(t.getX() - target.x, t.getZ() - target.z);
-            h.assertTrue(d < 2.0, "the directed tornado did not reach its target; still " + d + " blocks away");
+            Check.isTrue(h, d < 2.0, "the directed tornado did not reach its target; still " + d + " blocks away");
             t.release();
-            h.assertTrue(t.steerTarget() == null, "release did not clear the target");
+            Check.isTrue(h, t.steerTarget() == null, "release did not clear the target");
             t.discard();
             h.succeed();
         });

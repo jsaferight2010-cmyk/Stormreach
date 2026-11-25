@@ -453,61 +453,94 @@ def S(bid, **p): return (bid if ':' in bid else 'stormreach:' + bid, p)
 import random
 AIR = S('minecraft:air')
 WALLP = dict(up='true', north='none', south='none', east='none', west='none', waterlogged='false')
-# ---- Tempest Spire: 11x11 footprint, 34 tall ----
+# ---- Tempest Spire (5.1 redesign): a stepped temple 25 x 25, 52 tall ----
+# Three terraces with stairs on every side, a colonnade, four obelisk towers crowned with lightning rods, and a
+# central spire you climb by a spiral stair past three floors of chambers to the open-air altar crown.
 rnd = random.Random(7001); b = {}; chests = {}
-W, H = 11, 34
+W, H = 25, 52
+C = W // 2
 for x in range(W):
     for z in range(W):
         for y in range(H): b[(x, y, z)] = AIR
-def brick(): return S('cracked_tempest_bricks') if rnd.random() < 0.2 else S('tempest_bricks')
-for x in range(W):
-    for z in range(W):
-        b[(x, 0, z)] = S('tempest_bricks')  # foundation
-# tower body: a 7x7 hollow shaft (x,z 2..8), with floors every 8 blocks
-for y in range(1, 26):
-    for x in range(2, 9):
-        for z in range(2, 9):
-            edge = x in (2, 8) or z in (2, 8)
-            corner = x in (2, 8) and z in (2, 8)
-            if edge:
-                b[(x, y, z)] = S('chiseled_tempest_bricks') if corner and y % 8 == 0 else brick()
-            elif y % 8 == 0:
-                b[(x, y, z)] = S('tempest_bricks')
-    # windows
-    if y % 8 in (3, 4):
-        for (x, z) in ((5, 2), (5, 8), (2, 5), (8, 5)): b[(x, y, z)] = S('stormglass_pane' if False else 'minecraft:air')
-# entrance (south side z=8)
-for y in (1, 2): b[(5, y, 8)] = AIR
-b[(5, 3, 8)] = S('tempest_brick_stairs', facing='north', half='top', shape='straight', waterlogged='false')
-# ladder column against the north wall, with holes through the floors
-for y in range(1, 26):
-    b[(5, y, 3)] = S('minecraft:ladder', facing='south', waterlogged='false')
-# buttresses at the four outer corners
-for (x, z) in ((1, 1), (1, 9), (9, 1), (9, 9)):
-    for y in range(1, 14 - (rnd.random() < 0.5) * 3): b[(x, y, z)] = S('tempest_brick_wall', **WALLP)
-for (x, z) in ((1, 5), (9, 5), (5, 1)):
-    for y in range(1, 6): b[(x, y, z)] = brick()
-# chests on the first two floors
-b[(7, 9, 7)] = S('minecraft:chest', facing='west', type='single', waterlogged='false'); chests[(7, 9, 7)] = 'stormreach:chests/tempest_spire'
-b[(3, 17, 7)] = S('minecraft:chest', facing='east', type='single', waterlogged='false'); chests[(3, 17, 7)] = 'stormreach:chests/tempest_spire'
-b[(7, 1, 7)] = S('minecraft:chest', facing='west', type='single', waterlogged='false'); chests[(7, 1, 7)] = 'stormreach:chests/tempest_spire'
-for (x, y, z) in ((3, 9, 3), (7, 17, 3), (3, 1, 5)): b[(x, y, z)] = S('storm_lantern')
-# top: a wide 11x11 platform with the altar, ringed by pillars that end in charged stone
-for x in range(W):
-    for z in range(W):
-        d = max(abs(x - 5), abs(z - 5))
-        if d <= 5 and not (abs(x - 5) == 5 and abs(z - 5) == 5): b[(x, 26, z)] = S('tempest_bricks') if d < 5 else S('tempest_brick_slab', type='bottom', waterlogged='false')
-b[(5, 26, 3)] = AIR  # ladder exit
-b[(5, 25, 3)] = S('minecraft:ladder', facing='south', waterlogged='false')
-for (x, z) in ((1, 1), (1, 9), (9, 1), (9, 9), (5, 0), (0, 5), (10, 5), (5, 10)):
-    if (x, z) in ((5, 0), (0, 5), (10, 5), (5, 10)):
-        continue
-    for y in range(27, 31): b[(x, y, z)] = S('tempest_brick_wall', **WALLP)
-    b[(x, 31, z)] = S('charged_stormstone')
-for (x, z) in ((4, 4), (6, 4), (4, 6), (6, 6)): b[(x, 27, z)] = S('chiseled_tempest_bricks')
-b[(5, 27, 5)] = S('sovereign_altar', ritual='0')
-for (x, z, f) in ((5, 4, 'south'), (4, 5, 'east'), (6, 5, 'west'), (5, 6, 'north')):
-    b[(x, 27, z)] = S('tempest_brick_stairs', facing=f, half='bottom', shape='straight', waterlogged='false')
+def brick(): return S('cracked_tempest_bricks') if rnd.random() < 0.18 else S('tempest_bricks')
+def ring(d, x, z): return max(abs(x - C), abs(z - C)) == d
+FACE = {'north': (0, -1), 'south': (0, 1), 'west': (-1, 0), 'east': (1, 0)}
+# terraces: 25 -> 21 -> 17 wide, two blocks tall each, with a stair run up the middle of every side
+for t, half in enumerate((12, 10, 8)):
+    for x in range(C - half, C + half + 1):
+        for z in range(C - half, C + half + 1):
+            for y in (t * 2, t * 2 + 1):
+                b[(x, y, z)] = S('chiseled_tempest_bricks') if (abs(x - C) == half and abs(z - C) == half) else brick()
+    for f, (dx, dz) in FACE.items():
+        opp = {'north': 'south', 'south': 'north', 'west': 'east', 'east': 'west'}[f]
+        for k in (-1, 0, 1):
+            for step in range(2):
+                ox, oz = (k, -(half + 1) + step) if f == 'north' else (k, half + 1 - step) if f == 'south' else (-(half + 1) + step, k) if f == 'west' else (half + 1 - step, k)
+                if f in ('west', 'east'): ox, oz = ox, oz
+                x, z = C + ox, C + oz
+                if 0 <= x < W and 0 <= z < W: b[(x, t * 2 + step, z)] = S('tempest_brick_stairs', facing=opp, half='bottom', shape='straight', waterlogged='false')
+base = 6   # the top terrace's floor is y = 5; the temple stands on y = 6
+# colonnade around the top terrace: pillars every third block, joined by a lintel
+for x in range(C - 8, C + 9):
+    for z in range(C - 8, C + 9):
+        if not ring(8, x, z): continue
+        if (x + z) % 3 == 0:
+            for y in range(base, base + 5): b[(x, y, z)] = S('tempest_brick_wall', **WALLP)
+        b[(x, base + 5, z)] = S('tempest_brick_slab', type='bottom', waterlogged='false')
+for (x, z) in ((C, C - 8), (C, C + 8), (C - 8, C), (C + 8, C)):   # the four ways in stay open
+    for y in range(base, base + 5): b[(x, y, z)] = AIR
+# obelisk towers at the corners of the top terrace, crowned with charged stone and a lightning rod
+for (x, z) in ((C - 7, C - 7), (C + 7, C - 7), (C - 7, C + 7), (C + 7, C + 7)):
+    for y in range(base, base + 14):
+        b[(x, y, z)] = S('chiseled_tempest_bricks') if y % 5 == 0 else S('tempest_bricks')
+    b[(x, base + 14, z)] = S('charged_stormstone')
+    b[(x, base + 15, z)] = S('minecraft:lightning_rod', facing='up', powered='false', waterlogged='false')
+# the central spire: 9 x 9 hollow to y = base+30, then 7 x 7 to the crown
+top = base + 38
+for y in range(base, top):
+    half = 4 if y < base + 30 else 3
+    for x in range(C - half, C + half + 1):
+        for z in range(C - half, C + half + 1):
+            edge = abs(x - C) == half or abs(z - C) == half
+            corner = abs(x - C) == half and abs(z - C) == half
+            if edge: b[(x, y, z)] = S('chiseled_tempest_bricks') if corner else brick()
+            elif (y - base) % 10 == 0 and y > base: b[(x, y, z)] = S('tempest_bricks')   # floors
+    if (y - base) % 10 in (4, 5, 6):   # tall stormglass windows on every side
+        for (x, z) in ((C, C - half), (C, C + half), (C - half, C), (C + half, C)): b[(x, y, z)] = S('minecraft:light_blue_stained_glass_pane', north='false', south='false', east='false', west='false', waterlogged='false')
+for y in (base, base + 1, base + 2): b[(C, y, C + 4)] = AIR          # the doorway (south)
+b[(C, base + 3, C + 4)] = S('tempest_brick_stairs', facing='north', half='top', shape='straight', waterlogged='false')
+# spiral stair inside: one step per block, round the walls, with openings cut through each floor
+path = [(C - 3 + i, C - 3) for i in range(6)] + [(C + 3, C - 3 + i) for i in range(6)] + [(C + 3 - i, C + 3) for i in range(6)] + [(C - 3, C + 3 - i) for i in range(6)]
+dirs = ['east'] * 6 + ['south'] * 6 + ['west'] * 6 + ['north'] * 6
+for i in range(top - base - 9):
+    x, z = path[i % len(path)]
+    y = base + 1 + i
+    if y >= top - 8: break
+    b[(x, y, z)] = S('tempest_brick_stairs', facing=dirs[i % len(dirs)], half='bottom', shape='straight', waterlogged='false')
+    for k in (1, 2, 3):
+        if (x, y + k, z) in b and b[(x, y + k, z)] == S('tempest_bricks'): b[(x, y + k, z)] = AIR   # headroom through floors
+# chambers: chests and lanterns on each floor
+for n, fl in enumerate((base, base + 10, base + 20)):
+    b[(C + 2, fl + 1, C - 2)] = S('minecraft:chest', facing='west', type='single', waterlogged='false'); chests[(C + 2, fl + 1, C - 2)] = 'stormreach:chests/tempest_spire'
+    b[(C, fl + 6, C)] = S('minecraft:chain', axis='y', waterlogged='false')
+    b[(C, fl + 5, C)] = S('storm_lantern')
+# the crown: an open ring platform 11 x 11 over the spire, pillars with charged stone, the altar in the centre
+cy = top - 1
+for x in range(C - 5, C + 6):
+    for z in range(C - 5, C + 6):
+        d = max(abs(x - C), abs(z - C))
+        if d <= 5 and not (abs(x - C) == 5 and abs(z - C) == 5):
+            b[(x, cy, z)] = S('tempest_bricks') if d < 5 else S('tempest_brick_slab', type='bottom', waterlogged='false')
+x, z = path[(cy - base - 2) % len(path)]
+for k in range(0, 3): b[(x, cy + k, z)] = AIR if k else S('tempest_brick_stairs', facing='east', half='bottom', shape='straight', waterlogged='false')
+for (x, z) in ((C - 4, C - 4), (C + 4, C - 4), (C - 4, C + 4), (C + 4, C + 4)):
+    for y in range(cy + 1, cy + 6): b[(x, y, z)] = S('tempest_brick_wall', **WALLP)
+    b[(x, cy + 6, z)] = S('charged_stormstone')
+    b[(x, cy + 7, z)] = S('minecraft:lightning_rod', facing='up', powered='false', waterlogged='false')
+for (x, z) in ((C - 1, C - 1), (C + 1, C - 1), (C - 1, C + 1), (C + 1, C + 1)): b[(x, cy + 1, z)] = S('chiseled_tempest_bricks')
+b[(C, cy + 1, C)] = S('sovereign_altar', ritual='0')
+for (x, z, f) in ((C, C - 1, 'south'), (C - 1, C, 'east'), (C + 1, C, 'west'), (C, C + 1, 'north')):
+    b[(x, cy + 1, z)] = S('tempest_brick_stairs', facing=f, half='bottom', shape='straight', waterlogged='false')
 build_nbt('tempest_spire', (W, H, W), b, chests)
 w(f'{WG}/template_pool/tempest_spire.json', {'elements': [{'element': {'element_type': 'minecraft:single_pool_element', 'location': 'stormreach:tempest_spire',
     'processors': {'processors': []}, 'projection': 'rigid'}, 'weight': 1}], 'fallback': 'minecraft:empty'})

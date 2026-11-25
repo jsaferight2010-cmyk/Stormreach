@@ -414,6 +414,8 @@ MSG = {
  'gui.stormreach.guide.kind.campfire_cooking': 'Campfire',
  'gui.stormreach.guide.kind.stonecutting': 'Stonecutter',
  **{f'subtitles.stormreach.{_k}': _v[0] for _k, _v in __import__('sfx_list').SFX.items()},
+ 'block.stormreach.sovereign_altar.arena': 'The storm lifts you to the Sovereign\'s arena!',
+ 'block.stormreach.sovereign_altar.arena_return': 'The storm sets you back down where you stood.',
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',

@@ -113,6 +113,8 @@ public final class StormreachConfig {
     public static boolean stormClouds = true;
     /** Outline the Doppler radar's footprint while you hold one. */
     public static boolean radarPlacementOutline = true;
+    /** The Tempest Sovereign is fought on a floating arena above the spire (players are lifted up and brought back). */
+    public static boolean sovereignArena = true;
     public static boolean downbursts = true;
     public static int shadowAppearanceRate = 100;
     public static boolean shadowSigns = true;
@@ -197,6 +199,7 @@ public final class StormreachConfig {
         puddles = bool(p, "puddles", puddles);
         stormClouds = bool(p, "stormClouds", stormClouds);
         radarPlacementOutline = bool(p, "radarPlacementOutline", radarPlacementOutline);
+        sovereignArena = bool(p, "sovereignArena", sovereignArena);
         downbursts = bool(p, "downbursts", downbursts);
         shadowAppearanceRate = num(p, "shadowAppearanceRate", shadowAppearanceRate, 0, 300);
         shadowSigns = bool(p, "shadowSigns", shadowSigns);
@@ -281,6 +284,7 @@ public final class StormreachConfig {
         p.setProperty("puddles", String.valueOf(puddles));
         p.setProperty("stormClouds", String.valueOf(stormClouds));
         p.setProperty("radarPlacementOutline", String.valueOf(radarPlacementOutline));
+        p.setProperty("sovereignArena", String.valueOf(sovereignArena));
         p.setProperty("downbursts", String.valueOf(downbursts));
         p.setProperty("shadowAppearanceRate", String.valueOf(shadowAppearanceRate));
         p.setProperty("shadowSigns", String.valueOf(shadowSigns));

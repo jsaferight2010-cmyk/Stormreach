@@ -3,6 +3,18 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 11: the Tempest Spire temple and the Sovereign's arena
+- **The Tempest Spire is now a temple** (25 x 25, 52 tall):
+  - three stepped terraces with stairs up every side
+  - a colonnade and four obelisk towers crowned with charged stone and lightning rods
+  - a central spire with tall stormglass windows, climbed by a **spiral stair** (no more ladder) past three floors of chambers, each with a chest and a hanging storm lantern
+  - an open-air crown on top: the Sovereign Altar ringed by pillars and lightning rods
+- **The Sovereign's arena** (optional, on by default; set `sovereignArena=false` to fight at the altar instead). When the ritual ends, everyone within 32 blocks of the altar is lifted to a floating storm-stone arena high above the spire, and the Sovereign descends there. Teleports are made safe:
+  - the arena is built and loaded first
+  - you land on solid floor with Slow Falling and a moment of Resistance
+  - if you fall off you're put back on the platform instead of dying
+  - when the Sovereign dies (or after 15 minutes) everyone is taken back to exactly where they stood; a player who logged out mid-fight goes back when they return
+
 ### Stage 10: original particles
 - **Six particles of Stormreach's own**, each with its own frames and motion:
   - **storm sparks**: forked blue-white flashes that flicker, used for lightning, storm gear, the realm, storm mobs and bosses

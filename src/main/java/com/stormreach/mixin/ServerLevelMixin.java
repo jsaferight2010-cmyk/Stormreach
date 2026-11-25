@@ -22,6 +22,7 @@ public abstract class ServerLevelMixin {
             com.stormreach.tornado.TornadoManager.tick(self);
             com.stormreach.weather.precip.RainAccumulation.tick(self);
             com.stormreach.weather.cloud.StormCells.tick(self);
+            com.stormreach.realm.SovereignArena.tick(self);
             com.stormreach.labyrinth.LabyrinthTracker.tick(self);
             com.stormreach.story.StrangerDirector.tick(self);
             com.stormreach.story.Cinematics.tick(self);

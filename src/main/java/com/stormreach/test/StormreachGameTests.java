@@ -565,4 +565,22 @@ public class StormreachGameTests {
         Check.isTrue(h, n >= 40, "expected the full set of original sound effects, found " + n);
         h.succeed();
     }
+
+    @GameTest(maxTicks = 20)
+    public void theSovereignArenaIsBuiltSafeAndOptional(GameTestHelper h) {
+        var level = h.getLevel();
+        BlockPos altar = h.absolutePos(new BlockPos(1, 2, 1));
+        BlockPos c = com.stormreach.realm.SovereignArena.centreFor(level, altar);
+        Check.isTrue(h, c.getY() <= level.getMaxY() - 24, "the arena is too close to the build limit");
+        com.stormreach.realm.SovereignArena.build(level, c);
+        Check.isTrue(h, com.stormreach.realm.SovereignArena.safeSpot(level, c.above()), "the arena centre isn't a safe landing spot");
+        Check.isTrue(h, com.stormreach.realm.SovereignArena.safeSpot(level, c.offset(12, 1, 0)), "the arrival ring isn't a safe landing spot");
+        boolean was = com.stormreach.StormreachConfig.sovereignArena;
+        com.stormreach.StormreachConfig.sovereignArena = false;
+        Check.isTrue(h, com.stormreach.realm.SovereignArena.begin(level, altar) == null, "with the arena turned off the fight should stay at the altar");
+        com.stormreach.StormreachConfig.sovereignArena = true;
+        Check.isTrue(h, com.stormreach.realm.SovereignArena.begin(level, altar) != null, "the arena should give the Sovereign a place to appear");
+        com.stormreach.StormreachConfig.sovereignArena = was;
+        h.succeed();
+    }
 }

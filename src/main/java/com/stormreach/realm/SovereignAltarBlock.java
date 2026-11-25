@@ -112,9 +112,16 @@ public class SovereignAltarBlock extends Block {
         level.setBlock(pos, state.setValue(RITUAL, 0), Block.UPDATE_ALL);
         TempestSovereign boss = RealmEntities.TEMPEST_SOVEREIGN.create(level, EntitySpawnReason.EVENT);
         if (boss == null) return;
-        boss.snapTo(pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, random.nextFloat() * 360f, 0f);
-        boss.setHome(pos);
+        net.minecraft.world.phys.Vec3 arena = SovereignArena.begin(level, pos);   // the optional sky arena (lifts nearby players up safely)
+        if (arena != null) {
+            boss.snapTo(arena.x, arena.y, arena.z, random.nextFloat() * 360f, 0f);
+            boss.setHome(BlockPos.containing(arena).below(3));
+        } else {
+            boss.snapTo(pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, random.nextFloat() * 360f, 0f);
+            boss.setHome(pos);
+        }
         level.addFreshEntity(boss);
+        if (arena != null) SovereignArena.track(level, BlockPos.containing(arena).below(4), boss.getUUID());
         for (int i = 0; i < 4; i++) StormWeather.strikeVisual(level, pos.offset(random.nextInt(7) - 3, 1, random.nextInt(7) - 3));
         level.playSound(null, pos, com.stormreach.registry.ModSfx.CREATURE_TITAN_AMBIENT, SoundSource.HOSTILE, 3.0f, 1.3f);
         for (ServerPlayer p : level.getPlayers(p -> p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos)) < 96 * 96)) {

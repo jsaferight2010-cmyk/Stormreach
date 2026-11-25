@@ -200,3 +200,19 @@ Built from the user's "complete mod expansion" spec. The user also asked for rar
 4. `/locate structure stormreach:hollow_labyrinth`: the maze generates across chunk borders. Check the keys, keyhole, Keeper pathing, lockers and music.
 5. `/locate biome stormreach:elderstorm_grove` (in the realm): trees, fruit, mobs.
 6. Shrine ritual end to end, then the Cyrrus intro (sync, scaling, multiplayer), the phases and the drops.
+
+### 5.0 first real runs (GitHub Actions GameTest server + the user's client)
+The first runs were the user's client with a hand-built jar, then the CI GameTest server. Fixed in order:
+1. The hand-built jar used Mixin annotation stubs with the wrong retention, so the invoker mixin failed. Only the sandbox stubs were affected; Gradle builds were fine.
+2. "Some intrusive holders were not registered": a storm block clone that failed halfway left a half-built Block behind. StormBlocks now skips names Stormreach already uses (lantern) and releases any leftover holders.
+3. **No storm mobs had ever been generated.** In 26.x `EntityType.getBaseClass()` always returns Entity.class. The classes now come from `stormreach_entity_classes.txt` (made by `tools/entity_classes.py` from the jar): 90 storm mobs.
+4. Storm block items all failed with "Components not bound yet", because they read the vanilla stack size at init. They now use a fixed stack size: 944 items.
+5. Datapack waves:
+   - realm biomes needed `"modifier": "overlay"` on `natural_mob_spawns`
+   - `tool/can_shear_blocks` is now `tool/can_shear`
+   - `block_state_property` is now `match_block`
+   - crafting categories `tools` and `food` are invalid
+   - stale storm-block files had to be removed (amethyst clusters and buds, potent sulfur and lantern can't be cloned)
+6. The GameTest server has no Tempest Realm level, so the test now checks the dimension type instead.
+
+Result: CI is green. The build, 36 JUnit tests and all 8 required GameTests pass. validate.py now also checks loot types, predicates, recipe categories and biome attribute modifiers against vanilla 26.3.

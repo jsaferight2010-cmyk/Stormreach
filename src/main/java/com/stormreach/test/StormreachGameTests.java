@@ -475,9 +475,9 @@ public class StormreachGameTests {
         var level = h.getLevel();
         BlockPos base = h.absolutePos(new BlockPos(2, 2, 2));
         Check.isTrue(h, com.stormreach.tornado.radar.RadarStructure.blocked(level, base).isEmpty(), "the radar should fit in an open space");
-        h.setBlock(new BlockPos(3, 5, 2), Blocks.STONE);
+        h.setBlock(new BlockPos(3, 6, 2), Blocks.STONE); // in the dish space
         Check.isFalse(h, com.stormreach.tornado.radar.RadarStructure.blocked(level, base).isEmpty(), "a block inside the footprint should stop placement");
-        h.setBlock(new BlockPos(3, 5, 2), Blocks.AIR);
+        h.setBlock(new BlockPos(3, 6, 2), Blocks.AIR);
         com.stormreach.tornado.radar.RadarStructure.build(level, base);
         BlockPos controller = base.offset(com.stormreach.tornado.radar.RadarLayout.CONTROLLER);
         Check.isTrue(h, com.stormreach.tornado.radar.RadarStructure.complete(level, controller), "the radar structure is incomplete after building");

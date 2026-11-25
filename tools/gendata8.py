@@ -87,6 +87,7 @@ model('radar_part_base', {'parent': 'minecraft:block/block', 'textures': {'parti
 model('radar_part_mast', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/radar_mast', 'm': 'stormreach:block/radar_mast'},
       'elements': [box([5, 0, 5], [11, 16, 11], '#m')]})
 model('radar_part_dish', {'textures': {'particle': 'stormreach:block/radar_dish'}})
+w(f'{D}/loot_table/blocks/radar_part.json', {'type': 'minecraft:block', 'pools': []})  # the pedestal drops the radar
 w(f'{A}/blockstates/radar_part.json', {'variants': {f'part={p}': {'model': ns(f'block/radar_part_{p}')} for p in ('base', 'mast', 'dish')}})
 model('anemometer', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/anemometer', 'a': 'stormreach:block/anemometer'}, 'elements': [
     box([7, 0, 7], [9, 12, 9], '#a'), box([1, 12, 7.5], [15, 13, 8.5], '#a'), box([7.5, 12, 1], [8.5, 13, 15], '#a'),

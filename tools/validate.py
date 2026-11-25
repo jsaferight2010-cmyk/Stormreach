@@ -108,6 +108,10 @@ nb, ni, ne = [], [], []
 for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'forest/ForestRegistry.java', 'backpack/Backpacks.java'):
     src5 = jsrc(rel)
     nb += re.findall(r'(?:block|trophy)\("([a-z_0-9]+)"', src5); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src5); ne += re.findall(r'\bentity\("([a-z_0-9]+)"', src5)
+# 5.1: hail and puddles, and the Doppler radar (its block and item are registered by hand, not through block())
+src51 = jsrc('weather/precip/PrecipContent.java')
+nb += re.findall(r'\bblock\("([a-z_0-9]+)"', src51); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src51)
+nb += ['tornado_radar', 'radar_part']; ni += ['tornado_radar']
 ni = [i for i in ni if not i.endswith('_')]
 ni += ['tornado_spawner_' + k.strip().lower() for k in re.findall(r'enum SpawnerKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
 ni = [i.strip() for i in ni]
@@ -115,13 +119,13 @@ ni += ['weather_event_' + k.strip().lower() for k in re.findall(r'enum EventKind
 tiers = re.findall(r'[A-Z_]+\("([a-z_]+)", \d+\)', jsrc('sim/BackpackTier.java'))
 ni += [f'{t}_backpack' for t in tiers] + [f'{t}_backpack_upgrade' for t in tiers[1:]]
 ne += ['tornado']
-noitem5 = {'stormfruit_pod'}
+noitem5 = {'stormfruit_pod', 'puddle', 'radar_part'}
 for b in nb:
     bs = f'{A}/blockstates/{b}.json'
     if not os.path.exists(bs): problems.append(f'no blockstate {b}'); continue
     for m in models_in(json.load(open(bs))): chain_once(m)
     if f'block.stormreach.{b}' not in lang: problems.append(f'no lang block {b}')
-    blk_src = ''.join(jsrc(r) for r in ('labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java'))
+    blk_src = ''.join(jsrc(r) for r in ('labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'weather/precip/PrecipContent.java', 'tornado/radar/RadarContent.java'))
     noloot = re.search(r'"' + b + r'"[^;]*noLootTable', blk_src)
     if not noloot and not os.path.exists(f'{D}/stormreach/loot_table/blocks/{b}.json'): problems.append(f'no loot {b}')
 for i in ni + [b for b in nb if b not in noitem5]:

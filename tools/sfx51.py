@@ -371,6 +371,50 @@ def machine_hum():
     return (hum + whirr) * adsr(len(t), 0.1, 0.1, 0.9, 0.3)
 NEW55 = {'block.capacitor_charge': capacitor_charge, 'block.machine_hum': machine_hum}
 
+def fire_whirl_roar():
+    # a low turbulent roar (filtered noise with a slow swirl) under a bed of crackling embers
+    sec = 3.5; n = int(sec * SR); t = t_(sec)
+    roar = lp(noise(sec), 260) * (0.7 + 0.3 * np.sin(2 * np.pi * 0.9 * t)) * 1.4
+    body = bp(noise(sec), 300, 1400) * 0.35 * (0.6 + 0.4 * np.sin(2 * np.pi * 1.7 * t + 1))
+    crack = np.zeros(n)
+    for _ in range(90):
+        at = rng.uniform(0, sec - 0.05); c = hp(noise(0.03), 2500) * expdecay(0.03, 140) * rng.uniform(0.2, 0.7)
+        place(crack, c, at)
+    x = (roar + body + crack) * adsr(n, 0.3, 0.2, 0.9, 0.6)
+    return reverb(x, 1.4, 0.25, 2500)
+def tiv_spikes():
+    # hydraulic hiss, then four heavy steel spikes biting into the ground almost together
+    sec = 1.2; n = int(sec * SR); out = np.zeros(n)
+    place(out, bp(noise(0.35), 1800, 6000) * adsr(int(0.35 * SR), 0.02, 0.1, 0.6, 0.15) * 0.4, 0)
+    for k, at in enumerate((0.28, 0.31, 0.335, 0.36)):
+        th = lp(noise(0.25), 180) * expdecay(0.25, 18) * 1.2
+        ring = np.sin(2 * np.pi * (140 + 23 * k) * t_(0.25)) * expdecay(0.25, 25) * 0.5
+        place(out, th + ring, at)
+    return reverb(out, 0.8, 0.18, 3500)
+NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes}
+
+def fire_whirl_roar():
+    # a low turbulent roar (filtered noise with a slow swirl) under a bed of crackling embers
+    sec = 3.5; n = int(sec * SR); t = t_(sec)
+    roar = lp(noise(sec), 260) * (0.7 + 0.3 * np.sin(2 * np.pi * 0.9 * t)) * 1.4
+    body = bp(noise(sec), 300, 1400) * 0.35 * (0.6 + 0.4 * np.sin(2 * np.pi * 1.7 * t + 1))
+    crack = np.zeros(n)
+    for _ in range(90):
+        at = rng.uniform(0, sec - 0.05); c = hp(noise(0.03), 2500) * expdecay(0.03, 140) * rng.uniform(0.2, 0.7)
+        place(crack, c, at)
+    x = (roar + body + crack) * adsr(n, 0.3, 0.2, 0.9, 0.6)
+    return reverb(x, 1.4, 0.25, 2500)
+def tiv_spikes():
+    # hydraulic hiss, then four heavy steel spikes biting into the ground almost together
+    sec = 1.2; n = int(sec * SR); out = np.zeros(n)
+    place(out, bp(noise(0.35), 1800, 6000) * adsr(int(0.35 * SR), 0.02, 0.1, 0.6, 0.15) * 0.4, 0)
+    for k, at in enumerate((0.28, 0.31, 0.335, 0.36)):
+        th = lp(noise(0.25), 180) * expdecay(0.25, 18) * 1.2
+        ring = np.sin(2 * np.pi * (140 + 23 * k) * t_(0.25)) * expdecay(0.25, 25) * 0.5
+        place(out, th + ring, at)
+    return reverb(out, 0.8, 0.18, 3500)
+NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -381,7 +425,7 @@ SYNTH = {
     'creature.wind_hurt': wind_hurt, 'creature.wind_death': wind_death, 'creature.titan_ambient': titan_ambient, 'creature.titan_roar': titan_roar,
     'creature.titan_hurt': titan_hurt, 'creature.titan_death': titan_death, 'creature.titan_charge': titan_charge, 'creature.titan_blast': titan_blast,
     'weather.hail': hail, 'weather.puddle_splash': splash, 'block.radar_ping': radar_ping,
-    **MAT_SYNTH, **NEW52, **NEW53, **NEW54, **NEW55,
+    **MAT_SYNTH, **NEW52, **NEW53, **NEW54, **NEW55, **NEW60,
 }
 
 # ---------------------------------------------------------------------------------------------- the Labyrinth score

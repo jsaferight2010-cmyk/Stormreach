@@ -469,3 +469,25 @@ boot the headless test server in GitHub Actions as before.
   old random-tick evaporation and a timer safety net.
 - Downbursts: wet/dry now also follows the ground (soaked after long rain, water/mud/puddles under it, swamps); wet
   ones flood hollows and put out fires, dry ones hit 15% harder, raise a dust wall and dry out farmland.
+
+### Stage 4: tornadoes
+- Morphologies: each type has its own radius profile (`TornadoMorphology.radiusProfile`) and look in TornadoMesh:
+  ropes snake and lean with the base trailing, drill bits get spiral grooves, cones bow outward, stovepipes are
+  columns, wedges/large wedges are dense dark walls with a rain-wrap curtain and a grey (not brown) debris base; the
+  drawn width is capped at ~1.9x the funnel height so the biggest wedge reads as a wall. Any touched-down funnel meets
+  the ground with at least ~0.5 block width and a whirl >=2 blocks (ropes used to fade out above the ground).
+  Preview: tools/preview/TornadoPreview.java (see ~/scratch/tp).
+- Terrain: absolute cloud base (`cloudBaseAbs`, from the nearest storm cell or StormCells.cloudBase); the funnel
+  stretches to it as the ground rises and falls. Ground following snaps up, eases down.
+- Speed: `tornadoSpeedPercent` (default 40) scales forward speed.
+- Entities: `VortexForces.captured/ride/rideTicks` (unit-tested). Caught bodies get their own orbit radius, climb rate
+  and rhythm, circle, bob up and down, and are flung out after their ride; still server-side with needsSync.
+- Debris: sustained-wind fatigue below the failure speed (stalled tornadoes keep eroding), exposed soil/turf lifted
+  from 125 mph, foliage partly lifted, stone/masonry only above 200 mph. Lifting keeps the exact state; containers
+  are emptied in place first, other block entities ride along in FallingBlockEntity.blockData. Wider orbits and
+  surging climb. Default debris cap 80.
+- Trees: `breakTree` by severity (EF0 canopy .. EF5 uproot), stripped stumps from EF3, removed trunk pieces laid
+  down downwind (or lifted, or dropped as items, one for one); each tree processed once per severity.
+- Crops: flattened (lose growth) from 65 mph, torn out from 90 mph, once per tornado (config tornadoCropDamage).
+- Waterspout satellites no longer follow a parent ashore (landfall still dissipates them deliberately).
+- Fire whirl (`FireWhirlEntity`, Nether only, rare natural spawn near lava/soul ground, config fireWhirls).

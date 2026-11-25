@@ -28,6 +28,7 @@ public final class StormreachClient implements ClientModInitializer {
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.CYCLONE, com.stormreach.client.render.RealmRenderers.CycloneRenderer::new);
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.STORMHAWK, com.stormreach.client.render.RealmRenderers.StormhawkRenderer::new);
         EntityRendererRegistry.register(com.stormreach.tornado.TornadoTypes.TORNADO, com.stormreach.client.tornado.TornadoRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.tornado.TornadoTypes.FIRE_WHIRL, com.stormreach.client.tornado.FireWhirlRenderer::new);
         EntityRendererRegistry.register(com.stormreach.weather.precip.PrecipContent.HAILSTONE, com.stormreach.client.weather.HailstoneRenderer::new);
         EntityRendererRegistry.register(com.stormreach.weather.precip.PrecipContent.STORM_CELL, com.stormreach.client.weather.StormCellRenderer::new);
         EntityRendererRegistry.register(com.stormreach.labyrinth.LabyrinthRegistry.HOLLOW_KEEPER, com.stormreach.client.story.StoryRenderers.KeeperRenderer::new);

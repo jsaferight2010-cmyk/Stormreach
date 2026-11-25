@@ -1101,4 +1101,31 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    /** 6.0 (test list 10): tornado debris keeps the block's exact state; containers are emptied, never duplicated or lost. */
+    @GameTest(maxTicks = 20)
+    public void tornadoDebrisKeepsStateAndContents(GameTestHelper h) {
+        var level = h.getLevel();
+        BlockPos stairs = new BlockPos(1, 2, 1), barrel = new BlockPos(3, 2, 1);
+        BlockState st = Blocks.OAK_STAIRS.defaultBlockState().setValue(net.minecraft.world.level.block.StairBlock.FACING, Direction.EAST)
+                .setValue(net.minecraft.world.level.block.StairBlock.HALF, net.minecraft.world.level.block.state.properties.Half.TOP);
+        h.setBlock(stairs, st);
+        h.setBlock(barrel, Blocks.BARREL);
+        var be = (net.minecraft.world.level.block.entity.BarrelBlockEntity) level.getBlockEntity(h.absolutePos(barrel));
+        be.setItem(0, new ItemStack(Items.DIAMOND, 7));
+        be.setItem(5, new ItemStack(Items.TORCH, 12));
+        var fb1 = com.stormreach.tornado.TornadoEntity.takeAsDebris(level, h.absolutePos(stairs), st);
+        Check.isTrue(h, fb1.getBlockState().equals(st), "the flying stairs lost their facing/half: " + fb1.getBlockState());
+        Check.isTrue(h, h.getBlockState(stairs).isAir(), "the stairs were copied instead of picked up");
+        var fb2 = com.stormreach.tornado.TornadoEntity.takeAsDebris(level, h.absolutePos(barrel), h.getBlockState(barrel));
+        int diamonds = 0, torches = 0;
+        for (var ie : level.getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class, new net.minecraft.world.phys.AABB(h.absolutePos(barrel)).inflate(2))) {
+            if (ie.getItem().is(Items.DIAMOND)) diamonds += ie.getItem().getCount();
+            if (ie.getItem().is(Items.TORCH)) torches += ie.getItem().getCount();
+        }
+        Check.isTrue(h, diamonds == 7 && torches == 12, "the barrel's contents weren't dropped exactly once: diamonds " + diamonds + ", torches " + torches);
+        Check.isTrue(h, fb2.blockData == null, "an emptied container shouldn't carry item data");
+        fb1.discard(); fb2.discard();
+        h.succeed();
+    }
 }

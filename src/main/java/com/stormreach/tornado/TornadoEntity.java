@@ -87,6 +87,20 @@ public class TornadoEntity extends Entity {
         Flight(int carry, double orbit) { this.carry = carry; this.orbit = orbit; }
     }
     private double headingDeg;
+    /** 6.0: absolute height of the cloud base the funnel hangs from (the funnel stretches as the ground rises and falls). */
+    private double cloudBaseAbs = Double.NaN;
+    /** 6.0: bodies riding the vortex (circling, rising and bobbing until thrown out). */
+    private final Map<UUID, Ride> rides = new java.util.HashMap<>();
+    /** 6.0: trees already broken (lowest log -> severity applied) and crops already hit, so nothing is processed twice. */
+    private final Map<Long, Integer> trees = new java.util.HashMap<>();
+    private final java.util.Set<Long> crops = new java.util.HashSet<>();
+
+    private static final class Ride {
+        final double orbit, climb, phase;
+        final int max;
+        int ticks;
+        Ride(double orbit, double climb, double phase, int max) { this.orbit = orbit; this.climb = climb; this.phase = phase; this.max = max; }
+    }
     /** Client only: the funnel's accumulated spin angle (radians), and last tick's, for smooth interpolation. */
     public float clientSpin, clientSpinO;
 
@@ -222,6 +236,9 @@ public class TornadoEntity extends Entity {
             level.playSound(null, getX(), getY() + 4, getZ(), com.stormreach.registry.ModSounds.TORNADO_ROAR, net.minecraft.sounds.SoundSource.WEATHER,
                     2.5f + 0.5f * profile.potentialRating().ordinal(), 0.85f + 0.05f * (float) getRandom().nextGaussian());
         }
+        if (Double.isNaN(cloudBaseAbs)) cloudBaseAbs = initialCloudBase(level);
+        float rel = (float) Math.max(20, cloudBaseAbs - getY());
+        if (Math.abs(rel - cloudBase()) > 0.2f) entityData.set(CLOUD_BASE, rel);
         float width = (float) (profile.width() * TornadoStage.widthAt(f));
         maxWidth = Math.max(maxWidth, width);
         entityData.set(WIDTH, width);
@@ -237,6 +254,8 @@ public class TornadoEntity extends Entity {
         if (near == null && !simulateWithoutPlayers) return; // keep moving and ageing, but skip the expensive parts far from players
         // nothing happens on the ground until the funnel has come down and touched it
         boolean down = FunnelShape.touchedDown(reach);
+        if (!down) rides.clear();
+        if (tickCount % 40 == 0) rides.keySet().removeIf(id -> level.getEntity(id) == null);
         if (down) {
             pushEntities(level);
             if (StormreachConfig.tornadoDestruction) damageBlocks(level);
@@ -245,6 +264,23 @@ public class TornadoEntity extends Entity {
         if (tickCount % 40 == 0) {
             level.playSound(null, blockPosition(), com.stormreach.registry.ModSfx.WEATHER_WIND, SoundSource.WEATHER, 3.0f + intensity() * 4f, 0.4f);
         }
+    }
+
+    /**
+     * 6.0: the funnel hangs from its parent storm's cloud base: the nearest storm cell's base if one is overhead,
+     * otherwise a base at the same height storm cells use, so funnels, cells and the sky line up.
+     */
+    private double initialCloudBase(ServerLevel level) {
+        double best = Double.NaN, bestD = 250;
+        for (var c : level.getEntitiesOfClass(com.stormreach.weather.cloud.StormCellEntity.class, getBoundingBox().inflate(250, 300, 250))) {
+            double d = Math.hypot(c.getX() - getX(), c.getZ() - getZ());
+            if (d < bestD) { bestD = d; best = c.getY(); }
+        }
+        if (!Double.isNaN(best) && best > getY() + 25) return best;
+        double rel = cloudBase();
+        if (formation() == TornadoFormation.SUPERCELL)
+            return com.stormreach.weather.cloud.StormCells.cloudBase(level, (int) getY(), level.getRandom());
+        return getY() + rel;
     }
 
     private void move(ServerLevel level) {
@@ -257,13 +293,17 @@ public class TornadoEntity extends Entity {
                 // a satellite tornado orbits its parent at about 1.5–2.5 parent radii
                 double r = p.visualWidth() * 0.5 * 2.0 + 15;
                 orbitAngle += p.rotationSign() * 0.5 / Math.max(10, r);
+                if (formation() == TornadoFormation.WATERSPOUT && !overWater(level, p.getX() + Math.cos(orbitAngle) * r, p.getZ() + Math.sin(orbitAngle) * r)) {
+                    orbitAngle -= p.rotationSign() * 0.5 / Math.max(10, r);   // a waterspout never follows its parent ashore
+                    return;
+                }
                 setPos(p.getX() + Math.cos(orbitAngle) * r, groundY(level, p.getX() + Math.cos(orbitAngle) * r, p.getZ() + Math.sin(orbitAngle) * r), p.getZ() + Math.sin(orbitAngle) * r);
                 pathLength += position().distanceTo(before);
                 return;
             }
         }
         double f = lifeFraction();
-        double speed = profile.translationMs() * (f > 0.85 ? 0.6 : 1.0) * 0.05; // m/s to blocks/tick
+        double speed = profile.translationMs() * (f > 0.85 ? 0.6 : 1.0) * 0.05 * StormreachConfig.tornadoSpeedPercent / 100.0; // m/s to blocks/tick, scaled
         if (steerTarget != null) {
             // directed: turn toward the target (a few degrees a tick, so it curves rather than snaps) and stop on it
             double dx = steerTarget.x - getX(), dz = steerTarget.z - getZ(), dist = Math.hypot(dx, dz);
@@ -309,7 +349,10 @@ public class TornadoEntity extends Entity {
                 if (++offWaterTicks > 40 && !dissipating) dissipate(); // landfall: the waterspout falls apart
             } else offWaterTicks = 0;
         }
-        setPos(nx, groundY(level, nx, nz), nz);
+        // follow the terrain smoothly: climb with the ground, ease down slopes, never sink below it
+        double ground = groundY(level, nx, nz);
+        double ny = ground > getY() ? ground : Math.max(ground, getY() - 0.6);
+        setPos(nx, ny, nz);
         pathLength += position().distanceTo(before);
     }
 
@@ -356,11 +399,33 @@ public class TornadoEntity extends Entity {
             double mass = VortexForces.mass(e.getBbWidth(), e.getBbHeight(), armor) * com.stormreach.sky.ChaserGear.massFactor(e);
             double dx = e.getX() - getX(), dz = e.getZ() - getZ(), r = Math.max(0.01, Math.hypot(dx, dz));
             Vec3 v = e.getDeltaMovement();
-            double[] nv = VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{w.x * 0.05, w.y * 0.05 * 0.3, w.z * 0.05}, mph, mass,
-                    e.onGround(), e instanceof Player p && p.isShiftKeyDown(), above, ceiling, new double[]{dx / r, dz / r});
+            double core = Math.max(2.5, visualWidth() * 0.5);
+            Ride ride = rides.get(e.getUUID());
+            if (ride == null && VortexForces.captured(mph, mass, r, core) && level.getRandom().nextFloat() < 0.12f) {
+                // caught: each rider gets its own orbit, climb rate and rhythm, so bodies spread through the funnel
+                RandomSource rr = level.getRandom();
+                ride = new Ride(core * (0.45 + 0.9 * rr.nextDouble()), 0.06 + 0.12 * intensity() * (0.6 + 0.8 * rr.nextDouble()),
+                        rr.nextDouble() * Math.PI * 2, VortexForces.rideTicks(peak, rr.nextDouble()));
+                rides.put(e.getUUID(), ride);
+            }
+            double[] nv;
+            if (ride != null && (ride.ticks++ > ride.max || r > core * 3.5)) {
+                // thrown out of the funnel along its orbit, outward and a little up
+                double[] ej = VortexForces.eject(dx, dz, Math.hypot(w.x, w.z) * 0.05 * 0.5, rotationSign());
+                nv = new double[]{ej[0], ej[1], ej[2]};
+                rides.remove(e.getUUID());
+            } else if (ride != null) {
+                double[] path = VortexForces.ride(dx, dz, above, ride.orbit, Math.hypot(w.x, w.z) * 0.05 * 0.45, ride.climb, ceiling, rotationSign(), ride.phase, ride.ticks);
+                Vec3 drift = new Vec3(getX() - xo, 0, getZ() - zo);
+                // steer firmly toward the path (players are client-moved, so this is resent every tick)
+                nv = new double[]{v.x + (path[0] + drift.x - v.x) * 0.6, v.y + (path[1] - v.y) * 0.6, v.z + (path[2] + drift.z - v.z) * 0.6};
+            } else {
+                nv = VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{w.x * 0.05, w.y * 0.05 * 0.3, w.z * 0.05}, mph, mass,
+                        e.onGround(), e instanceof Player p && p.isShiftKeyDown(), above, ceiling, new double[]{dx / r, dz / r});
+            }
             e.setDeltaMovement(nv[0], nv[1], nv[2]);
             e.needsSync = true;
-            if (nv[1] > 0.05) e.resetFallDistance(); // fall damage counts from where they're dropped, not from the ground
+            if (nv[1] > 0.05 || ride != null) e.resetFallDistance(); // fall damage counts from where they're dropped, not from the ground
             if (e instanceof LivingEntity le && tickCount % 10 == 0) {
                 double dps = VortexForces.windDamagePerSecond(mph);
                 if (dps > 0) le.hurtServer(level, level.damageSources().flyIntoWall(), (float) (dps * 0.5) * (carriesBadge(le) ? 0.5f : 1f));
@@ -401,41 +466,209 @@ public class TornadoEntity extends Entity {
             double mph = sample.horizontalMph();
             if (mph < 45) continue;
             if (!s.getFluidState().isEmpty() && s.getFluidState().isSource()) continue; // water itself is not debris
+            // 6.0: crops and trees get their own, intensity-graded damage
+            if (StormreachConfig.tornadoCropDamage && isCrop(s)) { hitCrop(level, pos, s, mph); continue; }
+            if (StormreachConfig.tornadoTreeDamage && s.is(net.minecraft.tags.BlockTags.LOGS) && mph >= 80) {
+                if (breakTree(level, pos, mph, sample)) { survivedMaxMph = Math.max(survivedMaxMph, mph); damagedBlocks++; }
+                continue;
+            }
             MaterialClass m = BlockWind.classify(level, pos, s);
             if (water && m == MaterialClass.LOOSE_EARTH) continue; // a waterspout doesn't scour the lakebed
             if (m == MaterialClass.UNBREAKABLE) continue;
             double threshold = BlockWind.failureMph(level, pos, s, m);
-            if (mph < threshold) continue;
+            // sustained wind wears things down: below the failure speed there is still a growing chance per check, so a
+            // tornado that stalls over a spot keeps tearing at it instead of stopping after its first pass
+            if (mph < threshold) {
+                double over = (mph / threshold - 0.75) / 0.25;
+                if (over <= 0 || rnd.nextDouble() > 0.35 * over * over) continue;
+            }
             survivedMaxMph = Math.max(survivedMaxMph, mph);
             damagedBlocks++;
-            fail(level, pos, s, m, sample, limit);
+            fail(level, pos, s, m, sample, limit, mph);
         }
     }
 
-    private void fail(ServerLevel level, BlockPos pos, BlockState s, MaterialClass m, WindField.Sample sample, int limit) {
+    private void fail(ServerLevel level, BlockPos pos, BlockState s, MaterialClass m, WindField.Sample sample, int limit, double mph) {
         level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, s), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 6, 0.3, 0.3, 0.3, 0.2);
+        RandomSource rnd = level.getRandom();
+        boolean exposedTop = level.getBlockState(pos.above()).isAir();
         if (m == MaterialClass.LOOSE_EARTH) {
-            // ground scouring: strip turf to dirt, then to coarse dirt; soil isn't carried off whole
+            // 6.0: from strong-tornado winds up, exposed turf and soil are torn up and carried (grass, dirt, sand,
+            // gravel...); otherwise the ground is scoured: turf stripped to dirt, then to coarse dirt
+            double liftChance = mph < 125 ? 0 : Math.min(0.75, 0.12 + (mph - 125) / 160.0);
+            if (exposedTop && debris.size() < limit && rnd.nextDouble() < liftChance && !s.hasBlockEntity()) { lift(level, pos, s, sample, mph); return; }
             if (s.is(Blocks.GRASS_BLOCK) || s.is(Blocks.PODZOL) || s.is(Blocks.MYCELIUM)) level.setBlockAndUpdate(pos, Blocks.DIRT.defaultBlockState());
             else if (s.is(Blocks.DIRT)) level.setBlockAndUpdate(pos, Blocks.COARSE_DIRT.defaultBlockState());
             return;
         }
         if (m == MaterialClass.FOLIAGE) {
-            level.destroyBlock(pos, level.getRandom().nextInt(4) == 0);
+            // light plants and leaves: some fly off whole, the rest shred
+            if (exposedTop && debris.size() < limit && rnd.nextInt(3) == 0 && !s.hasBlockEntity() && s.isCollisionShapeFullBlock(level, pos)) lift(level, pos, s, sample, mph);
+            else level.destroyBlock(pos, rnd.nextInt(4) == 0);
             return;
         }
-        if (m.liftable && debris.size() < limit && !s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF)
-                && !s.hasBlockEntity()) {
-            FallingBlockEntity fb = FallingBlockEntity.fall(level, pos, s);
-            fb.dropItem = true;
-            fb.setHurtsEntities(2.0f, 20);
-            Vec3 w = new Vec3(sample.u(), 0, sample.w()).scale(0.05 * 0.5);
-            fb.setDeltaMovement(w.x, 0.4 + Math.min(0.8, sample.vertical() * 0.02), w.z);
-            double core = Math.max(2, visualWidth() * 0.5);
-            debris.put(fb, new Flight(VortexForces.carryTicks(currentPeakMph(), level.getRandom().nextDouble()), core * (0.7 + 0.6 * level.getRandom().nextDouble())));
+        // stone and masonry only fly in violent (upper EF4 / EF5) winds; everything light enough always can
+        boolean liftable = m.liftable || ((m == MaterialClass.STONE || m == MaterialClass.MASONRY) && mph > 200 && rnd.nextDouble() < 0.35);
+        if (liftable && debris.size() < limit && !s.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+            lift(level, pos, s, sample, mph);
         } else {
             level.destroyBlock(pos, true);
         }
+    }
+
+    /**
+     * Picks a block up as flying debris, keeping its exact state. A container is emptied onto the ground first (so
+     * nothing inside can be lost or duplicated in flight); any other block entity rides along with its data and is
+     * restored where the block lands. If it can't land, it drops as one item: never more, never less.
+     */
+    private void lift(ServerLevel level, BlockPos pos, BlockState s, WindField.Sample sample, double mph) {
+        FallingBlockEntity fb = takeAsDebris(level, pos, s);
+        fb.dropItem = true;
+        fb.setHurtsEntities(2.0f, 20);
+        Vec3 w = new Vec3(sample.u(), 0, sample.w()).scale(0.05 * 0.5);
+        fb.setDeltaMovement(w.x, 0.4 + Math.min(0.8, sample.vertical() * 0.02), w.z);
+        double core = Math.max(2, visualWidth() * 0.5);
+        RandomSource rnd = level.getRandom();
+        // a wide spread of orbits and climb rates: debris fills the whole funnel instead of one ring
+        debris.put(fb, new Flight(VortexForces.carryTicks(currentPeakMph(), rnd.nextDouble()), core * (0.35 + 1.1 * rnd.nextDouble())));
+    }
+
+    /**
+     * Turns the block at {@code pos} into a flying FallingBlockEntity with its exact state. Containers are emptied onto
+     * the ground first; any other block entity's data rides along and is restored on landing. Public for GameTests.
+     */
+    public static FallingBlockEntity takeAsDebris(ServerLevel level, BlockPos pos, BlockState s) {
+        net.minecraft.nbt.CompoundTag data = null;
+        if (s.hasBlockEntity()) {
+            var be = level.getBlockEntity(pos);
+            if (be instanceof net.minecraft.world.Container c) net.minecraft.world.Containers.dropContents(level, pos, c);
+            else if (be != null) data = be.saveWithoutMetadata(level.registryAccess());
+        }
+        FallingBlockEntity fb = FallingBlockEntity.fall(level, pos, s);
+        if (data != null) fb.blockData = data;
+        return fb;
+    }
+
+    // ------------------------------------------------------------------ 6.0: crops
+
+    private static boolean isCrop(BlockState s) {
+        return s.is(net.minecraft.tags.BlockTags.CROPS) || s.getBlock() instanceof net.minecraft.world.level.block.StemBlock
+                || s.is(Blocks.SWEET_BERRY_BUSH) || s.is(Blocks.SUGAR_CANE) || s.is(Blocks.BAMBOO);
+    }
+
+    /**
+     * Wind on a field: gusts from 65 mph flatten crops (they lose growth), from about 90 mph (EF1) they are torn out.
+     * Each crop is hit once per tornado, so the same plant isn't processed over and over.
+     */
+    private void hitCrop(ServerLevel level, BlockPos pos, BlockState s, double mph) {
+        if (mph < 65 || !crops.add(pos.asLong())) return;
+        if (crops.size() > 20000) crops.clear();
+        if (mph < 90 && s.getBlock() instanceof net.minecraft.world.level.block.CropBlock crop) {
+            int age = crop.getAge(s);
+            if (age > 0) level.setBlock(pos, crop.getStateForAge(Math.max(0, age - 1 - level.getRandom().nextInt(3))), 2);
+            level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, s), pos.getX() + 0.5, pos.getY() + 0.3, pos.getZ() + 0.5, 4, 0.3, 0.1, 0.3, 0.1);
+            return;
+        }
+        if (mph < 90) return;
+        damagedBlocks++;
+        level.destroyBlock(pos, level.getRandom().nextInt(3) != 0);   // most of a crop's yield is scattered and lost
+    }
+
+    // ------------------------------------------------------------------ 6.0: trees
+
+    /**
+     * Breaks a tree the way tornado damage surveys describe it: the stronger the wind, the more of the tree goes.
+     * EF0 strips part of the canopy, EF1 snaps branches and most leaves, EF2 snaps the trunk about halfway, EF3 leaves
+     * a debarked trunk a few blocks tall, EF4 a debarked stump, and EF5 uproots it. Removed trunk sections fall
+     * downwind as logs on the ground (big pieces from lighter damage, short splinters from violent winds), some are
+     * carried off as debris, and what can't be placed drops as items, one for one.
+     */
+    private boolean breakTree(ServerLevel level, BlockPos start, double mph, WindField.Sample sample) {
+        int severity = mph < 86 ? 0 : mph < 111 ? 1 : mph < 136 ? 2 : mph < 166 ? 3 : mph < 201 ? 4 : 5;
+        java.util.List<BlockPos> logs = new java.util.ArrayList<>(), leaves = new java.util.ArrayList<>();
+        java.util.Set<Long> seen = new java.util.HashSet<>();
+        java.util.ArrayDeque<BlockPos> q = new java.util.ArrayDeque<>();
+        q.add(start); seen.add(start.asLong());
+        while (!q.isEmpty() && logs.size() < 96) {
+            BlockPos p = q.poll();
+            BlockState st = level.getBlockState(p);
+            if (st.is(net.minecraft.tags.BlockTags.LOGS)) logs.add(p);
+            else if (st.is(net.minecraft.tags.BlockTags.LEAVES)) { leaves.add(p); if (leaves.size() > 400) continue; }
+            else continue;
+            for (int dx = -1; dx <= 1; dx++) for (int dy = -1; dy <= 1; dy++) for (int dz = -1; dz <= 1; dz++) {
+                BlockPos n = p.offset(dx, dy, dz);
+                if (Math.abs(n.getX() - start.getX()) > 10 || Math.abs(n.getZ() - start.getZ()) > 10 || !level.isLoaded(n)) continue;
+                BlockState ns = level.getBlockState(n);
+                if ((ns.is(net.minecraft.tags.BlockTags.LOGS) || (ns.is(net.minecraft.tags.BlockTags.LEAVES) && st.is(net.minecraft.tags.BlockTags.LOGS) || ns.is(net.minecraft.tags.BlockTags.LEAVES) && dy >= 0))
+                        && seen.add(n.asLong())) q.add(n);
+            }
+        }
+        if (logs.isEmpty()) return false;
+        BlockPos root = logs.stream().min(java.util.Comparator.comparingInt(BlockPos::getY)).get();
+        Integer done = trees.get(root.asLong());
+        if (done != null && done >= severity) return false;
+        trees.put(root.asLong(), severity);
+        int base = root.getY(), top = logs.stream().mapToInt(BlockPos::getY).max().getAsInt(), height = top - base + 1;
+        RandomSource rnd = level.getRandom();
+        // leaves: a share of the canopy, highest first
+        double leafShare = new double[]{0.35, 0.8, 1, 1, 1, 1}[severity];
+        leaves.sort((a, b) -> Integer.compare(b.getY(), a.getY()));
+        int strip = (int) Math.round(leaves.size() * leafShare);
+        for (int i = 0; i < strip; i++) level.destroyBlock(leaves.get(i), rnd.nextInt(6) == 0);
+        if (severity == 0) return true;
+        // trunk: keep everything up to this height above the root, snap the rest
+        int keep = switch (severity) { case 1 -> height - Math.max(1, height / 5); case 2 -> Math.max(2, height / 2); case 3 -> Math.min(3, height); case 4 -> 1; default -> 0; };
+        Vec3 wind = new Vec3(sample.u(), 0, sample.w());
+        Vec3 dir = wind.lengthSqr() < 1e-4 ? new Vec3(1, 0, 0) : wind.normalize();
+        int fallen = 0, limit = StormreachConfig.tornadoDebrisLimit;
+        for (BlockPos lp : logs) {
+            BlockState ls = level.getBlockState(lp);
+            if (!ls.is(net.minecraft.tags.BlockTags.LOGS)) continue;
+            if (lp.getY() - base < keep) {
+                if (severity >= 3) {                                     // debarking: the stump left is stripped
+                    BlockState stripped = strippedOf(ls);
+                    if (stripped != null) level.setBlock(lp, stripped, 3);
+                }
+                continue;
+            }
+            level.removeBlock(lp, false);
+            if (debris.size() < limit && rnd.nextInt(severity >= 4 ? 2 : 4) == 0) { lift(level, lp, ls, sample, mph); continue; }
+            // lay the piece down on the ground downwind, along the wind, in a short scatter
+            double dist = 3 + (lp.getY() - base) * 0.8 + rnd.nextDouble() * (severity * 2.5);
+            BlockPos land = landingSpot(level, lp, dir, dist, rnd);
+            BlockState lay = ls.hasProperty(net.minecraft.world.level.block.RotatedPillarBlock.AXIS)
+                    ? ls.setValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS, Math.abs(dir.x) > Math.abs(dir.z) ? net.minecraft.core.Direction.Axis.X : net.minecraft.core.Direction.Axis.Z) : ls;
+            if (severity >= 4) lay = java.util.Objects.requireNonNullElse(strippedOf(lay), lay);   // splintered, stripped pieces
+            if (land != null && fallen < 24) { level.setBlock(land, lay, 3); fallen++; }
+            else net.minecraft.world.level.block.Block.popResource(level, lp, new net.minecraft.world.item.ItemStack(ls.getBlock()));
+        }
+        return true;
+    }
+
+    private static BlockState strippedOf(BlockState log) {
+        var id = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(log.getBlock());
+        if (id.getPath().startsWith("stripped_")) return null;
+        var sid = net.minecraft.resources.Identifier.fromNamespaceAndPath(id.getNamespace(), "stripped_" + id.getPath());
+        var b = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getOptional(sid);
+        if (b.isEmpty()) return null;
+        BlockState out = b.get().defaultBlockState();
+        if (out.hasProperty(net.minecraft.world.level.block.RotatedPillarBlock.AXIS) && log.hasProperty(net.minecraft.world.level.block.RotatedPillarBlock.AXIS))
+            out = out.setValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS, log.getValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS));
+        return out;
+    }
+
+    /** An open spot on the ground about {@code dist} blocks downwind of {@code from}, or null (loaded chunks only). */
+    private static BlockPos landingSpot(ServerLevel level, BlockPos from, Vec3 dir, double dist, RandomSource rnd) {
+        for (int tries = 0; tries < 4; tries++) {
+            double side = (rnd.nextDouble() - 0.5) * 4;
+            int x = Mth.floor(from.getX() + 0.5 + dir.x * dist - dir.z * side), z = Mth.floor(from.getZ() + 0.5 + dir.z * dist + dir.x * side);
+            BlockPos probe = new BlockPos(x, 0, z);
+            if (!level.isLoaded(probe)) continue;
+            BlockPos at = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z);
+            if (level.getBlockState(at).canBeReplaced() && level.getBlockState(at.below()).isFaceSturdy(level, at.below(), net.minecraft.core.Direction.UP)) return at;
+            dist *= 0.8;
+        }
+        return null;
     }
 
     /** Picked-up blocks spiral up around the core, then are thrown out; flying debris hurts what it hits. */
@@ -459,11 +692,11 @@ public class TornadoEntity extends Entity {
                     double[] v = VortexForces.eject(dx, dz, tangential, rotationSign());
                     d.setDeltaMovement(v[0] + drift.x, v[1], v[2] + drift.z);
                 } else {
-                    double rise = 0.08 + 0.22 * intensity();
-                    double[] v = VortexForces.carry(dx, dz, above, fl.orbit, tangential, rise, ceiling, rotationSign(), 0.04);
+                    double rise = (0.05 + 0.22 * intensity()) * (0.55 + 0.75 * Math.sin(fl.ticks * 0.13 + fl.orbit));   // surges and sags
+                    double[] v = VortexForces.carry(dx, dz, above, fl.orbit * (1 + 0.25 * Math.sin(fl.ticks * 0.06 + fl.orbit * 3)), tangential, rise, ceiling, rotationSign(), 0.04);
                     d.setDeltaMovement(v[0] + drift.x, v[1], v[2] + drift.z);
                 }
-                d.needsSync = true;
+                if (fl.ticks % 2 == 0) d.needsSync = true;   // velocity updates every other tick are plenty to look smooth
             }
             // impacts: anything flying fast enough hurts what it hits
             Vec3 dv = d.getDeltaMovement();

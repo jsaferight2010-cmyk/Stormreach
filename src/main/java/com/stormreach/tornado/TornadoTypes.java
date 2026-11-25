@@ -15,6 +15,13 @@ public final class TornadoTypes {
                     .clientTrackingRange(32).updateInterval(2)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("tornado"))));
 
+    /** 6.0: the Nether's fire whirl. */
+    public static final EntityType<FireWhirlEntity> FIRE_WHIRL = Registry.register(BuiltInRegistries.ENTITY_TYPE,
+            ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("fire_whirl")),
+            EntityType.Builder.<FireWhirlEntity>of(FireWhirlEntity::new, MobCategory.MISC).sized(2.0f, 6.0f).fireImmune()
+                    .clientTrackingRange(16).updateInterval(2)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("fire_whirl"))));
+
     private TornadoTypes() {}
 
     public static void init() {}

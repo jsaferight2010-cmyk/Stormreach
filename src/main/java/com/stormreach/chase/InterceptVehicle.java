@@ -171,7 +171,7 @@ public class InterceptVehicle extends PathfinderMob {
         entityData.set(ANCHORED, down);
         if (down) { speed = 0; setDeltaMovement(0, getDeltaMovement().y, 0); }
         if (level() instanceof ServerLevel server)
-            server.playSound(null, blockPosition(), ModSfx.BLOCK_METAL_PLACE, SoundSource.NEUTRAL, 1.5f, down ? 0.6f : 0.8f);
+            server.playSound(null, blockPosition(), ModSfx.TIV_SPIKES, SoundSource.NEUTRAL, 1.5f, down ? 0.9f : 1.15f);
     }
 
     /** Ground speed in mph (for the dashboard). */

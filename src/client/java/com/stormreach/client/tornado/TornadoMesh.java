@@ -46,8 +46,15 @@ public final class TornadoMesh {
             funnel(out, s, morph(s), t, 1.0f, 0f, top, bottom, 55, light, 1f);
             coreRing(out, s);
         } else {
-            funnel(out, s, morph(s), t, 1.0f, 0f, top, bottom, (int) (230 * strength), light, 1f);
-            funnel(out, s, morph(s), t, 1.22f, 3.1f, top, bottom, (int) (90 * strength), light, -0.6f); // outer sheath (same centreline, its own lumps)
+            TornadoMorphology m = morph(s);
+            boolean wedge = m == TornadoMorphology.WEDGE || m == TornadoMorphology.LARGE_WEDGE;
+            // wedges are dense and dark (a wall of condensation and debris); thin types are paler and see-through
+            int core = wedge ? 245 : m == TornadoMorphology.ROPE || m == TornadoMorphology.NEEDLE ? 200 : 230;
+            int coreTop = wedge ? lerpColor(top, 0x3E4248, 0.5f) : top, coreBottom = wedge ? lerpColor(bottom, 0x2E2A26, 0.4f) : bottom;
+            funnel(out, s, m, t, 1.0f, 0f, coreTop, coreBottom, (int) (core * strength), light, 1f);
+            funnel(out, s, m, t, 1.22f, 3.1f, coreTop, coreBottom, (int) (90 * strength), light, -0.6f); // outer sheath (same centreline, its own lumps)
+            if (wedge && !water) // rain wrapping around a big wedge: a broad, faint curtain that hides its edges
+                funnel(out, s, m, t * 0.5f, m == TornadoMorphology.LARGE_WEDGE ? 1.75f : 1.5f, 7.7f, 0x7A838C, 0x6A727A, (int) (70 * strength), light, -0.25f);
         }
         if (s.subvortices > 0 && s.intensity > 0.5f && FunnelShape.touchedDown(s.reach)) {
             float orbit = s.width * 0.5f * 0.75f;
@@ -67,7 +74,10 @@ public final class TornadoMesh {
         TornadoFormation formation = formation(s);
         boolean water = formation == TornadoFormation.WATERSPOUT;
         float down = (float) Math.pow(M.clamp((s.reach - 0.35f) / 0.65f, 0, 1), 4); // a low dust whirl until touchdown, then the full cloud
-        int dust = water ? 0xF2F7FA : formation == TornadoFormation.LANDSPOUT ? 0x9E8763 : 0x6E5E4B;
+        TornadoMorphology m = morph(s);
+        boolean wedge = m == TornadoMorphology.WEDGE || m == TornadoMorphology.LARGE_WEDGE;
+        // a wedge's base is a churning wall of debris and rain, grey-brown, not a separate brown skirt
+        int dust = water ? 0xF2F7FA : formation == TornadoFormation.LANDSPOUT ? 0x9E8763 : wedge ? 0x56504A : 0x6E5E4B;
         if (s.seeThrough) down *= 0.25f;
         debrisCloud(out, s, time(s), down, dust, 0, water);
     }
@@ -100,18 +110,27 @@ public final class TornadoMesh {
             float h = y / base;
             float r = (float) FunnelShape.radius(morph, half, Math.min(y, base), base, s.reach) * scale;
             if (i == 0 && !FunnelShape.touchedDown(s.reach)) r = 0;
+            // a touched-down funnel always meets the ground with some width, however thin the rope
+            if (FunnelShape.touchedDown(s.reach) && y < base * 0.15f) r = Math.max(r, 0.55f * scale);
             // ropes and needles snake about; big funnels lean and sway a little
-            float sway = (morph == TornadoMorphology.ROPE ? 4.5f : morph == TornadoMorphology.NEEDLE ? 1.8f : morph == TornadoMorphology.DRILL_BIT ? 2.4f : 0.9f)
+            float sway = (morph == TornadoMorphology.ROPE ? 7.0f : morph == TornadoMorphology.NEEDLE ? 1.8f : morph == TornadoMorphology.DRILL_BIT ? 2.4f : 0.9f)
                     * (1 - h) * (1 - h) * Math.min(1, base / 40f);
             float cx = M.sin(t * 0.045f + y * 0.11f) * sway + M.sin(t * 0.013f + 1.3f) * sway * 0.5f;
             float cz = M.cos(t * 0.039f + y * 0.09f) * sway;
+            if (morph == TornadoMorphology.ROPE) {
+                // ropes lean and snake: the base trails behind the cloud as the storm moves on
+                float lean = (1 - h) * Math.min(base * 0.35f, 22f);
+                cx += lean * M.cos(s.seed * 0.7f); cz += lean * M.sin(s.seed * 0.7f);
+            }
             // spins faster near the ground; the bands also climb (upflow)
             // rigid per layer (per-height speeds would shear the mesh apart over time); the sheath lags the core
             float spin = s.rotation * spinMul * s.spin / scale;
             for (int j = 0; j <= SEG; j++) {
                 float a = (float) (j * Math.PI * 2 / SEG);
-                float lump = 1 + 0.14f * noise(a * 2.0f + noiseOffset, y * 0.07f - t * 0.035f, t * 0.01f)
+                float lumpAmp = morph == TornadoMorphology.WEDGE || morph == TornadoMorphology.LARGE_WEDGE ? 0.22f : morph == TornadoMorphology.ROPE ? 0.06f : 0.14f;
+                float lump = 1 + lumpAmp * noise(a * 2.0f + noiseOffset, y * 0.07f - t * 0.035f, t * 0.01f)
                         + 0.07f * noise(a * 5.0f + noiseOffset, y * 0.21f - t * 0.06f, 3.3f);
+                if (morph == TornadoMorphology.DRILL_BIT) lump += 0.12f * M.sin(a * 3 + y * 0.35f - t * 0.08f);   // spiral grooves
                 float rr = Math.max(0, r * lump);
                 xs[i][j] = cx + M.cos(a + spin) * rr;
                 zs[i][j] = cz + M.sin(a + spin) * rr;
@@ -155,11 +174,13 @@ public final class TornadoMesh {
         int rings = 12;
         float half = s.width * 0.5f;
         float height = M.clamp(s.width * (water ? 0.5f : 0.9f), 6, 45) * (0.35f + 0.65f * down) * (0.5f + 0.5f * s.intensity);
+        half = Math.max(half, 2.2f);   // even a thin rope kicks up a whirl a few blocks across where it touches down
         float alphaMax = (water ? 200 : 225) * (0.3f + 0.7f * down) * (0.5f + 0.5f * s.intensity);
         for (int layer = 0; layer < 2; layer++) {
             float[][] xs = new float[rings + 1][SEG + 1], ys = new float[rings + 1][SEG + 1], zs = new float[rings + 1][SEG + 1];
             int[] cols = new int[rings + 1];
-            float spread = layer == 0 ? 1.15f : 1.6f;
+            boolean wide = morph(s) == TornadoMorphology.WEDGE || morph(s) == TornadoMorphology.LARGE_WEDGE;
+            float spread = wide ? (layer == 0 ? 1.02f : 1.18f) : (layer == 0 ? 1.15f : 1.6f);
             for (int i = 0; i <= rings; i++) {
                 float k = (float) i / rings;
                 float y = k * height - 0.3f;

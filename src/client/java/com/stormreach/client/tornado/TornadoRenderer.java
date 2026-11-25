@@ -47,7 +47,8 @@ public class TornadoRenderer extends EntityRenderer<TornadoEntity, TornadoRender
     @Override
     public void extractRenderState(TornadoEntity e, TornadoRenderState s, float partial) {
         super.extractRenderState(e, s, partial);
-        s.width = Math.max(1.5f, e.visualWidth());
+        // a funnel is never drawn more than about twice as wide as it is tall, so even the biggest wedge reads as a wall
+        s.width = Math.max(1.5f, Math.min(e.visualWidth(), e.cloudBase() * 1.9f));
         s.cloudBase = e.cloudBase();
         s.reach = e.funnelReach();
         s.intensity = e.intensity();

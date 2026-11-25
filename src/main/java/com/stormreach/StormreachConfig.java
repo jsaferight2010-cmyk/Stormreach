@@ -100,8 +100,14 @@ public final class StormreachConfig {
     public static int tornadoSimulationDistance = 256;
     public static int maxActiveTornadoes = 2;
     public static int tornadoBlockChecksPerTick = 96;
-    public static int tornadoDebrisLimit = 48;
+    public static int tornadoDebrisLimit = 80;
     public static int tornadoSizePercent = 35;
+    /** 6.0: forward speed of tornadoes as a share of real-world speeds (real ones felt far too fast at block scale). */
+    public static int tornadoSpeedPercent = 40;
+    /** 6.0: tornadoes flatten and destroy crops, and break trees down by intensity. */
+    public static boolean tornadoCropDamage = true, tornadoTreeDamage = true;
+    /** 6.0: rare fire whirls in the Nether. */
+    public static boolean fireWhirls = true;
     public static int particleDensity = 100;
     public static int backpackMagnetInterval = 10;
     public static boolean naturalTornadoes = true;
@@ -197,6 +203,10 @@ public final class StormreachConfig {
         tornadoBlockChecksPerTick = num(p, "tornadoBlockChecksPerTick", tornadoBlockChecksPerTick, 0, 512);
         tornadoDebrisLimit = num(p, "tornadoDebrisLimit", tornadoDebrisLimit, 0, 200);
         tornadoSizePercent = num(p, "tornadoSizePercent", tornadoSizePercent, 10, 100);
+        tornadoSpeedPercent = num(p, "tornadoSpeedPercent", tornadoSpeedPercent, 10, 100);
+        tornadoCropDamage = bool(p, "tornadoCropDamage", tornadoCropDamage);
+        tornadoTreeDamage = bool(p, "tornadoTreeDamage", tornadoTreeDamage);
+        fireWhirls = bool(p, "fireWhirls", fireWhirls);
         particleDensity = num(p, "particleDensity", particleDensity, 0, 100);
         backpackMagnetInterval = num(p, "backpackMagnetInterval", backpackMagnetInterval, 5, 40);
         naturalTornadoes = bool(p, "naturalTornadoes", naturalTornadoes);
@@ -286,6 +296,10 @@ public final class StormreachConfig {
         p.setProperty("tornadoBlockChecksPerTick", String.valueOf(tornadoBlockChecksPerTick));
         p.setProperty("tornadoDebrisLimit", String.valueOf(tornadoDebrisLimit));
         p.setProperty("tornadoSizePercent", String.valueOf(tornadoSizePercent));
+        p.setProperty("tornadoSpeedPercent", String.valueOf(tornadoSpeedPercent));
+        p.setProperty("tornadoCropDamage", String.valueOf(tornadoCropDamage));
+        p.setProperty("tornadoTreeDamage", String.valueOf(tornadoTreeDamage));
+        p.setProperty("fireWhirls", String.valueOf(fireWhirls));
         p.setProperty("particleDensity", String.valueOf(particleDensity));
         p.setProperty("backpackMagnetInterval", String.valueOf(backpackMagnetInterval));
         p.setProperty("naturalTornadoes", String.valueOf(naturalTornadoes));
@@ -341,7 +355,7 @@ public final class StormreachConfig {
         heartActivatesOnPlace = false; stormFront = true; stormFrontMinutes = 4;
         useGeneratedBlocks = true; useGeneratedMobs = true; stormMobPerks = true; stormwaterShocks = true; stormInOtherDimensions = true;
         sovereignNaturalSpawns = true; sovereignSpawnChance = 20; sigilRitualSeconds = 60; eyesRequired = 4; sovereignHealth = 400; realmFallToOverworld = true; realmLightning = true; skyraySpeed = 15; realmMobSpawning = true; cloudBlocks = true; returnGateBuilt = true;
-        tornadoDestruction = true; tornadoSimulationDistance = 256; maxActiveTornadoes = 2; tornadoBlockChecksPerTick = 96; tornadoDebrisLimit = 48; tornadoSizePercent = 35; particleDensity = 100; backpackMagnetInterval = 10; naturalTornadoes = true; tornadoFrequency = 100; tornadoIntensityBias = 100; tornadoDurationPercent = 50; landspouts = true; downbursts = true; shadowAppearanceRate = 100; shadowSigns = true; labyrinthGeneration = true; bossDifficulty = 100; guardianDifficulty = 100;
+        tornadoDestruction = true; tornadoSimulationDistance = 256; maxActiveTornadoes = 2; tornadoBlockChecksPerTick = 96; tornadoDebrisLimit = 80; tornadoSizePercent = 35; particleDensity = 100; backpackMagnetInterval = 10; naturalTornadoes = true; tornadoFrequency = 100; tornadoIntensityBias = 100; tornadoDurationPercent = 50; landspouts = true; downbursts = true; shadowAppearanceRate = 100; shadowSigns = true; labyrinthGeneration = true; bossDifficulty = 100; guardianDifficulty = 100;
         bluffsEnabled = true; highlandsEnabled = true; marshEnabled = true; fulguriteFromLightning = true; hail = true; ballLightning = true; waterspouts = true; sealSpawning = true; wraithSpawning = true; crabConversion = true; bossSummoning = true; armorSetBonus = true; galeWingsBoost = true; stormfinFishing = true;
     }
 

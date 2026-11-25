@@ -164,6 +164,24 @@
     ],
     "subtitle": "subtitles.stormreach.block.metal_place"
   },
+  "entity.fire_whirl.roar": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/entity_fire_whirl_roar",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.entity.fire_whirl.roar"
+  },
+  "vehicle.tiv.spikes": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/vehicle_tiv_spikes",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.stormreach.vehicle.tiv.spikes"
+  },
   "item.equip_pack": {
     "sounds": [
       {

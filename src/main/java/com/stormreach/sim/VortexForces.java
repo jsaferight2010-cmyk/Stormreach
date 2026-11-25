@@ -131,6 +131,39 @@ public final class VortexForces {
         return new double[]{tx * vt + ex * 0.5, 0.25, tz * vt + ez * 0.5};
     }
 
+    /**
+     * 6.0: whether a body this heavy, this far from the axis, is caught up by the vortex (rather than just shoved):
+     * the wind must beat its lift threshold and it must be inside about 1.6 core radii.
+     */
+    public static boolean captured(double mph, double mass, double distance, double coreRadius) {
+        return mph > liftThresholdMph(mass) && distance < Math.max(3, coreRadius * 1.6);
+    }
+
+    /**
+     * 6.0: the path of a body riding the vortex. It circles the axis at an orbit radius that breathes in and out, its
+     * climb surges and sags (bursts of updraft, brief downdrafts) so riders bob up and down past each other, and it
+     * levels off under the ceiling. {@code phase} makes every rider different; {@code ticks} is how long it has ridden.
+     * Returns velocity {x, y, z} in blocks/tick, before the tornado's own motion is added.
+     */
+    public static double[] ride(double dx, double dz, double heightAboveGround, double orbitRadius, double tangentialBpt,
+                                double climbBpt, double ceiling, int rotationSign, double phase, int ticks) {
+        double r = Math.max(0.01, Math.hypot(dx, dz));
+        double ex = dx / r, ez = dz / r;
+        double tx = ez * rotationSign, tz = -ex * rotationSign;
+        double target = orbitRadius * (1 + 0.28 * Math.sin(ticks * 0.07 + phase));
+        double radial = clamp((target - r) * 0.15, -0.9, 0.9);
+        double vy = climbBpt * (0.55 + 0.75 * Math.sin(ticks * 0.11 + phase * 1.7));
+        if (heightAboveGround > ceiling) vy = Math.min(vy, -0.02);
+        else if (heightAboveGround > ceiling * 0.85) vy *= 0.4;
+        double vt = Math.min(MAX_SPEED * 0.8, tangentialBpt);
+        return new double[]{tx * vt + ex * radial, vy, tz * vt + ez * radial};
+    }
+
+    /** How long a living body rides before it is flung out, ticks: longer in stronger tornadoes. */
+    public static int rideTicks(double peakMph, double randomUnit) {
+        return (int) Math.round(clamp(30 + (peakMph - 110) * 0.8, 25, 140) * (0.6 + 0.8 * randomUnit));
+    }
+
     /** How long debris rides the vortex before it is thrown, ticks. Stronger tornadoes carry things longer. */
     public static int carryTicks(double peakMph, double randomUnit) {
         return (int) Math.round(clamp(20 + (peakMph - 90) * 0.9, 15, 160) * (0.6 + 0.8 * randomUnit));

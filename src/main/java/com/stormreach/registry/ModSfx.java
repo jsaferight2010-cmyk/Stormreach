@@ -21,6 +21,9 @@ public final class ModSfx {
     public static final SoundEvent MAGIC_DISPEL = ModSounds.register("magic.dispel");
     public static final SoundEvent MAGIC_WARP = ModSounds.register("magic.warp");
     public static final SoundEvent BLOCK_METAL_PLACE = ModSounds.register("block.metal_place");
+    /** 6.0 */
+    public static final SoundEvent FIRE_WHIRL_ROAR = ModSounds.register("entity.fire_whirl.roar");
+    public static final SoundEvent TIV_SPIKES = ModSounds.register("vehicle.tiv.spikes");
     public static final SoundEvent ITEM_EQUIP_PACK = ModSounds.register("item.equip_pack");
     public static final SoundEvent ITEM_EQUIP_METAL = ModSounds.register("item.equip_metal");
     public static final SoundEvent ITEM_BOTTLE = ModSounds.register("item.bottle");

@@ -39,14 +39,16 @@ public enum TornadoMorphology {
      */
     public double radiusProfile(double heightFraction) {
         double h = Math.max(0, Math.min(1, heightFraction));
-        double base = 1.0 - taper * (1.0 - h);
-        if (this == ROPE) {
-            // ropes thin out quickly and stay thin
-            base = 0.2 + 0.8 * Math.pow(h, 3);
-        } else if (this == WEDGE || this == LARGE_WEDGE) {
-            // flared top, broad base
-            base = 0.85 + 0.15 * h;
-        }
+        // 6.0: every type has its own silhouette instead of one cone stretched to different sizes
+        double base = switch (this) {
+            case ROPE -> 0.16 + 0.84 * Math.pow(h, 4);                          // a thin cord that only widens right under the cloud
+            case NEEDLE -> 0.12 + 0.25 * h + 0.63 * Math.pow(h, 6);              // straight and narrow all the way down
+            case DRILL_BIT -> 0.14 + 0.86 * Math.pow(h, 0.8);                   // tapered spike
+            case CONE -> 0.2 + 0.8 * Math.pow(h, 1.35);                         // classic inverted cone, sides bowing outward
+            case STOVEPIPE -> 0.9 + 0.1 * h;                                    // a column of nearly constant width
+            case WEDGE -> 0.92 + 0.08 * h + 0.12 * Math.max(0, 0.15 - h) / 0.15; // broader than tall, flaring at the ground
+            case LARGE_WEDGE -> 1.0 + 0.04 * h + 0.18 * Math.max(0, 0.2 - h) / 0.2; // a wall of cloud reaching the ground
+        };
         return Math.max(0.05, base);
     }
 }

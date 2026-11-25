@@ -30,6 +30,7 @@ L('hud.stormreach.tornado.here', 'Wind here %s')
 L('hud.stormreach.tiv.speed', 'Speed %s')
 L('hud.stormreach.tiv.anchored', 'ANCHORED (spikes down)')
 L('key.stormreach.tiv_anchor', 'Drop/Raise TIV Anchors')
+L('entity.stormreach.fire_whirl', 'Fire Whirl')
 
 # ---------------------------------------------------------------- salt crystal cluster (stage 2)
 # Real halite: a cluster of cubes with stepped hopper faces on a salt crust, not crossed panes. The hitbox follows it.

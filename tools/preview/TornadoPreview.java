@@ -28,6 +28,13 @@ public class TornadoPreview {
         BufferedImage sheet = new BufferedImage(W * cols, H * rows, BufferedImage.TYPE_INT_RGB);
         for (int k = 0; k < n; k++) {
             String[] p = a[k + 2].split(",");
+            if (p[0].equals("cloud") || p[0].equals("hail")) {
+                BufferedImage img = renderOther(p, ImageIO.read(new File(texDir, p[0].equals("cloud") ? "storm_cloud.png" : "hailstone.png")));
+                java.awt.Graphics2D g = img.createGraphics();
+                g.setColor(java.awt.Color.WHITE); g.drawString(p[p.length - 1].replace('_', ' '), 8, 16); g.dispose();
+                sheet.getGraphics().drawImage(img, (k % cols) * W, (k / cols) * H, null);
+                continue;
+            }
             TornadoRenderState s = new TornadoRenderState();
             s.morph = Integer.parseInt(p[0]); s.formation = Integer.parseInt(p[1]); s.reach = Float.parseFloat(p[2]);
             s.width = Float.parseFloat(p[3]); s.intensity = Float.parseFloat(p[4]); s.subvortices = Integer.parseInt(p[5]);
@@ -69,6 +76,31 @@ public class TornadoPreview {
     }
 
     interface Build { void run(TornadoMesh.Sink s); }
+
+    /** cloud,growth,width,depth,severe,label  or  hail,sizeOrdinal,label */
+    static BufferedImage renderOther(String[] p, BufferedImage tex) {
+        int[] px = new int[W * H];
+        boolean cloud = p[0].equals("cloud");
+        double dist = cloud ? 520 : 1.2, eyeY = cloud ? 2 : 0.15, pitch = cloud ? Math.toRadians(14) : 0;
+        double f = (H / 2.0) / Math.tan(Math.toRadians(70) / 2);
+        int horizon = (int) (H / 2.0 + Math.tan(pitch) * f);
+        for (int y = 0; y < H; y++) for (int x = 0; x < W; x++)
+            px[y * W + x] = y < horizon ? mix(0x6C8DB0, 0xA9BED3, (double) y / Math.max(1, horizon)) : mix(0x4D5A3A, 0x2F3824, (y - horizon) / (double) (H - horizon));
+        List<Quad> quads = new ArrayList<>();
+        if (cloud) {
+            float g = Float.parseFloat(p[1]), w = Float.parseFloat(p[2]), d = Float.parseFloat(p[3]);
+            boolean sev = p[4].equals("1");
+            collect(quads, tex, sink -> com.stormreach.client.weather.WeatherMesh.stormCloud((x, y, z, u, v, c) -> sink.vertex(x, y + 90, z, u, v, c), g, w, d, sev, 7, 0), dist, eyeY, pitch);
+        } else {
+            com.stormreach.sim.HailSize hs = com.stormreach.sim.HailSize.values()[Integer.parseInt(p[1])];
+            collect(quads, tex, sink -> com.stormreach.client.weather.WeatherMesh.hailstone(sink, hs.visualSize(), 3, 0), dist, eyeY, pitch);
+        }
+        quads.sort((q1, q2) -> Double.compare(q2.depth, q1.depth));
+        for (Quad q : quads) { tri(px, q.v[0], q.v[1], q.v[2], q.tex, dist, eyeY, pitch, f); tri(px, q.v[0], q.v[2], q.v[3], q.tex, dist, eyeY, pitch, f); }
+        BufferedImage img = new BufferedImage(W, H, BufferedImage.TYPE_INT_RGB);
+        img.setRGB(0, 0, W, H, px, 0, W);
+        return img;
+    }
 
     static void collect(List<Quad> out, BufferedImage tex, Build b, double dist, double eyeY, double pitch) {
         List<V> vs = new ArrayList<>();

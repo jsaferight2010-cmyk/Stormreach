@@ -239,3 +239,12 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
 - Client: `TornadoMesh` builds every layer into a `Sink` (no Minecraft classes), and `TornadoRenderer` submits it with `submitCustomGeometry`. The spin is accumulated per tick in `TornadoEntity.clientSpin`. Textures come from `tools/textures6.py`.
 - `tools/preview/TornadoPreview.java` (run with `/home/claude/tools/preview_tornado.sh`) rasterises the same meshes offline. Its lighting is approximate, so it is a shape check, not a screenshot.
 - GameTests: no damage before touchdown; an EF5 tears up a plank floor and lifts a zombie; a waterspout stays over a pool, and none can be made on land.
+
+### 5.1 stage 3: precipitation and clouds
+- `sim/HailSize` (terminal speed, mass, impact energy to damage, size distribution by severity), `sim/Rainfall` (wetness from intensity and duration, puddle sizes, evaporation), `sim/Outflow` (gust front), `sim/CloudGrowth`. Unit-tested.
+- `weather/precip/`: `HailstoneEntity` (cap of 600 alive), `HailLayerBlock` (scheduled-tick melt: 6–9 s per layer, 11–15 s with big stones; a random-tick safety net), `PuddleBlock`, `RainAccumulation`, `PrecipContent`.
+- `weather/cloud/`: `StormCellEntity` and `StormCells` (up to 3 per player in thunder, 1 in rain).
+- `WeatherEvents.Downburst` rewritten for wet and dry outflow; `HailBurst` drops real stones; natural spawning lives in `StormWeather.tick`.
+- Client: `WeatherMesh` (hailstone, storm cloud; no Minecraft classes, so it can be previewed), `HailstoneRenderer`, `StormCellRenderer`.
+- Config: `puddles`, `stormClouds` (properties file).
+- GameTests: hail smashes a pane, hurts a zombie, piles up with a melt timer; puddles form, cap and vanish without ground; a downburst pushes a zombie out; a storm cloud grows and collapses when dispelled.

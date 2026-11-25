@@ -88,4 +88,59 @@ for y, row in enumerate(rows):
     for x, ch in enumerate(row):
         if ch in pal: img.putpixel((x, y), pal[ch])
 img.save(f'{OUT}/item/tornado_director.png')
+# hailstone: clear ice with milky growth rings (hail grows in layers as it cycles through the updraft)
+W, H = 64, 32
+ring = fbm(W, H, [(4, 2, 1.0), (8, 4, 0.5)], 1501)
+img = Image.new('RGBA', (W, H))
+for y in range(H):
+    for x in range(W):
+        band = 0.5 + 0.5 * math.sin(y / H * math.pi * 7 + ring(x, y) * 3)
+        v = 0.78 + 0.22 * band
+        img.putpixel((x, y), (int(220 * v), int(236 * v), 255, int(255 * (0.55 + 0.4 * band))))
+img.save(f'{OUT}/entity/hailstone.png')
+
+# storm cloud: soft billows, bright where the cloud is thick
+W, H = 128, 64
+puff = fbm(W, H, [(4, 2, 1.0), (8, 4, 0.6), (16, 8, 0.35), (32, 16, 0.15)], 1601)
+img = Image.new('RGBA', (W, H))
+for y in range(H):
+    for x in range(W):
+        c = puff(x, y)
+        v = 0.72 + 0.4 * c
+        img.putpixel((x, y), (int(255 * min(1, v)),) * 3 + (int(255 * min(1, 0.7 + 0.5 * c)),))
+img.save(f'{OUT}/entity/storm_cloud.png')
+
+# hail on the ground (block textures, 64x): small pellets, and a pile with big stones in it
+os.makedirs(f'{OUT}/block', exist_ok=True)
+for name, big in (('hail_layer', False), ('hail_layer_big', True)):
+    rnd = random.Random(1701 + big)
+    img = Image.new('RGBA', (64, 64), (196, 214, 226, 255))
+    for _ in range(26 if big else 140):
+        r = rnd.randint(5, 10) if big else rnd.randint(1, 3)
+        x, y = rnd.randint(0, 63), rnd.randint(0, 63)
+        for dy in range(-r, r + 1):
+            for dx in range(-r, r + 1):
+                d = (dx * dx + dy * dy) ** 0.5
+                if d <= r:
+                    lit = 1.0 - 0.35 * (dx + dy) / (2 * r) - 0.15 * d / r   # light from the upper left
+                    c = (int(min(255, 205 * lit + 30)), int(min(255, 222 * lit + 28)), int(min(255, 240 * lit + 20)), 255)
+                    img.putpixel(((x + dx) % 64, (y + dy) % 64), c)
+                    if d < r * 0.35 and dx < 0 and dy < 0: img.putpixel(((x + dx) % 64, (y + dy) % 64), (250, 253, 255, 255))
+    img.save(f'{OUT}/block/{name}.png')
+
+# puddle: dark, glassy water with soft ripple rings
+rnd = random.Random(1801)
+img = Image.new('RGBA', (64, 64))
+rip = [(rnd.randint(0, 63), rnd.randint(0, 63), rnd.randint(6, 18)) for _ in range(5)]
+for y in range(64):
+    for x in range(64):
+        v = 0
+        for cx, cy, rr in rip:
+            for ox in (-64, 0, 64):
+                for oy in (-64, 0, 64):
+                    d = ((x - cx - ox) ** 2 + (y - cy - oy) ** 2) ** 0.5
+                    if abs(d - rr) < 1.2: v += 0.35 * (1 - abs(d - rr) / 1.2)
+        v = min(1, v)
+        img.putpixel((x, y), (int(58 + 90 * v), int(84 + 90 * v), int(118 + 80 * v), int(150 + 60 * v)))
+img.save(f'{OUT}/block/puddle.png')
 print('textures6 done')

@@ -43,6 +43,7 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.registry.ModSounds.init();
         com.stormreach.tornado.TornadoTypes.init();
         com.stormreach.tornado.WeatherItems.init();
+        com.stormreach.weather.precip.PrecipContent.init();
         com.stormreach.backpack.Backpacks.init();
         com.stormreach.labyrinth.LabyrinthRegistry.init();
         com.stormreach.forest.ForestRegistry.init();

@@ -107,6 +107,10 @@ public final class StormreachConfig {
     public static boolean landspouts = true;
     /** Creative/Spectator only: draw tornadoes nearly transparent, with the core marked, so you can see inside. */
     public static boolean creativeSeeThroughTornadoes = false;
+    /** Rain puddles collect during long or heavy rain and dry up afterwards. */
+    public static boolean puddles = true;
+    /** Storm clouds you can watch build, tower and spread during thunderstorms. */
+    public static boolean stormClouds = true;
     public static boolean downbursts = true;
     public static int shadowAppearanceRate = 100;
     public static boolean shadowSigns = true;
@@ -188,6 +192,8 @@ public final class StormreachConfig {
         tornadoDurationPercent = num(p, "tornadoDurationPercent", tornadoDurationPercent, 10, 100);
         landspouts = bool(p, "landspouts", landspouts);
         creativeSeeThroughTornadoes = bool(p, "creativeSeeThroughTornadoes", creativeSeeThroughTornadoes);
+        puddles = bool(p, "puddles", puddles);
+        stormClouds = bool(p, "stormClouds", stormClouds);
         downbursts = bool(p, "downbursts", downbursts);
         shadowAppearanceRate = num(p, "shadowAppearanceRate", shadowAppearanceRate, 0, 300);
         shadowSigns = bool(p, "shadowSigns", shadowSigns);
@@ -269,6 +275,8 @@ public final class StormreachConfig {
         p.setProperty("tornadoDurationPercent", String.valueOf(tornadoDurationPercent));
         p.setProperty("landspouts", String.valueOf(landspouts));
         p.setProperty("creativeSeeThroughTornadoes", String.valueOf(creativeSeeThroughTornadoes));
+        p.setProperty("puddles", String.valueOf(puddles));
+        p.setProperty("stormClouds", String.valueOf(stormClouds));
         p.setProperty("downbursts", String.valueOf(downbursts));
         p.setProperty("shadowAppearanceRate", String.valueOf(shadowAppearanceRate));
         p.setProperty("shadowSigns", String.valueOf(shadowSigns));

@@ -58,47 +58,83 @@ public final class WeatherEvents {
     }
 
     /**
-     * Downburst: a column of rain-cooled air slams into the ground and spreads out in all directions. Microbursts
-     * (under 4 km across) can reach EF1–EF2-equivalent speeds; the damage pattern is divergent, not rotational.
+     * Downburst: a column of rain-cooled air slams into the ground and spreads out as a ring (the gust front).
+     * A <b>wet</b> downburst comes down inside a curtain of heavy rain and its outflow drives a wall of spray and mist
+     * (the "rain foot"); a <b>dry</b> one falls out of virga (rain that evaporates on the way down) and shows only as
+     * a ring of dust racing across the ground. Winds peak just behind the front; the damage pattern spreads out from
+     * the centre instead of turning like a tornado's. See {@link com.stormreach.sim.Outflow}.
      */
     public static final class Downburst extends ActiveEvent {
         final double radius;
         final double peakMph;
+        final boolean wet;
+        final BlockState ground;
 
-        Downburst(ServerLevel level, Vec3 centre, double radius, double peakMph) {
-            super(level, centre, 140);
+        Downburst(ServerLevel level, Vec3 centre, double radius, double peakMph, boolean wet) {
+            super(level, centre, 160);
             this.radius = radius;
             this.peakMph = peakMph;
+            this.wet = wet;
+            BlockPos g = BlockPos.containing(centre.x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(centre.x), Mth.floor(centre.z)) - 1, centre.z);
+            BlockState gs = level.getBlockState(g);
+            this.ground = gs.isAir() ? net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState() : gs;
         }
 
         double mphAt(Vec3 p) {
             double r = Math.hypot(p.x - centre.x, p.z - centre.z);
-            double rm = radius * 0.6;
-            double shape = r < rm ? r / rm : Math.exp(-(r - rm) / (radius * 0.5));
-            double life = age < 30 ? age / 30.0 : age > 100 ? Math.max(0, (duration - age) / 40.0) : 1.0;
-            return peakMph * shape * life;
+            return com.stormreach.sim.Outflow.windMph(r, age, duration, peakMph, radius * 2);
         }
 
         @Override
         void run() {
-            if (age % 2 == 0) {
-                for (int i = 0; i < 12; i++) {
-                    double a = level.getRandom().nextDouble() * Math.PI * 2, d = level.getRandom().nextDouble() * radius;
-                    level.sendParticles(ParticleTypes.CLOUD, centre.x + Math.cos(a) * d, centre.y + 1, centre.z + Math.sin(a) * d, 1, Math.cos(a) * 0.5, 0, Math.sin(a) * 0.5, 0.1);
+            var rnd = level.getRandom();
+            double front = com.stormreach.sim.Outflow.frontRadius(age, radius * 2);
+            float density = StormreachConfig.particleDensity / 100f;
+            // the shaft: a curtain of rain (wet) or ragged virga hanging under the cloud (dry)
+            if (age < duration - 30) {
+                for (int i = 0; i < (int) (14 * density); i++) {
+                    double a = rnd.nextDouble() * Math.PI * 2, d = Math.sqrt(rnd.nextDouble()) * radius * 0.55;
+                    double x = centre.x + Math.cos(a) * d, z = centre.z + Math.sin(a) * d;
+                    if (wet) {
+                        level.sendParticles(ParticleTypes.FALLING_WATER, x, centre.y + 4 + rnd.nextDouble() * 26, z, 1, 0, 0, 0, 0);
+                        if (i % 3 == 0) level.sendParticles(ParticleTypes.CLOUD, x, centre.y + 0.3, z, 1, 0.2, 0.1, 0.2, 0.02);
+                    } else {
+                        level.sendParticles(ParticleTypes.WHITE_ASH, x, centre.y + 22 + rnd.nextDouble() * 10, z, 1, 0.3, 0.6, 0.3, 0.0);
+                    }
                 }
             }
-            AABB box = new AABB(centre.x - radius * 2, centre.y - 6, centre.z - radius * 2, centre.x + radius * 2, centre.y + 30, centre.z + radius * 2);
-            for (Entity e : level.getEntities((Entity) null, box, e -> !(e instanceof TornadoEntity) && !(e instanceof Player p && (p.isCreative() || p.isSpectator())))) {
-                double mph = mphAt(e.position());
-                if (mph < 35) continue;
-                Vec3 out = new Vec3(e.getX() - centre.x, 0, e.getZ() - centre.z).normalize().scale(EFScale.mphToMs(mph) * 0.05 * 0.06);
-                e.setDeltaMovement(e.getDeltaMovement().add(out));
-                e.needsSync = true;
+            // the gust front: a ring racing outward along the ground, curling up at its leading edge
+            int n = (int) (Math.min(48, 10 + front * 1.2) * density);
+            for (int i = 0; i < n; i++) {
+                double a = rnd.nextDouble() * Math.PI * 2, d = front - rnd.nextDouble() * 3;
+                double x = centre.x + Math.cos(a) * d, z = centre.z + Math.sin(a) * d;
+                double vx = Math.cos(a) * 0.6, vz = Math.sin(a) * 0.6;
+                if (wet) {
+                    level.sendParticles(i % 2 == 0 ? ParticleTypes.CLOUD : ParticleTypes.SPLASH, x, centre.y + 0.4 + rnd.nextDouble() * 2.5, z, 0, vx, 0.12, vz, 0.5);
+                } else {
+                    level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, ground), x, centre.y + 0.3, z, 1, 0.3, 0.2, 0.3, 0.2);
+                    if (i % 2 == 0) level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, centre.y + 0.5 + rnd.nextDouble() * 2, z, 0, vx * 0.5, 0.05, vz * 0.5, 0.4);
+                }
             }
-            if (StormreachConfig.tornadoDestruction && age > 20 && age < 110) {
-                var r = level.getRandom();
+            // wind on bodies: outward, falling off with distance behind and ahead of the front
+            AABB box = new AABB(centre.x - radius * 2, centre.y - 6, centre.z - radius * 2, centre.x + radius * 2, centre.y + 30, centre.z + radius * 2);
+            for (Entity e : level.getEntities((Entity) null, box, e -> !(e instanceof TornadoEntity) && !e.isSpectator() && !(e instanceof Player p && (p.isCreative() || p.isSpectator())))) {
+                double mph = mphAt(e.position());
+                if (mph < 30) continue;
+                double dx = e.getX() - centre.x, dz = e.getZ() - centre.z, r = Math.max(0.01, Math.hypot(dx, dz));
+                double bpt = EFScale.mphToMs(mph) * 0.05;
+                int armor = e instanceof LivingEntity le ? le.getArmorValue() : 0;
+                double mass = com.stormreach.sim.VortexForces.mass(e.getBbWidth(), e.getBbHeight(), armor);
+                Vec3 v = e.getDeltaMovement();
+                double[] nv = com.stormreach.sim.VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{dx / r * bpt, -0.02, dz / r * bpt}, mph * 0.6, mass,
+                        e.onGround(), e instanceof Player p && p.isShiftKeyDown(), 0, 3, new double[]{0, 0});
+                e.setDeltaMovement(nv[0], nv[1], nv[2]);
+                e.needsSync = true;
+                if (e instanceof LivingEntity le && age % 10 == 0 && mph > 110) le.hurtServer(level, level.damageSources().flyIntoWall(), (float) ((mph - 110) / 30.0));
+            }
+            if (StormreachConfig.tornadoDestruction && age > 15 && age < duration - 30) {
                 for (int i = 0; i < Math.min(48, StormreachConfig.tornadoBlockChecksPerTick / 2); i++) {
-                    double a = r.nextDouble() * Math.PI * 2, d = Math.sqrt(r.nextDouble()) * radius * 1.6;
+                    double a = rnd.nextDouble() * Math.PI * 2, d = Math.sqrt(rnd.nextDouble()) * front;
                     int x = Mth.floor(centre.x + Math.cos(a) * d), z = Mth.floor(centre.z + Math.sin(a) * d);
                     BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1, z);
                     BlockState s = level.getBlockState(pos);
@@ -107,38 +143,43 @@ public final class WeatherEvents {
                     if (mphAt(Vec3.atCenterOf(pos)) >= BlockWind.failureMph(level, pos, s, m)) level.destroyBlock(pos, m != MaterialClass.FOLIAGE);
                 }
             }
+            if (age == 1) level.playSound(null, BlockPos.containing(centre), SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), SoundSource.WEATHER, 4f, wet ? 0.4f : 0.6f);
+            if (age % 30 == 5) level.playSound(null, BlockPos.containing(centre), SoundEvents.ELYTRA_FLYING, SoundSource.WEATHER, 3f, 0.5f);
         }
     }
 
-    /** Hail burst: falling hailstones damage anyone without a helmet and smash glass panes and crops. */
+    /**
+     * Hailstorm: a core of falling hailstones under a storm. Its severity (0..1, the strength of the updraft) decides
+     * how big the stones get; see {@link com.stormreach.sim.HailSize}. Stones only fall near players, and the total
+     * number in the air is capped.
+     */
     public static final class HailBurst extends ActiveEvent {
-        final double radius = 28;
+        final double radius;
+        final double severity;
+        final java.util.Random random;
 
-        HailBurst(ServerLevel level, Vec3 centre) {
-            super(level, centre, 1200);
+        HailBurst(ServerLevel level, Vec3 centre, double severity) {
+            super(level, centre, 900 + level.getRandom().nextInt(900));
+            this.severity = severity;
+            this.radius = 24 + severity * 24;
+            this.random = new java.util.Random(level.getRandom().nextLong());
         }
 
         @Override
         void run() {
-            var r = level.getRandom();
-            for (int i = 0; i < 10; i++) {
-                double x = centre.x + (r.nextDouble() - 0.5) * radius * 2, z = centre.z + (r.nextDouble() - 0.5) * radius * 2;
-                level.sendParticles(ParticleTypes.ITEM_SNOWBALL, x, centre.y + 18, z, 2, 0.2, 0.2, 0.2, 0.0);
-            }
-            if (age % 20 != 0) return;
-            for (LivingEntity e : level.getEntitiesOfClass(LivingEntity.class, new AABB(BlockPos.containing(centre)).inflate(radius, 40, radius))) {
-                if (!level.canSeeSky(e.blockPosition().above()) || (e instanceof Player p && (p.isCreative() || p.isSpectator()))) continue;
-                if (e.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) e.hurtServer(level, level.damageSources().source(StormWeather.HAIL), 1.0f);
-            }
-            for (int i = 0; i < 4; i++) {
-                int x = Mth.floor(centre.x + (r.nextDouble() - 0.5) * radius * 2), z = Mth.floor(centre.z + (r.nextDouble() - 0.5) * radius * 2);
-                BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1, z);
-                BlockState s = level.getBlockState(pos);
-                if (s.is(net.minecraft.tags.BlockTags.CROPS) || s.getSoundType() == net.minecraft.world.level.block.SoundType.GLASS && !s.isSolidRender()) {
-                    level.destroyBlock(pos, false);
+            double ramp = age < 100 ? age / 100.0 : age > duration - 100 ? (duration - age) / 100.0 : 1.0;
+            double windX = Math.cos(age * 0.003) * 0.06, windZ = Math.sin(age * 0.003) * 0.06;
+            for (Player p : level.players()) {
+                if (p.isSpectator() || Math.hypot(p.getX() - centre.x, p.getZ() - centre.z) > radius + 48) continue;
+                int count = (int) Math.round((2 + 6 * severity) * ramp * StormreachConfig.particleDensity / 100.0);
+                for (int i = 0; i < count; i++) {
+                    double x = p.getX() + (random.nextDouble() - 0.5) * 48, z = p.getZ() + (random.nextDouble() - 0.5) * 48;
+                    if (Math.hypot(x - centre.x, z - centre.z) > radius) continue;
+                    int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(x), Mth.floor(z));
+                    double y = Math.max(top, p.getY()) + 24 + random.nextDouble() * 8;
+                    com.stormreach.weather.precip.HailstoneEntity.drop(level, new Vec3(x, y, z), com.stormreach.sim.HailSize.roll(random, severity), windX, windZ);
                 }
             }
-            if (age % 100 == 0) level.playSound(null, BlockPos.containing(centre), SoundEvents.SNOW_BREAK, SoundSource.WEATHER, 2f, 0.5f);
         }
     }
 
@@ -157,6 +198,9 @@ public final class WeatherEvents {
 
         @Override
         void run() {
+            if (age == 1 && StormreachConfig.stormClouds) {
+                com.stormreach.weather.cloud.StormCells.spawnNear(level, centre, level.getRandom(), true, true);
+            }
             if (age % 3 == 0) {
                 double a = age * 0.05;
                 for (int i = 0; i < 6; i++) {
@@ -174,14 +218,38 @@ public final class WeatherEvents {
         }
     }
 
+    /** A downburst at {@code at}: wet if it is raining there, dry otherwise. */
     public static void downburst(ServerLevel level, Vec3 at) {
-        double peak = 60 + level.getRandom().nextDouble() * 70; // most downbursts are EF0–EF1 equivalent; strong ones exceed 100 mph
-        TornadoManager.schedule(new Downburst(level, at, 18 + level.getRandom().nextDouble() * 22, peak));
-        level.playSound(null, BlockPos.containing(at), SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), SoundSource.WEATHER, 4f, 0.4f);
+        downburst(level, at, level.isRainingAt(BlockPos.containing(at).above(2)));
     }
 
+    public static void downburst(ServerLevel level, Vec3 at, boolean wet) {
+        double peak = 60 + level.getRandom().nextDouble() * 70; // most downbursts are EF0–EF1 equivalent; strong ones exceed 100 mph
+        TornadoManager.schedule(new Downburst(level, at, 18 + level.getRandom().nextDouble() * 22, peak, wet));
+    }
+
+    /** A hailstorm at {@code at} with a random severity (most storms drop small hail). */
     public static void hail(ServerLevel level, Vec3 at) {
-        TornadoManager.schedule(new HailBurst(level, at));
+        double r = level.getRandom().nextDouble();
+        hail(level, at, 0.15 + 0.85 * r * r);
+    }
+
+    /** True if a hailstorm is already falling within {@code r} blocks of {@code at}. */
+    public static boolean hailNear(ServerLevel level, Vec3 at, double r) {
+        for (ActiveEvent e : TornadoManager.events())
+            if (e instanceof HailBurst h && h.level == level && Math.hypot(h.centre.x - at.x, h.centre.z - at.z) < r) return true;
+        return false;
+    }
+
+    /** True if a downburst is happening within {@code r} blocks of {@code at}. */
+    public static boolean downburstNear(ServerLevel level, Vec3 at, double r) {
+        for (ActiveEvent e : TornadoManager.events())
+            if (e instanceof Downburst d && d.level == level && Math.hypot(d.centre.x - at.x, d.centre.z - at.z) < r) return true;
+        return false;
+    }
+
+    public static void hail(ServerLevel level, Vec3 at, double severity) {
+        TornadoManager.schedule(new HailBurst(level, at, severity));
     }
 
     public static void supercell(ServerLevel level, Vec3 at, com.stormreach.sim.EFScale forced, com.stormreach.sim.TornadoMorphology morph) {
@@ -227,9 +295,14 @@ public final class WeatherEvents {
         n += events - TornadoManager.events().size();
         net.minecraft.world.phys.AABB area = player.getBoundingBox().inflate(256);
         for (net.minecraft.world.entity.Entity e : level.getEntities((net.minecraft.world.entity.Entity) null, area,
-                e -> e instanceof com.stormreach.entity.StormFront || e instanceof com.stormreach.entity.Squall || e instanceof com.stormreach.entity.BallLightning)) {
-            level.sendParticles(ParticleTypes.CLOUD, e.getX(), e.getY() + 1, e.getZ(), 30, 0.8, 0.8, 0.8, 0.05);
+                e -> e instanceof com.stormreach.entity.StormFront || e instanceof com.stormreach.entity.Squall || e instanceof com.stormreach.entity.BallLightning
+                        || e instanceof com.stormreach.weather.precip.HailstoneEntity)) {
+            if (!(e instanceof com.stormreach.weather.precip.HailstoneEntity)) level.sendParticles(ParticleTypes.CLOUD, e.getX(), e.getY() + 1, e.getZ(), 30, 0.8, 0.8, 0.8, 0.05);
             e.discard();
+            if (!(e instanceof com.stormreach.weather.precip.HailstoneEntity)) n++;
+        }
+        for (com.stormreach.weather.cloud.StormCellEntity c : level.getEntitiesOfClass(com.stormreach.weather.cloud.StormCellEntity.class, player.getBoundingBox().inflate(600, 400, 600))) {
+            c.dissipate();
             n++;
         }
         boolean wasWet = level.isRaining() || level.isThundering();

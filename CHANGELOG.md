@@ -3,6 +3,31 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 3: rain, hail, downbursts and storm clouds
+- **Real hailstones** in six sizes: pea, marble, quarter, golf ball, baseball and softball.
+  - Each falls at its real terminal speed and is drawn as a lumpy ball of ice sized to its class.
+  - Damage grows steeply with size. A pea stings, a golf ball takes a few hearts, a softball can kill. Helmets and armour help.
+  - Quarter-size and up flattens crops and flowers, golf balls smash glass panes, and baseballs break glass blocks and shred leaves.
+  - Only strong storms make big hail.
+- **Hail on the ground** piles up to four layers and **melts on a timer**: small hail in about 30 seconds, piles with big stones in under a minute. It melts in every biome, so it can't build up into lag.
+- **Hailstorms happen naturally** in thunderstorms: often in the Thunderspire Highlands, now and then anywhere else. The total number of stones in the air is capped. The old "hail" (particles that hurt you if you had no helmet) is gone.
+- **Rain builds up into puddles.** After a couple of minutes of steady rain, puddles start forming on open, level ground; hollows fill first.
+  - They form faster in a downpour and grow larger the longer it rains.
+  - They dry up after the rain stops (faster in hot places).
+  - Walking through them splashes, and they put out burning mobs and players.
+  - Turn them off with `puddles=false`.
+- **Downbursts, wet and dry:**
+  - A wet downburst comes down in a curtain of heavy rain, and its gust front pushes a wall of spray outward.
+  - A dry one falls from wisps of rain that evaporate on the way down and shows only as a ring of dust racing over the ground.
+  - Winds peak just behind the expanding front.
+  - They now happen naturally: wet in thunderstorms, dry in hot, dry climates.
+- **Storm clouds you can watch develop.** During thunderstorms, a few storm clouds grow around you:
+  - a low cumulus swells into a towering cloud, shoots up and spreads an anvil, then slumps and fades
+  - supercells get a darker, bigger one overhead
+  - they drift with the steering wind and collapse when the weather clears or is dispelled
+  - turn them off with `stormClouds=false`
+- Dispel Weather also clears hailstones and storm clouds.
+
 ### Stage 2: tornadoes and waterspouts rebuilt
 - **They come down from the sky.** A new tornado starts as a bulge under the cloud base and lowers a pointed funnel until it reaches the ground. A dust whirl (or spray over water) spins up underneath first. It only damages blocks and pulls things in once it touches down, and it lifts back into the cloud when it ropes out or is dispelled.
 - **New look**, drawn as layered, turbulent meshes instead of stacked boxes:

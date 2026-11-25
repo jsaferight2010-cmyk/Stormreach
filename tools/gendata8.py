@@ -88,6 +88,22 @@ EVENT_KINDS = ['supercell', 'downburst', 'hailstorm', 'ball_lightning', 'dispel'
 for k in SPAWNER_KINDS: gen_item(f'tornado_spawner_{k}')
 for k in EVENT_KINDS: gen_item(f'weather_event_{k}')
 gen_item('tornado_director')
+# ---- 5.1 stage 3: hail on the ground, puddles
+for big in (False, True):
+    tex = 'stormreach:block/hail_layer' + ('_big' if big else '')
+    for layers in range(1, 9):
+        h = layers * 2
+        model(f'hail_layer{"_big" if big else ""}_{layers}', {'parent': 'minecraft:block/thin_block' if h < 16 else 'minecraft:block/cube_all',
+              'textures': {'particle': tex, 'texture': tex, 'all': tex},
+              'elements': [box([0, 0, 0], [16, h, 16], {c: '#texture' for c in 'nsewud'})]})
+w(f'{A}/blockstates/hail_layer.json', {'variants': {f'big={str(b).lower()},layers={l}': {'model': ns(f'block/hail_layer{"_big" if b else ""}_{l}')}
+                                                    for b in (False, True) for l in range(1, 9)}})
+item_def('hail_layer', 'block/hail_layer_2')
+for size, inset in ((1, 4), (2, 2), (3, 0)):
+    model(f'puddle_{size}', {'parent': 'minecraft:block/block', 'textures': {'particle': 'stormreach:block/puddle', 'p': 'stormreach:block/puddle'},
+          'elements': [{'from': [inset, 0, inset], 'to': [16 - inset, 0.5, 16 - inset],
+                        'faces': {'up': {'texture': '#p', 'uv': [inset, inset, 16 - inset, 16 - inset]}}}]})
+w(f'{A}/blockstates/puddle.json', {'variants': {f'size={n}': {'model': ns(f'block/puddle_{n}')} for n in (1, 2, 3)}})
 
 # ---- backpacks
 TIERS = ['diamond', 'obsidian', 'netherite', 'storm_crystal', 'voltite', 'aurorite', 'maelstrom']
@@ -299,6 +315,10 @@ MSG = {
  'event.stormreach.tornado.warning': 'TORNADO WARNING: a tornado is on the ground %s of you, %s blocks away. Take shelter!',
  'event.stormreach.tornado.survey': 'Damage survey: rated %s. Highest wind supported by damage %s mph (peak gust %s mph). %s blocks damaged along a %s km path, up to %s blocks wide. Appearance: %s.',
  'item.stormreach.tornado_spawner.needs_water': 'A waterspout needs open water: aim at a lake or the sea.',
+ 'block.stormreach.hail_layer': 'Hail',
+ 'block.stormreach.puddle': 'Puddle',
+ 'entity.stormreach.hailstone': 'Hailstone',
+ 'entity.stormreach.storm_cell': 'Storm Cloud',
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',

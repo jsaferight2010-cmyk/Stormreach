@@ -136,9 +136,27 @@ public final class StormWeather {
                 if (StormreachConfig.waterspouts && random.nextInt(4) == 0) trySpawnWaterspout(level, player, random);
             }
 
-            if (thunder && StormreachConfig.hail && outside && biome.is(ModBiomes.THUNDERSPIRE_HIGHLANDS)
-                    && level.getGameTime() % 40 == 0 && !player.isCreative()) {
-                hail(level, player);
+            // hail: real hailstones from a storm core. The Thunderspire Highlands are hail country; anywhere else a
+            // thunderstorm occasionally drops some. Big hail needs a strong storm (see HailSize).
+            if (thunder && StormreachConfig.hail && level.getGameTime() % 200 == 0 && !biome.value().coldEnoughToSnow(player.blockPosition(), level.getSeaLevel())) {
+                boolean highlands = biome.is(ModBiomes.THUNDERSPIRE_HIGHLANDS);
+                if (random.nextInt(highlands ? 3 : 25) == 0 && !com.stormreach.tornado.WeatherEvents.hailNear(level, player.position(), 120)) {
+                    double sev = highlands ? 0.35 + random.nextDouble() * 0.5 : 0.1 + Math.pow(random.nextDouble(), 2) * 0.8;
+                    Vec3 at = player.position().add((random.nextDouble() - 0.5) * 40, 0, (random.nextDouble() - 0.5) * 40);
+                    com.stormreach.tornado.WeatherEvents.hail(level, at, sev);
+                }
+            }
+            // downbursts: wet ones under thunderstorms; dry ones where rain evaporates before reaching the ground
+            if (StormreachConfig.downbursts && level.isRaining() && level.getGameTime() % 200 == 100) {
+                float temp = biome.value().getBaseTemperature();
+                boolean dryClimate = temp >= 1.5f || !biome.value().hasPrecipitation();
+                int odds = thunder ? 30 : dryClimate ? 45 : 0;
+                if (odds > 0 && random.nextInt(odds) == 0 && !com.stormreach.tornado.WeatherEvents.downburstNear(level, player.position(), 150)) {
+                    double a = random.nextDouble() * Math.PI * 2, d = 30 + random.nextDouble() * 60;
+                    Vec3 at = player.position().add(Math.cos(a) * d, 0, Math.sin(a) * d);
+                    at = new Vec3(at.x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(at.x), (int) Math.floor(at.z)), at.z);
+                    com.stormreach.tornado.WeatherEvents.downburst(level, at, !dryClimate);
+                }
             }
         }
     }
@@ -175,14 +193,6 @@ public final class StormWeather {
             level.sendParticles(player, ParticleTypes.ELECTRIC_SPARK, false, false,
                     player.getX() + (random.nextDouble() - 0.5) * 10, player.getY() + 2 + random.nextDouble() * 3,
                     player.getZ() + (random.nextDouble() - 0.5) * 10, 4, 0.3, 0.3, 0.3, 0.05);
-        }
-    }
-
-    private static void hail(ServerLevel level, ServerPlayer player) {
-        level.sendParticles(ParticleTypes.ITEM_SNOWBALL, player.getX(), player.getY() + 3, player.getZ(), 20, 3.0, 0.5, 3.0, 0.1);
-        if (player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-            DamageSource hail = new DamageSource(level.registryAccess().lookupOrThrow(Registries.DAMAGE_TYPE).getOrThrow(HAIL));
-            player.hurtServer(level, hail, 1.0f);
         }
     }
 

@@ -338,4 +338,84 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    @GameTest(maxTicks = 60)
+    public void hailBreaksPanesHurtsMobsAndPilesUp(GameTestHelper h) {
+        for (int x = 0; x < 7; x++) for (int z = 0; z < 7; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        h.setBlock(new BlockPos(1, 2, 1), Blocks.GLASS_PANE);
+        var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(5, 2, 5));
+        float hp = zombie.getHealth();
+        var level = h.getLevel();
+        com.stormreach.weather.precip.HailstoneEntity.drop(level, Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 6, 1))), com.stormreach.sim.HailSize.GOLF_BALL, 0, 0);
+        com.stormreach.weather.precip.HailstoneEntity.drop(level, new Vec3(zombie.getX(), zombie.getY() + 5, zombie.getZ()), com.stormreach.sim.HailSize.SOFTBALL, 0, 0);
+        for (int i = 0; i < 8; i++)
+            com.stormreach.weather.precip.HailstoneEntity.drop(level, Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(3, 6, i % 7))), com.stormreach.sim.HailSize.BASEBALL, 0, 0);
+        h.runAfterDelay(30, () -> {
+            Check.isFalse(h, h.getBlockState(new BlockPos(1, 2, 1)).is(Blocks.GLASS_PANE), "golf-ball hail should smash a glass pane");
+            Check.isTrue(h, !zombie.isAlive() || zombie.getHealth() <= hp - com.stormreach.sim.HailSize.SOFTBALL.damage() + 4, "softball hail should badly hurt a zombie");
+            int piles = 0;
+            for (int z = 0; z < 7; z++) {
+                BlockPos at = new BlockPos(3, 2, z);
+                if (h.getBlockState(at).is(com.stormreach.weather.precip.PrecipContent.HAIL_LAYER)) {
+                    piles++;
+                    Check.isTrue(h, level.getBlockTicks().hasScheduledTick(h.absolutePos(at), com.stormreach.weather.precip.PrecipContent.HAIL_LAYER),
+                            "hail on the ground must have a melt timer");
+                }
+            }
+            Check.isTrue(h, piles > 0, "baseball hail should leave hail on the ground");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 20)
+    public void puddlesFormOnLevelGroundAndGrow(GameTestHelper h) {
+        h.setBlock(new BlockPos(1, 1, 1), Blocks.STONE);
+        h.setBlock(new BlockPos(3, 1, 1), Blocks.STONE);
+        var level = h.getLevel();
+        BlockPos on = h.absolutePos(new BlockPos(1, 2, 1));
+        Check.isTrue(h, com.stormreach.weather.precip.PuddleBlock.grow(level, on, 2), "puddle did not form on stone");
+        com.stormreach.weather.precip.PuddleBlock.grow(level, on, 2);
+        com.stormreach.weather.precip.PuddleBlock.grow(level, on, 2);
+        Check.isTrue(h, level.getBlockState(on).getValue(com.stormreach.weather.precip.PuddleBlock.SIZE) == 2, "puddle should grow to, and stop at, its max size");
+        h.setBlock(new BlockPos(3, 1, 1), Blocks.AIR);
+        Check.isFalse(h, com.stormreach.weather.precip.PuddleBlock.grow(level, h.absolutePos(new BlockPos(3, 2, 1)), 3), "a puddle formed in mid-air");
+        h.setBlock(new BlockPos(1, 1, 1), Blocks.AIR);
+        h.runAfterDelay(2, () -> {
+            Check.isFalse(h, level.getBlockState(on).is(com.stormreach.weather.precip.PrecipContent.PUDDLE), "a puddle should vanish when its ground goes");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 80)
+    public void downburstsBlowThingsOutward(GameTestHelper h) {
+        for (int x = 0; x < 12; x++) for (int z = 0; z < 12; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(9, 2, 6));
+        Vec3 centre = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(3, 2, 6)));
+        double start = Math.hypot(zombie.getX() - centre.x, zombie.getZ() - centre.z);
+        com.stormreach.tornado.WeatherEvents.downburst(h.getLevel(), centre, false);
+        double[] far = {start};
+        h.onEachTick(() -> far[0] = Math.max(far[0], Math.hypot(zombie.getX() - centre.x, zombie.getZ() - centre.z)));
+        h.runAfterDelay(60, () -> {
+            Check.isTrue(h, far[0] > start + 1.5, "the downburst's outflow should push a zombie away from its centre (moved " + (far[0] - start) + ")");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 30)
+    public void stormCloudsGrowAndCanBeDispelled(GameTestHelper h) {
+        var level = h.getLevel();
+        var cell = com.stormreach.weather.cloud.StormCells.spawnNear(level, Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 1, 1))), level.getRandom(), true, true);
+        Check.isTrue(h, cell != null, "storm cloud did not spawn");
+        cell.skipTo(0.5);
+        h.runAfterDelay(3, () -> {
+            Check.isTrue(h, cell.growth() > 0.45f, "growth not synced: " + cell.growth());
+            Check.isTrue(h, cell.getY() + cell.cloudDepth() <= level.getMaxY(), "the cloud top is above the build limit");
+            cell.dissipate();
+            h.runAfterDelay(4, () -> {
+                Check.isTrue(h, cell.growth() >= 0.85f, "a dispelled cloud should be collapsing");
+                cell.discard();
+                h.succeed();
+            });
+        });
+    }
 }

@@ -20,6 +20,8 @@ public abstract class ServerLevelMixin {
             ServerLevel self = (ServerLevel) (Object) this;
             com.stormreach.realm.TempestRealm.tick(self);
             com.stormreach.tornado.TornadoManager.tick(self);
+            com.stormreach.weather.precip.RainAccumulation.tick(self);
+            com.stormreach.weather.cloud.StormCells.tick(self);
             com.stormreach.labyrinth.LabyrinthTracker.tick(self);
             com.stormreach.story.StrangerDirector.tick(self);
             com.stormreach.story.Cinematics.tick(self);

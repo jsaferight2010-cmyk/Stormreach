@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "big=false,layers=1": {
+      "model": "stormreach:block/hail_layer_1"
+    },
+    "big=false,layers=2": {
+      "model": "stormreach:block/hail_layer_2"
+    },
+    "big=false,layers=3": {
+      "model": "stormreach:block/hail_layer_3"
+    },
+    "big=false,layers=4": {
+      "model": "stormreach:block/hail_layer_4"
+    },
+    "big=false,layers=5": {
+      "model": "stormreach:block/hail_layer_5"
+    },
+    "big=false,layers=6": {
+      "model": "stormreach:block/hail_layer_6"
+    },
+    "big=false,layers=7": {
+      "model": "stormreach:block/hail_layer_7"
+    },
+    "big=false,layers=8": {
+      "model": "stormreach:block/hail_layer_8"
+    },
+    "big=true,layers=1": {
+      "model": "stormreach:block/hail_layer_big_1"
+    },
+    "big=true,layers=2": {
+      "model": "stormreach:block/hail_layer_big_2"
+    },
+    "big=true,layers=3": {
+      "model": "stormreach:block/hail_layer_big_3"
+    },
+    "big=true,layers=4": {
+      "model": "stormreach:block/hail_layer_big_4"
+    },
+    "big=true,layers=5": {
+      "model": "stormreach:block/hail_layer_big_5"
+    },
+    "big=true,layers=6": {
+      "model": "stormreach:block/hail_layer_big_6"
+    },
+    "big=true,layers=7": {
+      "model": "stormreach:block/hail_layer_big_7"
+    },
+    "big=true,layers=8": {
+      "model": "stormreach:block/hail_layer_big_8"
+    }
+  }
+}

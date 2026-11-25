@@ -15,5 +15,7 @@ public class RigState extends LivingEntityRenderState {
     public float speed, vy, turn;
     /** A per-entity constant in [0,1), so a herd doesn't move in lockstep. */
     public float seed;
-    public boolean saddled, sheared;
+    public boolean saddled, sheared, charged, anchored;
+    /** A smoothed 0..1 value a renderer can drive (a hermit crab pulling into its shell, a vehicle's anchors). */
+    public float hide;
 }

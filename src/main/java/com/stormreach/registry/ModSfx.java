@@ -73,6 +73,25 @@ public final class ModSfx {
     public static final SoundEvent BLOCK_MAT_GLASS_BREAK = ModSounds.register("block.mat.glass.break");
     public static final SoundEvent BLOCK_MAT_GLASS_STEP = ModSounds.register("block.mat.glass.step");
     public static final SoundEvent BLOCK_MAT_GLASS_PLACE = ModSounds.register("block.mat.glass.place");
+    public static final SoundEvent CREATURE_WHALE_SONG = ModSounds.register("creature.whale_song");
+    public static final SoundEvent CREATURE_WHALE_HURT = ModSounds.register("creature.whale_hurt");
+    public static final SoundEvent CREATURE_WHALE_DEATH = ModSounds.register("creature.whale_death");
+    public static final SoundEvent CREATURE_EEL_CRACKLE = ModSounds.register("creature.eel_crackle");
+    public static final SoundEvent CREATURE_EEL_ZAP = ModSounds.register("creature.eel_zap");
+    public static final SoundEvent CREATURE_EEL_HURT = ModSounds.register("creature.eel_hurt");
+    public static final SoundEvent CREATURE_EEL_DEATH = ModSounds.register("creature.eel_death");
+    public static final SoundEvent CREATURE_SKINK_CHIRP = ModSounds.register("creature.skink_chirp");
+    public static final SoundEvent CREATURE_JELLY_CHIME = ModSounds.register("creature.jelly_chime");
+    public static final SoundEvent CREATURE_JELLY_HURT = ModSounds.register("creature.jelly_hurt");
+    public static final SoundEvent CREATURE_JELLY_DEATH = ModSounds.register("creature.jelly_death");
+    public static final SoundEvent CREATURE_SPRITE_TRILL = ModSounds.register("creature.sprite_trill");
+    public static final SoundEvent CREATURE_HERMIT_CLICK = ModSounds.register("creature.hermit_click");
+    public static final SoundEvent CREATURE_HERMIT_HIDE = ModSounds.register("creature.hermit_hide");
+    public static final SoundEvent CREATURE_THUNDERBIRD_CRY = ModSounds.register("creature.thunderbird_cry");
+    public static final SoundEvent CREATURE_THUNDERBIRD_HURT = ModSounds.register("creature.thunderbird_hurt");
+    public static final SoundEvent CREATURE_THUNDERBIRD_DEATH = ModSounds.register("creature.thunderbird_death");
+    public static final SoundEvent ITEM_KITE_FLAP = ModSounds.register("item.kite_flap");
+    public static final SoundEvent ITEM_CONCH = ModSounds.register("item.conch");
 
     /** For APIs that take a sound holder (equip sounds, some mob sounds). */
     public static Holder<SoundEvent> holder(SoundEvent e) {

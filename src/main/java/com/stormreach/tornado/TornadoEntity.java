@@ -345,7 +345,8 @@ public class TornadoEntity extends Entity {
         double ceiling = VortexForces.ceiling(peak);
         AABB box = new AABB(getX() - reach, getY() - 4, getZ() - reach, getX() + reach, getY() + Math.max(cloudBase(), ceiling + 8), getZ() + reach);
         for (Entity e : level.getEntities(this, box, e -> !(e instanceof TornadoEntity) && !e.isSpectator() && !(e instanceof Player p && (p.isCreative() || p.isSpectator()))
-                && !(e instanceof FallingBlockEntity fb && debris.containsKey(fb)) && !e.isPassenger())) {
+                && !(e instanceof FallingBlockEntity fb && debris.containsKey(fb)) && !e.isPassenger()
+                && !(e instanceof com.stormreach.chase.InterceptVehicle iv && iv.isAnchored()))) {
             // sampled at least 10 m up: the EF rating describes the wind there, and the ground-level wind is what hits you
             Vec3 w = windAt(new Vec3(e.getX(), Math.max(e.getY(), getY() + 10), e.getZ()));
             double mph = EFScale.msToMph(Math.hypot(w.x, w.z));

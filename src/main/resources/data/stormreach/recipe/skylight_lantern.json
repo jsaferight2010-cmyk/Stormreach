@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "G": "stormreach:glowgel",
+    "A": "stormreach:cloud_ambergris"
+  },
+  "pattern": [
+    " N ",
+    "GAG",
+    " N "
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:skylight_lantern"
+  }
+}

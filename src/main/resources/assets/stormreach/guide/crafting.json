@@ -273,6 +273,23 @@
    ]
   },
   {
+   "result": "stormreach:glowgel_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel"
+   ]
+  },
+  {
    "result": "stormreach:ion_lamp",
    "count": 1,
    "category": "building",
@@ -286,6 +303,40 @@
     "stormreach:ion_shard",
     "",
     "stormreach:ion_shard",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:nacre_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:pearlescent_shell",
+    "stormreach:pearlescent_shell",
+    "",
+    "stormreach:pearlescent_shell",
+    "stormreach:pearlescent_shell",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:nacre_bricks",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:nacre_block",
+    "stormreach:nacre_block",
+    "",
+    "stormreach:nacre_block",
+    "stormreach:nacre_block",
+    "",
+    "",
+    "",
     ""
    ]
   },
@@ -372,6 +423,23 @@
     "stormreach:salt",
     "stormreach:salt",
     "stormreach:salt"
+   ]
+  },
+  {
+   "result": "stormreach:skylight_lantern",
+   "count": 2,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:iron_nugget",
+    "",
+    "stormreach:glowgel",
+    "stormreach:cloud_ambergris",
+    "stormreach:glowgel",
+    "",
+    "minecraft:iron_nugget",
+    ""
    ]
   },
   {
@@ -1106,6 +1174,23 @@
    ]
   },
   {
+   "result": "stormreach:stormkite",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:thunderbird_plume",
+    "stormreach:thunderbird_plume",
+    "stormreach:thunderbird_plume",
+    "minecraft:string",
+    "stormreach:charged_scale",
+    "minecraft:string",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:stormshard_axe",
    "count": 1,
    "category": "equipment",
@@ -1272,6 +1357,23 @@
     "stormreach:storm_shard",
     "",
     "stormreach:storm_crystal_block",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tide_conch",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:gold_ingot",
+    "",
+    "stormreach:pearlescent_shell",
+    "minecraft:prismarine_shard",
+    "stormreach:pearlescent_shell",
+    "",
+    "stormreach:pearlescent_shell",
     ""
    ]
   },
@@ -1769,6 +1871,23 @@
    ]
   },
   {
+   "result": "stormreach:rain_gauge",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:glass_pane",
+    "",
+    "",
+    "minecraft:glass_pane",
+    "",
+    "",
+    "minecraft:iron_ingot",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:storm_barometer",
    "count": 1,
    "category": "redstone",
@@ -1919,6 +2038,23 @@
     "",
     "minecraft:iron_nugget",
     ""
+   ]
+  },
+  {
+   "result": "stormreach:tornado_probe",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:anemometer",
+    "",
+    "minecraft:orange_dye",
+    "minecraft:redstone",
+    "minecraft:orange_dye",
+    "minecraft:iron_block",
+    "minecraft:iron_block",
+    "minecraft:iron_block"
    ]
   },
   {
@@ -2160,6 +2296,57 @@
    ]
   },
   {
+   "result": "stormreach:cooked_voltaic_eel",
+   "count": 1,
+   "category": "food",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:voltaic_eel",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_voltaic_eel",
+   "count": 1,
+   "category": "food",
+   "kind": "campfire_cooking",
+   "grid": [
+    "stormreach:voltaic_eel",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_voltaic_eel",
+   "count": 1,
+   "category": "food",
+   "kind": "smoking",
+   "grid": [
+    "stormreach:voltaic_eel",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:fried_gull_egg",
    "count": 1,
    "category": "food",
@@ -2381,6 +2568,23 @@
    ]
   },
   {
+   "result": "stormreach:bottled_gale",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:gale_essence",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:bottled_rain",
    "count": 1,
    "category": "misc",
@@ -2424,6 +2628,23 @@
     "stormreach:storm_cell",
     "",
     "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chasers_logbook",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:book",
+    "minecraft:feather",
+    "minecraft:ink_sac",
+    "minecraft:compass",
     "",
     "",
     "",
@@ -2701,6 +2922,40 @@
     "minecraft:gold_ingot",
     "minecraft:gold_ingot",
     "minecraft:gold_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:glowgel",
+   "count": 9,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:glowgel_block",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:intercept_vehicle",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:glass_pane",
+    "minecraft:iron_ingot",
+    "minecraft:iron_block",
+    "stormreach:anemometer",
+    "minecraft:iron_block",
+    "minecraft:coal_block",
+    "",
+    "minecraft:coal_block"
    ]
   },
   {
@@ -3597,6 +3852,23 @@
     "",
     "",
     "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:weather_balloon",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:slime_ball",
+    "minecraft:slime_ball",
+    "minecraft:string",
+    "stormreach:thermometer",
     "",
     "",
     "",

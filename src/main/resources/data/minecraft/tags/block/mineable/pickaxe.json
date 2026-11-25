@@ -1698,6 +1698,11 @@
     "stormreach:sovereign_trophy",
     "stormreach:keeper_trophy",
     "stormreach:cyrrus_trophy",
-    "stormreach:tornado_trophy"
+    "stormreach:tornado_trophy",
+    "stormreach:nacre_block",
+    "stormreach:nacre_bricks",
+    "stormreach:skylight_lantern",
+    "stormreach:tornado_probe",
+    "stormreach:rain_gauge"
   ]
 }

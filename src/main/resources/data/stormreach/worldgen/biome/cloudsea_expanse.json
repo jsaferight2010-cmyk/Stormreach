@@ -22,6 +22,24 @@
                 "min_inclusive": 1
               },
               "weight": 4
+            },
+            {
+              "type": "stormreach:cloud_whale",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 3
+            },
+            {
+              "type": "stormreach:storm_jelly",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 8
             }
           ],
           "monster": [

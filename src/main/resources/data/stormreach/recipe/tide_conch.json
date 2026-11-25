@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "S": "stormreach:pearlescent_shell",
+    "P": "minecraft:prismarine_shard"
+  },
+  "pattern": [
+    " G ",
+    "SPS",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tide_conch"
+  }
+}

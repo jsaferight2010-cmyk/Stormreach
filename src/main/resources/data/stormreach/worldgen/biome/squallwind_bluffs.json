@@ -104,6 +104,35 @@
                 "min_inclusive": 2
               },
               "weight": 6
+            },
+            {
+              "type": "stormreach:sparkskink",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 2
+              },
+              "weight": 8
+            },
+            {
+              "type": "stormreach:tidewrack_hermit",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 8
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "stormreach:shock_eel",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 6
             }
           ]
         }

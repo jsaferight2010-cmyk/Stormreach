@@ -632,6 +632,177 @@
     ],
     "subtitle": "subtitles.stormreach.block.mat.glass.place"
   },
+  "creature.whale_song": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_whale_song",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.whale_song"
+  },
+  "creature.whale_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_whale_hurt",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.whale_hurt"
+  },
+  "creature.whale_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_whale_death",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.whale_death"
+  },
+  "creature.eel_crackle": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_eel_crackle",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.eel_crackle"
+  },
+  "creature.eel_zap": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_eel_zap",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.eel_zap"
+  },
+  "creature.eel_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_eel_hurt",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.eel_hurt"
+  },
+  "creature.eel_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_eel_death",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.eel_death"
+  },
+  "creature.skink_chirp": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_skink_chirp",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.skink_chirp"
+  },
+  "creature.jelly_chime": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_jelly_chime",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.jelly_chime"
+  },
+  "creature.jelly_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_jelly_hurt",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.jelly_hurt"
+  },
+  "creature.jelly_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_jelly_death",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.jelly_death"
+  },
+  "creature.sprite_trill": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_sprite_trill",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.sprite_trill"
+  },
+  "creature.hermit_click": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_hermit_click",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.hermit_click"
+  },
+  "creature.hermit_hide": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_hermit_hide",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.hermit_hide"
+  },
+  "creature.thunderbird_cry": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_thunderbird_cry",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.thunderbird_cry"
+  },
+  "creature.thunderbird_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_thunderbird_hurt",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.thunderbird_hurt"
+  },
+  "creature.thunderbird_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_thunderbird_death",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.thunderbird_death"
+  },
+  "item.kite_flap": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_kite_flap",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.kite_flap"
+  },
+  "item.conch": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_conch",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.conch"
+  },
   "voice.cyrrus.l01": {
     "sounds": [
       {

@@ -1,5 +1,47 @@
 # Stormreach patch notes
 
+## 5.2.0 (Stormwild)
+New storm-touched creatures, storm chasing gear, and what they give you. Every new creature has its own jointed model, a painted texture, keyframed animation and synthesized sounds.
+
+### New creatures
+- **Sparkskink** (coasts, Static Fields): a lizard that charges up in the rain or when struck by lightning. Its crest glows, it crackles with sparks, and it sheds **Charged Scales**. It scuttles with an S-curved walk and does lizard push-ups. Breed with Glow Berries.
+- **Tidewrack Hermit** (coasts, marsh): a hermit crab in a pearly spiral shell.
+  - It pulls into the shell when you come close, taking far less damage, unless you sneak or hold Kelp.
+  - Drops **Pearlescent Shells**. Breed with Kelp.
+- **Shock Eel** (coastal and marsh water): an eight-part glowing-spotted eel that swims in a travelling wave.
+  - Peaceful, except in thunderstorms (when it hunts swimmers) or when provoked.
+  - Its bite shocks you. Drops **Voltaic Eel** (cook it).
+- **Cloud Whale** (Cloudsea Expanse): a sky giant with a cloud-tufted back that drifts, undulating, high above the ground.
+  - It sings, rains on what's beneath it, and leaves **Cloud Ambergris** every few minutes.
+- **Storm Jelly** (Cloudsea Expanse, Aurora Spires): a translucent, glowing jellyfish of the sky. It pulses and trails its tentacles, stings on touch, and drops **Glowgel**.
+- **Gale Sprite** (Galewood Highlands, Aurora Spires, Elderstorm Grove): a tiny wind spirit with dragonfly wings.
+  - Give it Thistle Down for a **Gale Essence**. It then follows you for three minutes and catches you on the wind when you fall.
+- **Thunderbird:** a storm raptor nearly six blocks across that arrives in thunderstorms.
+  - It circles, dives talons-first, and screams to call lightning onto you.
+  - It has a boss bar and leaves when the storm passes. Drops **Thunderbird Plumes**.
+
+### Storm chasing
+- **Tornado Intercept Vehicle:** a drivable armoured chase truck.
+  - It has an orange hood, a plow, slit-armoured windows, a beacon bar, a radar dome and a roof anemometer that spins with the wind.
+  - **Dashboard:** tracks the nearest tornado: rating, range, bearing, motion, peak wind, and the wind where you are.
+  - **Anchors:** stop and hydraulic anchors drop, and no tornado can move you.
+- **Weather Balloon:** launch a radiosonde. It bursts at the storm tops and sends back a sounding: temperature, dew point, cloud base, freezing level, CAPE, shear and severe risk.
+- **Rain Gauge:** fills with rain, faster in thunderstorms. Read it in millimetres; a comparator reads its level too.
+- **Tornado Probe:** a weighted barrel that no tornado can move. It records the peak wind and how close the core passed; a comparator reads it too.
+- **Storm Chaser's Logbook:** logs every tornado you see (count, strongest, closest) plus your intercepts, probe readings and balloon launches.
+
+### New items and blocks
+- **Stormkite:** hold it while falling to glide. Storm winds push you along.
+- **Tide Conch:** water breathing and Dolphin's Grace for everyone near you; it also calms Shock Eels.
+- **Bottled Gale**, Cooked Voltaic Eel, the **Skylight Lantern** (light 15), the bouncy, glowing **Glowgel Block**, and **Nacre Blocks** and **Nacre Bricks**.
+
+### Also
+- 14 new achievements across both new sets.
+- 19 new sounds, including whale song, a Thunderbird scream and a conch call.
+- Two new Field Guide chapters, and the new mobs' drop rates in the tables.
+- New gameplay options in `config/stormreach.properties`: `wildlifeSpawning` and `thunderbirdChance`.
+
+
 ## 5.1.0 (the Overhaul)
 Built and tested in seventeen stages.
 

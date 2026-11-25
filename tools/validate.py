@@ -105,7 +105,8 @@ def chk(i, where):
 # ---------------- 5.0 registries (tornado, meteorology, backpacks, labyrinth, story, forest) ----------------
 def jsrc(rel): return open(JAVA + '/com/stormreach/' + rel).read()
 nb, ni, ne = [], [], []
-for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'forest/ForestRegistry.java', 'backpack/Backpacks.java'):
+for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'forest/ForestRegistry.java', 'backpack/Backpacks.java',
+            'wild/WildRegistry.java', 'chase/ChaseRegistry.java'):
     src5 = jsrc(rel)
     nb += re.findall(r'(?:block|trophy)\("([a-z_0-9]+)"', src5); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src5); ne += re.findall(r'\bentity\("([a-z_0-9]+)"', src5)
 # 5.1: hail and puddles, and the Doppler radar (its block and item are registered by hand, not through block())
@@ -113,6 +114,7 @@ src51 = jsrc('weather/precip/PrecipContent.java')
 nb += re.findall(r'\bblock\("([a-z_0-9]+)"', src51); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src51)
 nb += ['tornado_radar', 'radar_part']; ni += ['tornado_radar', 'stormreach_field_guide', 'storm_crafters_handbook']
 ni = [i for i in ni if not i.endswith('_')]
+ni += [f'{m}_spawn_egg' for m in re.findall(r'\begg\("([a-z_0-9]+)"', jsrc('wild/WildRegistry.java'))]
 ni += ['tornado_spawner_' + k.strip().lower() for k in re.findall(r'enum SpawnerKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
 ni = [i.strip() for i in ni]
 ni += ['weather_event_' + k.strip().lower() for k in re.findall(r'enum EventKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
@@ -137,7 +139,8 @@ for i in ni + [b for b in nb if b not in noitem5]:
 for e in ne:
     if f'entity.stormreach.{e}' not in lang: problems.append(f'no lang entity {e}')
     if e != 'tornado' and not os.path.exists(f'{D}/stormreach/loot_table/entities/{e}.json'): problems.append(f'no entity loot {e}')
-for tex in ('tornado', 'stranger', 'cyrrus', 'cyrrus_final', 'hollow_keeper', 'glimmerstag', 'thistlehop'):
+for tex in ('tornado', 'stranger', 'cyrrus', 'cyrrus_final', 'hollow_keeper', 'glimmerstag', 'thistlehop', 'cloud_whale', 'shock_eel', 'sparkskink',
+            'storm_jelly', 'gale_sprite', 'tidewrack_hermit', 'thunderbird', 'intercept_vehicle', 'weather_balloon'):
     if not os.path.exists(f'{A}/textures/entity/{tex}.png'): problems.append(f'no entity texture {tex}')
 for eq in ('stormcrown', 'storm_chaser_cap'):
     if not os.path.exists(f'{A}/equipment/{eq}.json') or not os.path.exists(f'{A}/textures/entity/equipment/humanoid/{eq}.png'): problems.append(f'equipment {eq} incomplete')

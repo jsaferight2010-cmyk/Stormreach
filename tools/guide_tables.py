@@ -91,7 +91,8 @@ out.append(md_table(['Rarity', 'Items'], rows))
 
 # ---------------------------------------------------------------- mob drops
 MOBS = ['cyrrus', 'tempest_sovereign', 'stormwarden', 'hollow_keeper', 'glimmerstag', 'thistlehop', 'skyray', 'puffling', 'static_wisp', 'cyclone',
-        'stormhawk', 'thunder_crab', 'cliff_crab', 'harbor_seal', 'brine_wraith', 'squall', 'ball_lightning', 'storm_gull', 'waterspout']
+        'stormhawk', 'thunder_crab', 'cliff_crab', 'harbor_seal', 'brine_wraith', 'squall', 'ball_lightning', 'storm_gull', 'waterspout',
+        'thunderbird', 'cloud_whale', 'shock_eel', 'sparkskink', 'storm_jelly', 'gale_sprite', 'tidewrack_hermit']
 out.append('\n### Mob drops\n\nChance is per kill without Looting (Looting adds up to +1 per level to most counts). '
            '"Drop-rate rarity" uses the same bands everywhere in this guide: Guaranteed 100%, Common ≥50%, Uncommon 15–50%, Rare 5–15%, '
            'Very rare 1–5%, Legendary <1%.\n\n')

@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "c": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:charged_scale"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.charged_scale.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.charged_scale.description"
+    },
+    "icon": {
+      "id": "stormreach:charged_scale"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

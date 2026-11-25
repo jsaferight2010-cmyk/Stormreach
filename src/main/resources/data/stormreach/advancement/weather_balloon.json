@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.weather_balloon.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.weather_balloon.description"
+    },
+    "icon": {
+      "id": "stormreach:weather_balloon"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

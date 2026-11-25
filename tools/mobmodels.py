@@ -65,8 +65,8 @@ class Clip:
 
 
 class Model:
-    def __init__(self, cls, texture, mats, parts, clips, doc='', look=(), extra='', grounded=True, flags=()):
-        self.cls = cls; self.texture = texture; self.mats = mats; self.parts = parts; self.clips = clips
+    def __init__(self, cls, texture, mats, parts, clips, doc='', look=(), extra='', grounded=True, flags=(), translucent=False):
+        self.cls = cls; self.texture = texture; self.mats = mats; self.parts = parts; self.clips = clips; self.translucent = translucent
         self.doc = doc; self.look = look; self.extra = extra; self.grounded = grounded; self.flags = flags
 
 
@@ -299,6 +299,27 @@ def paint_face(img, al, x0, y0, w, h, mat, face, rng):
         foam = wave > 0.93
         over = (foam, np.array([236.0, 248, 255]))
         alpha = 165 + 75 * wave
+    elif kind == 'spots':
+        # dark hide with bright, glowing spots
+        v += 0.08 * (n - 0.5)
+        sp = fbm(rng, w, h, 3) > 0.7
+        over = (sp, np.minimum(255, second * 1.1))
+    elif kind == 'tread':
+        v -= 0.22 * ((yy // 3 + xx // 6) % 2 == 0) + 0.05
+    elif kind == 'grille':
+        v -= 0.3 * (xx % 4 < 2)
+    elif kind == 'decal':
+        # painted panels: a bold stripe band and panel seams with bolts
+        v += 0.06 * (n - 0.5)
+        stripe = (fy > 0.55) & (fy < 0.78)
+        v -= 0.22 * (((xx % 24) == 0) | ((yy % 20) == 0))
+        bolt = ((xx % 24) == 3) & ((yy % 20) == 3)
+        v = np.where(bolt, 0.85, v)
+        if side: over = (stripe, second)
+    elif kind == 'jelly':
+        ring = np.sin(np.hypot(fx - 0.5, fy - 0.3) * 20 + n * 4) * 0.5 + 0.5
+        v = 0.45 + 0.3 * ring + FACE_LIGHT[face] * 0.5
+        alpha = 120 + 80 * ring
     elif kind == 'skin':
         spots = fbm(rng, w, h, 5) > 0.63
         v += 0.08 * (n - 0.5)
@@ -446,7 +467,9 @@ def java(model, W, H):
     def apply_tracks(tracks, sample, wexpr):
         out = []
         for (part, ch), keys in sorted(tracks.items()):
-            if part not in names: raise ValueError(f'{model.cls}: no part {part}')
+            if part not in names:
+                if part.startswith('right_'): continue   # a mirrored copy of a one-sided part (sym)
+                raise ValueError(f'{model.cls}: no part {part}')
             f = next(p.field for p in all_parts(model.parts) if p.name == part)
             k = keys_const(keys)
             val = f'Keys.{sample}({k}, ph)'
@@ -508,7 +531,7 @@ public class {model.cls} extends EntityModel<RigState> {{
 {chr(10).join(fields)}
 
     public {model.cls}(ModelPart root) {{
-        super(root);
+        super(root{', net.minecraft.client.renderer.rendertype.RenderTypes::entityTranslucent' if model.translucent else ''});
 {chr(10).join(lookups)}
     }}
 
@@ -1091,6 +1114,234 @@ M.append(Model('HollowKeeperModel', 'hollow_keeper', {'cloth': ('cloth', C('#3a3
     hurt_clip('torso', 'head', 0.8)],
     doc='The Hollow Keeper: a gaunt hooded figure three blocks tall with a bone mask, glowing eyes, long clawed arms, tattered robes and a swinging lantern; it stalks with long strides, twitches its head, and swipes.',
     look=[('neck', 0.3, 0.3), ('head', 0.7, 0.7)], extra='        torso.yRot -= turn * 0.02f;\n'))
+
+# =============================================================================================== 5.2 Stormwild
+# ---- Cloud Whale ----------------------------------------------------------------------------------------------
+wbody = P('body', (0, 6, 0), boxes=[Box(-14, -12, -16, 28, 24, 32, 'skin'), Box(-12, 10, -15, 24, 3, 28, 'belly')])
+whead = P('head', (0, 0, -16), boxes=[Box(-12, -10, -18, 24, 19, 18, 'skin'), Box(-9, -12, -16, 18, 2, 12, 'skin2'),
+                                      Box(11.6, -2, -12, 1, 2, 2, 'eye'), Box(-12.6, -2, -12, 1, 2, 2, 'eye'),
+                                      Box(-6, -11, -17, 3, 1, 3, 'bone'), Box(4, -11, -14, 2, 1, 2, 'bone'), Box(8, -6, -18.5, 2, 2, 1, 'bone')]).add(
+    P('jaw', (0, 6, -1), boxes=[Box(-11, 0, -16.5, 22, 5, 17, 'belly')]))
+wbody.add(whead)
+for i, (x, z, w_, d_) in enumerate(((-6, -10, 9, 9), (5, -4, 8, 10), (-3, 3, 10, 9), (6, 9, 7, 7), (-7, 11, 6, 6), (0, -13, 7, 5))):
+    wbody.add(P(f'puff{i}', (x, -12, z), boxes=[Box(-w_ / 2, -4, -d_ / 2, w_, 4, d_, 'cloud'), Box(-w_ / 4, -6, -d_ / 4, w_ / 2, 2, d_ / 2, 'cloud2')]))
+wbody.add(*pair(P('left_fin', (13, 7, -8), (0, 0.15, 0.45), [Box(0, -1, -4, 14, 2, 9, 'skin')]).add(
+    P('left_fin_tip', (14, 0, 0.5), (0, 0.2, 0.1), [Box(0, -1, -3, 10, 2, 6, 'skin2')]))))
+wtail = P('tail', (0, -1, 16), boxes=[Box(-10, -9, 0, 20, 18, 16, 'skin'), Box(-8, 7.5, 1, 16, 2, 14, 'belly')]).add(
+    P('tail_mid', (0, 1, 16), boxes=[Box(-6, -6, 0, 12, 12, 14, 'skin')]).add(
+        P('tail_end', (0, 0, 14), boxes=[Box(-3, -4, 0, 6, 8, 10, 'skin2')]).add(
+            *pair(P('left_fluke', (2, 0, 7), (0, 0.45, 0), [Box(0, -1, -3, 14, 2, 9, 'skin2'), Box(10, -1.1, 3, 5, 2, 4, 'cloud2')])))))
+wbody.add(wtail)
+M.append(Model('CloudWhaleModel', 'cloud_whale', {'skin': ('skin', C('#7f97b8'), C('#c8d8ee')), 'skin2': ('skin', C('#6b82a6'), C('#b8c8e0')),
+    'belly': ('shell', C('#dfe8f2'), C('#a8b8cc')), 'eye': ('eye', C('#1c2840'), C('#0c1420')), 'bone': ('bone', C('#e8eef2'), C('#9aa6b0')),
+    'cloud': ('cloud', C('#eef3f8'), C('#b8c4d0')), 'cloud2': ('cloud', C('#ffffff'), C('#d0d8e0'))}, [wbody], [
+    Clip('time', 90, sym(T(body_rx=[(0, -2.5), (0.5, 2.5)], tail_rx=shift([(0, 6), (0.5, -6)], 0.12), tail_mid_rx=shift([(0, 10), (0.5, -10)], 0.24),
+                           tail_end_rx=shift([(0, 14), (0.5, -14)], 0.36), head_rx=shift([(0, 2), (0.5, -2)], 0.9),
+                           left_fin_rz=shift([(0, -10), (0.5, 12)], 0.1), left_fin_tip_rz=shift([(0, -8), (0.5, 10)], 0.25),
+                           body_py=shift([(0, 0.6), (0.5, -0.6)], 0.2), jaw_rx=even(0, 2))), '1f'),
+    Clip('fidget', 420, T(jaw_rx=[(0, 0), (0.2, 20), (0.45, 14), (0.7, 20), (1, 0)], head_rx=[(0, 0), (0.25, -6), (0.75, -6), (1, 0)]), '1f', dur=90),
+    hurt_clip('body', 'head', 0.5)],
+    doc='The Cloud Whale: a sky giant with a cloud-tufted back, barnacled head, two-jointed fins and a three-jointed tail; it undulates slowly as it swims through the air and opens its jaw to sing.',
+    grounded=False, extra='        tail.yRot += turn * 0.05f; tailMid.yRot += turn * 0.04f;\n'))
+
+# ---- Shock Eel ------------------------------------------------------------------------------------------------
+eel = P('head', (0, 20, -10), boxes=[Box(-1.5, -1.5, -4, 3, 3, 4, 'skin'), Box(1.3, -1, -3, 1, 1, 1, 'eye'), Box(-2.3, -1, -3, 1, 1, 1, 'eye')]).add(
+    P('jaw', (0, 0.5, 0), boxes=[Box(-1.5, 0, -4, 3, 1, 4, 'belly')]))
+prev = eel
+for i, (w_, ln) in enumerate(((3, 4), (3, 4), (3, 4), (2, 4), (2, 4), (2, 4), (1, 4))):
+    seg = P(f'seg{i}', (0, 0, 4 if i else 0), boxes=[Box(-w_ / 2, -w_ / 2, 0, w_, w_, ln, 'skin'), Box(-0.5, -w_ / 2 - 1, 1, 1, 1, ln - 2, 'fin')])
+    prev.add(seg); prev = seg
+eswim = {}
+for i in range(7):
+    eswim[(f'seg{i}', 'ry')] = shift([(0, -(7 + i * 2.6)), (0.5, 7 + i * 2.6)], i * 0.1)
+eswim[('head', 'ry')] = [(0, 5), (0.5, -5)]
+M.append(Model('ShockEelModel', 'shock_eel', {'skin': ('spots', C('#2c3446'), C('#ffe25a')), 'belly': ('skin', C('#6a7488'), C('#3a4050')),
+    'fin': ('glow', C('#ffd84a'), C('#a07a20')), 'eye': ('glow', C('#fff6b0'), C('#ffd84a'))}, [eel], [
+    Clip('time', 16, eswim, '1f'),
+    Clip('fidget', 80, T(jaw_rx=[(0, 0), (0.3, 18), (0.6, 0)]), '1f', dur=10),
+    Clip('attack', 10, T(jaw_rx=[(0, 0), (0.2, 40), (0.6, 0)], head_pz=[(0, 0), (0.2, -2.5), (1, 0)], seg0_ry=[(0, 0), (0.3, 25), (1, 0)])),
+    hurt_clip('head', None, 0.6)],
+    doc='The Shock Eel: an eight-part body spotted with glowing yellow and a glowing fin ridge, swimming in a travelling wave; it lunges and snaps.',
+    grounded=False))
+
+# ---- Sparkskink -----------------------------------------------------------------------------------------------
+sk = P('body', (0, 21, 0), boxes=[Box(-2, -1.5, -4, 4, 3, 8, 'scale'), Box(-1.5, 1.2, -3.5, 3, 1, 7, 'belly')])
+skhead = P('head', (0, -0.5, -4), boxes=[Box(-1.5, -1.5, -3, 3, 3, 3, 'scale'), Box(-1, -0.8, -5, 2, 2, 2, 'scale'),
+                                         Box(1.3, -1.2, -2.5, 1, 1, 1, 'eye'), Box(-2.3, -1.2, -2.5, 1, 1, 1, 'eye')]).add(
+    P('jaw', (0, 1, -3), boxes=[Box(-1, 0, -2, 2, 1, 2, 'belly')]))
+sk.add(skhead)
+for i in range(5):
+    z = -3 + i * 1.6
+    sk.add(P(f'crest{i}', (0, -1.5, z), (-0.3, 0, 0), [Box(-0.5, -1.5 + (i in (1, 2)) * -0.5, -0.5, 1, 2, 1, 'crest')]))
+    sk.add(P(f'spark{i}', (0, -1.5, z), (-0.3, 0, 0), [Box(-0.5, -2.2, -0.6, 1, 2, 1, 'glow')]))
+tl = P('tail0', (0, -0.5, 4), boxes=[Box(-1.5, -1, 0, 3, 2, 4, 'scale')])
+t1 = P('tail1', (0, 0, 4), boxes=[Box(-1, -0.75, 0, 2, 1, 4, 'scale')])
+t2 = P('tail2', (0, 0, 4), boxes=[Box(-0.5, -0.5, 0, 1, 1, 4, 'scale')]).add(P('tail3', (0, 0, 4), boxes=[Box(-0.5, -0.5, 0, 1, 1, 3, 'crest')]))
+tl.add(t1.add(t2)); sk.add(tl)
+for side, z in (('front', -2.5), ('back', 2.5)):
+    sk.add(*pair(P(f'left_{side}', (2, 0.5, z), (0, 0.25 if side == 'front' else -0.25, 0.45), [Box(0, -0.5, -0.5, 3, 1, 1, 'scale')]).add(
+        P(f'left_{side}_foot', (3, 0, 0), (0, 0, 0.95), [Box(-0.5, 0, -0.5, 1, 2, 1, 'scale'), Box(-1, 1.5, -1.5, 2, 1, 2, 'belly')]))))
+skwalk = {}
+for leg, ph in (('left_front', 0), ('right_back', 0), ('right_front', 0.5), ('left_back', 0.5)):
+    sg = 1 if leg.startswith('left') else -1
+    skwalk[(leg, 'ry')] = shift([(0, 32 * sg), (0.5, -32 * sg)], ph)
+    skwalk[(leg, 'rz')] = shift([(0, 0), (0.5, 0), (0.75, -28 * sg)], ph)
+skwalk.update(T(body_ry=[(0, -9), (0.5, 9)], tail0_ry=shift([(0, 12), (0.5, -12)], 0.1), tail1_ry=shift([(0, 16), (0.5, -16)], 0.2),
+                tail2_ry=shift([(0, 20), (0.5, -20)], 0.3), head_ry=shift([(0, 7), (0.5, -7)], 0.05)))
+M.append(Model('SparkskinkModel', 'sparkskink', {'scale': ('scale', C('#3f7a6a'), C('#1e3c34')), 'belly': ('scale', C('#c8d8a0'), C('#8a9a60')),
+    'crest': ('shell', C('#2f5a50'), C('#163028')), 'glow': ('glow', C('#c8f8ff'), C('#4ad0e8')), 'eye': ('eye', C('#f2d040'), C('#0c1410'))}, [sk], [
+    Clip('time', 60, T(body_py=[(0, 0), (0.5, 0.15)], tail1_ry=even(0, 8, 0, -8), tail2_ry=shift(even(0, 12, 0, -12), 0.1), tail3_ry=shift(even(0, 16, 0, -16), 0.2)), 'idleW'),
+    Clip('dist', 0.32, skwalk, 'moveW'),
+    Clip('fidget', 130, T(body_py=[(0, 0), (0.18, -1.2), (0.35, 0), (0.55, -1.2), (0.72, 0), (1, 0)],
+                          head_rx=[(0, 0), (0.18, -15), (0.35, 0), (0.55, -15), (0.72, 0)]), 'idleW', dur=22),
+    Clip('fidget', 45, T(head_ry=[(0, 0), (0.15, 28), (0.75, 28), (1, 0)]), 'idleW', dur=14),
+    Clip('fidget', 70, T(jaw_rx=[(0, 0), (0.2, 25), (0.4, 0)]), 'idleW', dur=8),
+    hurt_clip('body', 'head')],
+    doc='The Sparkskink: a sprawling coastal lizard with a five-spine crest that glows when it is storm-charged, an S-curving walk, a four-jointed tail, and the push-up display lizards do.',
+    look=[('head', 1.0, 0.8)],
+    extra='        for (ModelPart p : new ModelPart[] {spark0, spark1, spark2, spark3, spark4}) p.visible = s.charged;\n        tail0.yRot += turn * 0.05f;\n'))
+
+# ---- Storm Jelly ----------------------------------------------------------------------------------------------
+jbell = P('bell', (0, 9, 0), boxes=[Box(-5, -4, -5, 10, 5, 10, 'jelly'), Box(-4, -6, -4, 8, 2, 8, 'jelly'), Box(-2.5, -7, -2.5, 5, 1, 5, 'jelly2'),
+                                    Box(-2.5, -3, -2.5, 5, 4, 5, 'glow')])
+jtr = {}
+for i in range(8):
+    a = i * math.pi / 4
+    jbell.add(P(f'rim{i}', (math.cos(a) * 4.6, 1, math.sin(a) * 4.6), (0, -a + math.pi / 2, 0), [Box(-1.5, 0, -0.5, 3, 2, 1, 'jelly2')]))
+    jtr[(f'rim{i}', 'rx')] = [(0, 0), (0.25, 28), (0.6, -6), (1, 0)]
+for i in range(6):
+    a = i * math.pi / 3 + 0.3
+    t0 = P(f'tent{i}', (math.cos(a) * 3.2, 1, math.sin(a) * 3.2), boxes=[Box(-0.5, 0, -0.5, 1, 4, 1, 'tent')])
+    t0.add(P(f'tent{i}b', (0, 4, 0), boxes=[Box(-0.5, 0, -0.5, 1, 4, 1, 'tent')]).add(P(f'tent{i}c', (0, 4, 0), boxes=[Box(-0.5, 0, -0.5, 1, 3, 1, 'glow2')])))
+    jbell.add(t0)
+    jtr[(f'tent{i}', 'rx')] = shift(even(8, -8), i * 0.11); jtr[(f'tent{i}b', 'rx')] = shift(even(12, -12), i * 0.11 + 0.15)
+    jtr[(f'tent{i}c', 'rx')] = shift(even(16, -16), i * 0.11 + 0.3); jtr[(f'tent{i}', 'rz')] = shift(even(6, -6), i * 0.13 + 0.2)
+jbell.add(P('arm', (0, 1, 0), boxes=[Box(-1, 0, -1, 2, 6, 2, 'jelly2')]).add(P('arm2', (0, 6, 0), boxes=[Box(-1, 0, -1, 2, 5, 2, 'jelly2')])))
+jtr.update(T(bell_sx=[(0, 0), (0.25, -0.12), (0.6, 0.04), (1, 0)], bell_sz=[(0, 0), (0.25, -0.12), (0.6, 0.04), (1, 0)],
+             bell_sy=[(0, 0), (0.25, 0.08), (0.6, -0.03), (1, 0)], bell_py=[(0, 0), (0.3, -1.2), (1, 0)],
+             arm_rx=shift(even(6, -6), 0.2), arm2_rx=shift(even(10, -10), 0.35)))
+M.append(Model('StormJellyModel', 'storm_jelly', {'jelly': ('jelly', C('#8fd8ff'), C('#3a8ac0')), 'jelly2': ('jelly', C('#c8a8ff'), C('#6a4ab0')),
+    'glow': ('glow', C('#f0fcff'), C('#7fd4ff')), 'glow2': ('glow', C('#fff6c0'), C('#c0a0ff')), 'tent': ('jelly', C('#b8e8ff'), C('#5a9ad0'))}, [jbell], [
+    Clip('time', 34, jtr, '1f'),
+    Clip('attack', 12, {(f'tent{i}', 'rx'): [(0, 0), (0.25, -35), (1, 0)] for i in range(6)}),
+    Clip('hurt', 10, T(bell_s=[(0, 0), (0.2, -0.2), (1, 0)]))],
+    doc='The Storm Jelly: a translucent glowing bell with a frilled rim, six three-jointed tentacles and oral arms; it pulses (contracting, rising, flaring its rim) and its tentacles trail in waves.',
+    grounded=False, translucent=True))
+
+# ---- Gale Sprite ----------------------------------------------------------------------------------------------
+gs = P('body', (0, 17, 0), boxes=[Box(-1.5, -2, -1, 3, 4, 2, 'wisp')])
+gs.add(P('head', (0, -2, 0), boxes=[Box(-2, -4, -2, 4, 4, 4, 'wisp2'), Box(-1.6, -2.8, -2.3, 1, 1, 1, 'eye'), Box(0.6, -2.8, -2.3, 1, 1, 1, 'eye')]).add(
+    *pair(P('left_antenna', (1, -4, -1), (-0.4, 0, 0.35), [Box(-0.5, -3, -0.5, 1, 3, 1, 'wisp'), Box(-0.5, -4, -0.5, 1, 1, 1, 'glow')]))))
+gs.add(*pair(P('left_wing_front', (1.2, -1.5, -0.2), (0, 0.2, 0), [Box(0, -0.5, -1, 6, 1, 2, 'wing')])))
+gs.add(*pair(P('left_wing_back', (1.2, -0.5, 0.6), (0, -0.25, 0), [Box(0, -0.5, 0, 5, 1, 2, 'wing')])))
+gs.add(*pair(P('left_arm', (1.5, -1.5, 0), (0, 0, -0.3), [Box(0, 0, -0.5, 1, 3, 1, 'wisp2')])))
+gs.add(P('tail0', (0, 2, 0.5), boxes=[Box(-1, 0, -1, 2, 3, 2, 'wisp')]).add(P('tail1', (0, 3, 0), boxes=[Box(-0.5, 0, -0.5, 1, 3, 1, 'wisp')]).add(
+    P('tail2', (0, 3, 0), boxes=[Box(-0.5, 0, -0.5, 1, 2, 1, 'glow')]))))
+M.append(Model('GaleSpriteModel', 'gale_sprite', {'wisp': ('cloud', C('#e0f0fa'), C('#9ac0d8')), 'wisp2': ('cloud', C('#f6fbff'), C('#b8d4e8')),
+    'wing': ('jelly', C('#d8f4ff'), C('#7ac8e8')), 'glow': ('glow', C('#ffffff'), C('#9fe0ff')), 'eye': ('eye', C('#4ac0e8'), C('#0c2030'))}, [gs], [
+    Clip('time', 3, sym(T(left_wing_front_rz=[(0, -38), (0.5, 34)], left_wing_back_rz=shift([(0, -34), (0.5, 30)], 0.25))), '1f'),
+    Clip('time', 26, sym(T(body_py=[(0, 0), (0.5, -1)], tail0_rx=even(12, -6), tail1_rx=shift(even(16, -8), 0.15), tail2_rx=shift(even(22, -10), 0.3),
+                           tail0_rz=shift(even(10, -10), 0.25), left_arm_rz=even(-8, 4), left_antenna_rz=shift(even(10, -4), 0.2))), '1f'),
+    Clip('fidget', 160, T(body_rx=[(0, 0), (1, -360)], body_py=[(0, 0), (0.5, -3), (1, 0)]), '1f', dur=20),
+    hurt_clip('body', 'head')],
+    doc='The Gale Sprite: a tiny cloud-bodied wind spirit with big eyes, glowing antennae, four buzzing dragonfly wings and a curling tail; now and then it loops the loop.',
+    grounded=False, translucent=True, look=[('head', 1.0, 1.0)]))
+
+# ---- Tidewrack Hermit -----------------------------------------------------------------------------------------
+hshell = P('shell', (0, 18.5, 1.5), (-0.2, 0, 0), [Box(-4, -4, -3, 8, 7, 8, 'shell'), Box(-3, -7, -1, 6, 3, 6, 'shell2'), Box(-2, -9, 0, 4, 2, 4, 'shell'),
+                                                  Box(-1, -10.5, 1, 2, 2, 2, 'shell2'), Box(-4.5, -3.5, -3.5, 9, 6, 1, 'nacre'), Box(3.5, -3, 0, 1, 4, 3, 'barnacle')])
+hbody = P('body', (0, 20.5, -1.5), boxes=[Box(-2.5, -2, -3, 5, 3, 3, 'skin')]).add(
+    *pair(P('left_eye', (1, -2, -2.5), (0, 0, 0.15), [Box(-0.5, -3, -0.5, 1, 3, 1, 'skin'), Box(-1, -4, -1, 2, 1, 2, 'eye')])),
+    P('left_claw', (2.2, 0, -3), (0, -0.3, 0), [Box(-1, -1.5, -3.5, 3, 3, 3.5, 'claw')]).add(P('left_pincer', (0.5, -1.5, -3.5), boxes=[Box(-1, 0, -2, 2, 1, 2, 'claw2')])),
+    P('right_claw', (-2.2, 0.5, -3), (0, 0.3, 0), [Box(-1, -1, -2.5, 2, 2, 2.5, 'claw')]),
+    *pair(P('left_leg0', (2.5, 0.5, -2), (0, 0.3, 0.6), [Box(0, -0.5, -0.5, 3, 1, 1, 'claw')]).add(P('left_shin0', (3, 0, 0), (0, 0, 0.9), [Box(0, -0.5, -0.5, 3, 1, 1, 'claw2')]))),
+    *pair(P('left_leg1', (2.5, 0.5, -0.5), (0, -0.2, 0.6), [Box(0, -0.5, -0.5, 3, 1, 1, 'claw')]).add(P('left_shin1', (3, 0, 0), (0, 0, 0.9), [Box(0, -0.5, -0.5, 3, 1, 1, 'claw2')]))))
+hlegs = {}
+for i, (sd, ph) in enumerate((('left', 0), ('right', 0.5))):
+    for j in range(2):
+        sg = 1 if sd == 'left' else -1
+        hlegs[(f'{sd}_leg{j}', 'ry')] = shift([(0, 20 * sg), (0.5, -20 * sg)], ph + j * 0.5)
+        hlegs[(f'{sd}_leg{j}', 'rz')] = shift([(0, 0), (0.5, 0), (0.75, -22 * sg)], ph + j * 0.5)
+hlegs.update(T(shell_rz=even(4, -4), shell_rx=even(0, 3, 0, 3), body_ry=even(5, -5)))
+M.append(Model('TidewrackHermitModel', 'tidewrack_hermit', {'shell': ('shell', C('#d8b8a8'), C('#8a6a5a')), 'shell2': ('shell', C('#c89c88'), C('#7a5a4a')),
+    'nacre': ('shell', C('#f2e6f8'), C('#b8a8d0')), 'barnacle': ('bone', C('#cfd4d0'), C('#7a8480')), 'skin': ('skin', C('#d8784a'), C('#8a3a1a')),
+    'claw': ('claw', C('#e0683a'), C('#7a2a10')), 'claw2': ('claw', C('#f0c8a0'), C('#a07850')), 'eye': ('eye', C('#e8d040'), C('#1a1008'))}, [hshell, hbody], [
+    Clip('time', 50, sym(T(left_eye_rz=even(0, 8, 0, -5), left_claw_rx=even(0, -4, 0, 3), left_pincer_rx=even(0, -10, 0, -2))), 'idleW'),
+    Clip('dist', 0.25, hlegs, 'moveW'),
+    Clip('fidget', 110, T(left_claw_rx=[(0, 0), (0.2, -30), (0.35, 5), (0.5, -30), (0.65, 5), (1, 0)], left_pincer_rx=[(0, 0), (0.2, -30), (0.3, 0), (0.5, -30), (0.6, 0)]),
+         'idleW', dur=24),
+    hurt_clip('shell', None, 0.6)],
+    doc='The Tidewrack Hermit: a hermit crab in a pearly spiral shell with a nacre lip and a barnacle, one big claw and one small, and eye stalks; it pulls right back into its shell to hide.',
+    extra='''        float h = s.hide;
+        body.z += h * 3.2f; body.y -= h * 0.6f;
+        body.xScale -= h * 0.45f; body.yScale -= h * 0.45f; body.zScale -= h * 0.45f;
+        shell.y += h * 1.2f; shell.xRot += h * 0.2f;
+'''))
+
+# ---- Thunderbird ----------------------------------------------------------------------------------------------
+bird('ThunderbirdModel', 'thunderbird', {'feather': ('feather', C('#3a4258'), C('#1a1e2c')), 'feather2': ('feather', C('#4e5872'), C('#20263a')),
+     'belly': ('feather', C('#b8c4d8'), C('#68748c')), 'beak': ('shell', C('#f2c94c'), C('#8a6a1e')), 'beak2': ('shell', C('#d8a83a'), C('#7a5a14')),
+     'eye': ('eye', C('#9fe8ff'), C('#0a1420')), 'tail': ('feather', C('#2c3246'), C('#9fe8ff')), 'accent': ('crystal', C('#9fe8ff'), C('#3a7ab0')),
+     'tip': ('feather', C('#c8f0ff'), C('#3a6a9a')), 'leg': ('scale', C('#e8b840'), C('#8a6a1e'))}, 2.4, True,
+     'The Thunderbird: a storm-grey raptor nearly six blocks across, with lightning-blue flight feathers and a crystal crest; it screams and throws its wings wide to call lightning, and dives talons-first.')
+M[-1].clips.append(Clip('cast', 24, sym(T(left_wing_rz=[(0, 0), (0.3, -70), (0.75, -70), (1, 0)], left_wing_tip_rz=[(0, 0), (0.3, -20), (0.75, -20), (1, 0)],
+                                         neck_rx=[(0, 0), (0.3, -40), (0.75, -40), (1, 0)], jaw_rx=[(0, 0), (0.25, 40), (0.75, 40), (1, 0)],
+                                         left_tail_ry=[(0, 0), (0.3, 25), (0.75, 25), (1, 0)]))))
+
+# ---- Tornado Intercept Vehicle --------------------------------------------------------------------------------
+tiv = P('body', (0, 17, 0), boxes=[Box(-13, -9, -20, 26, 9, 40, 'armor'), Box(-12, -12, -20, 24, 3, 12, 'hood'), Box(-11, -8, -21, 22, 6, 1, 'grille'),
+                                  Box(-12.5, -9.5, 10, 25, 1, 10, 'armor2'), Box(-13.5, -4, -19, 1, 4, 38, 'metal'), Box(12.5, -4, -19, 1, 4, 38, 'metal'),
+                                  Box(-10, -7, -21.4, 3, 2, 1, 'light'), Box(7, -7, -21.4, 3, 2, 1, 'light'),
+                                  Box(-11, -7, 20.2, 3, 2, 1, 'tail_light'), Box(8, -7, 20.2, 3, 2, 1, 'tail_light')])
+tiv.add(P('plow', (0, -2, -21), (0.5, 0, 0), [Box(-14, -4, -3, 28, 5, 3, 'metal')]))
+for i, (x, z) in enumerate(((-12, -8), (11, -8), (-12, 9), (11, 9), (-12, 0.5), (11, 0.5))):
+    tiv.add(P(f'pillar{i}', (x + 0.5, -9, z), boxes=[Box(-1, -14, -1, 2, 14, 2, 'armor2')]))
+tiv.add(P('roof', (0, -23, 0.5), boxes=[Box(-13, -2, -10, 26, 2, 21, 'armor'), Box(-11, -3, -6, 22, 1, 14, 'armor2'),
+                                         Box(-9, -3.6, -10.4, 18, 1, 2, 'beacon')]).add(
+    P('mast', (0, -3, 7), boxes=[Box(-0.5, -9, -0.5, 1, 9, 1, 'metal')]).add(
+        P('anemometer', (0, -9, 0), boxes=[Box(-0.5, -1, -0.5, 1, 1, 1, 'metal')] + [Box(-0.5 + dx * 3, -1.5, -0.5 + dz * 3, 1, 2, 1, 'cup')
+                                                                                       for dx, dz in ((1, 0), (-0.5, 0.86), (-0.5, -0.86))]),
+        P('vane', (0, -6, 0), boxes=[Box(-0.5, -0.5, -3, 1, 1, 6, 'metal'), Box(-0.5, -1.5, 2, 1, 3, 2, 'hood')])),
+    P('dome', (-7, -3, 3), boxes=[Box(-2.5, -3, -2.5, 5, 3, 5, 'dome'), Box(-1.5, -4, -1.5, 3, 1, 3, 'dome')])))
+for i, (x, z) in enumerate(((-6.5, -11), (6.5, -11))):
+    tiv.add(P(f'slat{i}', (x, -15, -8.9), boxes=[Box(-5.5, 0, -0.5, 11, 1, 1, 'armor2')]))
+for side, sx in (('left', 13), ('right', -13)):
+    tiv.add(P(f'{side}_door_bar', (sx * 0.985, -15, 1), boxes=[Box(-0.5, 0, -8, 1, 1, 16, 'armor2')]))
+wheels = []
+for nm, x, z in (('wheel_fl', 12.5, -12), ('wheel_fr', -12.5, -12), ('wheel_bl', 12.5, 12), ('wheel_br', -12.5, 12)):
+    wheels.append(P(nm, (x, 19.5, z), boxes=[Box(-2, -4.5, -4.5, 4, 9, 9, 'tire'), Box(-2.5 if x > 0 else -2.5, -2, -2, 5, 4, 4, 'hub')]))
+anchors = [P(f'anchor{i}', (x, 15, z), boxes=[Box(-1, 0, -1, 2, 6, 2, 'metal'), Box(-1.5, 5, -1.5, 3, 1, 3, 'metal')]) for i, (x, z) in
+           enumerate(((10, -17), (-10, -17), (10, 17), (-10, 17)))]
+M.append(Model('InterceptVehicleModel', 'intercept_vehicle', {'armor': ('decal', C('#4a5058'), C('#e07a2a')), 'armor2': ('metal', C('#3a3f46'), C('#20242a')),
+    'hood': ('decal', C('#e07a2a'), C('#f2f2f2')), 'grille': ('grille', C('#2a2e34'), C('#101214')), 'metal': ('metal', C('#8a929a'), C('#3a4048')),
+    'light': ('glow', C('#fffbe0'), C('#e0c060')), 'tail_light': ('glow', C('#ff6a5a'), C('#a01a10')), 'beacon': ('glow', C('#ffb84a'), C('#c06010')),
+    'cup': ('shell', C('#d8dde2'), C('#6a7078')), 'dome': ('shell', C('#e8ecf0'), C('#9aa4ae')), 'tire': ('tread', C('#2a2a2c'), C('#101010')),
+    'hub': ('metal', C('#b0b8c0'), C('#505860'))}, [tiv, *wheels, *anchors], [
+    Clip('time', 30, T(body_py=[(0, 0), (0.5, 0.15)]), 'moveW'),
+    hurt_clip('body', None, 0.3)],
+    doc='The Tornado Intercept Vehicle: an armoured chase truck with a storm-orange hood, a plow, slit-armoured windows, a roof beacon bar, a radar dome and an instrument mast whose anemometer spins in the wind; four hydraulic anchors drop when it is parked.',
+    extra='''        float roll = s.walkAnimationPos * 1.1f;
+        wheelFl.xRot = roll; wheelFr.xRot = roll; wheelBl.xRot = roll; wheelBr.xRot = roll;
+        wheelFl.yRot = Mth.clamp(-turn * 0.08f, -0.5f, 0.5f); wheelFr.yRot = wheelFl.yRot;
+        anemometer.yRot = t * (0.35f + s.speed * 3f);
+        vane.yRot = Mth.sin(t * 0.02f) * 0.3f;
+        body.zRot += Mth.clamp(turn * 0.01f, -0.06f, 0.06f);
+        for (ModelPart a : new ModelPart[] {anchor0, anchor1, anchor2, anchor3}) { a.visible = s.hide > 0.02f; a.y += s.hide * 4f; }
+'''))
+
+# ---- Weather Balloon ------------------------------------------------------------------------------------------
+bal = P('balloon', (0, -6, 0), boxes=[Box(-6, -6, -6, 12, 12, 12, 'latex'), Box(-7, -4, -4, 14, 8, 8, 'latex'), Box(-4, -4, -7, 8, 8, 14, 'latex'),
+                                       Box(-4, -7, -4, 8, 14, 8, 'latex'), Box(-2, 6.5, -2, 4, 3, 4, 'latex2'), Box(-1, 9, -1, 2, 2, 2, 'latex2')])
+string = P('string', (0, 11, 0), boxes=[Box(-0.5, 0, -0.5, 1, 8, 1, 'cord')]).add(
+    P('string2', (0, 8, 0), boxes=[Box(-0.5, 0, -0.5, 1, 7, 1, 'cord')]).add(
+        P('sonde', (0, 7, 0), boxes=[Box(-1.5, 0, -1, 3, 4, 2, 'sonde'), Box(-0.5, 4, -0.5, 1, 3, 1, 'cord'), Box(-1.2, 1, -1.3, 2, 1, 1, 'light')])))
+bal.add(string)
+M.append(Model('WeatherBalloonModel', 'weather_balloon', {'latex': ('skin', C('#f4f2ee'), C('#d8d4cc')), 'latex2': ('skin', C('#e0dcd4'), C('#a8a49c')),
+    'cord': ('dark', C('#c8c0a8')), 'sonde': ('decal', C('#f2f2f2'), C('#e04a3a')), 'light': ('glow', C('#ff5a4a'), C('#a01a10'))}, [bal], [
+    Clip('time', 50, T(balloon_rz=even(4, -4), balloon_rx=shift(even(3, -3), 0.25), string_rz=shift(even(-6, 6), 0.1), string2_rz=shift(even(-8, 8), 0.2),
+                       sonde_rz=shift(even(-10, 10), 0.3), sonde_ry=even(0, 20, 0, -20)), '1f')],
+    doc='The Weather Balloon: a latex balloon that swells as it climbs, trailing a radiosonde with a blinking light on a swaying cord.',
+    grounded=False, extra='        float g = Math.min(1f, s.ageInTicks / 600f) * 0.7f;\n        balloon.xScale += g; balloon.yScale += g; balloon.zScale += g;\n'))
 
 MOB_TEXTURES = {m.texture for m in M}
 

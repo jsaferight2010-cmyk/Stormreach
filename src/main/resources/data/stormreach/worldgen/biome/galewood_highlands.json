@@ -22,6 +22,15 @@
                 "min_inclusive": 1
               },
               "weight": 6
+            },
+            {
+              "type": "stormreach:gale_sprite",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 8
             }
           ],
           "monster": [

@@ -1,0 +1,29 @@
+{
+  "parent": "stormreach:probe_hit",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.probe_violent.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.probe_violent.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_probe"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

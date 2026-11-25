@@ -1,0 +1,29 @@
+{
+  "parent": "stormreach:chaser_first",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.chaser_veteran.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.chaser_veteran.description"
+    },
+    "icon": {
+      "id": "stormreach:chasers_logbook"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 150
+  }
+}

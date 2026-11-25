@@ -57,7 +57,7 @@ Like a real survey, a powerful tornado that only crossed empty fields can come o
 
 ### What it looks like (morphology)
 
-A tornado's shape is a separate thing from its strength. The guide tables (section 12) list how often each shape appears at each rating.
+A tornado's shape is a separate thing from its strength. The guide tables (section 14) list how often each shape appears at each rating.
 
 - **Rope:** a thin, twisting tube. This is often how a tornado looks at the end of its life.
 - **Needle:** a thin, straight, tapering funnel.
@@ -266,11 +266,78 @@ Gilded Stormfruit is also needed for the Aurorite Backpack upgrade and the Hollo
 
 ---
 
-## 7. The Stranger *(spoilers)*
+## 7. Stormwild: new creatures
+
+**On the coast** (Stormreach Coast, Squallwind Bluffs, Brinewater Marsh, Static Fields):
+
+- **Sparkskink:** a small lizard that soaks up storm charge.
+  - Out in the rain, or if lightning strikes it, it **charges**: its crest glows and it crackles with sparks.
+  - While charged it sheds a **Charged Scale** every few minutes.
+  - Breed with Glow Berries.
+- **Tidewrack Hermit:** a hermit crab in a pearly spiral shell.
+  - Walk up to one and it pulls into its shell, taking far less damage. Sneak, or hold Kelp, and it stays out.
+  - Drops **Pearlescent Shells**. Breed with Kelp.
+- **Shock Eel:** lives in coastal and marsh water and leaves you alone, unless it's thundering and you're in its water, or you hit it.
+  - Its bite shocks you (Static Charge).
+  - Drops **Voltaic Eel**: cook it for a filling meal that gives Haste.
+
+**In the Tempest Realm:**
+
+- **Cloud Whale** (Cloudsea Expanse): a gentle giant that drifts high above the ground, singing, with a little rain always falling from its belly.
+  - Every five to ten minutes it leaves a lump of **Cloud Ambergris**.
+- **Storm Jelly** (Cloudsea Expanse, Aurora Spires): a glowing jellyfish that swims through the air. Touching one stings (Static Charge). Drops **Glowgel**.
+- **Gale Sprite** (Galewood Highlands, Aurora Spires, Elderstorm Grove): a tiny wind spirit.
+  - Give it **Thistle Down** and it gives you a **Gale Essence**, then keeps you company for three minutes.
+  - While it's with you, it catches you on the wind when you fall.
+
+**In thunderstorms:**
+
+- **Thunderbird:** a huge storm raptor that sometimes arrives over a player out under a thunderstorm.
+  - It circles high, dives to strike with its talons, and calls lightning down on you.
+  - It has 120 health and a boss bar, and leaves when the storm passes.
+  - Drops **Thunderbird Plumes** and Charged Scales.
+
+**What they give you:**
+
+| Item | Made from | What it does |
+|---|---|---|
+| Stormkite | 3 Thunderbird Plumes, 2 string, a Charged Scale, a stick | Hold it while falling to glide the way you're looking. No fall damage while gliding. |
+| Tide Conch | 3 Pearlescent Shells, a gold ingot, a prismarine shard | Blow it: Water Breathing (60 s) and Dolphin's Grace (30 s) for everyone within 8 blocks, and Shock Eels nearby calm down. 1-minute cooldown. |
+| Bottled Gale | Gale Essence + glass bottle | Drink: Jump Boost III and Slow Falling (45 s). |
+| Skylight Lantern | Cloud Ambergris, 2 Glowgel, 2 iron nuggets (makes 2) | The brightest lantern (light 15). |
+| Glowgel Block | 9 Glowgel | Bouncy like slime, and it glows. |
+| Nacre Block / Nacre Bricks | 4 Pearlescent Shells / 4 Nacre Blocks | Iridescent mother-of-pearl building blocks. |
+
+---
+
+## 8. Storm chasing
+
+- **Tornado Intercept Vehicle (TIV):** an armoured chase truck. Craft it from iron, glass, an Anemometer and coal blocks, then right-click the ground to set it down.
+  - **To drive:** right-click to get in, W/S for throttle and brake, A/D to steer, sneak to get out.
+  - **To pick it up:** sneak + right-click from outside.
+  - **Dashboard:** the action bar tracks the nearest tornado: its rating, distance and bearing, which way and how fast it's moving, its peak wind, and the wind where you are.
+  - **Anchors:** stop for two seconds and its hydraulic anchors drop. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you.
+- **Weather Balloon:** use it to launch a radiosonde. It climbs with the wind, bursts at the storm tops, and radios back a **sounding**:
+  - temperature and dew point
+  - cloud base and freezing level
+  - instability (CAPE) and wind shear
+  - the severe-weather risk
+- **Rain Gauge:** fills with rain (faster in thunderstorms) and slowly dries out.
+  - Right-click to read it in millimetres. Sneak + right-click to empty it.
+  - A comparator reads its level.
+- **Tornado Probe:** a weighted instrument barrel that no tornado can move. Put it in a tornado's path.
+  - When the tornado passes over, the probe records the peak wind and its light turns red.
+  - Right-click to read it. A comparator reads its peak wind too.
+- **Storm Chaser's Logbook:** carry one and every tornado you see (with a clear line of sight, within 600 blocks) is logged: how many, the strongest, and the closest you've been. Your TIV intercepts, probe readings and balloon launches are logged too. Right-click to read it.
+- New achievements: Chaser, Too Close for Comfort, Violent, Veteran Chaser, Intercept, Data in the Core, Turtle in the Vortex and Upper Air.
+
+---
+
+## 9. The Stranger *(spoilers)*
 
 You are not alone.
 
-- After a while you may notice **someone standing at the edge of your vision**, 28–48 blocks away. Look straight at it, or walk toward it, and it's gone.
+- After a while you may notice **someone standing at the edge of your vision**, 28–48 blocks away. It looks like you: your own skin, drained and storm-worn, with hollow eyes. Look straight at it, or walk toward it, and it's gone.
 - It turns up more often in forests, in rain, at night and in the dark. It never attacks.
 - **Signs** that something is following you:
   - footsteps behind you
@@ -293,7 +360,7 @@ Craft all five pages with a book and a Hollow Remnant to rebind the **Weathered 
 
 ---
 
-## 8. The Hollow Shrine *(spoilers)*
+## 10. The Hollow Shrine *(spoilers)*
 
 **Finding it:**
 
@@ -327,7 +394,7 @@ Lay the **Weathered Journal** on the **Hollow Altar**.
 
 ---
 
-## 9. Cyrrus, the Hollow Storm *(spoilers)*
+## 11. Cyrrus, the Hollow Storm *(spoilers)*
 
 ### The intro
 
@@ -379,7 +446,7 @@ He has three last lines, and the storm clears.
 
 ---
 
-## 10. Achievements
+## 12. Achievements
 
 5.0 adds **49 achievements**, with three new tabs and new branches on the main tab.
 
@@ -399,7 +466,7 @@ The full reward list is in the tables below.
 
 ---
 
-## 11. Settings
+## 13. Settings
 
 **Mod Menu** (Stormreach → Configure) now holds **performance settings only**:
 
@@ -424,12 +491,13 @@ Gameplay options are still available for server owners in `config/stormreach.pro
 - `landspouts`, `downbursts`
 - `shadowAppearanceRate`, `shadowSigns`
 - `labyrinthGeneration`
+- `wildlifeSpawning` (the 5.2 creatures), `thunderbirdChance` (percent chance per minute, per player out in a thunderstorm; default 6)
 - `bossDifficulty`, `guardianDifficulty`
 - every setting from earlier versions
 
 ---
 
-## 12. Rarity and drop-rate tables
+## 14. Rarity and drop-rate tables
 
 All numbers below are calculated directly from the mod's loot tables, worldgen files and code (by `tools/guide_tables.py`), so they match the game.
 
@@ -437,7 +505,7 @@ All numbers below are calculated directly from the mod's loot tables, worldgen f
 
 ---
 
-## 13. Credits and licences
+## 15. Credits and licences
 
 - **Cyrrus's voice:**
   - spoken by the **Piper** text-to-speech engine with the "Ryan (high)" voice model

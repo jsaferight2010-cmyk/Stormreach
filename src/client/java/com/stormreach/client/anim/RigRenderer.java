@@ -33,7 +33,7 @@ public abstract class RigRenderer<T extends Mob, M extends EntityModel<? super R
         s.hurtAge = e.hurtTime > 0 ? Math.max(0, e.hurtDuration - e.hurtTime) + partial : 1e6f;
         double dx = e.getX() - e.xo, dz = e.getZ() - e.zo;
         float now = e.tickCount + partial;
-        float[] m = memory.computeIfAbsent(e, k -> new float[] {now, e.onGround() ? 0 : 1, 0, 0});
+        float[] m = memory.computeIfAbsent(e, k -> new float[] {now, e.onGround() ? 0 : 1, 0, 0, 0, 0});
         float dt = Mth.clamp(now - m[0], 0f, 5f);
         m[0] = now;
         float k = 1f - (float) Math.exp(-0.25f * dt);
@@ -45,5 +45,14 @@ public abstract class RigRenderer<T extends Mob, M extends EntityModel<? super R
         s.turn = m[3];
         s.vy = (float) (e.getY() - e.yo);
         s.seed = ((e.getId() * 0.618034f) % 1f + 1f) % 1f;
+        m[5] = dt;
+    }
+
+    /** Eases a per-entity value toward a target (call from extractRenderState, after super). */
+    protected float smooth(T e, float target, float rate) {
+        float[] m = memory.get(e);
+        if (m == null) return target;
+        m[4] += (target - m[4]) * (1f - (float) Math.exp(-rate * m[5]));
+        return m[4];
     }
 }

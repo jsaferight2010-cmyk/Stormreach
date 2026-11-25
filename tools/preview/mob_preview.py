@@ -66,8 +66,10 @@ def fidget(t, seed, period, dur):
 def evaluate(model, st):
     """st: dict with t, walk_pos, walk_speed, air, swim, attack_age, attack_kind, hurt_age, seed, yaw, pitch."""
     pose = {}
+    names = {p.name for p in mm.all_parts(model.parts)}
 
     def bump(part, ch, val):
+        if part.startswith('right_') and part not in names: return
         d = pose.setdefault(part, {'r': np.zeros(3), 'p': np.zeros(3), 's': np.zeros(3)})
         if ch[0] == 'r': d['r']['xyz'.index(ch[1])] += math.radians(val)
         elif ch[0] == 'p': d['p']['xyz'.index(ch[1])] += val

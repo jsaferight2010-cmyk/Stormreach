@@ -617,4 +617,126 @@ public class StormreachGameTests {
                 && com.stormreach.registry.ModSoundTypes.familyFor("AZALEA_LEAVES") == com.stormreach.registry.ModSoundTypes.PLANT, "sound families mis-sorted");
         h.succeed();
     }
+
+    // ------------------------------------------------------------------------------------------ 5.2 Stormwild
+    @GameTest
+    public void stormwildContentLoaded(GameTestHelper h) {
+        MinecraftServer server = h.getLevel().getServer();
+        for (String a : new String[]{"cloud_ambergris", "shock_eel", "gale_friend", "stormkite_glide", "thunderbird", "weather_balloon", "chaser_first",
+                "chaser_veteran", "tiv_intercept", "probe_hit", "probe_violent"})
+            Check.isTrue(h, server.getAdvancements().get(Stormreach.id(a)) != null, "advancement missing: " + a);
+        for (String t : new String[]{"entities/cloud_whale", "entities/shock_eel", "entities/thunderbird", "entities/intercept_vehicle", "blocks/tornado_probe",
+                "blocks/rain_gauge", "blocks/glowgel_block"}) {
+            LootTable table = server.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Stormreach.id(t)));
+            Check.isTrue(h, table != LootTable.EMPTY, "loot table missing or failed to parse: " + t);
+        }
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 80)
+    public void stormwildCreaturesSpawnAndLive(GameTestHelper h) {
+        openSky(h, 0, 0, 8, 8);
+        java.util.List<net.minecraft.world.entity.Mob> mobs = new java.util.ArrayList<>();
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.SPARKSKINK, new BlockPos(1, 2, 1)));
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.TIDEWRACK_HERMIT, new BlockPos(3, 2, 1)));
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.STORM_JELLY, new BlockPos(5, 4, 1)));
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.GALE_SPRITE, new BlockPos(1, 4, 5)));
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.SHOCK_EEL, new BlockPos(3, 2, 5)));
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.CLOUD_WHALE, new BlockPos(4, 8, 4)));
+        mobs.add(h.spawn(com.stormreach.wild.WildRegistry.THUNDERBIRD, new BlockPos(4, 14, 4)));
+        h.runAfterDelay(60, () -> {
+            for (var m : mobs) Check.isTrue(h, m.isAlive() || m.isRemoved() && !m.isDeadOrDying(), m.getType() + " died or vanished while ticking");
+            for (var m : mobs) m.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 20)
+    public void sparkskinksChargeWhenStruck(GameTestHelper h) {
+        var skink = h.spawn(com.stormreach.wild.WildRegistry.SPARKSKINK, new BlockPos(2, 2, 2));
+        Check.isFalse(h, skink.isCharged(), "a new Sparkskink should start uncharged");
+        var bolt = net.minecraft.world.entity.EntityTypes.LIGHTNING_BOLT.create(h.getLevel(), net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        skink.thunderHit(h.getLevel(), bolt);
+        Check.isTrue(h, skink.isCharged(), "lightning should charge a Sparkskink");
+        Check.isTrue(h, skink.isAlive(), "lightning should not kill a Sparkskink");
+        skink.discard();
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 40)
+    public void hermitsHideFromAPlayer(GameTestHelper h) {
+        var hermit = h.spawn(com.stormreach.wild.WildRegistry.TIDEWRACK_HERMIT, new BlockPos(2, 2, 2));
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(4, 2, 2)));
+        p.snapTo(at.x, at.y, at.z, 0, 0);
+        h.runAfterDelay(6, () -> {
+            Check.isTrue(h, hermit.isHiding(), "a Tidewrack Hermit should pull into its shell with a player beside it");
+            hermit.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 60)
+    public void weatherBalloonsRise(GameTestHelper h) {
+        openSky(h, 0, 0, 4, 4);
+        var b = h.spawn(com.stormreach.chase.ChaseRegistry.WEATHER_BALLOON_ENTITY, new BlockPos(2, 2, 2));
+        double y0 = b.getY();
+        h.runAfterDelay(20, () -> {
+            Check.isTrue(h, b.getY() > y0 + 3, "a weather balloon should climb about 5 blocks a second, it rose " + (b.getY() - y0));
+            b.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 20)
+    public void stormkiteSlowsAFall(GameTestHelper h) {
+        openSky(h, 0, 0, 4, 4);
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(2, 12, 2)));
+        p.snapTo(at.x, at.y, at.z, 0, 0);
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new ItemStack(com.stormreach.wild.WildRegistry.STORMKITE));
+        p.setOnGround(false);
+        p.setDeltaMovement(0, -0.8, 0);
+        p.fallDistance = 10;
+        com.stormreach.wild.Stormkite.tick(p);
+        Check.isTrue(h, p.getDeltaMovement().y >= -0.15, "holding a Stormkite should slow a fall to a glide, vy=" + p.getDeltaMovement().y);
+        Check.isTrue(h, p.fallDistance < 1, "gliding should cancel fall damage");
+        Check.isTrue(h, Math.hypot(p.getDeltaMovement().x, p.getDeltaMovement().z) > 0.01, "a glide should carry you forward");
+        h.succeed();
+    }
+
+    @GameTest
+    public void rainGaugeDrivesAComparator(GameTestHelper h) {
+        BlockPos pos = new BlockPos(1, 2, 1);
+        h.setBlock(pos, com.stormreach.chase.ChaseRegistry.RAIN_GAUGE.defaultBlockState().setValue(com.stormreach.chase.RainGaugeBlock.LEVEL, 6));
+        var st = h.getBlockState(pos);
+        Check.isTrue(h, st.getAnalogOutputSignal(h.getLevel(), h.absolutePos(pos), net.minecraft.core.Direction.NORTH) == 12,
+                "a rain gauge at level 6 should give a comparator signal of 12");
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 80)
+    public void anAnchoredInterceptVehicleHoldsInATornadoAndTheProbeRecordsIt(GameTestHelper h) {
+        openSky(h, -4, -4, 14, 14);
+        for (int x = -2; x < 13; x++) for (int z = -2; z < 13; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.BEDROCK);
+        var v = h.spawn(com.stormreach.chase.ChaseRegistry.INTERCEPT_VEHICLE_ENTITY, new BlockPos(9, 2, 4));
+        v.setAnchored(true);
+        Vec3 start = v.position();
+        h.setBlock(new BlockPos(4, 2, 9), com.stormreach.chase.ChaseRegistry.TORNADO_PROBE);
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(4, 2, 4))),
+                stationary(TornadoFormation.SUPERCELL, EFScale.EF5, 240, 10));
+        Check.isTrue(h, t != null, "tornado did not spawn");
+        t.simulateWithoutPlayers();
+        t.skipTo(0.4);
+        h.runAfterDelay(50, () -> {
+            Check.isTrue(h, v.isAlive() && v.position().distanceTo(start) < 0.5, "an anchored intercept vehicle moved " + v.position().distanceTo(start) + " blocks");
+            var be = h.getLevel().getBlockEntity(h.absolutePos(new BlockPos(4, 2, 9)));
+            Check.isTrue(h, be instanceof com.stormreach.chase.TornadoProbeBlockEntity, "the tornado probe was destroyed");
+            if (be instanceof com.stormreach.chase.TornadoProbeBlockEntity probe)
+                Check.isTrue(h, probe.peakMph() > 65, "the probe should have recorded tornado-force wind, got " + probe.peakMph());
+            t.discard();
+            v.discard();
+            h.succeed();
+        });
+    }
 }

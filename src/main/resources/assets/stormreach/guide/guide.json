@@ -101,7 +101,7 @@
     },
     {
      "s": "p",
-     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 12) list how often each shape appears at each rating."
+     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 14) list how often each shape appears at each rating."
     },
     {
      "s": "bullet",
@@ -762,7 +762,251 @@
    ]
   },
   {
-   "title": "7. The Stranger (spoilers)",
+   "title": "7. Stormwild: new creatures",
+   "lines": [
+    {
+     "s": "p",
+     "t": "On the coast (Stormreach Coast, Squallwind Bluffs, Brinewater Marsh, Static Fields):"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Sparkskink: a small lizard that soaks up storm charge."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Out in the rain, or if lightning strikes it, it charges: its crest glows and it crackles with sparks."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "While charged it sheds a Charged Scale every few minutes."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Breed with Glow Berries."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Tidewrack Hermit: a hermit crab in a pearly spiral shell."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Walk up to one and it pulls into its shell, taking far less damage. Sneak, or hold Kelp, and it stays out."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Drops Pearlescent Shells. Breed with Kelp."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Shock Eel: lives in coastal and marsh water and leaves you alone, unless it's thundering and you're in its water, or you hit it."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Its bite shocks you (Static Charge)."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Drops Voltaic Eel: cook it for a filling meal that gives Haste."
+    },
+    {
+     "s": "p",
+     "t": "In the Tempest Realm:"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Cloud Whale (Cloudsea Expanse): a gentle giant that drifts high above the ground, singing, with a little rain always falling from its belly."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Every five to ten minutes it leaves a lump of Cloud Ambergris."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Storm Jelly (Cloudsea Expanse, Aurora Spires): a glowing jellyfish that swims through the air. Touching one stings (Static Charge). Drops Glowgel."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Gale Sprite (Galewood Highlands, Aurora Spires, Elderstorm Grove): a tiny wind spirit."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Give it Thistle Down and it gives you a Gale Essence, then keeps you company for three minutes."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "While it's with you, it catches you on the wind when you fall."
+    },
+    {
+     "s": "p",
+     "t": "In thunderstorms:"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Thunderbird: a huge storm raptor that sometimes arrives over a player out under a thunderstorm."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "It circles high, dives to strike with its talons, and calls lightning down on you."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "It has 120 health and a boss bar, and leaves when the storm passes."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Drops Thunderbird Plumes and Charged Scales."
+    },
+    {
+     "s": "p",
+     "t": "What they give you:"
+    },
+    {
+     "s": "table",
+     "t": "Item  |  Made from  |  What it does"
+    },
+    {
+     "s": "table",
+     "t": "Stormkite  |  3 Thunderbird Plumes, 2 string, a Charged Scale, a stick  |  Hold it while falling to glide the way you're looking. No fall damage while gliding."
+    },
+    {
+     "s": "table",
+     "t": "Tide Conch  |  3 Pearlescent Shells, a gold ingot, a prismarine shard  |  Blow it: Water Breathing (60 s) and Dolphin's Grace (30 s) for everyone within 8 blocks, and Shock Eels nearby calm down. 1-minute cooldown."
+    },
+    {
+     "s": "table",
+     "t": "Bottled Gale  |  Gale Essence + glass bottle  |  Drink: Jump Boost III and Slow Falling (45 s)."
+    },
+    {
+     "s": "table",
+     "t": "Skylight Lantern  |  Cloud Ambergris, 2 Glowgel, 2 iron nuggets (makes 2)  |  The brightest lantern (light 15)."
+    },
+    {
+     "s": "table",
+     "t": "Glowgel Block  |  9 Glowgel  |  Bouncy like slime, and it glows."
+    },
+    {
+     "s": "table",
+     "t": "Nacre Block / Nacre Bricks  |  4 Pearlescent Shells / 4 Nacre Blocks  |  Iridescent mother-of-pearl building blocks."
+    }
+   ]
+  },
+  {
+   "title": "8. Storm chasing",
+   "lines": [
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Tornado Intercept Vehicle (TIV): an armoured chase truck. Craft it from iron, glass, an Anemometer and coal blocks, then right-click the ground to set it down."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "To drive: right-click to get in, W/S for throttle and brake, A/D to steer, sneak to get out."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "To pick it up: sneak + right-click from outside."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Dashboard: the action bar tracks the nearest tornado: its rating, distance and bearing, which way and how fast it's moving, its peak wind, and the wind where you are."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Anchors: stop for two seconds and its hydraulic anchors drop. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Weather Balloon: use it to launch a radiosonde. It climbs with the wind, bursts at the storm tops, and radios back a sounding:"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "temperature and dew point"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "cloud base and freezing level"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "instability (CAPE) and wind shear"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "the severe-weather risk"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Rain Gauge: fills with rain (faster in thunderstorms) and slowly dries out."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Right-click to read it in millimetres. Sneak + right-click to empty it."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "A comparator reads its level."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Tornado Probe: a weighted instrument barrel that no tornado can move. Put it in a tornado's path."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "When the tornado passes over, the probe records the peak wind and its light turns red."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Right-click to read it. A comparator reads its peak wind too."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Storm Chaser's Logbook: carry one and every tornado you see (with a clear line of sight, within 600 blocks) is logged: how many, the strongest, and the closest you've been. Your TIV intercepts, probe readings and balloon launches are logged too. Right-click to read it."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "New achievements: Chaser, Too Close for Comfort, Violent, Veteran Chaser, Intercept, Data in the Core, Turtle in the Vortex and Upper Air."
+    }
+   ]
+  },
+  {
+   "title": "9. The Stranger (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -771,7 +1015,7 @@
     {
      "s": "bullet",
      "d": 0,
-     "t": "After a while you may notice someone standing at the edge of your vision, 28\u201348 blocks away. Look straight at it, or walk toward it, and it's gone."
+     "t": "After a while you may notice someone standing at the edge of your vision, 28\u201348 blocks away. It looks like you: your own skin, drained and storm-worn, with hollow eyes. Look straight at it, or walk toward it, and it's gone."
     },
     {
      "s": "bullet",
@@ -849,7 +1093,7 @@
    ]
   },
   {
-   "title": "8. The Hollow Shrine (spoilers)",
+   "title": "10. The Hollow Shrine (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -937,7 +1181,7 @@
    ]
   },
   {
-   "title": "9. Cyrrus, the Hollow Storm (spoilers)",
+   "title": "11. Cyrrus, the Hollow Storm (spoilers)",
    "lines": [
     {
      "s": "h",
@@ -1075,7 +1319,7 @@
    ]
   },
   {
-   "title": "10. Achievements",
+   "title": "12. Achievements",
    "lines": [
     {
      "s": "p",
@@ -1132,7 +1376,7 @@
    ]
   },
   {
-   "title": "11. Settings",
+   "title": "13. Settings",
    "lines": [
     {
      "s": "p",
@@ -1217,6 +1461,11 @@
     {
      "s": "bullet",
      "d": 0,
+     "t": "wildlifeSpawning (the 5.2 creatures), thunderbirdChance (percent chance per minute, per player out in a thunderstorm; default 6)"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
      "t": "bossDifficulty, guardianDifficulty"
     },
     {
@@ -1227,7 +1476,7 @@
    ]
   },
   {
-   "title": "12. Rarity and drop-rate tables",
+   "title": "14. Rarity and drop-rate tables",
    "lines": [
     {
      "s": "p",
@@ -1251,11 +1500,11 @@
     },
     {
      "s": "table",
-     "t": "Rare (aqua)  |  Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Thunder Key"
+     "t": "Rare (aqua)  |  Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle"
     },
     {
      "s": "table",
-     "t": "Uncommon (yellow)  |  Glimmer Antler, Handheld Storm Radar, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
+     "t": "Uncommon (yellow)  |  Cloud Ambergris, Gale Essence, Glimmer Antler, Handheld Storm Radar, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
     },
     {
      "s": "h",
@@ -1388,6 +1637,50 @@
     {
      "s": "table",
      "t": "Storm Gull  |  Gull Feather  |  0\u20132  |  66.7%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Thunderbird  |  Thunderbird Plume  |  2\u20134  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Thunderbird  |  Charged Scale  |  1\u20133  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Cloud Whale  |  Cloud Ambergris  |  1\u20132  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Cloud Whale  |  Glowgel  |  0\u20132  |  66.7%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Shock Eel  |  Voltaic Eel  |  1  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Shock Eel  |  Charged Scale  |  1  |  20.0%  |  Uncommon"
+    },
+    {
+     "s": "table",
+     "t": "Sparkskink  |  Charged Scale  |  1  |  15.0%  |  Uncommon"
+    },
+    {
+     "s": "table",
+     "t": "Storm Jelly  |  Glowgel  |  1\u20133  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Gale Sprite  |  Gale Essence  |  0\u20131  |  50.0%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Tidewrack Hermit  |  Pearlescent Shell  |  0\u20131  |  50.0%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Tidewrack Hermit  |  Kelp  |  0\u20131  |  50.0%  |  Common"
     },
     {
      "s": "p",
@@ -2152,7 +2445,7 @@
    ]
   },
   {
-   "title": "13. Credits and licences",
+   "title": "15. Credits and licences",
    "lines": [
     {
      "s": "bullet",

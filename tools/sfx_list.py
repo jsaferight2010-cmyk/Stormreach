@@ -65,6 +65,26 @@ SFX = {
     'block.mat.glass.break': ('Glass breaks', [], 16),
     'block.mat.glass.step': ('Footsteps', [], 12),
     'block.mat.glass.place': ('Glass placed', [], 16),
+    # 5.2 Stormwild
+    'creature.whale_song': ('Cloud Whale sings', [], 96),
+    'creature.whale_hurt': ('Cloud Whale groans', [], 48),
+    'creature.whale_death': ('Cloud Whale dies', [], 64),
+    'creature.eel_crackle': ('Shock Eel crackles', [], 16),
+    'creature.eel_zap': ('Shock Eel zaps', [], 16),
+    'creature.eel_hurt': ('Shock Eel hurts', [], 16),
+    'creature.eel_death': ('Shock Eel dies', [], 16),
+    'creature.skink_chirp': ('Sparkskink chirps', [], 16),
+    'creature.jelly_chime': ('Storm Jelly chimes', [], 16),
+    'creature.jelly_hurt': ('Storm Jelly hurts', [], 16),
+    'creature.jelly_death': ('Storm Jelly fades', [], 16),
+    'creature.sprite_trill': ('Gale Sprite trills', [], 16),
+    'creature.hermit_click': ('Hermit crab clicks', [], 12),
+    'creature.hermit_hide': ('Hermit crab hides', [], 12),
+    'creature.thunderbird_cry': ('Thunderbird screams', [], 128),
+    'creature.thunderbird_hurt': ('Thunderbird hurts', [], 48),
+    'creature.thunderbird_death': ('Thunderbird falls', [], 96),
+    'item.kite_flap': ('Kite fabric snaps', [], 16),
+    'item.conch': ('A conch is blown', [], 64),
 }
 
 def java_const(sid):

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:book",
+    "minecraft:feather",
+    "minecraft:ink_sac",
+    "minecraft:compass"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:chasers_logbook"
+  }
+}

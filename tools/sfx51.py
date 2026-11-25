@@ -199,6 +199,77 @@ MAT = {
 }
 MAT_SYNTH = {f'block.mat.{m}.{ev}': fns[i] for m, fns in MAT.items() for i, ev in enumerate(('break', 'step', 'place'))}
 
+# ---------------------------------------------------------------------------------------------- 5.2 Stormwild
+def moan(f_path, sec, vib=3.0, harm=(1.0, 0.45, 0.2)):
+    """A whale-like moan following a pitch path [(t, Hz), ...] with vibrato and a few harmonics."""
+    t = t_(sec)
+    ts, fs = zip(*f_path)
+    f = np.interp(t, np.array(ts) * sec, fs) * (1 + 0.012 * np.sin(2 * np.pi * vib * t))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    out = sum(a * np.sin(ph * (k + 1)) for k, a in enumerate(harm))
+    return out * adsr(len(t), 0.25, 0.3, 0.8, 0.6)
+def whale_song():
+    out = moan([(0, 150), (0.35, 230), (0.6, 205), (1.0, 140)], 3.2)
+    place(out, moan([(0, 320), (0.5, 410), (1.0, 300)], 1.4, 5, (0.4, 0.15)) * 0.5, 1.4)
+    return reverb(lp(out, 2200), 2.6, 0.45, 1800)
+def whale_hurt(): return reverb(moan([(0, 210), (1.0, 120)], 0.9, 6), 1.4, 0.3, 1800)
+def whale_death(): return reverb(moan([(0, 200), (0.4, 150), (1.0, 55)], 3.5, 2), 2.6, 0.45, 1500)
+def crackle(sec, rate):
+    out = np.zeros(int(sec * SR))
+    for _ in range(int(sec * rate)):
+        place(out, hp(noise(0.012), 2500) * expdecay(0.012, 300) * (0.3 + rng.random() * 0.7), rng.random() * sec * 0.95)
+    return out
+def eel_crackle(): return crackle(0.6, 40)
+def eel_zap():
+    t = t_(0.35)
+    buzz = np.sign(np.sin(2 * np.pi * 120 * t)) * np.sin(2 * np.pi * 2400 * t + 3 * np.sin(2 * np.pi * 60 * t))
+    return mix(bp(buzz, 300, 6000) * expdecay(0.35, 8) * 0.6, hp(noise(0.35), 1500) * expdecay(0.35, 18), crackle(0.35, 60))
+def eel_hurt(): return mix(np.sin(glide(900, 560, 0.3)) * adsr(int(0.3 * SR), 0.005, 0.05, 0.7, 0.15) * 0.5, crackle(0.3, 50))
+def eel_death(): t = t_(1.0); return mix(np.sin(glide(700, 180, 1.0)) * np.exp(-t * 2.5) * 0.5, crackle(1.0, 30) * np.linspace(1, 0, len(t)))
+def skink_chirp(): return chirp(3200, 3700, 0.035, 4, 0.03, 3.0)
+def jelly_chime(): return reverb(mix(bell(1568, 1.8, 0.5) * 0.5, np.concatenate([np.zeros(int(0.12 * SR)), bell(2349, 1.6, 0.4)]) * 0.3), 2.0, 0.5)
+def jelly_hurt(): return reverb(mix(bell(1480, 0.6, 1.2) * 0.5, bell(1568, 0.6, 1.2) * 0.5), 1.0, 0.3)
+def jelly_death():
+    out = np.zeros(int(2.2 * SR))
+    for k, f in enumerate((2093, 1568, 1319, 1047, 784)): place(out, bell(f, 1.2, 0.5) * (0.6 - k * 0.08), k * 0.18)
+    return reverb(out, 2.0, 0.45)
+def sprite_trill(): return reverb(chirp(2600, 3400, 0.03, 9, 0.02, 6.0), 0.8, 0.25)
+def hermit_click():
+    out = np.zeros(int(0.3 * SR))
+    for k in range(3): place(out, knock(2000, 7000, 0.035, 90) * (1 - k * 0.2), k * 0.07)
+    return out
+def hermit_hide(): return mix(bp(noise(0.25), 400, 2000) * np.linspace(1, 0, int(0.25 * SR)) * 0.6, knock(300, 1500, 0.15, 30))
+def screech(sec, f0, f1):
+    t = t_(sec)
+    ph = glide(f0, f1, sec, 0.8)
+    tone = np.sin(ph) + 0.5 * np.sin(2 * ph + 0.3) + 0.35 * np.sin(3 * ph) + 0.25 * np.sign(np.sin(ph))
+    rasp = bp(noise(sec), 1500, 6000) * (0.6 + 0.4 * np.sin(2 * np.pi * 45 * t))
+    return (tone * 0.6 + rasp * 0.5) * adsr(len(t), 0.02, 0.15, 0.75, sec * 0.4)
+def thunderbird_cry():
+    out = mix(screech(1.3, 2300, 1500), lp(noise(1.3), 120) * expdecay(1.3, 1.2) * 0.6)
+    return reverb(out, 1.8, 0.35, 4000)
+def thunderbird_hurt(): return reverb(screech(0.45, 2600, 1900), 0.9, 0.25)
+def thunderbird_death():
+    out = mix(screech(2.2, 2100, 600), np.zeros(int(2.2 * SR)))
+    place(out, thunder()[:int(2.0 * SR)] * 0.5, 0.4)
+    return reverb(out, 2.4, 0.4, 3000)
+def kite_flap():
+    t = t_(0.3)
+    return lp(noise(0.3), 1800) * np.abs(np.sin(2 * np.pi * 14 * t)) ** 3 * np.linspace(1, 0.3, len(t))
+def conch():
+    t = t_(2.4)
+    f = 196 * (1 + 0.004 * np.sin(2 * np.pi * 4.5 * t))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    tone = sum(a * np.sin(ph * k) for k, a in ((1, 1.0), (2, 0.55), (3, 0.3), (4, 0.18), (5, 0.1)))
+    breath = bp(noise(2.4), 300, 1800) * 0.12
+    return reverb((tone * 0.5 + breath) * adsr(len(t), 0.35, 0.2, 0.85, 0.7), 2.2, 0.4, 2500)
+NEW52 = {'creature.whale_song': whale_song, 'creature.whale_hurt': whale_hurt, 'creature.whale_death': whale_death,
+         'creature.eel_crackle': eel_crackle, 'creature.eel_zap': eel_zap, 'creature.eel_hurt': eel_hurt, 'creature.eel_death': eel_death,
+         'creature.skink_chirp': skink_chirp, 'creature.jelly_chime': jelly_chime, 'creature.jelly_hurt': jelly_hurt, 'creature.jelly_death': jelly_death,
+         'creature.sprite_trill': sprite_trill, 'creature.hermit_click': hermit_click, 'creature.hermit_hide': hermit_hide,
+         'creature.thunderbird_cry': thunderbird_cry, 'creature.thunderbird_hurt': thunderbird_hurt, 'creature.thunderbird_death': thunderbird_death,
+         'item.kite_flap': kite_flap, 'item.conch': conch}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -209,7 +280,7 @@ SYNTH = {
     'creature.wind_hurt': wind_hurt, 'creature.wind_death': wind_death, 'creature.titan_ambient': titan_ambient, 'creature.titan_roar': titan_roar,
     'creature.titan_hurt': titan_hurt, 'creature.titan_death': titan_death, 'creature.titan_charge': titan_charge, 'creature.titan_blast': titan_blast,
     'weather.hail': hail, 'weather.puddle_splash': splash, 'block.radar_ping': radar_ping,
-    **MAT_SYNTH,
+    **MAT_SYNTH, **NEW52,
 }
 
 # ---------------------------------------------------------------------------------------------- the Labyrinth score

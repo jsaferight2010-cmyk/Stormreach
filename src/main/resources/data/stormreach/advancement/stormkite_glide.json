@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:charged_scale",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormkite_glide.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormkite_glide.description"
+    },
+    "icon": {
+      "id": "stormreach:stormkite"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

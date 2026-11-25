@@ -35,6 +35,16 @@ public final class StormreachClient implements ClientModInitializer {
         EntityRendererRegistry.register(com.stormreach.story.StoryRegistry.CYRRUS, com.stormreach.client.story.StoryRenderers.CyrrusRenderer::new);
         EntityRendererRegistry.register(com.stormreach.forest.ForestRegistry.GLIMMERSTAG, com.stormreach.client.forest.ForestModels.StagRenderer::new);
         EntityRendererRegistry.register(com.stormreach.forest.ForestRegistry.THISTLEHOP, com.stormreach.client.forest.ForestModels.HopRenderer::new);
+        // 5.2 Stormwild
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.CLOUD_WHALE, com.stormreach.client.wild.WildRenderers.CloudWhaleRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.SHOCK_EEL, com.stormreach.client.wild.WildRenderers.ShockEelRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.SPARKSKINK, com.stormreach.client.wild.WildRenderers.SparkskinkRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.STORM_JELLY, com.stormreach.client.wild.WildRenderers.StormJellyRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.GALE_SPRITE, com.stormreach.client.wild.WildRenderers.GaleSpriteRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.TIDEWRACK_HERMIT, com.stormreach.client.wild.WildRenderers.HermitRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.wild.WildRegistry.THUNDERBIRD, com.stormreach.client.wild.WildRenderers.ThunderbirdRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.chase.ChaseRegistry.INTERCEPT_VEHICLE_ENTITY, com.stormreach.client.wild.WildRenderers.VehicleRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.chase.ChaseRegistry.WEATHER_BALLOON_ENTITY, com.stormreach.client.wild.WildRenderers.BalloonRenderer::new);
         com.stormreach.client.backpack.BackpackClient.init();
         com.stormreach.client.labyrinth.LockerClient.init();
         com.stormreach.client.tornado.TornadoSeeThrough.init();

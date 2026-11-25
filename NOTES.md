@@ -359,3 +359,25 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
     - The glow texture is drawn by a `RenderTypes.eyes` layer, pulsing.
     - It was checked offline on the default skins (Steve, Alex, Efe) at all three stages.
   - `CyrrusModel` extends PlayerModel and layers poses by form over the walk and attack swings.
+
+## 5.2.0 Stormwild (the user asked for a lot more content, then more meteorology and storm chasing)
+- `wild/` (WildRegistry):
+  - Mobs: CloudWhale, ShockEel (WaterAnimal), Sparkskink (CHARGED), StormJelly, GaleSprite (friend/gift), TidewrackHermit (HIDING), Thunderbird.
+  - Items: TideConchItem and Stormkite, which glides from `LivingEntityMixin` tick on both sides.
+  - Thunderbirds arrive from `ServerTickEvents.END_SERVER_TICK` in thunderstorms, controlled by `thunderbirdChance`.
+- `chase/` (ChaseRegistry):
+  - InterceptVehicle: a PathfinderMob vehicle with its own travel(). Its dashboard uses sendOverlayMessage. It anchors after 40 still ticks, and TornadoEntity.pushEntities skips anchored vehicles.
+  - WeatherBalloon: a NoAi mob that rises and sends a sounding.
+  - RainGaugeBlock: random ticks fill it from `Rainfall.intensity`.
+  - TornadoProbeBlock with a block entity that records the peak wind from `windMphAt`. It has explosion resistance 1200, so BlockWind ignores it.
+  - ChaserLog: CustomData on the logbook. The server tick checks every second, with a ClipContext line-of-sight check.
+- Client:
+  - `client/wild/WildRenderers`.
+  - RigState gains `charged`, `anchored` and `hide`, plus a `RigRenderer.smooth()` helper.
+  - mobmodels supports `translucent` models (the jelly and sprite), with new materials: spots, tread, grille, decal, jelly.
+- Tools:
+  - `textures7.py`: 32x item icons shaded on a ramp with outlines (remaster64 takes them to 64x), eggs, and 64x blocks. The lantern texture is recoloured from vanilla's.
+  - `gendata9.py`: models, blockstates, lang, loot, recipes, spawns and advancements.
+  - sfx51 `NEW52`: 19 synthesized sounds.
+- Tests: 8 new GameTests: content loads, creatures live, skink charging, hermit hiding, balloon rising, kite gliding, gauge comparator, anchored TIV plus probe in an EF5.
+- Not run in a client. The vehicle's driving feel, the dashboard, the models and the textures all need in-game checks.

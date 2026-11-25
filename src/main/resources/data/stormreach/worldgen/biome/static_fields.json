@@ -22,6 +22,15 @@
                 "min_inclusive": 1
               },
               "weight": 4
+            },
+            {
+              "type": "stormreach:sparkskink",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 10
             }
           ],
           "monster": [

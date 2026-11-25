@@ -20,7 +20,7 @@ public final class Outflow {
         if (r > front + 3) return 0;                              // the air ahead of the front is still calm
         double profile = r < front * 0.35 ? r / (front * 0.35) * 0.6 : 0.6 + 0.4 * Math.min(1, (r - front * 0.35) / (front * 0.55));
         if (r > front) profile *= Math.max(0, 1 - (r - front) / 3);
-        double life = ticks < 20 ? ticks / 20.0 : ticks > duration - 40 ? Math.max(0, (duration - ticks) / 40.0) : 1;
+        double life = ticks < 6 ? ticks / 6.0 : ticks > duration - 40 ? Math.max(0, (duration - ticks) / 40.0) : 1;
         double spread = Math.max(0.35, 1 - front / (maxRadius * 2.2)); // weakens as it spreads out
         return peakMph * profile * life * spread;
     }

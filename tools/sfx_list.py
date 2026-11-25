@@ -101,6 +101,9 @@ SFX = {
     'creature.petrel_call': ('Storm Petrel chitters', [], 16),
     'creature.dust_devil_whirl': ('Dust devil whirls', [], 16),
     'block.wind_chime': ('Wind chimes ring', [], 16),
+    # 5.5 Live Wire
+    'block.capacitor_charge': ('Capacitor charges', [], 32),
+    'block.machine_hum': ('Machine hums', [], 12),
 }
 
 def java_const(sid):

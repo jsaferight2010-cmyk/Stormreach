@@ -1,5 +1,40 @@
 # Stormreach patch notes
 
+## 5.5.0 (Live Wire)
+Storm electricity and captured water, with JEI support for everything.
+
+### Power (Storm Units, SU)
+- **Generators:**
+  - **Wind Turbine:** the 5.3 turbine now also makes power, up to 30 SU a tick in a gale.
+  - **Water Wheel:** a paddle wheel that turns in moving water, up to 16 SU a tick. Moving Stormwater doubles it.
+- **Copper Cable** joins generators, capacitors and machines into a network on all six sides. Power goes to machines first, then to capacitors.
+- **Storm Capacitor:** stores 100,000 SU. A lightning strike within 24 blocks fills half of it at once, and its glass jars glow as it fills.
+- **Machines:**
+  - **Arc Lamp:** light level 15 while powered.
+  - **Shock Plate:** shocks hostile mobs that step on it.
+  - **Electric Pump:** lifts water into tanks.
+  - **Sprinkler:** waters crops.
+  - **Tesla Coil:** can now also charge from the network.
+- **Multimeter:** reads any power block, tank or cable.
+
+### Captured water
+- **Rain Barrel:** catches rain, which comes out as **Stormwater** in a thunderstorm. Set it on a **Cistern** (32 buckets) and it drains into it.
+- Fill buckets and bottles from either tank, or pour buckets in. Comparators read the level.
+- **Sprinklers** spend the water on a 9x9 area: farmland stays wet, crops and saplings grow faster (more with Stormwater), and fires go out.
+- **Electric Pumps** lift water from ponds, rivers and the sea, which never run dry.
+
+### JEI (and EMI or REI)
+- Every Stormreach recipe already shows up. A new plugin adds four pages:
+  - **Storm Power:** what makes, stores and uses power, and how much.
+  - **Water Capture:** where water comes from and where it goes.
+  - **Catching and Gathering:** bottled creatures and lightning, Storm Cells, creature by-products.
+  - **Creature Drops:** every mob's drops with counts and chances, generated from the loot tables.
+- An information page for every Stormreach item, with its description and how to use it.
+
+### Fixes
+- **The Stormheart is easier to find in creative.** It now leads the Storm Blocks tab and appears in the Weather Events tab. It is the block that starts the Stormblight spreading.
+- 3 new achievements and 2 new sounds.
+
 ## 5.4.0 (Thunderfront)
 Signs of the coming storm, and tools for weathering it. The new creatures each have a jointed model, painted texture, keyframed animation and synthesized sounds.
 

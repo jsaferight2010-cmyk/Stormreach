@@ -56,6 +56,7 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.chase.ChaseRegistry.init();
         com.stormreach.sky.SkyRegistry.init();
         com.stormreach.front.FrontRegistry.init();
+        com.stormreach.power.PowerRegistry.init();
         com.stormreach.story.StoryRegistry.init();
         com.stormreach.storm.StormBlocks.registerAll();
         com.stormreach.storm.StormMobs.registerAll();
@@ -68,6 +69,8 @@ public final class Stormreach implements ModInitializer {
                         .title(Component.translatable("itemGroup.stormreach.storm_blocks"))
                         .icon(() -> new ItemStack(com.stormreach.registry.ModFluids.STORMWATER_BUCKET))
                         .displayItems((params, output) -> {
+                            // the Stormheart starts the Stormblight that turns blocks into these, so it leads the tab
+                            output.accept(com.stormreach.registry.ModBlocks.STORMHEART);
                             for (Item item : com.stormreach.storm.StormBlocks.ITEMS) output.accept(item);
                         })
                         .build());

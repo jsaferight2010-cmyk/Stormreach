@@ -19,7 +19,9 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 
 /** The coil's stored charge (0-500): a lightning strike nearby fills half, a Storm Cell half, a thunderstorm 1 a second. */
-public class TeslaCoilBlockEntity extends BlockEntity {
+public class TeslaCoilBlockEntity extends BlockEntity implements com.stormreach.power.PowerNode {
+    /** SU per point of charge when the coil is fed from a power network. */
+    public static final int SU_PER_CHARGE = 20;
     public static final int MAX = 500, ZAP_COST = 10;
     public static final float ZAP_DAMAGE = 6.0f;
     private int charge;
@@ -29,6 +31,12 @@ public class TeslaCoilBlockEntity extends BlockEntity {
     }
 
     public int charge() { return charge; }
+
+    @Override public Role role() { return Role.CONSUMER; }
+    @Override public int stored() { return charge * SU_PER_CHARGE; }
+    @Override public int capacity() { return MAX * SU_PER_CHARGE; }
+    @Override public int insert(int amount) { int n = Math.min(amount / SU_PER_CHARGE, MAX - charge); if (n > 0) { charge += n; setChanged(); } return n * SU_PER_CHARGE; }
+    @Override public int extract(int amount) { return 0; }
 
     public void addCharge(ServerLevel level, int amount) {
         charge = Math.min(MAX, charge + amount);

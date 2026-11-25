@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "stormreach:block/arc_lamp_off"
+    },
+    "lit=true": {
+      "model": "stormreach:block/arc_lamp_on"
+    }
+  }
+}

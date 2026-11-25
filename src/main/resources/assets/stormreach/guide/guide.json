@@ -101,7 +101,7 @@
     },
     {
      "s": "p",
-     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 15) list how often each shape appears at each rating."
+     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 16) list how often each shape appears at each rating."
     },
     {
      "s": "bullet",
@@ -1163,7 +1163,97 @@
    ]
   },
   {
-   "title": "10. The Stranger (spoilers)",
+   "title": "10. Thunderfront: signs of the storm",
+   "lines": [
+    {
+     "s": "h",
+     "t": "Creatures"
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Rainfrog (Brinewater Marsh, the Stormreach Coast, Elderstorm Grove): a blue-green frog with golden eyes."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "In the minutes before rain the whole marsh starts croaking, throats puffing, louder and faster the closer the rain. Once it's raining they come out and hop about."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "A Rainfrog chorus is a forecast you can hear. Breed them with Slimeballs."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Storm Petrel (over oceans and beaches, while rain is due or falling): a small sooty seabird with a white rump that flutters low over the waves."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Flocks of 3\u20135 gather ahead of a storm and leave once it has passed."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Drops feathers and, a quarter of the time, an Omen Feather."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Dust Devil (deserts, badlands and savannas, on clear days): a whirling column of sand that skitters around for a minute or so."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "It lifts sand and loose items and spins anyone it crosses, but does no harm. Hit it and it scatters; rain or water breaks it up."
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "Use a glass bottle on one to catch it."
+    },
+    {
+     "s": "h",
+     "t": "Gear and gadgets"
+    },
+    {
+     "s": "table",
+     "t": "Item  |  Recipe  |  What it does"
+    },
+    {
+     "s": "table",
+     "t": "Umbrella  |  3 wool, 2 sticks  |  Held in either hand: hailstones hit it, not you, and you float down from a height with no fall damage. In a thunderstorm it can draw lightning onto you."
+    },
+    {
+     "s": "table",
+     "t": "Omen Feather  |  Storm Petrels (25%)  |  Use it to read the sky: when rain comes or stops, and whether thunder is due."
+    },
+    {
+     "s": "table",
+     "t": "Bottled Dust Devil  |  Use a glass bottle on a Dust Devil  |  Throw it: a dust devil stays where it lands for 10 seconds and sweeps every dropped item within 8 blocks to the middle."
+    },
+    {
+     "s": "table",
+     "t": "Tesla Coil  |  Lightning rod, 2 copper ingots, Storm Shard, 3 iron ingots  |  Stores lightning: half a charge from each strike within 24 blocks or each Storm Cell, and a trickle in thunderstorms. While charged it zaps the nearest hostile mob in sight within 10 blocks (6 damage) once a second. A redstone signal holds its fire. Comparators read the charge."
+    },
+    {
+     "s": "table",
+     "t": "Wind Chimes  |  String, 3 wooden slabs, 2 copper ingots  |  Hang them under a block, fence, chain or leaves. They ring more the harder the wind blows, and barely at all indoors."
+    },
+    {
+     "s": "p",
+     "t": "New achievements: Red Sky at Night, Whirlwind in a Bottle, It's Alive and Under the Weather."
+    },
+    {
+     "s": "p",
+     "t": "Every Stormreach enchantment now has a description too, for mods that show enchantment descriptions."
+    }
+   ]
+  },
+  {
+   "title": "11. The Stranger (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -1250,7 +1340,7 @@
    ]
   },
   {
-   "title": "11. The Hollow Shrine (spoilers)",
+   "title": "12. The Hollow Shrine (spoilers)",
    "lines": [
     {
      "s": "p",
@@ -1338,7 +1428,7 @@
    ]
   },
   {
-   "title": "12. Cyrrus, the Hollow Storm (spoilers)",
+   "title": "13. Cyrrus, the Hollow Storm (spoilers)",
    "lines": [
     {
      "s": "h",
@@ -1476,7 +1566,7 @@
    ]
   },
   {
-   "title": "13. Achievements",
+   "title": "14. Achievements",
    "lines": [
     {
      "s": "p",
@@ -1533,7 +1623,7 @@
    ]
   },
   {
-   "title": "14. Settings",
+   "title": "15. Settings",
    "lines": [
     {
      "s": "p",
@@ -1633,7 +1723,7 @@
    ]
   },
   {
-   "title": "15. Rarity and drop-rate tables",
+   "title": "16. Rarity and drop-rate tables",
    "lines": [
     {
      "s": "p",
@@ -1661,7 +1751,7 @@
     },
     {
      "s": "table",
-     "t": "Uncommon (yellow)  |  Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
+     "t": "Uncommon (yellow)  |  Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Omen Feather, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
     },
     {
      "s": "h",
@@ -1862,6 +1952,14 @@
     {
      "s": "table",
      "t": "Aurora Moth  |  Aurora Dust  |  1\u20132  |  100.0%  |  Guaranteed"
+    },
+    {
+     "s": "table",
+     "t": "Storm Petrel  |  Feather  |  0\u20132  |  66.7%  |  Common"
+    },
+    {
+     "s": "table",
+     "t": "Storm Petrel  |  Omen Feather  |  1  |  25.0%  |  Uncommon"
     },
     {
      "s": "p",
@@ -2626,7 +2724,7 @@
    ]
   },
   {
-   "title": "16. Credits and licences",
+   "title": "17. Credits and licences",
    "lines": [
     {
      "s": "bullet",

@@ -1123,6 +1123,23 @@
    ]
   },
   {
+   "result": "stormreach:multimeter",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:glass_pane",
+    "",
+    "minecraft:redstone",
+    "minecraft:copper_ingot",
+    "minecraft:redstone",
+    "",
+    "minecraft:iron_ingot",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:netherite_backpack",
    "count": 1,
    "category": "equipment",
@@ -1786,6 +1803,40 @@
    ]
   },
   {
+   "result": "stormreach:arc_lamp",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:iron_nugget",
+    "",
+    "minecraft:iron_nugget",
+    "minecraft:glowstone",
+    "minecraft:iron_nugget",
+    "",
+    "stormreach:copper_cable",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:copper_cable",
+   "count": 8,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp",
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp"
+   ]
+  },
+  {
    "result": "stormreach:driftwood_button",
    "count": 1,
    "category": "redstone",
@@ -1956,6 +2007,23 @@
    ]
   },
   {
+   "result": "stormreach:electric_pump",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "stormreach:copper_cable",
+    "minecraft:iron_ingot",
+    "minecraft:piston",
+    "minecraft:bucket",
+    "minecraft:piston",
+    "minecraft:iron_ingot",
+    "stormreach:copper_cable",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
    "result": "stormreach:galewood_button",
    "count": 1,
    "category": "redstone",
@@ -2058,6 +2126,40 @@
    ]
   },
   {
+   "result": "stormreach:shock_plate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:copper_ingot",
+    "stormreach:copper_cable",
+    "minecraft:copper_ingot",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:sprinkler",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_nugget",
+    "minecraft:iron_ingot",
+    "minecraft:iron_nugget",
+    "",
+    "stormreach:copper_cable",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:storm_barometer",
    "count": 1,
    "category": "redstone",
@@ -2072,6 +2174,23 @@
     "stormreach:polished_stormstone",
     "minecraft:redstone",
     "stormreach:polished_stormstone"
+   ]
+  },
+  {
+   "result": "stormreach:storm_capacitor",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:glass",
+    "stormreach:storm_cell",
+    "minecraft:glass",
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot"
    ]
   },
   {
@@ -2293,6 +2412,23 @@
     "minecraft:iron_ingot",
     "minecraft:iron_ingot",
     "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:water_wheel",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "#minecraft:planks",
+    "minecraft:stick",
+    "#minecraft:planks",
+    "minecraft:stick",
+    "minecraft:iron_ingot",
+    "minecraft:stick",
+    "#minecraft:planks",
+    "minecraft:stick",
+    "#minecraft:planks"
    ]
   },
   {
@@ -2942,6 +3078,23 @@
    ]
   },
   {
+   "result": "stormreach:cistern",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:stone_bricks",
+    "",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:bucket",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks"
+   ]
+  },
+  {
    "result": "stormreach:cloud_seeder",
    "count": 2,
    "category": "misc",
@@ -3313,6 +3466,23 @@
     "",
     "",
     ""
+   ]
+  },
+  {
+   "result": "stormreach:rain_barrel",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "#minecraft:planks",
+    "",
+    "#minecraft:planks",
+    "#minecraft:planks",
+    "",
+    "#minecraft:planks",
+    "#minecraft:planks",
+    "#minecraft:wooden_slabs",
+    "#minecraft:planks"
    ]
   },
   {
@@ -4185,7 +4355,7 @@
   {
    "result": "stormreach:wind_chimes",
    "count": 1,
-   "category": "decorations",
+   "category": "misc",
    "kind": "shaped",
    "grid": [
     "",

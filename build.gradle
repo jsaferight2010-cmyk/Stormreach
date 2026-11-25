@@ -8,6 +8,8 @@ base { archivesName = project.archives_base_name }
 
 repositories {
     maven { name = 'TerraformersMC'; url = 'https://maven.terraformersmc.com/releases/' }
+    // JEI (Just Enough Items): compile-only, for the optional JEI plugin. EMI and REI can load JEI plugins too.
+    maven { name = 'BlameJared'; url = 'https://maven.blamejared.com/'; content { includeGroup 'mezz.jei' } }
 }
 
 loom {
@@ -37,6 +39,8 @@ dependencies {
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
     // Optional: only used for the Mod Menu config button. Not bundled, not required to play.
     clientCompileOnly("com.terraformersmc:modmenu:${project.modmenu_version}") { transitive = false }
+    // Optional: the JEI plugin (client/compat/jei). Not bundled, not required to play.
+    clientCompileOnly("mezz.jei:jei-${project.minecraft_version}-fabric-api:${project.jei_version}") { transitive = false }
 
     // Unit tests for the pure-Java simulation code (tornado physics, EF scale, maze, hiding, boss plan, scripts).
     testImplementation platform('org.junit:junit-bom:5.11.4')

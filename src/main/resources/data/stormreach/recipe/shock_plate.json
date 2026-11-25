@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "W": "stormreach:copper_cable"
+  },
+  "pattern": [
+    "CWC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:shock_plate"
+  }
+}

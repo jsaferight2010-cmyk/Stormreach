@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "I": "minecraft:iron_ingot",
+    "C": "stormreach:copper_cable"
+  },
+  "pattern": [
+    "NIN",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:sprinkler"
+  }
+}

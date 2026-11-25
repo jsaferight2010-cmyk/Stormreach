@@ -147,6 +147,8 @@
     "stormreach:elderstorm_trapdoor",
     "stormreach:elderstorm_button",
     "stormreach:elderstorm_pressure_plate",
-    "stormreach:stormfruit_pod"
+    "stormreach:stormfruit_pod",
+    "stormreach:water_wheel",
+    "stormreach:rain_barrel"
   ]
 }

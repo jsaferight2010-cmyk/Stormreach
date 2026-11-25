@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "N": "minecraft:iron_nugget",
+    "G": "minecraft:glowstone",
+    "C": "stormreach:copper_cable"
+  },
+  "pattern": [
+    " N ",
+    "NGN",
+    " C "
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:arc_lamp"
+  }
+}

@@ -57,6 +57,7 @@ public final class StormreachClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(com.stormreach.client.story.LabyrinthMusic::tick);
         com.stormreach.client.sky.SkyRenderers.register();
         com.stormreach.client.sky.FrontRenderers.register();
+        net.minecraft.client.renderer.blockentity.BlockEntityRenderers.register(com.stormreach.power.PowerRegistry.WATER_WHEEL_ENTITY, com.stormreach.client.sky.WaterWheelRenderer::new);
         com.stormreach.client.tooltip.StormTooltips.register();
         StormClientContent.init();
     }

@@ -22,6 +22,9 @@
     ],
     "modmenu": [
       "com.stormreach.client.compat.ModMenuIntegration"
+    ],
+    "jei_mod_plugin": [
+      "com.stormreach.client.compat.jei.StormreachJeiPlugin"
     ]
   },
   "mixins": [
@@ -38,6 +41,7 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "modmenu": "*"
+    "modmenu": "*",
+    "jei": "*"
   }
 }

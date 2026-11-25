@@ -929,6 +929,24 @@
     ],
     "subtitle": "subtitles.stormreach.block.wind_chime"
   },
+  "block.capacitor_charge": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_capacitor_charge",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.capacitor_charge"
+  },
+  "block.machine_hum": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_machine_hum",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.machine_hum"
+  },
   "voice.cyrrus.l01": {
     "sounds": [
       {

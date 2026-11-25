@@ -1710,6 +1710,13 @@
     "stormreach:serpentscale_block",
     "stormreach:glacial_lamp",
     "stormreach:tesla_coil",
-    "stormreach:wind_chimes"
+    "stormreach:wind_chimes",
+    "stormreach:copper_cable",
+    "stormreach:storm_capacitor",
+    "stormreach:arc_lamp",
+    "stormreach:shock_plate",
+    "stormreach:electric_pump",
+    "stormreach:sprinkler",
+    "stormreach:cistern"
   ]
 }

@@ -347,11 +347,42 @@ ENCH = {
     'grounded': 'Armour. Reduces damage from lightning.',
 }
 
+# ---------------------------------------------------------------------------------------------- 5.5 Live Wire
+d('copper_cable', 'Insulated copper wire. Joins generators, Storm Capacitors and machines into one power network.')
+d('storm_capacitor', 'A bank of glass jars that stores 100,000 SU of storm power. Lightning nearby charges it.')
+d('water_wheel', 'A paddle wheel that makes power from moving water.')
+d('arc_lamp', 'A caged electric lamp, as bright as light gets, while it has power.')
+d('shock_plate', 'A copper floor grid that shocks hostile mobs that step on it.')
+d('electric_pump', 'Lifts water from beneath it into a Rain Barrel or Cistern.')
+d('sprinkler', 'Waters the crops around it from a tank, so they grow faster.')
+d('rain_barrel', 'An open barrel that catches the rain. Thunderstorm rain comes out as Stormwater.')
+d('cistern', 'A stone tank that holds 32 buckets of water. Set Rain Barrels on top to fill it.')
+d('multimeter', 'Reads power and water: what a machine stores, makes or uses, and what is on its network.')
+DETAILS.update({
+    'block.stormreach.copper_cable': ['Connects to cable and power blocks on all six sides.', 'Generators send power to machines first, then to capacitors.'],
+    'block.stormreach.storm_capacitor': ['Stores 100,000 SU.', 'Lightning within 24 blocks: +50,000 SU.', 'Feeds machines on its network. Comparators read how full it is.'],
+    'block.stormreach.water_wheel': ['4 SU a tick per side or bottom with moving water against it (up to 16).', 'Moving Stormwater doubles it.'],
+    'block.stormreach.arc_lamp': ['Uses 1 SU a tick. Light 15 while powered.'],
+    'block.stormreach.shock_plate': ['100 SU per shock: 4 damage to a hostile mob, up to twice a second.', 'Players, pets and passive mobs walk over it safely.'],
+    'block.stormreach.electric_pump': ['80 SU per 250 mB, once a second, into a tank beside or above it.', 'Ponds, rivers and the sea never run dry; a lone source block does.'],
+    'block.stormreach.sprinkler': ['Every 2 s: 80 SU and 50 mB from a tank it sits on or beside.', 'Waters a 9x9 area: wet farmland, faster crops (more with Stormwater), no fires.'],
+    'block.stormreach.rain_barrel': ['Holds 4 buckets. Catches 25 mB/s of rain, 60 mB/s of Stormwater in a thunderstorm.',
+                                     'Drains into a tank below it. Bucket or bottle to take water out.'],
+    'block.stormreach.cistern': ['Holds 32 buckets. Bucket or bottle to take water out; pour buckets in.', 'Comparators read how full it is.'],
+    'item.stormreach.multimeter': ['Use on a power block, tank or cable for a reading.'],
+    'block.stormreach.wind_turbine': ['Must stand under open sky.', 'Redstone: about 1 per 4 mph of wind (a gale gives 15).',
+                                      'Power: 2 SU a tick per level of wind (up to 30), sent along Copper Cable.', 'Use: read the wind.'],
+    'block.stormreach.tesla_coil': ['Charges from lightning within 24 blocks, a Storm Cell, a power network, or slowly in a thunderstorm.',
+                                    'Zaps the nearest hostile mob in sight within 10 blocks (6 damage), once a second.',
+                                    'A redstone signal holds its fire. Comparators read the charge.'],
+})
+
+OVERRIDE = {'block.stormreach.wind_turbine', 'block.stormreach.tesla_coil'}
 with open(LANG) as f: lang = json.load(f)
 for k, v in ENCH.items(): lang[f'enchantment.stormreach.{k}.desc'] = v
 for k, v in D.items(): lang[f'desc.stormreach.{k}'] = v
 for key, lines in DETAILS.items():
-    if key + '.tooltip' in lang: continue          # the item already has its own usage lines
+    if key + '.tooltip' in lang and key not in OVERRIDE: continue          # the item already has its own usage lines
     for i, line in enumerate(lines): lang[key + '.tooltip' + ('' if i == 0 else str(i + 1))] = line
 lang['desc.stormreach.storm_block'] = 'A storm-touched %s, changed by the Stormblight. Builds just like the original.'
 lang['desc.stormreach.storm_egg'] = 'Spawns a Storm %s: the Stormblight\'s version, with storm powers.'

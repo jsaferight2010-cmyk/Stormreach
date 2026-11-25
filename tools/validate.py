@@ -106,7 +106,7 @@ def chk(i, where):
 def jsrc(rel): return open(JAVA + '/com/stormreach/' + rel).read()
 nb, ni, ne = [], [], []
 for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'forest/ForestRegistry.java', 'backpack/Backpacks.java',
-            'wild/WildRegistry.java', 'chase/ChaseRegistry.java', 'sky/SkyRegistry.java', 'front/FrontRegistry.java'):
+            'wild/WildRegistry.java', 'chase/ChaseRegistry.java', 'sky/SkyRegistry.java', 'front/FrontRegistry.java', 'power/PowerRegistry.java'):
     src5 = jsrc(rel)
     nb += re.findall(r'(?:block|trophy)\("([a-z_0-9]+)"', src5); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src5); ne += re.findall(r'\bentity\("([a-z_0-9]+)"', src5)
 # 5.1: hail and puddles, and the Doppler radar (its block and item are registered by hand, not through block())

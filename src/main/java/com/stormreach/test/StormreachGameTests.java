@@ -862,4 +862,98 @@ public class StormreachGameTests {
         Check.isTrue(h, com.stormreach.front.UmbrellaItem.shields(p), "an umbrella in hand should shield from hail");
         h.succeed();
     }
+
+    // ------------------------------------------------------------------------------------------------ 5.5 Live Wire
+    private <T> T be(GameTestHelper h, BlockPos p, Class<T> c) {
+        var e = h.getLevel().getBlockEntity(h.absolutePos(p));
+        Check.isTrue(h, c.isInstance(e), "expected a " + c.getSimpleName() + " at " + p + " but found " + e);
+        return c.cast(e);
+    }
+
+    @GameTest(maxTicks = 60)
+    public void aCapacitorPowersALampDownACable(GameTestHelper h) {
+        for (int x = 0; x < 6; x++) h.setBlock(new BlockPos(x, 1, 1), Blocks.STONE);
+        h.setBlock(new BlockPos(1, 2, 1), com.stormreach.power.PowerRegistry.STORM_CAPACITOR);
+        h.setBlock(new BlockPos(2, 2, 1), com.stormreach.power.PowerRegistry.COPPER_CABLE);
+        h.setBlock(new BlockPos(3, 2, 1), com.stormreach.power.PowerRegistry.COPPER_CABLE);
+        h.setBlock(new BlockPos(4, 2, 1), com.stormreach.power.PowerRegistry.ARC_LAMP);
+        var cap = be(h, new BlockPos(1, 2, 1), com.stormreach.power.StormCapacitorBlock.Entity.class);
+        cap.insert(10_000);
+        Check.isTrue(h, h.getBlockState(new BlockPos(2, 2, 1)).getValue(net.minecraft.world.level.block.PipeBlock.EAST), "cable should join the next cable");
+        h.runAfterDelay(40, () -> {
+            Check.isTrue(h, cap.stored() < 10_000, "the capacitor should have sent power down the cable");
+            Check.isTrue(h, h.getBlockState(new BlockPos(4, 2, 1)).getValue(com.stormreach.power.ArcLampBlock.LIT), "the arc lamp should be lit");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 60)
+    public void rainBarrelsDrainIntoCisternsAndKeepStormwaterApart(GameTestHelper h) {
+        h.setBlock(new BlockPos(1, 2, 1), com.stormreach.power.PowerRegistry.CISTERN);
+        h.setBlock(new BlockPos(1, 3, 1), com.stormreach.power.PowerRegistry.RAIN_BARREL);
+        var barrel = be(h, new BlockPos(1, 3, 1), com.stormreach.power.TankBlock.Entity.class);
+        var cistern = be(h, new BlockPos(1, 2, 1), com.stormreach.power.TankBlock.Entity.class);
+        Check.isTrue(h, barrel.waterCapacity() == 4000 && cistern.waterCapacity() == 32000, "tank sizes");
+        barrel.fill(1000, true);
+        Check.isTrue(h, barrel.isStormwater(), "thunderstorm water in an empty barrel is Stormwater");
+        h.runAfterDelay(45, () -> {
+            Check.isTrue(h, cistern.water() >= 250, "the barrel should drain into the cistern below, cistern has " + cistern.water());
+            Check.isTrue(h, cistern.isStormwater(), "stormwater stays stormwater when it drains");
+            cistern.fill(100, false);
+            Check.isTrue(h, !cistern.isStormwater(), "plain water mixed in makes it plain water");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 60)
+    public void aPumpLiftsWaterIntoATank(GameTestHelper h) {
+        for (int x = 0; x < 4; x++) for (int z = 0; z < 3; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        h.setBlock(new BlockPos(1, 1, 1), Blocks.WATER);
+        h.setBlock(new BlockPos(1, 2, 1), com.stormreach.power.PowerRegistry.ELECTRIC_PUMP);
+        h.setBlock(new BlockPos(2, 2, 1), com.stormreach.power.PowerRegistry.CISTERN);
+        var pump = be(h, new BlockPos(1, 2, 1), com.stormreach.power.ElectricPumpBlock.Entity.class);
+        var cistern = be(h, new BlockPos(2, 2, 1), com.stormreach.power.TankBlock.Entity.class);
+        pump.insert(2000);
+        h.runAfterDelay(45, () -> {
+            Check.isTrue(h, cistern.water() >= com.stormreach.power.ElectricPumpBlock.MB, "the pump should have lifted water, cistern has " + cistern.water());
+            Check.isTrue(h, pump.stored() < 2000, "pumping should cost power");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 80)
+    public void aSprinklerWetsFarmland(GameTestHelper h) {
+        for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        h.setBlock(new BlockPos(1, 2, 1), com.stormreach.power.PowerRegistry.CISTERN);
+        h.setBlock(new BlockPos(1, 3, 1), com.stormreach.power.PowerRegistry.SPRINKLER);
+        BlockPos farm = new BlockPos(3, 2, 3);
+        h.setBlock(farm, Blocks.FARMLAND.defaultBlockState().setValue(net.minecraft.world.level.block.FarmlandBlock.MOISTURE, 1));
+        var cistern = be(h, new BlockPos(1, 2, 1), com.stormreach.power.TankBlock.Entity.class);
+        var spr = be(h, new BlockPos(1, 3, 1), com.stormreach.power.SprinklerBlock.Entity.class);
+        cistern.fill(1000, false);
+        spr.insert(1000);
+        h.runAfterDelay(50, () -> {
+            Check.isTrue(h, cistern.water() < 1000, "the sprinkler should draw water from the cistern under it");
+            var st = h.getBlockState(farm);
+            Check.isTrue(h, st.is(Blocks.FARMLAND) && st.getValue(net.minecraft.world.level.block.FarmlandBlock.MOISTURE) == 7, "farmland in range should be wet: " + st);
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 60)
+    public void aShockPlateZapsAMonster(GameTestHelper h) {
+        for (int x = 0; x < 4; x++) for (int z = 0; z < 4; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        BlockPos plate = new BlockPos(2, 2, 2);
+        h.setBlock(plate, com.stormreach.power.PowerRegistry.SHOCK_PLATE);
+        var pe = be(h, plate, com.stormreach.power.ShockPlateBlock.Plate.class);
+        pe.insert(2000);
+        var spider = h.spawn(net.minecraft.world.entity.EntityTypes.CAVE_SPIDER, plate);
+        spider.setNoAi(true);
+        h.runAfterDelay(30, () -> {
+            Check.isTrue(h, pe.stored() < 2000, "the plate should have spent power on a shock");
+            Check.isTrue(h, !spider.isAlive() || spider.getHealth() < spider.getMaxHealth(), "the spider should have been shocked");
+            spider.discard();
+            h.succeed();
+        });
+    }
 }

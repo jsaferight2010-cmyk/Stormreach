@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "c": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:storm_capacitor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.storm_capacitor.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.storm_capacitor.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_capacitor"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

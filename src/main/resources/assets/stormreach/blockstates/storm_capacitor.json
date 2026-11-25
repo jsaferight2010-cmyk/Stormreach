@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "stormreach:block/storm_capacitor"
+    },
+    "level=1": {
+      "model": "stormreach:block/storm_capacitor_lit"
+    },
+    "level=2": {
+      "model": "stormreach:block/storm_capacitor_lit"
+    },
+    "level=3": {
+      "model": "stormreach:block/storm_capacitor_lit"
+    },
+    "level=4": {
+      "model": "stormreach:block/storm_capacitor_lit"
+    }
+  }
+}

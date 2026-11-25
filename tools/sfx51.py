@@ -355,6 +355,22 @@ def wind_chime():
     return reverb(tone * 0.6, 1.8, 0.35)
 NEW54 = {'creature.frog_croak': frog_croak, 'creature.petrel_call': petrel_call, 'creature.dust_devil_whirl': dust_devil_whirl, 'block.wind_chime': wind_chime}
 
+# ---------------------------------------------------------------------------------------------- 5.5 Live Wire
+def capacitor_charge():
+    # a rising electric whine with crackle, ending in a soft clunk as the jars fill
+    sec = 1.6; t = t_(sec)
+    whine = np.sin(2 * np.pi * np.cumsum(220 + 900 * (t / sec) ** 1.6) / SR) * 0.4 * np.sin(np.pi * t / sec) ** 0.5
+    out = whine + crackle(sec, 50) * 0.5
+    place(out, knock(80, 600, 0.3, 14) * 0.8, sec - 0.3)
+    return reverb(out, 0.9, 0.25)
+def machine_hum():
+    # mains hum: 60 Hz and its harmonics, with a little motor whirr
+    t = t_(1.5)
+    hum = sum(a * np.sin(2 * np.pi * f * t) for f, a in ((60, 0.6), (120, 0.35), (180, 0.15), (240, 0.08)))
+    whirr = bp(noise(1.5), 600, 1400) * 0.15 * (1 + 0.5 * np.sin(2 * np.pi * 9 * t))
+    return (hum + whirr) * adsr(len(t), 0.1, 0.1, 0.9, 0.3)
+NEW55 = {'block.capacitor_charge': capacitor_charge, 'block.machine_hum': machine_hum}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -365,7 +381,7 @@ SYNTH = {
     'creature.wind_hurt': wind_hurt, 'creature.wind_death': wind_death, 'creature.titan_ambient': titan_ambient, 'creature.titan_roar': titan_roar,
     'creature.titan_hurt': titan_hurt, 'creature.titan_death': titan_death, 'creature.titan_charge': titan_charge, 'creature.titan_blast': titan_blast,
     'weather.hail': hail, 'weather.puddle_splash': splash, 'block.radar_ping': radar_ping,
-    **MAT_SYNTH, **NEW52, **NEW53, **NEW54,
+    **MAT_SYNTH, **NEW52, **NEW53, **NEW54, **NEW55,
 }
 
 # ---------------------------------------------------------------------------------------------- the Labyrinth score

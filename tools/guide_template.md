@@ -16,13 +16,14 @@ Everything added in Stormreach 5.0 (the *Hollow Storm* update): how to find it, 
 8. Storm chasing
 9. Skyward: storm creatures, gear and gadgets
 10. Thunderfront: signs of the storm
-11. The Stranger *(spoilers)*
-12. The Hollow Shrine *(spoilers)*
-13. Cyrrus, the Hollow Storm *(spoilers)*
-14. Achievements
-15. Settings
-16. Rarity and drop-rate tables
-17. Credits and licences
+11. Live Wire: storm power and captured water
+12. The Stranger *(spoilers)*
+13. The Hollow Shrine *(spoilers)*
+14. Cyrrus, the Hollow Storm *(spoilers)*
+15. Achievements
+16. Settings
+17. Rarity and drop-rate tables
+18. Credits and licences
 
 ---
 
@@ -61,7 +62,7 @@ Like a real survey, a powerful tornado that only crossed empty fields can come o
 
 ### What it looks like (morphology)
 
-A tornado's shape is a separate thing from its strength. The guide tables (section 16) list how often each shape appears at each rating.
+A tornado's shape is a separate thing from its strength. The guide tables (section 17) list how often each shape appears at each rating.
 
 - **Rope:** a thin, twisting tube. This is often how a tornado looks at the end of its life.
 - **Needle:** a thin, straight, tapering funnel.
@@ -410,7 +411,45 @@ Every Stormreach enchantment now has a description too, for mods that show encha
 
 ---
 
-## 11. The Stranger *(spoilers)*
+## 11. Live Wire: storm power and captured water
+
+### Power
+Electricity is measured in **Storm Units (SU)**. Generators make it and **Copper Cable** carries it (it joins on all six sides). Generators send power to machines first, then to Storm Capacitors, and capacitors feed machines. Use a **Multimeter** on anything for a reading.
+
+| Block | Recipe | Makes, stores or uses |
+|---|---|---|
+| Wind Turbine | (see Skyward) | Makes 2 SU a tick per level of wind, up to 30 in a gale. Open sky only. |
+| Water Wheel | Planks, sticks, iron ingot | Makes 4 SU a tick per side (or bottom) with moving water against it, up to 16; moving Stormwater doubles it. |
+| Storm Capacitor | Iron, copper, glass, a Storm Cell | Stores 100,000 SU. Lightning within 24 blocks adds 50,000 at once. |
+| Copper Cable | 6 dried kelp, 3 copper ingots (makes 8) | Carries power. |
+| Arc Lamp | Iron nuggets, glowstone, cable (makes 2) | Uses 1 SU a tick for light level 15. |
+| Shock Plate | 2 copper ingots, cable | Uses 100 SU per shock: 4 damage to a hostile mob on it, up to twice a second. Players and animals are safe. |
+| Electric Pump | Iron, cable, pistons, bucket | Uses 80 SU to lift 250 mB a second from the water under it into a tank beside or above it. Ponds, rivers and the sea never run dry. |
+| Sprinkler | Iron nuggets, iron ingot, cable | Every 2 seconds uses 80 SU and 50 mB from a tank it sits on or beside to water a 9x9 area. |
+| Tesla Coil | (see Thunderfront) | Now also charges from a power network (20 SU per point of charge). |
+
+### Water
+| Block | Recipe | What it does |
+|---|---|---|
+| Rain Barrel | Planks, a wooden slab | Holds 4 buckets. Under open sky it catches 25 mB of rain a second, or 60 mB of **Stormwater** in a thunderstorm. It drains into a tank below it. |
+| Cistern | Stone bricks, a bucket | Holds 32 buckets. |
+
+On either tank: use a bucket for a bucket of water (or Stormwater), a glass bottle for a water bottle, or pour a bucket in. Comparators read how full they are.
+
+### JEI
+With **Just Enough Items** installed (or EMI or REI, which load JEI plugins), every Stormreach crafting, smelting and brewing recipe shows up. Stormreach also adds four pages:
+- **Storm Power:** what makes, stores, carries and uses SU, and how much.
+- **Water Capture:** where captured water comes from and goes.
+- **Catching and Gathering:** bottling Stormflies, lightning and Dust Devils; Storm Cells from a collector; what creatures give you.
+- **Creature Drops:** every Stormreach mob's drops with counts and chances.
+
+Every Stormreach item also has an information page with its description and how to use it.
+
+New achievements: Live Wire, Every Drop Counts and Green Thumb.
+
+---
+
+## 12. The Stranger *(spoilers)*
 
 You are not alone.
 
@@ -437,7 +476,7 @@ Craft all five pages with a book and a Hollow Remnant to rebind the **Weathered 
 
 ---
 
-## 12. The Hollow Shrine *(spoilers)*
+## 13. The Hollow Shrine *(spoilers)*
 
 **Finding it:**
 
@@ -471,7 +510,7 @@ Lay the **Weathered Journal** on the **Hollow Altar**.
 
 ---
 
-## 13. Cyrrus, the Hollow Storm *(spoilers)*
+## 14. Cyrrus, the Hollow Storm *(spoilers)*
 
 ### The intro
 
@@ -523,7 +562,7 @@ He has three last lines, and the storm clears.
 
 ---
 
-## 14. Achievements
+## 15. Achievements
 
 5.0 adds **49 achievements**, with three new tabs and new branches on the main tab.
 
@@ -543,7 +582,7 @@ The full reward list is in the tables below.
 
 ---
 
-## 15. Settings
+## 16. Settings
 
 **Mod Menu** (Stormreach → Configure) now holds **performance settings only**:
 
@@ -574,7 +613,7 @@ Gameplay options are still available for server owners in `config/stormreach.pro
 
 ---
 
-## 16. Rarity and drop-rate tables
+## 17. Rarity and drop-rate tables
 
 All numbers below are calculated directly from the mod's loot tables, worldgen files and code (by `tools/guide_tables.py`), so they match the game.
 
@@ -582,7 +621,7 @@ All numbers below are calculated directly from the mod's loot tables, worldgen f
 
 ---
 
-## 17. Credits and licences
+## 18. Credits and licences
 
 - **Cyrrus's voice:**
   - spoken by the **Piper** text-to-speech engine with the "Ryan (high)" voice model

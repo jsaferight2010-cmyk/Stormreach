@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "c": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:cistern"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.cistern.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.cistern.description"
+    },
+    "icon": {
+      "id": "stormreach:cistern"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

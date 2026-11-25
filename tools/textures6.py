@@ -292,4 +292,69 @@ for name, cover, mark in (('stormreach_field_guide', (44, 70, 110), 'bolt'), ('s
             for gx in range(11, 24):
                 if (gx - 11) % 4 == 0 or (gy - 9) % 4 == 0: img.putpixel((gx, gy), (230, 200, 140, 255))
     img.save(f'{OUT}/item/{name}.png')
+# ---- 5.1 original particles (16x16 frames) and their particle definitions
+import json as _json
+os.makedirs(f'{OUT}/particle', exist_ok=True)
+_pdir = ROOT + '/src/main/resources/assets/stormreach/particles'; os.makedirs(_pdir, exist_ok=True)
+def frame(name, draw):
+    img = Image.new('RGBA', (16, 16), (0, 0, 0, 0)); draw(img); img.save(f'{OUT}/particle/{name}.png')
+def disc_px(img, cx, cy, r, col):
+    for y in range(16):
+        for x in range(16):
+            d = ((x - cx) ** 2 + (y - cy) ** 2) ** 0.5
+            if d <= r: img.putpixel((x, y), col[:3] + (int(col[3] * max(0.0, min(1.0, r + 0.5 - d))),))
+particles = {}
+# storm spark: a forked blue-white flash, three shapes
+for i, pts in enumerate([[(7, 2), (8, 5), (6, 8), (9, 11), (7, 14)], [(3, 7), (6, 8), (8, 6), (11, 9), (13, 8)], [(4, 3), (7, 6), (9, 5), (10, 9), (12, 13)]]):
+    def d(img, pts=pts):
+        for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+            for k in range(9):
+                x, y = round(x0 + (x1 - x0) * k / 8), round(y0 + (y1 - y0) * k / 8)
+                img.putpixel((x, y), (235, 248, 255, 255))
+                for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    if 0 <= x + dx < 16 and 0 <= y + dy < 16 and img.getpixel((x + dx, y + dy))[3] == 0: img.putpixel((x + dx, y + dy), (110, 200, 255, 170))
+    frame(f'storm_spark_{i}', d)
+particles['storm_spark'] = [f'storm_spark_{i}' for i in range(3)]
+# rain splash: a crown of droplets opening out
+for i in range(4):
+    def d(img, i=i):
+        r = 2 + i * 1.6
+        for a in range(10):
+            ang = a * math.pi / 5
+            x, y = 8 + math.cos(ang) * r, 9 + math.sin(ang) * r * 0.5 - i * 0.6
+            disc_px(img, x, y, 1.0, (200, 225, 255, 230 - i * 40))
+    frame(f'rain_splash_{i}', d)
+particles['rain_splash'] = [f'rain_splash_{i}' for i in range(4)]
+# hail shard: angular ice chips
+for i, poly in enumerate([[(5, 4), (11, 6), (9, 12), (4, 10)], [(7, 3), (12, 9), (6, 12)], [(4, 6), (9, 4), (12, 10), (7, 12)]]):
+    def d(img, poly=poly):
+        from PIL import ImageDraw as _D
+        dr = _D.Draw(img); dr.polygon(poly, fill=(214, 236, 250, 255), outline=(150, 190, 220, 255))
+        x, y = poly[0]; img.putpixel((x + 1, y + 1), (255, 255, 255, 255))
+    frame(f'hail_shard_{i}', d)
+particles['hail_shard'] = [f'hail_shard_{i}' for i in range(3)]
+# debris dust: a soft brown puff that breaks up
+for i in range(4):
+    def d(img, i=i):
+        rnd = random.Random(3100 + i)
+        for k in range(6 - i):
+            disc_px(img, 8 + rnd.uniform(-3, 3), 8 + rnd.uniform(-3, 3), 3.2 - i * 0.4, (120, 100, 78, 200 - i * 35))
+    frame(f'debris_dust_{i}', d)
+particles['debris_dust'] = [f'debris_dust_{i}' for i in range(4)]
+# wind streak: a thin, tapered white line
+def d(img):
+    for x in range(1, 15):
+        a = int(220 * math.sin(math.pi * x / 15))
+        img.putpixel((x, 8), (240, 246, 250, a)); img.putpixel((x, 7), (240, 246, 250, a // 3))
+frame('wind_streak', d)
+particles['wind_streak'] = ['wind_streak']
+# vault dust: a golden mote with a glint
+for i in range(2):
+    def d(img, i=i):
+        disc_px(img, 8, 8, 1.6 + i * 0.6, (240, 200, 90, 230))
+        img.putpixel((8, 8), (255, 250, 220, 255))
+    frame(f'vault_dust_{i}', d)
+particles['vault_dust'] = [f'vault_dust_{i}' for i in range(2)]
+for name, frames in particles.items():
+    _json.dump({'textures': [f'stormreach:{f}' for f in frames]}, open(f'{_pdir}/{name}.json', 'w'))
 print('textures6 done')

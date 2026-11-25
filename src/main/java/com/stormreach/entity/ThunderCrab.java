@@ -56,7 +56,7 @@ public class ThunderCrab extends Monster {
     public void tick() {
         super.tick();
         if (level() instanceof ServerLevel server && tickCount % 10 == 0) {
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 0.5, getZ(), 2, 0.4, 0.2, 0.4, 0.05);
+            server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + 0.5, getZ(), 2, 0.4, 0.2, 0.4, 0.05);
         }
     }
 

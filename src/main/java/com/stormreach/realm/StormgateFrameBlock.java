@@ -47,7 +47,7 @@ public class StormgateFrameBlock extends Block {
             server.setBlock(pos, state.setValue(EYE, true), Block.UPDATE_ALL);
             stack.consume(1, player);
             server.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_CHIME, SoundSource.BLOCKS, 1.0f, 0.7f);
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 20, 0.3, 0.2, 0.3, 0.2);
+            server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 20, 0.3, 0.2, 0.3, 0.2);
             Stormgate.describe(server, pos, player);
         }
         return InteractionResult.SUCCESS;

@@ -3,6 +3,15 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 10: original particles
+- **Six particles of Stormreach's own**, each with its own frames and motion:
+  - **storm sparks**: forked blue-white flashes that flicker, used for lightning, storm gear, the realm, storm mobs and bosses
+  - **rain splashes**: crowns of droplets, used for puddles, waterspout spray and wet downbursts
+  - **hail shards**: tumbling chips of ice when hailstones hit
+  - **debris dust**: brown puffs that swell and break up, used for the tornado's debris whirl and dry downbursts
+  - **wind streaks**: thin white lines riding the wind, used for downburst fronts and Dispel Weather
+  - **vault dust**: golden motes from the Vault Door's locks and opening
+
 ### Stage 9: original sound and a new Labyrinth score
 - **Every sound effect is now Stormreach's own.** 41 new sounds were synthesised from scratch for the mod. They replace every vanilla sound it used to borrow:
   - thunder cracks and rolling rumbles, gusts and howling wind, hail clatter and taps, puddle splashes

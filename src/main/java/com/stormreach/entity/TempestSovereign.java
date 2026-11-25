@@ -108,7 +108,7 @@ public class TempestSovereign extends Monster {
         bossBar.setProgress(getHealth() / getMaxHealth());
         if (tickCount % 2 == 0) {
             server.sendParticles(ParticleTypes.REVERSE_PORTAL, getX(), getY() + 2.0, getZ(), 3, 1.0, 1.4, 1.0, 0.02);
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 3.2, getZ(), 2, 0.9, 0.3, 0.9, 0.1);
+            server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + 3.2, getZ(), 2, 0.9, 0.3, 0.9, 0.1);
         }
         updatePhase(server);
         LivingEntity target = getTarget();
@@ -116,7 +116,7 @@ public class TempestSovereign extends Monster {
 
         if (--lightningCooldown <= 0) {
             BlockPos at = target.blockPosition();
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, at.getX() + 0.5, at.getY() + 0.2, at.getZ() + 0.5, 40, 0.8, 0.1, 0.8, 0.1);
+            server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, at.getX() + 0.5, at.getY() + 0.2, at.getZ() + 0.5, 40, 0.8, 0.1, 0.8, 0.1);
             StormWeather.strike(server, at, null);
             if (phase >= 2) {
                 for (int i = 0; i < 3; i++) {

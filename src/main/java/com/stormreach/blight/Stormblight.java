@@ -119,7 +119,7 @@ public final class Stormblight {
             if (otherState.is(from.getBlock())) place(level, other, copyProperties(otherState, to));
         }
         if (random.nextInt(4) == 0) {
-            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 3, 0.3, 0.2, 0.3, 0.05);
+            level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 3, 0.3, 0.2, 0.3, 0.05);
         }
         return true;
     }
@@ -178,7 +178,7 @@ public final class Stormblight {
         if (mob.getType() == ModEntities.CLIFF_CRAB && (!level.isThundering() || !StormreachConfig.crabConversion)) return false;
         Mob converted = mob.convertTo(to, ConversionParams.single(mob, true, true), m -> {});
         if (converted != null) {
-            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, converted.getX(), converted.getY() + 0.5, converted.getZ(), 20, 0.4, 0.5, 0.4, 0.2);
+            level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, converted.getX(), converted.getY() + 0.5, converted.getZ(), 20, 0.4, 0.5, 0.4, 0.2);
             level.sendParticles(ParticleTypes.CLOUD, converted.getX(), converted.getY() + 0.5, converted.getZ(), 8, 0.4, 0.4, 0.4, 0.02);
             return true;
         }

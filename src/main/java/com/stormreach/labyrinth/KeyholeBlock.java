@@ -66,7 +66,7 @@ public class KeyholeBlock extends HorizontalDirectionalBlock {
         stack.consume(1, player);
         server.setBlock(pos, state.setValue(FILLED, true), Block.UPDATE_ALL);
         server.playSound(null, pos, com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_OPEN, SoundSource.BLOCKS, 1.2f, 0.55f + kind * 0.15f);
-        server.sendParticles(ParticleTypes.ENCHANT, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.4, 0.4, 0.4, 0.4);
+        server.sendParticles(com.stormreach.particle.ModParticles.VAULT_DUST, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.4, 0.4, 0.4, 0.4);
         int set = VaultDoor.locksSet(server, pos);
         player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.keys", set).withStyle(ChatFormatting.GOLD));
         if (set == 3 && VaultDoor.open(server, pos)) {

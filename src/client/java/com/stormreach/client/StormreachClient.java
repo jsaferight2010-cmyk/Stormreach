@@ -41,6 +41,7 @@ public final class StormreachClient implements ClientModInitializer {
         com.stormreach.client.weather.WeatherScreen.registerReceiver();
         com.stormreach.client.weather.RadarPlacementOutline.init();
         com.stormreach.client.guide.GuidebookScreen.registerOpener();
+        com.stormreach.client.particle.StormParticle.register();
         net.minecraft.client.renderer.blockentity.BlockEntityRenderers.register(com.stormreach.tornado.radar.RadarContent.RADAR_ENTITY,
                 com.stormreach.client.weather.DopplerRadarRenderer::new);
         net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents.END_CLIENT_TICK.register(com.stormreach.client.story.LabyrinthMusic::tick);

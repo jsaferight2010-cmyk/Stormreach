@@ -43,7 +43,7 @@ public final class StormPerks {
             }
         }
         if (e.tickCount % 30 == 0) {
-            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, e.getX(), e.getY() + e.getBbHeight() * 0.6, e.getZ(),
+            level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, e.getX(), e.getY() + e.getBbHeight() * 0.6, e.getZ(),
                     2 + (int) e.getBbWidth(), e.getBbWidth() * 0.4, e.getBbHeight() * 0.3, e.getBbWidth() * 0.4, 0.05);
         }
         if (e.tickCount % 40 == 0 && level.isRainingAt(e.blockPosition())) {
@@ -75,7 +75,7 @@ public final class StormPerks {
         if (target instanceof LivingEntity living && level.getRandom().nextInt(4) == 0 && !StormWeather.isLightningProof(living)) {
             living.hurtServer(level, level.damageSources().lightningBolt(), 2.0f);
             living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 30, 1), attacker);
-            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, living.getX(), living.getY() + 1, living.getZ(), 12, 0.3, 0.4, 0.3, 0.2);
+            level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, living.getX(), living.getY() + 1, living.getZ(), 12, 0.3, 0.4, 0.3, 0.2);
         }
     }
 
@@ -101,7 +101,7 @@ public final class StormPerks {
                 x -> x.isAlive() && level.getFluidState(x.blockPosition()).getType().isSame(ModFluids.STORMWATER))) {
             if (StormWeather.isLightningProof(e) || StormMobs.isStorm(e.getType())) continue;
             e.hurtServer(level, level.damageSources().lightningBolt(), 6.0f);
-            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, e.getX(), e.getY() + 0.5, e.getZ(), 20, 0.4, 0.4, 0.4, 0.3);
+            level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, e.getX(), e.getY() + 0.5, e.getZ(), 20, 0.4, 0.4, 0.4, 0.3);
         }
     }
 }

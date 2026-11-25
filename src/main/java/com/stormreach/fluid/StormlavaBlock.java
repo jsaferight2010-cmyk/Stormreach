@@ -46,7 +46,7 @@ public class StormlavaBlock extends LiquidBlock {
             level.levelEvent(1501, pos, 0); // lava fizz sound + smoke
             level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_CHIME, SoundSource.BLOCKS, 1.0f, 1.6f);
             if (level instanceof net.minecraft.server.level.ServerLevel server) {
-                server.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 12, 0.3, 0.2, 0.3, 0.2);
+                server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 12, 0.3, 0.2, 0.3, 0.2);
             }
             return true;
         }

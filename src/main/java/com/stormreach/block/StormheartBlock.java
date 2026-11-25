@@ -71,7 +71,7 @@ public class StormheartBlock extends Block {
         level.setBlock(pos, state.setValue(ACTIVE, true), Block.UPDATE_ALL);
         level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, SoundSource.BLOCKS, 1.5f, 0.6f);
         level.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.BLOCKS, 1.0f, 1.4f);
-        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 60, 0.8, 0.8, 0.8, 0.3);
+        level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 60, 0.8, 0.8, 0.8, 0.3);
         level.scheduleTick(pos, state.getBlock(), 10);
     }
 
@@ -146,7 +146,7 @@ public class StormheartBlock extends Block {
         }
         if (random.nextInt(3) == 0) Stormblight.convertOneMob(level, new AABB(pos).inflate(radius), random);
 
-        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 6, 0.4, 0.4, 0.4, 0.15);
+        level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 6, 0.4, 0.4, 0.4, 0.15);
         if (random.nextInt(8) == 0) {
             level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_HUM, SoundSource.BLOCKS, 1.0f, 0.5f + random.nextFloat() * 0.3f);
         }

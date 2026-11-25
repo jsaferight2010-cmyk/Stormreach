@@ -121,7 +121,7 @@ public class HailstoneEntity extends Entity {
     private void hitEntity(ServerLevel level, LivingEntity e, HailSize size) {
         DamageSource src = level.damageSources().source(StormWeather.HAIL);
         e.hurtServer(level, src, size.damage());
-        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()), getX(), getY(), getZ(), 4 + size.ordinal() * 2, 0.1, 0.1, 0.1, 0.1);
+        level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, getX(), getY(), getZ(), 4 + size.ordinal() * 2, 0.1, 0.1, 0.1, 0.1);
         discard();
     }
 
@@ -129,10 +129,10 @@ public class HailstoneEntity extends Entity {
         BlockPos pos = hit.getBlockPos();
         BlockState s = level.getBlockState(pos);
         Vec3 at = hit.getLocation();
-        level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ICE.defaultBlockState()), at.x, at.y + 0.05, at.z,
+        level.sendParticles(com.stormreach.particle.ModParticles.HAIL_SHARD, at.x, at.y + 0.05, at.z,
                 3 + size.ordinal() * 3, 0.1, 0.05, 0.1, 0.12);
         if (!s.getFluidState().isEmpty()) {
-            level.sendParticles(ParticleTypes.SPLASH, at.x, at.y + 0.1, at.z, 2 + size.ordinal() * 2, 0.1, 0, 0.1, 0.1);
+            level.sendParticles(com.stormreach.particle.ModParticles.RAIN_SPLASH, at.x, at.y + 0.1, at.z, 2 + size.ordinal() * 2, 0.1, 0, 0.1, 0.1);
             discard();
             return;
         }

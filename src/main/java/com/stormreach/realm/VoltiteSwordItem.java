@@ -37,7 +37,7 @@ public class VoltiteSwordItem extends Item {
         if (next == null || StormWeather.isLightningProof(next)) return;
         for (int i = 0; i <= 8; i++) {
             double t = i / 8.0;
-            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, target.getX() + (next.getX() - target.getX()) * t,
+            level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, target.getX() + (next.getX() - target.getX()) * t,
                     target.getY(0.5) + (next.getY(0.5) - target.getY(0.5)) * t, target.getZ() + (next.getZ() - target.getZ()) * t, 2, 0.05, 0.05, 0.05, 0.0);
         }
         next.hurtServer(level, level.damageSources().lightningBolt(), arcDamage);

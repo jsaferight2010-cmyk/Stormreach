@@ -80,6 +80,7 @@ public final class VaultDoor {
                 level.setBlock(p, Blocks.CAVE_AIR.defaultBlockState(), Block.UPDATE_ALL);
                 level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, LabyrinthRegistry.VAULT_DOOR.defaultBlockState()),
                         p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 12, 0.4, 0.4, 0.4, 0.1);
+                level.sendParticles(com.stormreach.particle.ModParticles.VAULT_DUST, p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 6, 0.5, 0.5, 0.5, 0.02);
             }
             BlockPos mid = o.blocks().get(o.blocks().size() / 2);
             level.playSound(null, mid, com.stormreach.registry.ModSfx.BLOCK_GRIND, SoundSource.BLOCKS, 2f, 0.4f);

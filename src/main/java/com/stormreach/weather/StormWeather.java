@@ -190,7 +190,7 @@ public final class StormWeather {
                     windDir.x, -0.05, windDir.z, 0.35);
         }
         if (thunder && random.nextInt(6) == 0) {
-            level.sendParticles(player, ParticleTypes.ELECTRIC_SPARK, false, false,
+            level.sendParticles(player, com.stormreach.particle.ModParticles.STORM_SPARK, false, false,
                     player.getX() + (random.nextDouble() - 0.5) * 10, player.getY() + 2 + random.nextDouble() * 3,
                     player.getZ() + (random.nextDouble() - 0.5) * 10, 4, 0.3, 0.3, 0.3, 0.05);
         }
@@ -268,7 +268,7 @@ public final class StormWeather {
     }
 
     private static void sparks(ServerLevel level, BlockPos pos) {
-        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 20, 0.4, 0.2, 0.4, 0.2);
+        level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 20, 0.4, 0.2, 0.4, 0.2);
     }
 
     private static BlockPos randomGroundNear(ServerLevel level, Player player, RandomSource random, double min, double extra) {
@@ -319,7 +319,7 @@ public final class StormWeather {
             Holder<Biome> biome = level.getBiome(player.blockPosition());
             if (!biome.is(ModBiomes.STORM_WASTES) && !biome.is(ModBiomes.STORM_VOID)) continue;
             if (StormreachConfig.stormParticles && level.getGameTime() % 3 == 0) {
-                level.sendParticles(player, ParticleTypes.ELECTRIC_SPARK, false, false,
+                level.sendParticles(player, com.stormreach.particle.ModParticles.STORM_SPARK, false, false,
                         player.getX() + (random.nextDouble() - 0.5) * 14, player.getY() + random.nextDouble() * 5,
                         player.getZ() + (random.nextDouble() - 0.5) * 14, 3, 0.3, 0.3, 0.3, 0.05);
             }

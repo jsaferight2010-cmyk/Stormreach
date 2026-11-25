@@ -37,7 +37,7 @@ public class RealmPassItem extends Item {
             return InteractionResult.FAIL;
         }
         server.sendParticles(ParticleTypes.REVERSE_PORTAL, player.getX(), player.getY() + 1, player.getZ(), 60, 0.4, 0.9, 0.4, 0.1);
-        server.sendParticles(ParticleTypes.ELECTRIC_SPARK, player.getX(), player.getY() + 1, player.getZ(), 30, 0.5, 1, 0.5, 0.2);
+        server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, player.getX(), player.getY() + 1, player.getZ(), 30, 0.5, 1, 0.5, 0.2);
         TempestRealm.queueTravel(player);
         player.getCooldowns().addCooldown(player.getItemInHand(hand), 40);
         return InteractionResult.SUCCESS_SERVER;

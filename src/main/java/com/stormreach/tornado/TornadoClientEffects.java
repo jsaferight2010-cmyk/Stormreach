@@ -38,10 +38,10 @@ public final class TornadoClientEffects {
             // tangential motion following the rotation, with inflow and a lift
             double vx = (Math.sin(a) * rot - Math.cos(a) * 0.15) * 0.45, vz = (-Math.cos(a) * rot - Math.sin(a) * 0.15) * 0.45;
             if (water) {
-                level.addParticle(r.nextInt(3) == 0 ? ParticleTypes.CLOUD : ParticleTypes.SPLASH, x, y, z, vx, 0.12 + r.nextDouble() * 0.25, vz);
+                level.addParticle(r.nextInt(3) == 0 ? ParticleTypes.CLOUD : com.stormreach.particle.ModParticles.RAIN_SPLASH, x, y, z, vx, 0.12 + r.nextDouble() * 0.25, vz);
                 if (r.nextInt(4) == 0) level.addParticle(ParticleTypes.FALLING_WATER, x, y + 2 + r.nextDouble() * 4, z, 0, 0, 0);
             } else {
-                level.addParticle(!down ? ParticleTypes.POOF : r.nextInt(3) == 0 ? ParticleTypes.LARGE_SMOKE : ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                level.addParticle(!down ? com.stormreach.particle.ModParticles.DEBRIS_DUST : com.stormreach.particle.ModParticles.DEBRIS_DUST,
                         x, y, z, vx, 0.08 + r.nextDouble() * 0.2, vz);
             }
         }

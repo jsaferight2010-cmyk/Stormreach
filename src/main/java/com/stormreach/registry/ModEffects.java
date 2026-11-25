@@ -51,14 +51,14 @@ public final class ModEffects {
 
     static class StaticChargeEffect extends MobEffect {
         StaticChargeEffect() {
-            super(MobEffectCategory.BENEFICIAL, 0x6FDCFF, ParticleTypes.ELECTRIC_SPARK);
+            super(MobEffectCategory.BENEFICIAL, 0x6FDCFF, com.stormreach.particle.ModParticles.STORM_SPARK);
         }
 
         @Override
         public void onMobHurt(ServerLevel level, LivingEntity entity, int amplifier, DamageSource source, float damage) {
             if (source.getEntity() instanceof LivingEntity attacker && attacker != entity && attacker.distanceToSqr(entity) < 36) {
                 attacker.hurtServer(level, level.damageSources().lightningBolt(), 2.0f + amplifier * 2.0f);
-                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getY() + 1, attacker.getZ(), 15, 0.3, 0.5, 0.3, 0.2);
+                level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, attacker.getX(), attacker.getY() + 1, attacker.getZ(), 15, 0.3, 0.5, 0.3, 0.2);
             }
         }
     }

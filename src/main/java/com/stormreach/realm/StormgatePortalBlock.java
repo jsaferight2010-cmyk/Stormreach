@@ -51,7 +51,7 @@ public class StormgatePortalBlock extends Block {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         for (int i = 0; i < 2; i++) {
-            level.addParticle(random.nextBoolean() ? ParticleTypes.ELECTRIC_SPARK : ParticleTypes.END_ROD,
+            level.addParticle(random.nextBoolean() ? com.stormreach.particle.ModParticles.STORM_SPARK : ParticleTypes.END_ROD,
                     pos.getX() + random.nextDouble(), pos.getY() + 0.8, pos.getZ() + random.nextDouble(), 0, 0.05 + random.nextDouble() * 0.1, 0);
         }
     }

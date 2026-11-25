@@ -110,10 +110,10 @@ public final class WeatherEvents {
                 double x = centre.x + Math.cos(a) * d, z = centre.z + Math.sin(a) * d;
                 double vx = Math.cos(a) * 0.6, vz = Math.sin(a) * 0.6;
                 if (wet) {
-                    level.sendParticles(i % 2 == 0 ? ParticleTypes.CLOUD : ParticleTypes.SPLASH, x, centre.y + 0.4 + rnd.nextDouble() * 2.5, z, 0, vx, 0.12, vz, 0.5);
+                    level.sendParticles(i % 2 == 0 ? com.stormreach.particle.ModParticles.WIND_STREAK : com.stormreach.particle.ModParticles.RAIN_SPLASH, x, centre.y + 0.4 + rnd.nextDouble() * 2.5, z, 0, vx, 0.12, vz, 0.5);
                 } else {
                     level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, ground), x, centre.y + 0.3, z, 1, 0.3, 0.2, 0.3, 0.2);
-                    if (i % 2 == 0) level.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, centre.y + 0.5 + rnd.nextDouble() * 2, z, 0, vx * 0.5, 0.05, vz * 0.5, 0.4);
+                    if (i % 2 == 0) level.sendParticles(com.stormreach.particle.ModParticles.DEBRIS_DUST, x, centre.y + 0.5 + rnd.nextDouble() * 2, z, 0, vx * 0.5, 0.05, vz * 0.5, 0.4);
                 }
             }
             // wind on bodies: outward, falling off with distance behind and ahead of the front
@@ -320,7 +320,7 @@ public final class WeatherEvents {
                         player.getZ() + Math.sin(ang) * ring * 2.5, 1, 0, 0, 0, 0.02);
             }
         }
-        level.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY() + 1.5, player.getZ(), 40, 0.3, 1.2, 0.3, 0.08);
+        level.sendParticles(com.stormreach.particle.ModParticles.WIND_STREAK, player.getX(), player.getY() + 1.5, player.getZ(), 40, 0.3, 1.2, 0.3, 0.08);
         level.playSound(null, player.getX(), player.getY(), player.getZ(), com.stormreach.registry.ModSfx.MAGIC_DISPEL,
                 net.minecraft.sounds.SoundSource.WEATHER, 1.2f, 1.4f);
         player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable(n > 0 ? "event.stormreach.dispel" : "event.stormreach.dispel.clear"));

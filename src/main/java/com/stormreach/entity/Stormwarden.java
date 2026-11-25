@@ -83,7 +83,7 @@ public class Stormwarden extends Monster {
         bossBar.setProgress(getHealth() / getMaxHealth());
         if (tickCount % 2 == 0) {
             server.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1.5, getZ(), 3, 1.2, 1.0, 1.2, 0.02);
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 2.5, getZ(), 2, 0.8, 0.8, 0.8, 0.1);
+            server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + 2.5, getZ(), 2, 0.8, 0.8, 0.8, 0.1);
         }
         LivingEntity target = getTarget();
         if (target == null || !target.isAlive()) return;
@@ -91,7 +91,7 @@ public class Stormwarden extends Monster {
         if (--lightningCooldown <= 0) {
             // Strike where the target is standing; telegraph first with sparks.
             BlockPos at = target.blockPosition();
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, at.getX() + 0.5, at.getY() + 0.2, at.getZ() + 0.5, 30, 0.6, 0.1, 0.6, 0.1);
+            server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, at.getX() + 0.5, at.getY() + 0.2, at.getZ() + 0.5, 30, 0.6, 0.1, 0.6, 0.1);
             StormWeather.strike(server, at, null);
             lightningCooldown = getHealth() < getMaxHealth() / 2 ? 50 : 80;
         }

@@ -57,7 +57,7 @@ public class StaticWisp extends Monster {
     public void tick() {
         super.tick();
         if (level().isClientSide() && random.nextInt(3) == 0) {
-            level().addParticle(ParticleTypes.ELECTRIC_SPARK, getRandomX(0.6), getRandomY(), getRandomZ(0.6), 0, 0, 0);
+            level().addParticle(com.stormreach.particle.ModParticles.STORM_SPARK, getRandomX(0.6), getRandomY(), getRandomZ(0.6), 0, 0, 0);
         }
     }
 
@@ -94,7 +94,7 @@ public class StaticWisp extends Monster {
             } else if (d < 100 && wisp.hasLineOfSight(t) && !StormWeather.isLightningProof(t)) {
                 for (int i = 0; i <= 10; i++) {
                     double k = i / 10.0;
-                    server.sendParticles(ParticleTypes.ELECTRIC_SPARK, wisp.getX() + (t.getX() - wisp.getX()) * k,
+                    server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, wisp.getX() + (t.getX() - wisp.getX()) * k,
                             wisp.getY() + (t.getY(0.5) - wisp.getY()) * k, wisp.getZ() + (t.getZ() - wisp.getZ()) * k, 1, 0, 0, 0, 0);
                 }
                 t.hurtServer(server, server.damageSources().lightningBolt(), 2.0f);

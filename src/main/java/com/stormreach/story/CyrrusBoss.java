@@ -134,7 +134,7 @@ public class CyrrusBoss extends Monster {
         }
         bar.setProgress(getHealth() / getMaxHealth());
         if (tickCount % 3 == 0) {
-            level.sendParticles(form() == 0 ? ParticleTypes.SMOKE : ParticleTypes.ELECTRIC_SPARK, getX(), getY() + getBbHeight() * 0.6, getZ(),
+            level.sendParticles(form() == 0 ? ParticleTypes.SMOKE : com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + getBbHeight() * 0.6, getZ(),
                     3 + form() * 3, getBbWidth() * 0.4, getBbHeight() * 0.3, getBbWidth() * 0.4, 0.05);
         }
         if (inCinematic()) {
@@ -322,14 +322,14 @@ public class CyrrusBoss extends Monster {
 
     /** Telegraph: sparks and a hum on the spot, then a real strike after the delay. */
     private void telegraph(ServerLevel level, BlockPos pos, int delay) {
-        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 25, 0.5, 0.1, 0.5, 0.05);
+        level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 0.2, pos.getZ() + 0.5, 25, 0.5, 0.1, 0.5, 0.05);
         pendingStrikes.add(new long[]{tickCount + delay, pos.getX(), pos.getY(), pos.getZ()});
     }
 
     private void resolveStrikes(ServerLevel level) {
         pendingStrikes.removeIf(s -> {
             if (tickCount < s[0]) {
-                if ((s[0] - tickCount) % 10 == 0) level.sendParticles(ParticleTypes.ELECTRIC_SPARK, s[1] + 0.5, s[2] + 0.2, s[3] + 0.5, 6, 0.4, 0.1, 0.4, 0.05);
+                if ((s[0] - tickCount) % 10 == 0) level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, s[1] + 0.5, s[2] + 0.2, s[3] + 0.5, 6, 0.4, 0.1, 0.4, 0.05);
                 return false;
             }
             StormWeather.strike(level, new BlockPos((int) s[1], (int) s[2], (int) s[3]), null);

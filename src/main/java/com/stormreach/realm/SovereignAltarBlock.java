@@ -101,7 +101,7 @@ public class SovereignAltarBlock extends Block {
         double angle = stage * (Math.PI / 4);
         int r = Math.max(3, 9 - stage / 2);
         StormWeather.strikeVisual(level, ritualStrike(level, pos, angle, r));
-        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 20 + stage * 4, 0.4, 0.6, 0.4, 0.25);
+        level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 20 + stage * 4, 0.4, 0.6, 0.4, 0.25);
         level.sendParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 10 + stage * 3, 1.5, 1.5, 1.5, 0.05);
         level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_HUM, SoundSource.BLOCKS, 1.5f, 0.5f + stage * 0.08f);
         if (stage < 15) {

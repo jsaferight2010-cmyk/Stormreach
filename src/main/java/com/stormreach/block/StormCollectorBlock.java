@@ -48,7 +48,7 @@ public class StormCollectorBlock extends Block {
             int chance = level.isThundering() ? 2 : level.isRaining() ? 12 : 0;
             if (chance > 0 && random.nextInt(chance) == 0) {
                 level.setBlock(pos, state.setValue(CHARGE, charge + 1), Block.UPDATE_ALL);
-                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.1);
+                level.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.1);
                 level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_CHIME, SoundSource.BLOCKS, 0.8f, 1.5f);
             }
         }

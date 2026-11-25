@@ -77,7 +77,7 @@ public final class TempestRealm {
                 }
             }
             if (random.nextInt(8) == 0) {
-                level.sendParticles(player, ParticleTypes.ELECTRIC_SPARK, false, false,
+                level.sendParticles(player, com.stormreach.particle.ModParticles.STORM_SPARK, false, false,
                         player.getX() + random.nextGaussian() * 8, player.getY() + random.nextDouble() * 6, player.getZ() + random.nextGaussian() * 8,
                         1, 0, 0, 0, 0.05);
             }

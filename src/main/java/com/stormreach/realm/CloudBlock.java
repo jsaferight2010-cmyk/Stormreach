@@ -54,7 +54,7 @@ public class CloudBlock extends Block {
                     entity.setDeltaMovement(m.x, 1.3, m.z);
                     entity.needsSync = true;
                     if (level instanceof ServerLevel server) {
-                        server.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), entity.getY(), entity.getZ(), 12, 0.4, 0.2, 0.4, 0.2);
+                        server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, entity.getX(), entity.getY(), entity.getZ(), 12, 0.4, 0.2, 0.4, 0.2);
                         level.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.BLOCKS, 0.4f, 1.8f);
                     }
                 }
@@ -70,7 +70,7 @@ public class CloudBlock extends Block {
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         if (kind == Kind.THUNDER && random.nextInt(8) == 0) {
-            level.addParticle(ParticleTypes.ELECTRIC_SPARK, pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble(),
+            level.addParticle(com.stormreach.particle.ModParticles.STORM_SPARK, pos.getX() + random.nextDouble(), pos.getY() + random.nextDouble(),
                     pos.getZ() + random.nextDouble(), 0, 0, 0);
         } else if (kind == Kind.GALE && random.nextInt(12) == 0) {
             Vec3 wind = StormWeather.windVector().scale(0.2);

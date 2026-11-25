@@ -60,7 +60,7 @@ public class BallLightning extends Monster {
         super.tick();
         if (level() instanceof ServerLevel server) {
             if (tickCount % 3 == 0) {
-                server.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 0.3, getZ(), 3, 0.15, 0.15, 0.15, 0.08);
+                server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + 0.3, getZ(), 3, 0.15, 0.15, 0.15, 0.08);
             }
             if (--life <= 0) {
                 server.sendParticles(ParticleTypes.SMOKE, getX(), getY() + 0.3, getZ(), 8, 0.2, 0.2, 0.2, 0.02);

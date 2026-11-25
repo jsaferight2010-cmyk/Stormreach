@@ -38,8 +38,18 @@ public final class RadarScan {
         return new double[]{dir.x * ms, dir.z * ms};
     }
 
+    /** A vortex the radar sees: position, wind field and how wide the funnel looks (for the debris ball). */
+    public record Vortex(double x, double z, WindField field, double visualWidth) {
+        public static Vortex of(TornadoEntity t) { return new Vortex(t.getX(), t.getZ(), t.windField(), t.visualWidth()); }
+    }
+
     public static Grid scan(ServerLevel level, Vec3 radar, double range, List<TornadoEntity> tornadoes,
                             List<StormCellEntity> cells, List<WeatherEvents.ActiveEvent> events) {
+        return scanVortices(level, radar, range, tornadoes.stream().map(Vortex::of).toList(), cells, events);
+    }
+
+    public static Grid scanVortices(ServerLevel level, Vec3 radar, double range, List<Vortex> tornadoes,
+                                    List<StormCellEntity> cells, List<WeatherEvents.ActiveEvent> events) {
         Grid g = Grid.empty();
         boolean raining = level.isRaining();
         double clearAir = range * 0.22;
@@ -71,9 +81,9 @@ public final class RadarScan {
                     }
                 }
                 boolean debris = false;
-                for (TornadoEntity tor : tornadoes) {
-                    double tx = x - tor.getX(), tz = z - tor.getZ(), d = Math.hypot(tx, tz);
-                    WindField f = tor.windField();
+                for (Vortex tor : tornadoes) {
+                    double tx = x - tor.x(), tz = z - tor.z(), d = Math.hypot(tx, tz);
+                    WindField f = tor.field();
                     double reach = Math.max(40, f.coreRadius * 10);
                     if (d > reach * 2) continue;
                     WindField.Sample s = f.sample(tx, tz, 30, t);

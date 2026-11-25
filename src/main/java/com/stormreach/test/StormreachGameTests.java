@@ -977,44 +977,41 @@ public class StormreachGameTests {
         h.succeed();
     }
 
-    /** 6.0 (test list 14): the radar's velocity scan is real Doppler data: a tornado shows an inbound/outbound couplet. */
-    @GameTest(maxTicks = 700)
+    /** 6.0 (test list 14): the radar's velocity scan is real Doppler data: a mature vortex shows an inbound/outbound couplet. */
+    @GameTest(maxTicks = 20)
     public void dopplerVelocityShowsATornadoCouplet(GameTestHelper h) {
         Vec3 at = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 1)));
-        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), at.add(0, 0, -200), stationary(TornadoFormation.SUPERCELL, EFScale.EF3, 150, 0));
-        if (t == null) { h.succeed(); return; }
-        // a new tornado spins up over its first seconds; scan once it is a real vortex
-        int[] waited = {0};
-        Runnable[] check = new Runnable[1];
-        check[0] = () -> {
-            if (t.isRemoved()) { h.succeed(); return; }
-            if (t.windField().vMax < 25 && waited[0] < 640) { waited[0] += 20; h.runAfterDelay(20, check[0]); return; }
-            couplet(h, at, t);
-        };
-        h.runAfterDelay(1, check[0]);
-    }
-
-    private static void couplet(GameTestHelper h, Vec3 at, TornadoEntity t) {
-        var r = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.TORNADO_RADAR.ordinal(), BlockPos.containing(at));
-        Check.isTrue(h, r.scan() != null, "the Doppler radar sent no scan");
+        double range = 1024;
+        var field = com.stormreach.sim.WindField.forPeakGust(com.stormreach.sim.EFScale.mphToMs(160), 30, 0, 0, 1, 0);
+        var vortex = new com.stormreach.tornado.RadarScan.Vortex(at.x, at.z - 300, field, 40);
+        var scan = com.stormreach.tornado.RadarScan.scanVortices(h.getLevel(), at, range, java.util.List.of(vortex), java.util.List.of(), java.util.List.of());
+        double[] amb = com.stormreach.tornado.RadarScan.ambient(h.getLevel(), vortex.x(), vortex.z());
+        double bias = com.stormreach.sim.RadarMath.radial(amb[0], amb[1], 0, -300);
         int in = 0, out = 0;
-        double range = r.range();
-        double[] amb = com.stormreach.tornado.RadarScan.ambient(h.getLevel(), t.getX(), t.getZ());
-        double bias = com.stormreach.sim.RadarMath.radial(amb[0], amb[1], t.getX() - at.x, t.getZ() - at.z);
         StringBuilder dbg = new StringBuilder();
         for (int az = 0; az < com.stormreach.sim.RadarMath.AZIMUTHS; az++) for (int g = 0; g < com.stormreach.sim.RadarMath.GATES; g++) {
             double[] o = com.stormreach.sim.RadarMath.gateOffset(az, g, range);
-            if (Math.hypot(o[0] - (t.getX() - at.x), o[1] - (t.getZ() - at.z)) > 150) continue;
-            byte v = r.scan().velocity()[com.stormreach.sim.RadarMath.index(az, g)];
+            if (Math.hypot(o[0], o[1] + 300) > 150) continue;
+            byte v = scan.velocity()[com.stormreach.sim.RadarMath.index(az, g)];
             if (v == com.stormreach.sim.RadarMath.NO_DATA) continue;
-            if (v - bias < -8) in++;
-            if (v - bias > 8) out++;
-            if (dbg.length() < 600) dbg.append(String.format(" (%.0f,%.0f:%d)", o[0] - (t.getX() - at.x), o[1] - (t.getZ() - at.z), v));
+            if (v - bias < -10) in++;
+            if (v - bias > 10) out++;
+            if (dbg.length() < 500) dbg.append(String.format(" (%.0f,%.0f:%d)", o[0], o[1] + 300, v));
         }
-        double vmax = t.windField().vMax;
-        t.discard();
-        Check.isTrue(h, vmax < 25 || (in > 0 && out > 0), "no velocity couplet around the tornado: inbound gates " + in + ", outbound " + out
-                + " bias " + bias + " vmax " + vmax + dbg);
+        Check.isTrue(h, in > 0 && out > 0, "no velocity couplet around the vortex: inbound gates " + in + ", outbound " + out + " bias " + bias + dbg);
+        // cyclonic, radar to the south: west side moves toward the radar, east side away
+        double west = 0, east = 0;
+        for (int az = 0; az < com.stormreach.sim.RadarMath.AZIMUTHS; az++) for (int g = 0; g < com.stormreach.sim.RadarMath.GATES; g++) {
+            double[] o = com.stormreach.sim.RadarMath.gateOffset(az, g, range);
+            if (Math.abs(o[1] + 300) > 40 || Math.abs(o[0]) > 90 || Math.abs(o[0]) < 10) continue;
+            byte v = scan.velocity()[com.stormreach.sim.RadarMath.index(az, g)];
+            if (v == com.stormreach.sim.RadarMath.NO_DATA) continue;
+            if (o[0] < 0) west += v - bias; else east += v - bias;
+        }
+        Check.isTrue(h, west < 0 && east > 0, "the couplet points the wrong way: west " + west + " east " + east);
+        // a real report carries the scan across the network unchanged
+        var r = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.TORNADO_RADAR.ordinal(), BlockPos.containing(at));
+        Check.isTrue(h, r.scan() != null, "the Doppler radar sent no scan");
         var buf = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
         com.stormreach.tornado.WeatherUi.ReportPayload.CODEC.encode(buf, new com.stormreach.tornado.WeatherUi.ReportPayload(true, r));
         var back = com.stormreach.tornado.WeatherUi.ReportPayload.CODEC.decode(buf);

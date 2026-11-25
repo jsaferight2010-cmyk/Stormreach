@@ -108,5 +108,6 @@ public class BackpackItem extends Item {
         tooltip.accept(Component.translatable("item.stormreach.backpack.slots", used, base).withStyle(ChatFormatting.GRAY));
         if (builtInMagnet) tooltip.accept(Component.translatable("item.stormreach.backpack.magnet").withStyle(ChatFormatting.AQUA));
         tooltip.accept(Component.translatable("item.stormreach.backpack.open").withStyle(ChatFormatting.DARK_GRAY));
+        tooltip.accept(Component.translatable("item.stormreach.backpack.worn_hint").withStyle(ChatFormatting.DARK_GRAY));
     }
 }

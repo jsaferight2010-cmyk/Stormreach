@@ -3,6 +3,11 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 14: 64x items, mobs and armour
+- **Every Stormreach item texture is now 64x**, and **mob and armour textures are 4x their old resolution**, with the same detail pass as the blocks: crisp pixel-art cells with a soft bevel and fine grain.
+- The smooth, procedurally drawn textures (tornado, clouds, hailstones) were already high resolution and are left as they are.
+- Mob models keep their 5.0 shapes; only their textures changed.
+
 ### Stage 13: the Hollow Keeper hunts by sound, and blocks sound like Stormreach
 - **A smarter Hollow Keeper:**
   - **It hears noise, not just players.** Standing still is silent and sneaking almost silent. Walking carries about 14 blocks, sprinting 28, and fighting or breaking blocks 32. Its guess of where you are sharpens the closer it gets.

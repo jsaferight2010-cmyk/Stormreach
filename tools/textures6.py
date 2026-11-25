@@ -64,4 +64,28 @@ for y in range(H):
         v = 0.5 + 0.5 * c
         img.putpixel((x, y), (int(255 * v),) * 3 + (int(255 * (0.75 + 0.25 * c)),))
 img.save(f'{OUT}/entity/tornado_wallcloud.png')
+# Tornado Director (item): a brass-capped rod with a little spinning funnel at its tip
+os.makedirs(f'{OUT}/item', exist_ok=True)
+rows = ['................',
+        '..........GGGG..',
+        '.........GWWWWG.',
+        '..........GWWG..',
+        '...........GWG..',
+        '..........GWG...',
+        '...........G....',
+        '..........KK....',
+        '.........KYK....',
+        '........KYK.....',
+        '.......KYK......',
+        '......KYK.......',
+        '.....KBK........',
+        '....KBK.........',
+        '...KBK..........',
+        '...KK...........']
+pal = {'G': (110, 118, 128, 255), 'W': (205, 214, 222, 255), 'K': (40, 34, 52, 255), 'Y': (242, 201, 76, 255), 'B': (123, 79, 201, 255)}
+img = Image.new('RGBA', (16, 16), (0, 0, 0, 0))
+for y, row in enumerate(rows):
+    for x, ch in enumerate(row):
+        if ch in pal: img.putpixel((x, y), pal[ch])
+img.save(f'{OUT}/item/tornado_director.png')
 print('textures6 done')

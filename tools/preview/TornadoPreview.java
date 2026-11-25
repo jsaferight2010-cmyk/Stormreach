@@ -12,7 +12,7 @@ import java.util.List;
  * software, so the look can be checked without launching Minecraft. Lighting is approximated (flat ambient plus a
  * simple directional term), so treat it as a shape and composition check, not a pixel-exact in-game screenshot.
  *
- * usage: java TornadoPreview <textures dir> <out.png> <spec>...   spec = morph,formation,reach,width,intensity,subs,label
+ * usage: java TornadoPreview <textures dir> <out.png> <spec>...   spec = morph,formation,reach,width,intensity,subs,label[,see]
  */
 public class TornadoPreview {
     static final int W = 360, H = 480;
@@ -31,6 +31,7 @@ public class TornadoPreview {
             TornadoRenderState s = new TornadoRenderState();
             s.morph = Integer.parseInt(p[0]); s.formation = Integer.parseInt(p[1]); s.reach = Float.parseFloat(p[2]);
             s.width = Float.parseFloat(p[3]); s.intensity = Float.parseFloat(p[4]); s.subvortices = Integer.parseInt(p[5]);
+            s.seeThrough = p.length > 7 && p[7].equals("see");
             s.cloudBase = s.formation == 2 ? 55 : 85; s.rotation = -1; s.ageInTicks = 400; s.seed = 3; s.spin = 37;
             BufferedImage img = render(s, funnel, debris, wall, s.formation == 2);
             java.awt.Graphics2D g = img.createGraphics();

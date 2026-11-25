@@ -15,4 +15,6 @@ public class TornadoRenderState extends EntityRenderState {
     public float seed;
     /** Accumulated spin angle, radians (see TornadoEntity.clientSpin). */
     public float spin;
+    /** Creative see-inside view (see TornadoSeeThrough). */
+    public boolean seeThrough;
 }

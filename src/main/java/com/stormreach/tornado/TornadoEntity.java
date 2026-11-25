@@ -76,6 +76,8 @@ public class TornadoEntity extends Entity {
     /** Blocks the tornado has picked up, and where each one is in its ride (spiralling up, then thrown). */
     private final Map<FallingBlockEntity, Flight> debris = new LinkedHashMap<>();
     private int offWaterTicks;
+    /** Creative Tornado Director: where this tornado has been told to go (null = its own path). */
+    private Vec3 steerTarget;
 
     private static final class Flight {
         int ticks;
@@ -154,6 +156,14 @@ public class TornadoEntity extends Entity {
     }
 
     public boolean isDissipating() { return dissipating; }
+
+    /** Creative Tornado Director: head for this spot and hold there. */
+    public void steerTo(Vec3 target) { steerTarget = target; }
+
+    /** Creative Tornado Director: let the tornado follow its own path again. */
+    public void release() { steerTarget = null; }
+
+    public Vec3 steerTarget() { return steerTarget; }
 
     private boolean simulateWithoutPlayers;
 
@@ -253,10 +263,18 @@ public class TornadoEntity extends Entity {
             }
         }
         double f = lifeFraction();
-        // meander, and in the decaying stage curve to the left (as occluding tornadoes often do)
-        headingDeg += (random.nextDouble() - 0.5) * 0.6;
-        if (f > 0.7) headingDeg -= 0.05 * rotationSign();
         double speed = profile.translationMs() * (f > 0.85 ? 0.6 : 1.0) * 0.05; // m/s to blocks/tick
+        if (steerTarget != null) {
+            // directed: turn toward the target (a few degrees a tick, so it curves rather than snaps) and stop on it
+            double dx = steerTarget.x - getX(), dz = steerTarget.z - getZ(), dist = Math.hypot(dx, dz);
+            double want = Math.toDegrees(Math.atan2(dz, dx));
+            headingDeg += Mth.clamp(Mth.wrapDegrees(want - headingDeg), -4, 4);
+            speed = Math.min(Math.max(speed, 0.4), dist * 0.1); // at least ~8 m/s so a slow tornado still gets there
+        } else {
+            // meander, and in the decaying stage curve to the left (as occluding tornadoes often do)
+            headingDeg += (random.nextDouble() - 0.5) * 0.6;
+            if (f > 0.7) headingDeg -= 0.05 * rotationSign();
+        }
         if (formation() == TornadoFormation.WATERSPOUT) speed *= 0.6; // waterspouts drift slowly
         double rad = Math.toRadians(headingDeg);
         double nx = getX() + Math.cos(rad) * speed, nz = getZ() + Math.sin(rad) * speed;
@@ -317,13 +335,15 @@ public class TornadoEntity extends Entity {
     }
 
     private void pushEntities(ServerLevel level) {
-        double reach = Math.max(12, visualWidth() * 1.8);
+        // the pull reaches several core radii out; the wind sampled at each body sets how hard (it falls off with distance)
+        double reach = Math.max(24, visualWidth() * 3.5);
         double peak = currentPeakMph();
         double ceiling = VortexForces.ceiling(peak);
         AABB box = new AABB(getX() - reach, getY() - 4, getZ() - reach, getX() + reach, getY() + Math.max(cloudBase(), ceiling + 8), getZ() + reach);
         for (Entity e : level.getEntities(this, box, e -> !(e instanceof TornadoEntity) && !e.isSpectator() && !(e instanceof Player p && (p.isCreative() || p.isSpectator()))
                 && !(e instanceof FallingBlockEntity fb && debris.containsKey(fb)) && !e.isPassenger())) {
-            Vec3 w = windAt(e.position());
+            // sampled at least 10 m up: the EF rating describes the wind there, and the ground-level wind is what hits you
+            Vec3 w = windAt(new Vec3(e.getX(), Math.max(e.getY(), getY() + 10), e.getZ()));
             double mph = EFScale.msToMph(Math.hypot(w.x, w.z));
             if (mph < 40) continue;
             double above = e.getY() - groundY(level, e.getX(), e.getZ());

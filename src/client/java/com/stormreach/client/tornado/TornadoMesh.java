@@ -41,8 +41,14 @@ public final class TornadoMesh {
         int bottom = water ? 0xE6EEF3 : formation == TornadoFormation.LANDSPOUT ? 0x8A7559 : 0x4E4A45;
         float strength = 0.55f + 0.45f * M.clamp(s.intensity, 0, 1);
         int light = 0;
-        funnel(out, s, morph(s), t, 1.0f, 0f, top, bottom, (int) (230 * strength), light, 1f);
-        funnel(out, s, morph(s), t, 1.22f, 3.1f, top, bottom, (int) (90 * strength), light, -0.6f); // outer sheath (same centreline, its own lumps)
+        if (s.seeThrough) {
+            // Creative see-inside view: a faint ghost of the funnel, no sheath, and the core marked on the ground
+            funnel(out, s, morph(s), t, 1.0f, 0f, top, bottom, 55, light, 1f);
+            coreRing(out, s);
+        } else {
+            funnel(out, s, morph(s), t, 1.0f, 0f, top, bottom, (int) (230 * strength), light, 1f);
+            funnel(out, s, morph(s), t, 1.22f, 3.1f, top, bottom, (int) (90 * strength), light, -0.6f); // outer sheath (same centreline, its own lumps)
+        }
         if (s.subvortices > 0 && s.intensity > 0.5f && FunnelShape.touchedDown(s.reach)) {
             float orbit = s.width * 0.5f * 0.75f;
             for (int i = 0; i < s.subvortices; i++) {
@@ -62,6 +68,7 @@ public final class TornadoMesh {
         boolean water = formation == TornadoFormation.WATERSPOUT;
         float down = (float) Math.pow(M.clamp((s.reach - 0.35f) / 0.65f, 0, 1), 4); // a low dust whirl until touchdown, then the full cloud
         int dust = water ? 0xF2F7FA : formation == TornadoFormation.LANDSPOUT ? 0x9E8763 : 0x6E5E4B;
+        if (s.seeThrough) down *= 0.25f;
         debrisCloud(out, s, time(s), down, dust, 0, water);
     }
 
@@ -203,9 +210,23 @@ public final class TornadoMesh {
                 ys[i][j] = s.cloudBase + 1.5f - drop * wall * wall - bump * (1.0f + 1.5f * wall);
             }
             float edge = M.clamp((1 - k) / 0.45f, 0, 1);                  // fade out over the outer part of the deck
-            cols[i] = ((int) (235 * edge) << 24) | lerpColor(light2, dark, Math.max(wall, 0.35f));
+            cols[i] = ((int) ((s.seeThrough ? 90 : 235) * edge) << 24) | lerpColor(light2, dark, Math.max(wall, 0.35f));
         }
         tube(out, xs, ys, zs, cols, rings, light, seg);
+    }
+
+    /** See-inside view: a glowing band on the ground at the core's edge, where the strongest winds are. */
+    static void coreRing(Sink out, TornadoRenderState s) {
+        if (!FunnelShape.touchedDown(s.reach)) return;
+        float r = Math.max(1, s.width * 0.5f);
+        int seg = 48;
+        float[][] xs = new float[2][seg + 1], ys = new float[2][seg + 1], zs = new float[2][seg + 1];
+        for (int j = 0; j <= seg; j++) {
+            float a = (float) (j * Math.PI * 2 / seg);
+            xs[0][j] = M.cos(a) * r; zs[0][j] = M.sin(a) * r; ys[0][j] = 0.1f;
+            xs[1][j] = M.cos(a) * r; zs[1][j] = M.sin(a) * r; ys[1][j] = 1.6f;
+        }
+        tube(out, xs, ys, zs, new int[]{0xC0FF5040, 0x00FF5040}, 1, 0, seg);
     }
 
     // ------------------------------------------------------------------ helpers

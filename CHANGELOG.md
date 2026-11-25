@@ -13,7 +13,14 @@ Built in stages. This section grows as each stage lands.
   - ropes and needles snake about; each shape (rope, needle, drill bit, cone, stovepipe, wedge) keeps its own profile
 - **Violent tornadoes are violent.** Stronger, wider tornadoes check up to four times as many blocks. They strip roofs first, then tear into the walls below. An EF5 levels most things in its core.
 - **Debris is picked up, carried and thrown.** Blocks spiral up around the core, ride the vortex for a while (longer in stronger tornadoes), then fly out along the rotation. Anything they hit takes damage.
-- **Wind forces on players and mobs** depend on size and armour: an EF3 skids you along, an EF4 lifts you, an EF5 carries you high and throws you. Sneaking helps you brace. Fall damage counts from where you're dropped.
+- **Wind forces on players and mobs** depend on the wind where you stand, so they fall off with distance from the funnel:
+  - EF0 winds shove you around.
+  - **EF1 winds pull you toward the funnel.**
+  - **EF2 winds lift you** a few blocks.
+  - Stronger tornadoes carry you higher (an EF5 up to about 45 blocks) and throw you out.
+  - Heavier mobs and armour resist, and sneaking helps you brace. Fall damage counts from where you're dropped.
+- **Tornado Director** (Creative only, in the Weather Events tab): point at the ground and use it to send the nearest tornado there. It curves toward the spot and stops on it. Sneak and use to let it wander again.
+- **See inside tornadoes** (Creative and Spectator only): press **O** to toggle. Tornadoes turn nearly transparent, the debris and particles thin out, and a red band marks the core, where the winds are strongest. The setting is saved as `creativeSeeThroughTornadoes` in `config/stormreach.properties`.
 - **Waterspouts stay over water.** They only form over open water, steer away from the shore, and fall apart if pushed onto land. They don't scour the lakebed. The waterspout spawner tells you if there's no water.
 - Shape, formation and vortex structure stay independent. The EF rating still comes from the damage survey.
 

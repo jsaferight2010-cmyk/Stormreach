@@ -44,6 +44,10 @@ import java.util.Random;
  * dimension) parsed and loaded; the tests then exercise the systems that can't be checked outside the game.
  */
 public class StormreachGameTests {
+    static {
+        // tests run side by side, each with its own tornado; the default cap of 2 would refuse some of them
+        com.stormreach.StormreachConfig.maxActiveTornadoes = 8;
+    }
 
     @GameTest
     public void datapackContentLoaded(GameTestHelper h) {
@@ -294,6 +298,24 @@ public class StormreachGameTests {
             for (int x = 0; x < 13; x++) for (int z = 0; z < 13; z++) h.setBlock(new BlockPos(x, 2, z), Blocks.GRASS_BLOCK);
             h.assertTrue(TornadoEntity.findWater(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(6, 3, 6))), 6) == null,
                     "found water where there is none");
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 100)
+    public void theTornadoDirectorSteersATornadoToItsTarget(GameTestHelper h) {
+        for (int x = 0; x < 14; x++) for (int z = 0; z < 6; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        TornadoEntity t = TornadoEntity.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(1, 2, 2))),
+                stationary(TornadoFormation.SUPERCELL, EFScale.EF0, 70, 4));
+        h.assertTrue(t != null, "tornado did not spawn");
+        Vec3 target = Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(12, 2, 2)));
+        t.steerTo(target);
+        h.runAfterDelay(80, () -> {
+            double d = Math.hypot(t.getX() - target.x, t.getZ() - target.z);
+            h.assertTrue(d < 2.0, "the directed tornado did not reach its target; still " + d + " blocks away");
+            t.release();
+            h.assertTrue(t.steerTarget() == null, "release did not clear the target");
+            t.discard();
             h.succeed();
         });
     }

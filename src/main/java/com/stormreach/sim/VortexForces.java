@@ -8,8 +8,12 @@ package com.stormreach.sim;
  *
  * <p>The model is drag toward the local wind: each tick a body closes a fraction {@code k} of the gap between its
  * velocity and the wind's, where {@code k} shrinks with mass (inertia) and with ground friction. Lift is a separate
- * vertical term that only beats gravity in violent winds: roughly EF3 skids you along, EF4 lifts you, EF5 carries
- * you up to the {@link #ceiling} and throws you out.
+ * vertical term, and a pull toward the funnel. For a player-sized body: EF0 winds only shove you, EF1 winds pull you
+ * toward the funnel, EF2 winds lift you, and EF5 winds carry you up to the {@link #ceiling} and throw you out.
+ *
+ * <p>Distance matters through the wind itself: every force here is fed the wind speed sampled at the body's own
+ * position, and the tornado's wind falls off with distance from the core (see {@link WindField#tangential}), so the
+ * same tornado lifts you at its core's edge, pulls you a few core radii out, and only gusts at you further away.
  */
 public final class VortexForces {
     private VortexForces() {}
@@ -32,16 +36,28 @@ public final class VortexForces {
         return clamp(k, 0.005, 0.35);
     }
 
-    /** Wind speed at which a body of this mass starts to be lifted, mph. */
-    public static double liftThresholdMph(double mass) {
-        return 100 + 20 * Math.sqrt(mass);
+    /** Wind speed at which a body of this mass starts to be pulled toward the funnel, mph (a player: 86, the start of EF1). */
+    public static double pullThresholdMph(double mass) {
+        return 76 + 10 * Math.sqrt(mass);
     }
 
-    /** Upward acceleration from the wind (blocks/tick²). It beats living gravity (0.08) from about 170 mph for a player (EF4). */
+    /** Pull toward the funnel's axis, blocks/tick². Noticeable in EF1 winds, hard to walk against in EF2 and up. */
+    public static double pull(double mph, double mass) {
+        double thr = pullThresholdMph(mass);
+        if (mph <= thr) return 0;
+        return Math.min(0.07, 0.012 + (mph - thr) / 1000.0) / Math.sqrt(Math.max(0.3, mass));
+    }
+
+    /** Wind speed at which a body of this mass starts to be lifted, mph (a player: 111, the start of EF2). */
+    public static double liftThresholdMph(double mass) {
+        return 101 + 10 * Math.sqrt(mass);
+    }
+
+    /** Upward acceleration from the wind (blocks/tick²). For a player it beats living gravity (0.08) from the start of EF2. */
     public static double lift(double mph, double mass, double heightAboveGround, double ceiling) {
         double thr = liftThresholdMph(mass);
         if (mph <= thr) return 0;
-        double a = Math.min(0.2, (mph - thr) / 600.0) / Math.sqrt(Math.max(0.3, mass));
+        double a = Math.min(0.22, 0.082 + (mph - thr) / 350.0) / Math.sqrt(Math.max(0.3, mass));
         // fade out under the ceiling, so bodies don't climb forever
         double room = clamp((ceiling - heightAboveGround) / 6.0, 0, 1);
         return a * room;
@@ -49,7 +65,7 @@ public final class VortexForces {
 
     /** How high (blocks above the ground) a tornado of this peak wind can carry things before throwing them. */
     public static double ceiling(double peakMph) {
-        return clamp(4 + (peakMph - 100) * 0.32, 4, 48);
+        return clamp(4 + (peakMph - 100) * 0.32, 5, 48);
     }
 
     /** Damage per second to a living body from the wind alone (sandblasting, impacts with small debris). */
@@ -67,6 +83,9 @@ public final class VortexForces {
         double vx = vel[0] + (wind[0] - vel[0]) * k;
         double vz = vel[2] + (wind[2] - vel[2]) * k;
         double vy = vel[1] + (wind[1] - vel[1]) * k * 0.5 + lift(mph, mass, heightAboveGround, ceiling);
+        double in = pull(mph, mass);
+        vx -= radialOut[0] * in;
+        vz -= radialOut[1] * in;
         // near the ceiling, the outflow throws bodies out of the funnel
         if (heightAboveGround > ceiling * 0.8 && mph > liftThresholdMph(mass)) {
             double fling = 0.06 * Math.min(1, (mph - liftThresholdMph(mass)) / 60.0);

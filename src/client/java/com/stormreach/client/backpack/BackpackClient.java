@@ -15,7 +15,7 @@ public final class BackpackClient {
 
     public static void init() {
         for (int rows = 1; rows <= 6; rows++) MenuScreens.register(Backpacks.MENUS[rows], BackpackScreen::new);
-        KeyMapping.Category category = KeyMapping.Category.register(Stormreach.id("stormreach"));
+        KeyMapping.Category category = com.stormreach.client.StormKeys.category();
         openKey = KeyMappingHelper.registerKeyMapping(new KeyMapping("key.stormreach.open_backpack", 66 /* GLFW_KEY_B */, category));
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openKey.consumeClick()) {

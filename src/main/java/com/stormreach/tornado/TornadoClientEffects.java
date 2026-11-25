@@ -11,6 +11,9 @@ import net.minecraft.world.level.Level;
 public final class TornadoClientEffects {
     private TornadoClientEffects() {}
 
+    /** Set by the client each tick: the Creative see-inside view is on, so thin the particles right out. */
+    public static volatile boolean seeThrough;
+
     static void tick(TornadoEntity t) {
         // spin: angular speed ~ v / r, so narrow funnels whirl and broad wedges turn slowly
         t.clientSpinO = t.clientSpin;
@@ -18,7 +21,7 @@ public final class TornadoClientEffects {
         t.clientSpin += Math.max(0.015f, Math.min(0.45f, 2.2f * (0.4f + 0.6f * t.intensity()) / half));
         Level level = t.level();
         RandomSource r = level.getRandom();
-        float density = StormreachConfig.particleDensity / 100f;
+        float density = StormreachConfig.particleDensity / 100f * (seeThrough ? 0.15f : 1f);
         float reach = t.funnelReach();
         if (!FunnelShape.dustWhirl(reach) || density <= 0) return;
         boolean down = FunnelShape.touchedDown(reach);

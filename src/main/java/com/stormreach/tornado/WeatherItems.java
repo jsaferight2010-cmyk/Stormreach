@@ -56,6 +56,10 @@ public final class WeatherItems {
     public static final Item STORM_RADAR = item("storm_radar", p -> new Handheld(p, true), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON).useCooldown(1.0f), METEOROLOGY);
     public static final Item WEATHER_RADIO = item("weather_radio", p -> new Handheld(p, false), new Item.Properties().stacksTo(1).useCooldown(1.0f), METEOROLOGY);
 
+    /** Creative-only: send the nearest tornado where you point. */
+    public static final Item TORNADO_DIRECTOR = item("tornado_director", TornadoDirectorItem::new,
+            new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).component(net.minecraft.core.component.DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true), WEATHER_EVENTS);
+
     static {
         for (SpawnerKind k : SpawnerKind.values()) {
             item("tornado_spawner_" + k.name().toLowerCase(), p -> new TornadoSpawner(p, k), new Item.Properties().stacksTo(1).rarity(Rarity.EPIC), WEATHER_EVENTS);

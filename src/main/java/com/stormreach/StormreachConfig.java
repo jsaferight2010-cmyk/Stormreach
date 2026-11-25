@@ -105,6 +105,8 @@ public final class StormreachConfig {
     public static int tornadoIntensityBias = 100;
     public static int tornadoDurationPercent = 50;
     public static boolean landspouts = true;
+    /** Creative/Spectator only: draw tornadoes nearly transparent, with the core marked, so you can see inside. */
+    public static boolean creativeSeeThroughTornadoes = false;
     public static boolean downbursts = true;
     public static int shadowAppearanceRate = 100;
     public static boolean shadowSigns = true;
@@ -185,6 +187,7 @@ public final class StormreachConfig {
         tornadoIntensityBias = num(p, "tornadoIntensityBias", tornadoIntensityBias, 50, 300);
         tornadoDurationPercent = num(p, "tornadoDurationPercent", tornadoDurationPercent, 10, 100);
         landspouts = bool(p, "landspouts", landspouts);
+        creativeSeeThroughTornadoes = bool(p, "creativeSeeThroughTornadoes", creativeSeeThroughTornadoes);
         downbursts = bool(p, "downbursts", downbursts);
         shadowAppearanceRate = num(p, "shadowAppearanceRate", shadowAppearanceRate, 0, 300);
         shadowSigns = bool(p, "shadowSigns", shadowSigns);
@@ -265,6 +268,7 @@ public final class StormreachConfig {
         p.setProperty("tornadoIntensityBias", String.valueOf(tornadoIntensityBias));
         p.setProperty("tornadoDurationPercent", String.valueOf(tornadoDurationPercent));
         p.setProperty("landspouts", String.valueOf(landspouts));
+        p.setProperty("creativeSeeThroughTornadoes", String.valueOf(creativeSeeThroughTornadoes));
         p.setProperty("downbursts", String.valueOf(downbursts));
         p.setProperty("shadowAppearanceRate", String.valueOf(shadowAppearanceRate));
         p.setProperty("shadowSigns", String.valueOf(shadowSigns));

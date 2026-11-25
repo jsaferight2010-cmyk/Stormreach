@@ -23,9 +23,34 @@ class VortexForcesTest {
     }
 
     @Test
-    void weakWindsDoNotLiftAPlayer() {
-        assertEquals(0, climbAfter(90, 100), 1e-9, "an EF0-strength wind lifted a player");
-        assertEquals(0, climbAfter(125, 100), 0.5, "an EF2-strength wind lifted a player clear off the ground");
+    void ef0ShovesEf1PullsEf2Lifts() {
+        double m = VortexForces.mass(0.6, 1.8, 0);
+        assertEquals(0, VortexForces.pull(75, m), 1e-9, "EF0 winds should not pull a player in");
+        assertTrue(VortexForces.pull(95, m) > 0, "EF1 winds should pull a player toward the funnel");
+        assertEquals(0, climbAfter(80, 100), 1e-9, "an EF0 wind lifted a player");
+        assertEquals(0, climbAfter(100, 100), 1e-9, "an EF1 wind lifted a player");
+        assertTrue(climbAfter(120, 100) > 1.5, "an EF2 wind should lift a player off the ground, got " + climbAfter(120, 100));
+        assertTrue(climbAfter(120, 200) < VortexForces.ceiling(120) + 3, "an EF2 should only lift a player a modest height");
+    }
+
+    @Test
+    void forcesFallOffWithDistanceFromTheTornado() {
+        // an EF2 tornado: 125 mph peak, 10-block core radius
+        WindField f = WindField.forPeakGust(EFScale.mphToMs(125), 10, 0, 0, 1, 0);
+        double m = VortexForces.mass(0.6, 1.8, 0);
+        double prevPull = Double.MAX_VALUE;
+        boolean liftedAtCore = false, liftedFar = false;
+        for (double r = 10; r <= 60; r += 5) {
+            double mph = f.sample(r, 0, 10, 0).horizontalMph();
+            double p = VortexForces.pull(mph, m);
+            assertTrue(p <= prevPull + 1e-12, "pull should weaken with distance (r=" + r + ")");
+            prevPull = p;
+            if (r <= 10) liftedAtCore = VortexForces.lift(mph, m, 0, 20) > 0;
+            if (r >= 30) liftedFar |= VortexForces.lift(mph, m, 0, 20) > 0;
+        }
+        assertTrue(liftedAtCore, "an EF2 should lift a player at its core's edge");
+        assertFalse(liftedFar, "an EF2 should not lift a player three core radii away");
+        assertEquals(0, VortexForces.pull(f.sample(60, 0, 10, 0).horizontalMph(), m), 1e-9, "no pull six core radii out");
     }
 
     @Test

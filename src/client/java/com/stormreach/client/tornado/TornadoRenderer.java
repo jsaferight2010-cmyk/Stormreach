@@ -57,6 +57,7 @@ public class TornadoRenderer extends EntityRenderer<TornadoEntity, TornadoRender
         s.rotation = -e.rotationSign(); // angles here grow from +x toward +z; WindField's cyclonic flow turns the other way
         s.seed = (e.getUUID().hashCode() & 1023) * 0.37f;
         s.spin = Mth.lerp(partial, e.clientSpinO, e.clientSpin);
+        s.seeThrough = TornadoSeeThrough.active();
     }
 
     @Override

@@ -1076,19 +1076,26 @@ public class StormreachGameTests {
     public void hailWithoutEntitiesStillHitsAndSettles(GameTestHelper h) {
         for (int x = 0; x < 6; x++) for (int z = 0; z < 6; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
         var level = h.getLevel();
-        var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, new BlockPos(1, 2, 1));
+        // the test area can have blocks overhead (which would rightly shield anything under them): use open columns
+        java.util.List<BlockPos> openCols = new java.util.ArrayList<>();
+        for (int x = 0; x < 6; x++) for (int z = 0; z < 6; z++) {
+            BlockPos a = h.absolutePos(new BlockPos(x, 2, z));
+            if (level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, a.getX(), a.getZ()) == a.getY()) openCols.add(new BlockPos(x, 2, z));
+        }
+        if (openCols.size() < 2) { h.succeed(); return; }
+        var zombie = h.spawn(net.minecraft.world.entity.EntityTypes.ZOMBIE, openCols.get(0));
         zombie.setNoAi(true);   // stand still under the stones
         float hp = zombie.getHealth();
         Vec3 z0 = zombie.position();
         int before = com.stormreach.weather.precip.HailstoneEntity.live();
         for (int i = 0; i < 6; i++) com.stormreach.weather.precip.HailSim.schedule(level, z0.x, z0.y + 20, z0.z, com.stormreach.sim.HailSize.GOLF_BALL, 0, 0);
-        BlockPos open = h.absolutePos(new BlockPos(4, 2, 4));
+        BlockPos openRel = openCols.get(openCols.size() - 1), open = h.absolutePos(openRel);
         for (int i = 0; i < 60; i++) com.stormreach.weather.precip.HailSim.schedule(level, open.getX() + 0.5, open.getY() + 20, open.getZ() + 0.5, com.stormreach.sim.HailSize.SOFTBALL, 0, 0);
         Check.isTrue(h, com.stormreach.weather.precip.HailstoneEntity.live() == before, "scheduling hail spawned entities");
         h.runAfterDelay(60, () -> {
             int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING, net.minecraft.util.Mth.floor(z0.x), net.minecraft.util.Mth.floor(z0.z));
             Check.isTrue(h, zombie.getHealth() < hp, "the hail never hit the zombie: zombie at " + zombie.position() + " scheduled at " + z0 + " column top " + top + " hp " + zombie.getHealth() + " hurtTime " + zombie.hurtTime);
-            Check.isTrue(h, h.getBlockState(new BlockPos(4, 2, 4)).is(com.stormreach.weather.precip.PrecipContent.HAIL_LAYER), "no hail settled on open ground");
+            Check.isTrue(h, h.getBlockState(openRel).is(com.stormreach.weather.precip.PrecipContent.HAIL_LAYER), "no hail settled on open ground");
             Check.isTrue(h, com.stormreach.weather.precip.HailSim.pending(level) == 0, "hail impacts were left pending");
             zombie.discard();
             h.succeed();

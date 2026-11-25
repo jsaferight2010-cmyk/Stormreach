@@ -12,13 +12,16 @@ Everything added in Stormreach 5.0 (the *Hollow Storm* update): how to find it, 
 4. Backpacks
 5. The Hollow Labyrinth
 6. Elderstorm Grove (Tempest Realm)
-7. The Stranger *(spoilers)*
-8. The Hollow Shrine *(spoilers)*
-9. Cyrrus, the Hollow Storm *(spoilers)*
-10. Achievements
-11. Settings
-12. Rarity and drop-rate tables
-13. Credits and licences
+7. Stormwild: new creatures
+8. Storm chasing
+9. Skyward: storm creatures, gear and gadgets
+10. The Stranger *(spoilers)*
+11. The Hollow Shrine *(spoilers)*
+12. Cyrrus, the Hollow Storm *(spoilers)*
+13. Achievements
+14. Settings
+15. Rarity and drop-rate tables
+16. Credits and licences
 
 ---
 
@@ -57,7 +60,7 @@ Like a real survey, a powerful tornado that only crossed empty fields can come o
 
 ### What it looks like (morphology)
 
-A tornado's shape is a separate thing from its strength. The guide tables (section 14) list how often each shape appears at each rating.
+A tornado's shape is a separate thing from its strength. The guide tables (section 15) list how often each shape appears at each rating.
 
 - **Rope:** a thin, twisting tube. This is often how a tornado looks at the end of its life.
 - **Needle:** a thin, straight, tapering funnel.
@@ -333,7 +336,52 @@ Gilded Stormfruit is also needed for the Aurorite Backpack upgrade and the Hollo
 
 ---
 
-## 9. The Stranger *(spoilers)*
+## 9. Skyward: storm creatures, gear and gadgets
+
+### Creatures
+- **Squall Serpent** (Tempest Realm: Cloudsea Expanse, Aurora Spires, Galewood Highlands; rare, never more than one nearby): a horned sky-dragon three blocks long that swims through the air.
+  - 160 health, 8 armour, with a purple boss bar.
+  - It circles its prey, lunges to bite, and rears back to spit three balls of lightning.
+  - When hurt it sometimes lashes the air into a gust that throws everything back.
+  - Drops 3–6 **Serpent Scales** and its **Squall Heart**.
+- **Hailstone Golem** (Overworld thunderstorms): a two-and-a-half-block giant of packed hail around a glowing core.
+  - Forms out under the open sky during a thunderstorm (5% a minute for each player outside, at most two nearby).
+  - 50 health, 10 armour. It smashes what it reaches and hurls fistfuls of hailstones at what it can't.
+  - Out of the storm it melts: sunshine and warm biomes wear it down, and fire hurts it twice as much.
+  - Drops a **Glacial Core** (half the time), Packed Ice and Snowballs.
+- **Aurora Moth** (Elderstorm Grove, Galewood Highlands, Aurora Spires, the coasts; at night): a violet moth with sheer aurora wings that flutters round lanterns and torches. It sheds **Aurora Dust** every few minutes.
+- **Stormfly:** a firefly whose tail glows with stored lightning. Swarms appear in the minutes before a storm and while it lasts, then fade away. Use a **glass bottle** on one to catch it.
+
+### Gear and gadgets
+| Item | Recipe | What it does |
+|---|---|---|
+| Gale Blade | Serpent Scale, Squall Heart, Breeze Rod | A sword: every hit throws the target into the air. Use it to ride an updraft yourself (5 s cooldown). Repaired with Serpent Scales. |
+| Stormchaser Goggles | Leather, light-blue glass panes, copper | A heads-up readout of the nearest tornado (or wind and pressure when there isn't one). |
+| Stormchaser Jacket | Leather, orange dye, glow ink sac | Braced against the wind: tornadoes and downbursts push you about a third as hard. |
+| Stormchaser Trousers and Boots | Leather, orange dye / slime balls | Speed I while it rains on you. |
+| Full Stormchaser suit | — | Lightning can't hurt you. |
+| Bottled Lightning | Hold an empty bottle within 8 blocks of a lightning strike | Throw it and the bolt comes down where it lands. |
+| Cloud Seeder | Firework rocket, Bottled Rain, snowball (makes 2) | Fire it under open sky to bring five minutes of rain. |
+| Supercell Seeder | Cloud Seeder, Bottled Lightning, gunpowder | Fire it under open sky to start a thunderstorm (with everything that comes with one). |
+| Wind Turbine | White wool, Anemometer, iron ingot, redstone | Turns in the wind and gives a redstone signal for how hard it blows (about 1 per 4 mph, 15 in a gale). Needs open sky. Right-click to read the wind. |
+| Storm Shelter Hatch | Iron ingots, orange dye (makes 2) | A heavy steel trapdoor for a storm cellar, as blast-proof as obsidian. |
+| Stormfly Jar | Copper ingot, glass panes, Bottled Stormfly | A soft lamp (light 12) that stands or hangs. |
+| Glacial Lamp | Packed Ice, Glacial Core (makes 4) | Light 15. |
+| Aurora Glass | Glass, Aurora Dust (makes 8) | Glass with the aurora drifting across it (light 7). |
+| Serpentscale Block | 4 Serpent Scales | A gleaming building block. |
+| Chaser's Coffee | 2 cocoa beans, sugar, glass bottle | Speed, Haste and Night Vision for two minutes. |
+| Snow Cone | 2 snowballs, sugar, sweet berries, paper (makes 2) | Fire Resistance for 30 seconds. |
+
+**Weather Radio, upgraded:** carried, it now sounds an alert tone and broadcasts a **Tornado Emergency** when a tornado comes within 150 blocks, a **Severe Thunderstorm Warning** when thunder starts, a statement when rain moves in, the **all-clear**, and a wildlife advisory when a Thunderbird is about.
+
+New achievements: This Is Not a Test, Rainmaker, Playing God, Suited Up, Lightning in a Bottle, Jar of Sparks, Thaw, Serpent of the Squall and Riding the Gale.
+
+### Tooltips
+Every Stormreach item now has a short description under its name. Hold **Shift** to see how to use it and its exact effects.
+
+---
+
+## 10. The Stranger *(spoilers)*
 
 You are not alone.
 
@@ -360,7 +408,7 @@ Craft all five pages with a book and a Hollow Remnant to rebind the **Weathered 
 
 ---
 
-## 10. The Hollow Shrine *(spoilers)*
+## 11. The Hollow Shrine *(spoilers)*
 
 **Finding it:**
 
@@ -394,7 +442,7 @@ Lay the **Weathered Journal** on the **Hollow Altar**.
 
 ---
 
-## 11. Cyrrus, the Hollow Storm *(spoilers)*
+## 12. Cyrrus, the Hollow Storm *(spoilers)*
 
 ### The intro
 
@@ -446,7 +494,7 @@ He has three last lines, and the storm clears.
 
 ---
 
-## 12. Achievements
+## 13. Achievements
 
 5.0 adds **49 achievements**, with three new tabs and new branches on the main tab.
 
@@ -466,7 +514,7 @@ The full reward list is in the tables below.
 
 ---
 
-## 13. Settings
+## 14. Settings
 
 **Mod Menu** (Stormreach → Configure) now holds **performance settings only**:
 
@@ -491,13 +539,13 @@ Gameplay options are still available for server owners in `config/stormreach.pro
 - `landspouts`, `downbursts`
 - `shadowAppearanceRate`, `shadowSigns`
 - `labyrinthGeneration`
-- `wildlifeSpawning` (the 5.2 creatures), `thunderbirdChance` (percent chance per minute, per player out in a thunderstorm; default 6)
+- `wildlifeSpawning` (the 5.2 and 5.3 creatures), `thunderbirdChance` (percent chance per minute, per player out in a thunderstorm; default 6), `hailGolemChance` (the same for Hailstone Golems; default 5)
 - `bossDifficulty`, `guardianDifficulty`
 - every setting from earlier versions
 
 ---
 
-## 14. Rarity and drop-rate tables
+## 15. Rarity and drop-rate tables
 
 All numbers below are calculated directly from the mod's loot tables, worldgen files and code (by `tools/guide_tables.py`), so they match the game.
 
@@ -508,9 +556,9 @@ Minecraft colours item names by rarity: white = Common, yellow = Uncommon, aqua 
 
 | Rarity | Items |
 |---|---|
-| Epic (magenta) | Chaser's Badge, Heart of the Labyrinth, Maelstrom Core, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter |
-| Rare (aqua) | Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle |
-| Uncommon (yellow) | Cloud Ambergris, Gale Essence, Glimmer Antler, Handheld Storm Radar, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V) |
+| Epic (magenta) | Chaser's Badge, Gale Blade, Heart of the Labyrinth, Maelstrom Core, Squall Heart, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter |
+| Rare (aqua) | Bottled Lightning, Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Supercell Seeder, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle |
+| Uncommon (yellow) | Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V) |
 
 
 ### Mob drops
@@ -561,6 +609,12 @@ Chance is per kill without Looting (Looting adds up to +1 per level to most coun
 | Gale Sprite | Gale Essence | 0–1 | 50.0% | Common |
 | Tidewrack Hermit | Pearlescent Shell | 0–1 | 50.0% | Common |
 | Tidewrack Hermit | Kelp | 0–1 | 50.0% | Common |
+| Squall Serpent | Serpent Scale | 3–6 | 100.0% | Guaranteed |
+| Squall Serpent | Squall Heart | 1 | 100.0% | Guaranteed |
+| Hailstone Golem | Packed Ice | 1–3 | 100.0% | Guaranteed |
+| Hailstone Golem | Snowball | 2–5 | 100.0% | Guaranteed |
+| Hailstone Golem | Glacial Core | 1 | 50.0% | Common |
+| Aurora Moth | Aurora Dust | 1–2 | 100.0% | Guaranteed |
 
 
 The Stranger and tornadoes drop nothing. Stranger: after you have seen it 3+ times, each time it vanishes there is a 25% chance it leaves a Hollow Remnant where it stood (Uncommon, but only after the third sighting).
@@ -837,7 +891,7 @@ Each reward item comes from exactly one achievement. The Sovereign Trophy is the
 
 ---
 
-## 15. Credits and licences
+## 16. Credits and licences
 
 - **Cyrrus's voice:**
   - spoken by the **Piper** text-to-speech engine with the "Ryan (high)" voice model

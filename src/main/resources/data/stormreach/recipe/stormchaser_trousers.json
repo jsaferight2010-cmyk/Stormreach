@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "O": "minecraft:orange_dye"
+  },
+  "pattern": [
+    "LLL",
+    "O O",
+    "L L"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormchaser_trousers"
+  }
+}

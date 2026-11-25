@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "W": "minecraft:white_wool",
+    "A": "stormreach:anemometer",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "WAW",
+    " I ",
+    " R "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:wind_turbine"
+  }
+}

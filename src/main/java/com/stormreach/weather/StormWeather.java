@@ -178,7 +178,8 @@ public final class StormWeather {
     /** True when lightning shouldn't be able to hurt this entity (full Stormshard set or Grounded). */
     public static boolean isLightningProof(LivingEntity entity) {
         return entity.hasEffect(ModEffects.GROUNDED) || (StormreachConfig.armorSetBonus && (hasFullStormshard(entity) || com.stormreach.realm.RealmGear.fullAurorite(entity)
-                || entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).is(com.stormreach.story.StoryRegistry.STORMCROWN)));
+                || entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).is(com.stormreach.story.StoryRegistry.STORMCROWN)
+                || com.stormreach.sky.ChaserGear.fullSet(entity)));
     }
 
     private static void spray(ServerLevel level, ServerPlayer player, Vec3 windDir, boolean thunder, RandomSource random, boolean highlands) {
@@ -239,6 +240,7 @@ public final class StormWeather {
     public static void onLightning(ServerLevel level, BlockPos hitBlock) {
         com.stormreach.realm.Stormgate.onLightning(level, hitBlock);
         com.stormreach.story.ShrineBlocks.onLightning(level, hitBlock);
+        com.stormreach.sky.BottledLightningItem.onLightning(level, hitBlock);
         BlockState state = level.getBlockState(hitBlock);
         RandomSource random = level.getRandom();
         net.minecraft.world.level.material.FluidState fluid = level.getFluidState(hitBlock.above());

@@ -9,6 +9,15 @@
               "type": "minecraft:bat",
               "count": 8,
               "weight": 10
+            },
+            {
+              "type": "stormreach:aurora_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 10
             }
           ],
           "monster": [

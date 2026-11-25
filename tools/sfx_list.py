@@ -85,6 +85,17 @@ SFX = {
     'creature.thunderbird_death': ('Thunderbird falls', [], 96),
     'item.kite_flap': ('Kite fabric snaps', [], 16),
     'item.conch': ('A conch is blown', [], 64),
+    # 5.3 Skyward
+    'creature.serpent_roar': ('Squall Serpent roars', [], 128),
+    'creature.serpent_hurt': ('Squall Serpent hisses', [], 48),
+    'creature.serpent_death': ('Squall Serpent dies', [], 96),
+    'creature.golem_crackle': ('Hailstone Golem creaks', [], 16),
+    'creature.golem_hurt': ('Hailstone Golem cracks', [], 16),
+    'creature.golem_death': ('Hailstone Golem shatters', [], 32),
+    'creature.golem_throw': ('Hailstone Golem hurls hail', [], 24),
+    'creature.moth_flutter': ('Moth flutters', [], 8),
+    'creature.stormfly_buzz': ('Stormflies buzz', [], 8),
+    'item.radio_alert': ('Weather radio alert tone', [], 16),
 }
 
 def java_const(sid):

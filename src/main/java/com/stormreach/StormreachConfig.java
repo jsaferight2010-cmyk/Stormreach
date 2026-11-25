@@ -38,7 +38,8 @@ public final class StormreachConfig {
     public static boolean crabSpawning = true;
     // 5.2 Stormwild
     public static boolean wildlifeSpawning = true;
-    public static int thunderbirdChance = 6;        // percent per minute per player out in a thunderstorm, 0-100
+    public static int thunderbirdChance = 6;
+    public static int hailGolemChance = 5;          // 5.3: percent per minute per player out in a thunderstorm, 0-100
     public static boolean gullSpawning = true;
     public static boolean squallSpawning = true;
     public static int maxSquallsPerPlayer = 4;      // 0-12
@@ -158,6 +159,7 @@ public final class StormreachConfig {
         maxSquallsPerPlayer = num(p, "maxSquallsPerPlayer", maxSquallsPerPlayer, 0, 12);
         wildlifeSpawning = bool(p, "wildlifeSpawning", wildlifeSpawning);
         thunderbirdChance = num(p, "thunderbirdChance", thunderbirdChance, 0, 100);
+        hailGolemChance = num(p, "hailGolemChance", hailGolemChance, 0, 100);
         tempestStaffCooldown = num(p, "tempestStaffCooldown", tempestStaffCooldown, 0, 60);
         tempestStaffRange = num(p, "tempestStaffRange", tempestStaffRange, 8, 64);
         stormbladeLightningChance = num(p, "stormbladeLightningChance", stormbladeLightningChance, 0, 100);
@@ -246,6 +248,7 @@ public final class StormreachConfig {
         p.setProperty("maxSquallsPerPlayer", String.valueOf(maxSquallsPerPlayer));
         p.setProperty("wildlifeSpawning", String.valueOf(wildlifeSpawning));
         p.setProperty("thunderbirdChance", String.valueOf(thunderbirdChance));
+        p.setProperty("hailGolemChance", String.valueOf(hailGolemChance));
         p.setProperty("tempestStaffCooldown", String.valueOf(tempestStaffCooldown));
         p.setProperty("tempestStaffRange", String.valueOf(tempestStaffRange));
         p.setProperty("stormbladeLightningChance", String.valueOf(stormbladeLightningChance));
@@ -328,7 +331,7 @@ public final class StormreachConfig {
         stormWeather = true; stormsOnAllCoasts = false; lightningFrequency = 40; lightningHarmful = true;
         wind = true; windStrength = 50; stormParticles = true; stormMessages = true;
         crabSpawning = true; gullSpawning = true; squallSpawning = true; maxSquallsPerPlayer = 4;
-        wildlifeSpawning = true; thunderbirdChance = 6;
+        wildlifeSpawning = true; thunderbirdChance = 6; hailGolemChance = 5;
         tempestStaffCooldown = 3; tempestStaffRange = 32; stormbladeLightningChance = 15; hornStormMinutes = 5;
         spreadMode = SpreadMode.CONTAINED; heartMaxRadius = 32; spreadSpeed = 5; convertMobs = true; blightBiome = true;
         heartActivatesOnPlace = false; stormFront = true; stormFrontMinutes = 4;

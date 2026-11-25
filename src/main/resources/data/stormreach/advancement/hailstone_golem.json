@@ -1,0 +1,35 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:hailstone_golem"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.hailstone_golem.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.hailstone_golem.description"
+    },
+    "icon": {
+      "id": "stormreach:glacial_core"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

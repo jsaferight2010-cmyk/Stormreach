@@ -353,7 +353,7 @@ public class TornadoEntity extends Entity {
             if (mph < 40) continue;
             double above = e.getY() - groundY(level, e.getX(), e.getZ());
             int armor = e instanceof LivingEntity le ? le.getArmorValue() : 0;
-            double mass = VortexForces.mass(e.getBbWidth(), e.getBbHeight(), armor);
+            double mass = VortexForces.mass(e.getBbWidth(), e.getBbHeight(), armor) * com.stormreach.sky.ChaserGear.massFactor(e);
             double dx = e.getX() - getX(), dz = e.getZ() - getZ(), r = Math.max(0.01, Math.hypot(dx, dz));
             Vec3 v = e.getDeltaMovement();
             double[] nv = VortexForces.step(new double[]{v.x, v.y, v.z}, new double[]{w.x * 0.05, w.y * 0.05 * 0.3, w.z * 0.05}, mph, mass,

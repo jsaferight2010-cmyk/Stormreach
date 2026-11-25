@@ -1,5 +1,49 @@
 # Stormreach patch notes
 
+## 5.3.0 (Skyward)
+More storm creatures, storm chasing gear and weather gadgets, and a cleaner tooltip with a description on every item. Every new creature has its own jointed model, a painted texture, keyframed animation and synthesized sounds.
+
+### Tooltips
+- **Every Stormreach item now has a description**: a sentence or two under its name saying what it is and what it's for. That's about 350 hand-written descriptions, plus a shared one for each generated Storm block and Storm mob egg that names the vanilla original.
+- **A cleaner layout:** name, then the description in soft grey, then a single "Hold ⇧ Shift for details" line.
+  - Holding Shift shows how to use the item and its exact effects (food effects, redstone outputs, cooldowns) as short bullet points.
+  - The usage lines that items used to print all the time now sit under Shift, so nothing appears twice. Live values (a logbook's count, a backpack's contents) stay visible.
+
+### New creatures
+- **Squall Serpent** (Tempest Realm, rare): a horned sky-dragon three blocks long that swims through the air on a wave down six tapering segments, with glowing crystal fins and trailing whiskers.
+  - 160 health and a boss bar. It circles, lunges to bite, rears back to spit ball lightning, and lashes out a gust when hurt.
+  - Drops **Serpent Scales** and its **Squall Heart**.
+- **Hailstone Golem** (Overworld thunderstorms): a hulking giant of packed hail around a glowing core, with an icicle crown.
+  - It smashes up close and heaves both arms overhead to hurl hailstones. Out of the storm it melts, and fire hurts it double.
+  - Drops a **Glacial Core**, Packed Ice and Snowballs.
+- **Aurora Moth** (at night, near light): a plush violet moth with four sheer, eyespotted wings that shade from aurora green to rose. It sheds **Aurora Dust**.
+- **Stormfly:** fireflies with lightning-lit tails that swarm before and during storms. Catch one in a glass bottle.
+
+### Storm chasing and weather gear
+- **Stormchaser suit** (goggles, jacket, trousers, boots), in storm orange with reflective tape:
+  - The goggles give a heads-up readout of the nearest tornado.
+  - The jacket braces you against tornado winds.
+  - The trousers and boots give Speed in the rain.
+  - The full suit makes you immune to lightning.
+- **Weather Radio, upgraded:** it now sounds an alert tone and broadcasts a Tornado Emergency (within 150 blocks), Severe Thunderstorm Warnings, rain statements, the all-clear and Thunderbird advisories.
+- **Cloud Seeder and Supercell Seeder:** rockets that bring rain, or a full thunderstorm.
+- **Bottled Lightning:** hold an empty bottle near a lightning strike to catch it, then throw it to call the bolt down.
+- **Wind Turbine:** a turbine whose three-bladed rotor spins faster in stronger wind and gives a redstone signal for the wind speed.
+- **Storm Shelter Hatch:** a blast-proof steel cellar hatch with hazard stripes.
+
+### Weapons, blocks and food
+- **Gale Blade:** a sword forged around a Squall Heart. Every hit throws the target skyward, and you can use it to ride an updraft.
+- **Blocks:**
+  - **Stormfly Jar:** a lamp that stands or hangs.
+  - **Glacial Lamp**.
+  - **Aurora Glass:** animated, with the aurora drifting across it.
+  - **Serpentscale Block**.
+- **Food:**
+  - **Chaser's Coffee:** Speed, Haste and Night Vision.
+  - **Snow Cone:** Fire Resistance.
+- 9 new achievements and 10 new synthesized sounds (serpent roar, golem crackle and shatter, moth flutter, stormfly buzz, the radio alert tone…).
+- New setting: `hailGolemChance` in `config/stormreach.properties`.
+
 ## 5.2.0 (Stormwild)
 New storm-touched creatures, storm chasing gear, and what they give you. Every new creature has its own jointed model, a painted texture, keyframed animation and synthesized sounds.
 

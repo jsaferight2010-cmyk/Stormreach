@@ -1703,6 +1703,11 @@
     "stormreach:nacre_bricks",
     "stormreach:skylight_lantern",
     "stormreach:tornado_probe",
-    "stormreach:rain_gauge"
+    "stormreach:rain_gauge",
+    "stormreach:wind_turbine",
+    "stormreach:storm_shelter_hatch",
+    "stormreach:stormfly_jar",
+    "stormreach:serpentscale_block",
+    "stormreach:glacial_lamp"
   ]
 }

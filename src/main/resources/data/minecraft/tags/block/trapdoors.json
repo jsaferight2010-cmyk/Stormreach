@@ -1,40 +1,41 @@
 {
- "values": [
-  {
-   "id": "stormreach:storm_iron_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_exposed_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_weathered_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_oxidized_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_waxed_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_waxed_exposed_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_waxed_weathered_copper_trapdoor",
-   "required": false
-  },
-  {
-   "id": "stormreach:storm_waxed_oxidized_copper_trapdoor",
-   "required": false
-  }
- ]
+  "values": [
+    {
+      "id": "stormreach:storm_iron_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_exposed_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_weathered_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_oxidized_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_waxed_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_waxed_exposed_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_waxed_weathered_copper_trapdoor",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_waxed_oxidized_copper_trapdoor",
+      "required": false
+    },
+    "stormreach:storm_shelter_hatch"
+  ]
 }

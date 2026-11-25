@@ -109,7 +109,7 @@ public final class StoryRenderers {
                     if (s.glow == null || s.isInvisible) return;
                     float pulse = 0.75f + 0.25f * Mth.sin(s.ageInTicks * 0.25f);
                     int a = (int) (255 * pulse);
-                    out.submitModel(getParentModel(), s, pose, RenderTypes.eyes(s.glow), 0xF000F0, OverlayTexture.NO_OVERLAY, a << 24 | 0xFFFFFF);
+                    out.submitModel(getParentModel(), s, pose, RenderTypes.eyes(s.glow), 0xF000F0, OverlayTexture.NO_OVERLAY, a << 24 | 0xFFFFFF, null, s.outlineColor);
                 }
             });
         }

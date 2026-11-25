@@ -60,6 +60,15 @@
                 "min_inclusive": 1
               },
               "weight": 30
+            },
+            {
+              "type": "stormreach:squall_serpent",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 2
             }
           ]
         }

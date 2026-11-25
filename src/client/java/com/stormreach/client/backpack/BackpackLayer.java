@@ -37,7 +37,7 @@ public class BackpackLayer extends RenderLayer<AvatarRenderState, PlayerModel> {
         boolean armored = !state.chestEquipment.isEmpty();
         if (armored) pose.translate(0, 0, 1.2f / 16f); // sit on top of the chestplate instead of clipping into it
         model.showStraps(!armored);
-        collector.submitModel(model, tier, pose, RenderTypes.entityCutout(TEXTURES[Math.min(tier, TEXTURES.length - 1)]), light, OverlayTexture.NO_OVERLAY, -1);
+        collector.submitModel(model, tier, pose, RenderTypes.entityCutout(TEXTURES[Math.min(tier, TEXTURES.length - 1)]), light, OverlayTexture.NO_OVERLAY, 0);
         pose.popPose();
     }
 

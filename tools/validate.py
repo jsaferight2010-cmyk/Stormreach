@@ -106,7 +106,7 @@ def chk(i, where):
 def jsrc(rel): return open(JAVA + '/com/stormreach/' + rel).read()
 nb, ni, ne = [], [], []
 for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'forest/ForestRegistry.java', 'backpack/Backpacks.java',
-            'wild/WildRegistry.java', 'chase/ChaseRegistry.java'):
+            'wild/WildRegistry.java', 'chase/ChaseRegistry.java', 'sky/SkyRegistry.java'):
     src5 = jsrc(rel)
     nb += re.findall(r'(?:block|trophy)\("([a-z_0-9]+)"', src5); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src5); ne += re.findall(r'\bentity\("([a-z_0-9]+)"', src5)
 # 5.1: hail and puddles, and the Doppler radar (its block and item are registered by hand, not through block())
@@ -114,7 +114,7 @@ src51 = jsrc('weather/precip/PrecipContent.java')
 nb += re.findall(r'\bblock\("([a-z_0-9]+)"', src51); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src51)
 nb += ['tornado_radar', 'radar_part']; ni += ['tornado_radar', 'stormreach_field_guide', 'storm_crafters_handbook']
 ni = [i for i in ni if not i.endswith('_')]
-ni += [f'{m}_spawn_egg' for m in re.findall(r'\begg\("([a-z_0-9]+)"', jsrc('wild/WildRegistry.java'))]
+ni += [f'{m}_spawn_egg' for m in re.findall(r'\begg\("([a-z_0-9]+)"', jsrc('wild/WildRegistry.java') + jsrc('sky/SkyRegistry.java'))]
 ni += ['tornado_spawner_' + k.strip().lower() for k in re.findall(r'enum SpawnerKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
 ni = [i.strip() for i in ni]
 ni += ['weather_event_' + k.strip().lower() for k in re.findall(r'enum EventKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
@@ -140,11 +140,19 @@ for e in ne:
     if f'entity.stormreach.{e}' not in lang: problems.append(f'no lang entity {e}')
     if e != 'tornado' and not os.path.exists(f'{D}/stormreach/loot_table/entities/{e}.json'): problems.append(f'no entity loot {e}')
 for tex in ('tornado', 'stranger', 'cyrrus', 'cyrrus_final', 'hollow_keeper', 'glimmerstag', 'thistlehop', 'cloud_whale', 'shock_eel', 'sparkskink',
-            'storm_jelly', 'gale_sprite', 'tidewrack_hermit', 'thunderbird', 'intercept_vehicle', 'weather_balloon'):
+            'storm_jelly', 'gale_sprite', 'tidewrack_hermit', 'thunderbird', 'intercept_vehicle', 'weather_balloon',
+            'squall_serpent', 'hailstone_golem', 'aurora_moth', 'stormfly'):
     if not os.path.exists(f'{A}/textures/entity/{tex}.png'): problems.append(f'no entity texture {tex}')
-for eq in ('stormcrown', 'storm_chaser_cap'):
+for eq in ('stormcrown', 'storm_chaser_cap', 'stormchaser'):
     if not os.path.exists(f'{A}/equipment/{eq}.json') or not os.path.exists(f'{A}/textures/entity/equipment/humanoid/{eq}.png'): problems.append(f'equipment {eq} incomplete')
 ours |= {f'stormreach:{x}' for x in nb + ni + ne}
+# 5.3: every hand-made item has a description (generated Storm blocks and Storm eggs share the two templates)
+for f in os.listdir(f'{A}/items'):
+    i = f[:-5]
+    if i.startswith('storm_') and (i[6:] in gen_blocks or (i.endswith('_spawn_egg') and i[6:-10] in eggs)): continue
+    if f'desc.stormreach.{i}' not in lang: problems.append(f'no description for {i}')
+for k in ('desc.stormreach.storm_block', 'desc.stormreach.storm_egg', 'tooltip.stormreach.more'):
+    if k not in lang: problems.append(f'missing {k}')
 # sounds: every registered sound event has a sounds.json entry, every entry's file exists, subtitles have lang
 sj = json.load(open(f'{A}/sounds.json'))
 for path in re.findall(r'register\("([a-z_.0-9]+)"\)', open(JAVA + '/com/stormreach/registry/ModSounds.java').read() + open(JAVA + '/com/stormreach/registry/ModSfx.java').read()):

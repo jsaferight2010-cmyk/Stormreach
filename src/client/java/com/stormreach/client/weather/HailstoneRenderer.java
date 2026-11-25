@@ -50,7 +50,7 @@ public class HailstoneRenderer extends EntityRenderer<HailstoneEntity, Hailstone
         collector.submitCustomGeometry(pose, RenderTypes.entityTranslucent(TEXTURE), (p, vc) -> WeatherMesh.hailstone(sink(p, vc, light), size.visualSize(), s.seed, s.spin));
     }
 
-    static TornadoMesh.Sink sink(PoseStack.Pose p, VertexConsumer vc, int light) {
+    public static TornadoMesh.Sink sink(PoseStack.Pose p, VertexConsumer vc, int light) {
         return (x, y, z, u, v, argb) -> {
             float len = Math.max(0.001f, Mth.sqrt(x * x + y * y + z * z));
             vc.addVertex(p, x, y, z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(p, x / len, y / len, z / len);

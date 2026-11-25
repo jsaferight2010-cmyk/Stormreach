@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "stormreach:block/stormfly_jar"
+    },
+    "hanging=true": {
+      "model": "stormreach:block/stormfly_jar_hanging"
+    }
+  }
+}

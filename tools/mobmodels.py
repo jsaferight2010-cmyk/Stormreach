@@ -206,6 +206,27 @@ def paint_face(img, al, x0, y0, w, h, mat, face, rng):
         img[y0:y0 + h, x0:x0 + w] = rgb; al[y0:y0 + h, x0:x0 + w] = 255
         return
 
+    if kind == 'mothwing':
+        # sheer aurora wing: colour flows from base to second along the span, dark veins fan out from the root,
+        # a wavy band and an eyespot, a pale fringe at the edge, and some see-through
+        g = np.clip(fx * 0.8 + fy * 0.35 + (n - 0.5) * 0.3, 0, 1)
+        rgb = base[None, None] * (1 - g[..., None]) + second[None, None] * g[..., None]
+        lit = 0.85 + FACE_LIGHT[face] * 0.5 + 0.18 * np.sin(fx * 9 + fy * 4 + n * 3)
+        rgb = rgb * lit[..., None]
+        ang = np.arctan2(fy + 0.15, fx + 0.02)
+        vein = np.abs(np.sin(ang * 9)) < 0.08
+        band = np.abs(fx - 0.62 - 0.06 * np.sin(fy * 14)) < 0.035
+        d = np.hypot((fx - 0.55) * 1.4, fy - 0.5)
+        ring = (d > 0.12) & (d < 0.2)
+        rgb = np.where((vein | band)[..., None], rgb * 0.55, rgb)
+        rgb = np.where(ring[..., None], np.array([30.0, 20, 50]), rgb)
+        rgb = np.where((d < 0.09)[..., None], np.array([250.0, 255, 240]), rgb)
+        fringe = (fx > 0.92) | (fy < 0.06) | (fy > 0.94)
+        rgb = np.where(fringe[..., None], np.minimum(255, rgb * 0.4 + 160), rgb)
+        img[y0:y0 + h, x0:x0 + w] = np.clip(rgb, 0, 255)
+        al[y0:y0 + h, x0:x0 + w] = np.where(fringe, 235, np.clip(170 + 50 * g, 0, 255))
+        return
+
     # ---- value field: lighting + material pattern, quantized onto the ramp --------------------------------------
     v = 0.5 + FACE_LIGHT[face] + (n - 0.5) * 0.16
     if side: v -= 0.12 * fy
@@ -242,6 +263,28 @@ def paint_face(img, al, x0, y0, w, h, mat, face, rng):
         cx = (xx + (row % 2) * 3) % 6
         v += 0.12 * (1 - (yy % 5) / 5) - 0.04
         v -= 0.24 * ((cx == 0) | (yy % 5 == 4))
+    elif kind == 'dscale':
+        # overlapping rounded dragon scales, each with a lit crown and a dark rim, with a sheen across the plate
+        SW, SH = 5, 4
+        row = yy // SH
+        lx = (xx + (row % 2) * (SW // 2 + 0.5)) % SW - (SW - 1) / 2
+        ly = yy % SH
+        rim = ly - (SH - 1) + (lx * lx) / (SW * 0.55)
+        v += 0.16 * (1 - ly / SH) * (1 - np.abs(lx) / SW) - 0.05
+        v -= 0.28 * (np.abs(rim) < 0.6)
+        v += 0.12 * (np.abs((xx * 0.7 - yy) % 30 - 8) < 3)
+    elif kind == 'hail':
+        # packed hailstones: round lumps with a bright upper-left highlight, shaded undersides and dark gaps
+        bl = np.zeros((h, w)); hl = np.zeros((h, w)); taken = np.full((h, w), -1.0)
+        for _ in range(max(3, w * h // 26)):
+            cx, cy, r = rng.random() * w, rng.random() * h, 2.2 + rng.random() * 2.6
+            dd = np.hypot(xx - cx, yy - cy) / r
+            inside = (dd < 1) & (1 - dd > taken)
+            taken = np.where(inside, 1 - dd, taken)
+            bl = np.where(inside, 1 - dd, bl)
+            hl = np.where(inside, np.clip(1 - np.hypot(xx - cx + r * 0.35, yy - cy + r * 0.35) / (r * 0.45), 0, 1), hl)
+        v = 0.38 + 0.38 * np.sqrt(np.clip(bl, 0, 1)) + 0.25 * hl + FACE_LIGHT[face] * 0.6 + (n - 0.5) * 0.06
+        v = np.where(taken < 0, 0.18, v)
     elif kind == 'metal':
         brush = value_noise(rng, max(2, w // 2), w, h)[:1].repeat(h, 0)
         v += 0.1 * (brush - 0.5)
@@ -1342,6 +1385,110 @@ M.append(Model('WeatherBalloonModel', 'weather_balloon', {'latex': ('skin', C('#
                        sonde_rz=shift(even(-10, 10), 0.3), sonde_ry=even(0, 20, 0, -20)), '1f')],
     doc='The Weather Balloon: a latex balloon that swells as it climbs, trailing a radiosonde with a blinking light on a swaying cord.',
     grounded=False, extra='        float g = Math.min(1f, s.ageInTicks / 600f) * 0.7f;\n        balloon.xScale += g; balloon.yScale += g; balloon.zScale += g;\n'))
+
+# ================================================================================================ 5.3 Skyward
+# ---- Squall Serpent -------------------------------------------------------------------------------------------
+sq = P('body', (0, 12, -2), boxes=[Box(-4, -3.5, -1, 8, 7, 8, 'scale'), Box(-3.5, 2.5, -0.5, 7, 1.5, 7, 'belly'), Box(-0.5, -6, 0, 1, 3, 6, 'fin')])
+shead = P('head', (0, -0.5, -1), boxes=[Box(-4, -3.5, -8, 8, 6, 8, 'scale'), Box(-3, -2, -12.5, 6, 4, 5, 'scale'), Box(-2.5, -2.6, -12.8, 5, 1, 3, 'scale2'),
+                                        Box(-4.3, -2.5, -6.5, 1, 1, 2, 'eye'), Box(3.3, -2.5, -6.5, 1, 1, 2, 'eye'),
+                                        Box(-2.5, 1.6, -12, 5, 1, 1, 'tooth'), Box(-4.5, -4.5, -1.5, 9, 8, 1, 'fin'),
+                                        Box(-1, -4.2, -11, 2, 1, 7, 'scale2')])
+shead.add(P('jaw', (0, 2, -4), boxes=[Box(-3, 0, -8, 6, 2, 8, 'belly'), Box(-2.5, -1, -7.5, 5, 1, 1, 'tooth')]))
+shead.add(*pair(P('left_horn', (2.5, -3.5, -2), (-0.65, 0, 0.3), [Box(-0.5, -6, -0.5, 1, 6, 1, 'horn')]).add(
+    P('left_horn_tip', (0, -6, 0), (-0.5, 0, 0), [Box(-0.5, -4, -0.5, 1, 4, 1, 'horn'), Box(-0.5, -2, 0.5, 1, 1, 2, 'horn')]))))
+shead.add(*pair(P('left_whisker', (3, 0.5, -11.5), (0, 0.6, 0.3), [Box(0, -0.5, -0.5, 4, 1, 1, 'fin')]).add(
+    P('left_whisker2', (4, 0, 0), (0, 0.4, 0.2), [Box(0, -0.5, -0.5, 4, 1, 1, 'glow')]))))
+sq.add(shead)
+sq.add(*pair(P('left_claw', (3.8, 2.5, 3), (0, -0.4, 0.5), [Box(0, -1, -1, 3, 2, 2, 'scale')]).add(
+    P('left_talon', (3, 0, 0), (0, 0, 0.8), [Box(0, -0.5, -1.5, 2, 1, 3, 'horn')]))))
+prev, seg_tr, segs = sq, {}, []
+for i in range(6):
+    k = 1 - i * 0.11
+    w, h = 8 * k, 7 * k
+    seg = P(f'seg{i}', (0, 0, 7 if i == 0 else 8 * (1 - (i - 1) * 0.11)), boxes=[
+        Box(-w / 2, -h / 2, 0, w, h, 8 * k + 0.4, 'scale'), Box(-w / 2 + 0.5, h / 2 - 1, 0.5, w - 1, 1.5, 8 * k - 0.6, 'belly'),
+        Box(-0.5, -h / 2 - 2.5 * k, 1, 1, 2.5 * k, 6 * k, 'fin')])
+    prev.add(seg); prev = seg; segs.append(seg.field)
+    seg_tr[(f'seg{i}', 'ry')] = shift(even(9 + i * 1.5, -(9 + i * 1.5)), 0.12 * (i + 1))
+    seg_tr[(f'seg{i}', 'rx')] = shift(even(4, -4), 0.12 * (i + 1) + 0.25)
+prev.add(P('tail_fin', (0, 0, 8 * (1 - 5 * 0.11)), boxes=[Box(-4, -0.5, 0, 8, 1, 6, 'fin'), Box(-0.5, -3, 0, 1, 6, 5, 'fin'), Box(-0.5, -1, 4, 1, 2, 3, 'glow')]))
+seg_tr.update(sym(T(body_py=even(0, -1.2, 0, 1.2), body_ry=even(-5, 5), head_ry=shift(even(4, -4), 0.05), jaw_rx=even(2, 6),
+                    left_whisker_rz=shift(even(-10, 10), 0.1), left_whisker2_rz=shift(even(-14, 14), 0.25), left_whisker_ry=shift(even(6, -6), 0.2),
+                    left_claw_rz=even(10, -6), left_talon_rz=shift(even(10, -10), 0.2), tail_fin_ry=shift(even(18, -18), 0.85))))
+M.append(Model('SquallSerpentModel', 'squall_serpent', {'scale': ('dscale', C('#3c4c80'), C('#141a3a')), 'scale2': ('dscale', C('#55689e'), C('#20284e')),
+    'belly': ('scale', C('#a8b4d4'), C('#525e80')), 'fin': ('crystal', C('#9fe8ff'), C('#3a6ab0')), 'horn': ('bone', C('#dfe3ee'), C('#6a7090')),
+    'tooth': ('bone', C('#f4f2ea'), C('#a09e90')), 'eye': ('eye', C('#ffe070'), C('#120c04')), 'glow': ('glow', C('#eafaff'), C('#6ad0ff'))}, [sq], [
+    Clip('time', 44, seg_tr, '1f'),
+    Clip('fidget', 220, T(head_rx=[(0, 0), (0.2, -35), (0.75, -35), (1, 0)], jaw_rx=[(0, 0), (0.2, 50), (0.75, 50), (1, 0)],
+                          body_rx=[(0, 0), (0.2, -20), (0.75, -20), (1, 0)], seg0_rx=[(0, 0), (0.2, 15), (0.75, 15), (1, 0)]), '1f', dur=36),
+    Clip('attack', 12, T(head_rx=[(0, 0), (0.3, -25), (0.55, 20), (1, 0)], jaw_rx=[(0, 0), (0.3, 55), (0.55, 0), (1, 0)],
+                         body_pz=[(0, 0), (0.3, 3), (0.55, -6), (1, 0)], seg0_rx=[(0, 0), (0.3, -12), (0.55, 10), (1, 0)])),
+    Clip('cast', 30, T(body_rx=[(0, 0), (0.3, -45), (0.8, -45), (1, 0)], seg0_rx=[(0, 0), (0.3, 30), (0.8, 30), (1, 0)], seg1_rx=[(0, 0), (0.3, 18), (0.8, 18), (1, 0)],
+                       jaw_rx=[(0, 0), (0.3, 60), (0.8, 60), (1, 0)], left_horn_rx=[(0, 0), (0.3, -10), (1, 0)], right_horn_rx=[(0, 0), (0.3, -10), (1, 0)])),
+    hurt_clip('body', 'head', 1.0)],
+    doc='The Squall Serpent: a horned sky-dragon three blocks long that swims through the air on a travelling wave down six tapering segments, with glowing crystal fins, whiskers that trail and a forked tail fin; it rears and gapes to spit ball lightning and lunges to bite.',
+    grounded=False, look=[('head', 0.7, 0.6)],
+    extra='        ' + ' '.join(f'{f}.yRot += turn * {0.012 * (j + 1):.3f}f;' for j, f in enumerate(segs)) + '\n'))
+
+# ---- Hailstone Golem ------------------------------------------------------------------------------------------
+gb = P('body', (0, 10, 0), boxes=[Box(-6, -12, -4, 12, 12, 8, 'ice'), Box(-7, -12.5, -4.5, 14, 5, 9, 'hail'), Box(-2.5, -9.5, -4.4, 5, 5, 1, 'core'),
+                                  Box(-5, -3, -3.5, 10, 4, 7, 'ice2'), Box(4, -6, -4.6, 2, 2, 1, 'hail'), Box(-6.4, -5, 1, 2, 3, 2, 'hail'),
+                                  Box(-3, -15, -2, 6, 3, 4, 'hail')])
+gb.add(P('head', (0, -13, -1.5), boxes=[Box(-3.5, -6, -3.5, 7, 6, 7, 'ice2'), Box(-2.6, -3.6, -3.7, 2, 1, 1, 'eye'), Box(0.6, -3.6, -3.7, 2, 1, 1, 'eye'),
+                                         Box(-2, -2, -3.8, 4, 1, 1, 'dark'), Box(-4, -7, -4, 8, 2, 8, 'hail')]).add(
+    *[P(f'icicle{i}', (x, -7, z), boxes=[Box(-0.5, -h, -0.5, 1, h, 1, 'icicle')]) for i, (x, z, h) in enumerate(((-3, -2, 3), (0, -3, 4), (3, -1, 3), (-1, 2, 2), (2, 2, 3)))]))
+for sd in ('left',):
+    gb.add(*pair(P('left_arm', (7, -10, 0), (0, 0, -0.12), [Box(0, -2.5, -3, 5, 10, 6, 'ice'), Box(-0.5, -3, -3.5, 6, 4, 7, 'hail')]).add(
+        P('left_forearm', (2.5, 7.5, 0), boxes=[Box(-2.5, 0, -2.5, 5, 9, 5, 'ice2'), Box(-3.5, 7, -3.5, 7, 6, 7, 'hail'), Box(-1, 3, -2.8, 2, 2, 1, 'icicle')]))))
+legs = [P(f'{sd}_leg', (3.4 * sg, 10, 0), boxes=[Box(-3, 0, -3, 6, 9, 6, 'ice'), Box(-3.5, 9, -3.5, 7, 5, 7, 'hail')]) for sd, sg in (('left', 1), ('right', -1))]
+gwalk = merge(gait_leg('left_leg', None, 0, 22), gait_leg('right_leg', None, 0.5, 22),
+              T(left_arm_rx=shift([(0, 18), (0.5, -18)], 0.5), right_arm_rx=[(0, 18), (0.5, -18)], body_rz=even(4, -4), body_ry=even(-6, 6),
+                body_py=[(0, 0), (0.25, 0.6), (0.5, 0), (0.75, 0.6)], left_forearm_rx=shift([(0, -10), (0.5, -26)], 0.5), right_forearm_rx=[(0, -10), (0.5, -26)]))
+M.append(Model('HailstoneGolemModel', 'hailstone_golem', {'ice': ('crystal', C('#cde6f4'), C('#5f8eb0')), 'ice2': ('crystal', C('#e6f3fb'), C('#86afc8')),
+    'hail': ('hail', C('#f0f5f8'), C('#9fb4c4')), 'icicle': ('crystal', C('#f4fbff'), C('#a8d4ee')), 'core': ('glow', C('#effcff'), C('#6ec8ff')),
+    'eye': ('glow', C('#c8f6ff'), C('#3a9ad8')), 'dark': ('dark', C('#2c4252'))}, [gb, *legs], [
+    Clip('time', 70, sym(T(body_sy=[(0, 0), (0.5, 0.025)], left_arm_rz=even(-3, 2), left_forearm_rx=hold(-12), head_ry=even(0, 6, 0, -6))), 'idleW'),
+    Clip('dist', 0.2, gwalk, 'moveW'),
+    Clip('fidget', 180, T(head_rz=[(0, 0), (0.15, 14), (0.3, -14), (0.45, 12), (0.6, -10), (0.75, 0)], body_rz=[(0, 0), (0.2, 3), (0.4, -3), (0.6, 0)]), 'idleW', dur=26),
+    Clip('cast', 20, sym(T(left_arm_rx=[(0, 0), (0.35, -165), (0.55, -175), (0.75, -40), (1, 0)], left_forearm_rx=[(0, 0), (0.35, -30), (0.6, -40), (0.75, 0)],
+                           body_rx=[(0, 0), (0.35, -12), (0.7, 14), (1, 0)]))),
+    Clip('attack', 14, sym(T(left_arm_rx=[(0, 0), (0.35, -150), (0.6, -20), (1, 0)], left_forearm_rx=[(0, 0), (0.35, -40), (0.6, 0)],
+                             body_rx=[(0, 0), (0.35, -8), (0.6, 18), (1, 0)], head_rx=[(0, 0), (0.6, 10), (1, 0)]))),
+    hurt_clip('body', 'head', 0.7)],
+    doc='The Hailstone Golem: a lumbering two-and-a-half-block giant of packed ice crusted with hailstones, with a glowing storm core in its chest, an icicle crown and fists like boulders; it heaves both arms overhead to hurl hail and brings them down to smash.',
+    look=[('head', 0.8, 0.5)]))
+
+# ---- Aurora Moth ----------------------------------------------------------------------------------------------
+am = P('body', (0, 18, 0), boxes=[Box(-2, -2, -3, 4, 4, 5, 'fur'), Box(-2.5, -2.5, -2.5, 5, 2, 3, 'fur2'), Box(-1.5, -1.5, 2, 3, 3, 5, 'fur3'), Box(-1, -1, 6.6, 2, 2, 1, 'glow')])
+am.add(P('head', (0, -0.3, -3), boxes=[Box(-2, -2, -2.5, 4, 4, 2.5, 'fur2'), Box(-2.6, -1.6, -2.2, 1.2, 2, 2, 'eye'), Box(1.4, -1.6, -2.2, 1.2, 2, 2, 'eye')]).add(
+    *pair(P('left_antenna', (0.8, -2, -2), (-0.6, 0, 0.5), [Box(-0.5, -4, -0.5, 1, 4, 1, 'fur2'), Box(0, -4, -0.5, 2, 3, 1, 'feather')]))))
+am.add(*pair(P('left_wing', (1.8, -1.8, -1.5), (0, 0, 0.05), [Box(0, -0.5, -4, 10, 1, 7, 'wing')])))
+am.add(*pair(P('left_hindwing', (1.6, -1.4, 1.5), (0, -0.15, 0.1), [Box(0, -0.5, 0, 7, 1, 5, 'wing2')])))
+am.add(*pair(P('left_legs', (1.5, 1.8, -1), (0, 0, 0.7), [Box(0, -0.5, -1.5, 2, 1, 3, 'fur3')])))
+M.append(Model('AuroraMothModel', 'aurora_moth', {'fur': ('fur', C('#3e3468'), C('#1a1432')), 'fur2': ('fur', C('#ddd6f2'), C('#7c6ca4')),
+    'fur3': ('fur', C('#5a4a8a'), C('#2a2048')), 'feather': ('feather', C('#e8e0ff'), C('#8a7ac0')),
+    'wing': ('mothwing', C('#86f4cc'), C('#a05ae8')), 'wing2': ('mothwing', C('#ff92dc'), C('#48c4ea')), 'eye': ('glow', C('#c0fff0'), C('#38c0a0')),
+    'glow': ('glow', C('#e8fff4'), C('#7af0c0'))}, [am], [
+    Clip('time', 7, sym(T(left_wing_rz=[(0, -46), (0.5, 38)], left_hindwing_rz=shift([(0, -40), (0.5, 32)], 0.12), body_py=[(0, 0.5), (0.5, -0.5)])), '1f'),
+    Clip('time', 40, sym(T(body_rx=even(-6, 4), left_antenna_rx=shift(even(-8, 6), 0.2), left_antenna_rz=even(4, -4))), '1f'),
+    Clip('fidget', 120, sym(T(left_wing_rz=[(0, 0), (0.2, 30), (0.8, 30), (1, 0)], left_hindwing_rz=[(0, 0), (0.2, 26), (0.8, 26), (1, 0)])), '1f', dur=28),
+    hurt_clip('body', 'head', 0.8)],
+    doc='The Aurora Moth: a plush violet moth with feathered antennae and four sheer wings that shimmer from aurora green to rose; it flutters round lanterns at night and now and then glides with its wings held high.',
+    grounded=False, translucent=True, look=[('head', 0.8, 0.8)]))
+
+# ---- Stormfly -------------------------------------------------------------------------------------------------
+sf = P('body', (0, 20, 0), boxes=[Box(-1, -1, -1.5, 2, 2, 3, 'shell'), Box(-0.8, -0.8, 1.2, 1.6, 1.6, 2.5, 'glow')])
+sf.add(P('head', (0, 0, -1.5), boxes=[Box(-1, -1, -1.5, 2, 2, 1.5, 'shell2'), Box(-1.2, -0.8, -1.4, 0.6, 1, 1, 'eye'), Box(0.6, -0.8, -1.4, 0.6, 1, 1, 'eye')]).add(
+    *pair(P('left_antenna', (0.5, -1, -1.2), (-0.7, 0, 0.4), [Box(-0.5, -2, -0.5, 1, 2, 1, 'shell2')]))))
+sf.add(*pair(P('left_wing', (0.6, -1, -0.5), (0, 0.25, 0), [Box(0, -0.5, -1, 3.5, 1, 2.5, 'wing')])))
+sf.add(*pair(P('left_elytron', (0.5, -1, -1), (0, -0.2, -0.35), [Box(0, -0.5, 0, 1.5, 1, 3, 'shell')])))
+M.append(Model('StormflyModel', 'stormfly', {'shell': ('shell', C('#2e3a52'), C('#121826')), 'shell2': ('shell', C('#465670'), C('#1c2434')),
+    'wing': ('jelly', C('#e0f4ff'), C('#80b8e0')), 'eye': ('eye', C('#cfe8ff'), C('#0a1018')), 'glow': ('glow', C('#fbffd8'), C('#a8f0ff'))}, [sf], [
+    Clip('time', 2, sym(T(left_wing_rz=[(0, -50), (0.5, 40)])), '1f'),
+    Clip('time', 30, sym(T(body_py=even(0, -0.6, 0, 0.6), body_rx=even(-10, -4), left_antenna_rz=even(6, -6))), '1f'),
+    hurt_clip('body', None, 0.5)],
+    doc='The Stormfly: a firefly whose tail glows with stored lightning, on two buzzing wings under raised wing cases.',
+    grounded=False, translucent=True))
 
 MOB_TEXTURES = {m.texture for m in M}
 

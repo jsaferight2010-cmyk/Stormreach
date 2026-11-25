@@ -270,6 +270,55 @@ NEW52 = {'creature.whale_song': whale_song, 'creature.whale_hurt': whale_hurt, '
          'creature.thunderbird_cry': thunderbird_cry, 'creature.thunderbird_hurt': thunderbird_hurt, 'creature.thunderbird_death': thunderbird_death,
          'item.kite_flap': kite_flap, 'item.conch': conch}
 
+# ---------------------------------------------------------------------------------------------- 5.3 Skyward
+def serpent_roar():
+    # a long, throaty sky-dragon roar: two detuned growling voices sweeping down, a hiss on top, and thunder under it
+    sec = 2.6
+    out = titan(150, 70, sec, 0.8) * 0.6 + titan(152, 68, sec, 0.8) * 0.4
+    out = out + hp(noise(sec), 2500) * np.sin(np.pi * t_(sec) / sec) ** 2 * 0.25
+    place(out, lp(thunder()[:int(2.0 * SR)], 300) * 0.4, 0.3)
+    return reverb(out, 2.2, 0.35, 2200)
+def serpent_hurt(): t = t_(0.5); return mix(hp(noise(0.5), 1800) * np.exp(-t * 6) * 0.7, titan(220, 160, 0.5, 0.6) * 0.5)
+def serpent_death():
+    out = mix(titan(140, 40, 3.2, 0.7), np.zeros(int(3.2 * SR)))
+    place(out, crackle(2.0, 25) * 0.5, 0.6)
+    return reverb(out, 2.6, 0.4, 2000)
+def golem_crackle():
+    # ice settling: a few sharp tinkles and creaks
+    out = np.zeros(int(0.9 * SR))
+    for i in range(6):
+        at = rng.random() * 0.75
+        place(out, tone_hit(2400 + rng.random() * 2600, 0.12, 40) * 0.3, at); place(out, knock(2500, 8000, 0.05, 80) * 0.4, at)
+    place(out, bp(noise(0.5), 200, 900) * np.sin(np.pi * t_(0.5) / 0.5) * 0.3, 0.1)
+    return out
+def golem_hurt(): return mix(shatter()[:int(0.5 * SR)] * 0.6, knock(200, 1200, 0.3, 14) * 0.7)
+def golem_death():
+    out = shatter() * 0.8
+    out = np.concatenate([out, np.zeros(max(0, int(1.5 * SR) - len(out)))])
+    place(out, debris(14, 1500, 7000, 0.9) * 0.6, 0.05)
+    place(out, lp(noise(0.6), 300) * expdecay(0.6, 6) * 0.8, 0)
+    return reverb(out, 1.4, 0.3)
+def golem_throw(): return mix(throw() * 0.8, knock(300, 2000, 0.2, 18) * 0.6)
+def moth_flutter(): t = t_(0.5); return lp(noise(0.5), 1200) * np.abs(np.sin(2 * np.pi * 22 * t)) ** 4 * np.sin(np.pi * t / 0.5) * 0.6
+def stormfly_buzz():
+    t = t_(1.2)
+    f = 240 + 30 * np.sin(2 * np.pi * 3 * t)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    tone = np.sign(np.sin(ph)) * 0.25 + np.sin(ph * 2) * 0.2
+    return lp(tone, 2500) * adsr(len(t), 0.1, 0.1, 0.8, 0.4) * 0.5 + crackle(1.2, 6) * 0.15
+def radio_alert():
+    # the weather-radio attention tone: a steady 1050 Hz beep, three times, with a little speaker grit
+    out = np.zeros(int(2.4 * SR))
+    for i in range(3):
+        t = t_(0.55)
+        beep = (np.sin(2 * np.pi * 1050 * t) + 0.12 * np.sin(2 * np.pi * 3150 * t)) * adsr(len(t), 0.005, 0.02, 0.9, 0.02)
+        place(out, beep, i * 0.75)
+    return bp(out, 300, 3400) + bp(noise(2.4), 300, 3400) * 0.015
+NEW53 = {'creature.serpent_roar': serpent_roar, 'creature.serpent_hurt': serpent_hurt, 'creature.serpent_death': serpent_death,
+         'creature.golem_crackle': golem_crackle, 'creature.golem_hurt': golem_hurt, 'creature.golem_death': golem_death,
+         'creature.golem_throw': golem_throw, 'creature.moth_flutter': moth_flutter, 'creature.stormfly_buzz': stormfly_buzz,
+         'item.radio_alert': radio_alert}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -280,7 +329,7 @@ SYNTH = {
     'creature.wind_hurt': wind_hurt, 'creature.wind_death': wind_death, 'creature.titan_ambient': titan_ambient, 'creature.titan_roar': titan_roar,
     'creature.titan_hurt': titan_hurt, 'creature.titan_death': titan_death, 'creature.titan_charge': titan_charge, 'creature.titan_blast': titan_blast,
     'weather.hail': hail, 'weather.puddle_splash': splash, 'block.radar_ping': radar_ping,
-    **MAT_SYNTH, **NEW52,
+    **MAT_SYNTH, **NEW52, **NEW53,
 }
 
 # ---------------------------------------------------------------------------------------------- the Labyrinth score

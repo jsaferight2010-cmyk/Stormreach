@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.cloud_seeder.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.cloud_seeder.description"
+    },
+    "icon": {
+      "id": "stormreach:cloud_seeder"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

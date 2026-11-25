@@ -1,0 +1,38 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:squall_serpent"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.squall_serpent.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.squall_serpent.description"
+    },
+    "icon": {
+      "id": "stormreach:squall_heart"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 150
+  }
+}

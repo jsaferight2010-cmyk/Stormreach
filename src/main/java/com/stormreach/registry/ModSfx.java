@@ -92,6 +92,16 @@ public final class ModSfx {
     public static final SoundEvent CREATURE_THUNDERBIRD_DEATH = ModSounds.register("creature.thunderbird_death");
     public static final SoundEvent ITEM_KITE_FLAP = ModSounds.register("item.kite_flap");
     public static final SoundEvent ITEM_CONCH = ModSounds.register("item.conch");
+    public static final SoundEvent CREATURE_SERPENT_ROAR = ModSounds.register("creature.serpent_roar");
+    public static final SoundEvent CREATURE_SERPENT_HURT = ModSounds.register("creature.serpent_hurt");
+    public static final SoundEvent CREATURE_SERPENT_DEATH = ModSounds.register("creature.serpent_death");
+    public static final SoundEvent CREATURE_GOLEM_CRACKLE = ModSounds.register("creature.golem_crackle");
+    public static final SoundEvent CREATURE_GOLEM_HURT = ModSounds.register("creature.golem_hurt");
+    public static final SoundEvent CREATURE_GOLEM_DEATH = ModSounds.register("creature.golem_death");
+    public static final SoundEvent CREATURE_GOLEM_THROW = ModSounds.register("creature.golem_throw");
+    public static final SoundEvent CREATURE_MOTH_FLUTTER = ModSounds.register("creature.moth_flutter");
+    public static final SoundEvent CREATURE_STORMFLY_BUZZ = ModSounds.register("creature.stormfly_buzz");
+    public static final SoundEvent ITEM_RADIO_ALERT = ModSounds.register("item.radio_alert");
 
     /** For APIs that take a sound holder (equip sounds, some mob sounds). */
     public static Holder<SoundEvent> holder(SoundEvent e) {

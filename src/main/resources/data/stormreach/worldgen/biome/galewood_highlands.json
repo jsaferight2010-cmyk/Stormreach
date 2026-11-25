@@ -60,6 +60,26 @@
                 "min_inclusive": 1
               },
               "weight": 15
+            },
+            {
+              "type": "stormreach:squall_serpent",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 2
+            }
+          ],
+          "ambient": [
+            {
+              "type": "stormreach:aurora_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 10
             }
           ]
         }

@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:squall_serpent",
+  "criteria": {
+    "g": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:gale_blade"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "g"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.gale_blade.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.gale_blade.description"
+    },
+    "icon": {
+      "id": "stormreach:gale_blade"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

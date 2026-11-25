@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.radio_warning.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.radio_warning.description"
+    },
+    "icon": {
+      "id": "stormreach:weather_radio"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

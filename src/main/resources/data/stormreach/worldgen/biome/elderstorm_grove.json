@@ -61,6 +61,17 @@
               },
               "weight": 10
             }
+          ],
+          "ambient": [
+            {
+              "type": "stormreach:aurora_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 10
+            }
           ]
         }
       },

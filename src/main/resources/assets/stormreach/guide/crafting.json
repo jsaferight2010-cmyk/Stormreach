@@ -1,6 +1,23 @@
 {
  "recipes": [
   {
+   "result": "stormreach:aurora_glass",
+   "count": 8,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "stormreach:aurora_dust",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass"
+   ]
+  },
+  {
    "result": "stormreach:aurorite_block",
    "count": 1,
    "category": "building",
@@ -273,6 +290,23 @@
    ]
   },
   {
+   "result": "stormreach:glacial_lamp",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:packed_ice",
+    "",
+    "minecraft:packed_ice",
+    "stormreach:glacial_core",
+    "minecraft:packed_ice",
+    "",
+    "minecraft:packed_ice",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:glowgel_block",
    "count": 1,
    "category": "building",
@@ -426,6 +460,23 @@
    ]
   },
   {
+   "result": "stormreach:serpentscale_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:serpent_scale",
+    "stormreach:serpent_scale",
+    "",
+    "stormreach:serpent_scale",
+    "stormreach:serpent_scale",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:skylight_lantern",
    "count": 2,
    "category": "building",
@@ -525,6 +576,23 @@
     "",
     "stormreach:stormglass",
     ""
+   ]
+  },
+  {
+   "result": "stormreach:stormfly_jar",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:glass_pane",
+    "stormreach:bottled_stormfly",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane"
    ]
   },
   {
@@ -987,6 +1055,23 @@
    ]
   },
   {
+   "result": "stormreach:gale_blade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:serpent_scale",
+    "",
+    "",
+    "stormreach:squall_heart",
+    "",
+    "",
+    "minecraft:breeze_rod",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:gale_wings",
    "count": 1,
    "category": "equipment",
@@ -1171,6 +1256,74 @@
     "",
     "stormreach:stormpine_log",
     ""
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_boots",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "",
+    "minecraft:leather",
+    "minecraft:slime_ball",
+    "",
+    "minecraft:slime_ball",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_goggles",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:light_blue_stained_glass_pane",
+    "minecraft:copper_ingot",
+    "minecraft:light_blue_stained_glass_pane",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_jacket",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "",
+    "minecraft:leather",
+    "minecraft:orange_dye",
+    "minecraft:glow_ink_sac",
+    "minecraft:orange_dye",
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:leather"
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_trousers",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:orange_dye",
+    "",
+    "minecraft:orange_dye",
+    "minecraft:leather",
+    "",
+    "minecraft:leather"
    ]
   },
   {
@@ -1939,6 +2092,23 @@
    ]
   },
   {
+   "result": "stormreach:storm_shelter_hatch",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:orange_dye",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:stormpine_button",
    "count": 1,
    "category": "redstone",
@@ -2123,6 +2293,23 @@
     "minecraft:iron_ingot",
     "minecraft:redstone_block",
     "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:wind_turbine",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:white_wool",
+    "stormreach:anemometer",
+    "minecraft:white_wool",
+    "",
+    "minecraft:iron_ingot",
+    "",
+    "",
+    "minecraft:redstone",
+    ""
    ]
   },
   {
@@ -2636,6 +2823,23 @@
    ]
   },
   {
+   "result": "stormreach:chasers_coffee",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:cocoa_beans",
+    "minecraft:cocoa_beans",
+    "minecraft:sugar",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:chasers_logbook",
    "count": 1,
    "category": "misc",
@@ -2695,6 +2899,23 @@
     "stormreach:tempest_bricks",
     "",
     "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cloud_seeder",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:firework_rocket",
+    "stormreach:bottled_rain",
+    "minecraft:snowball",
     "",
     "",
     "",
@@ -3248,6 +3469,23 @@
    ]
   },
   {
+   "result": "stormreach:snow_cone",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:snowball",
+    "minecraft:snowball",
+    "minecraft:sugar",
+    "minecraft:sweet_berries",
+    "minecraft:paper",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:squall_in_a_bottle",
    "count": 3,
    "category": "misc",
@@ -3647,6 +3885,23 @@
     "stormreach:stormstone",
     "",
     "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:supercell_seeder",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:cloud_seeder",
+    "stormreach:bottled_lightning",
+    "minecraft:gunpowder",
     "",
     "",
     "",

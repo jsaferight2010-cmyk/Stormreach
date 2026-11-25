@@ -739,4 +739,62 @@ public class StormreachGameTests {
             h.succeed();
         });
     }
+
+    // ------------------------------------------------------------------------------------------------ 5.3 Skyward
+    @GameTest(maxTicks = 20)
+    public void skywardContentLoaded(GameTestHelper h) {
+        MinecraftServer server = h.getLevel().getServer();
+        for (String a : new String[]{"radio_warning", "cloud_seeder", "supercell_seeder", "stormchaser_suit", "bottled_lightning", "stormfly_jar",
+                "hailstone_golem", "squall_serpent", "gale_blade"})
+            Check.isTrue(h, server.getAdvancements().get(Stormreach.id(a)) != null, "advancement missing: " + a);
+        for (String t : new String[]{"entities/squall_serpent", "entities/hailstone_golem", "entities/aurora_moth", "entities/stormfly", "blocks/wind_turbine",
+                "blocks/aurora_glass", "blocks/storm_shelter_hatch", "blocks/stormfly_jar", "blocks/glacial_lamp", "blocks/serpentscale_block"}) {
+            LootTable table = server.reloadableRegistries().getLootTable(ResourceKey.create(Registries.LOOT_TABLE, Stormreach.id(t)));
+            Check.isTrue(h, table != LootTable.EMPTY, "loot table missing or failed to parse: " + t);
+        }
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 60)
+    public void skywardCreaturesSpawnAndLive(GameTestHelper h) {
+        openSky(h, 0, 0, 8, 8);
+        java.util.List<net.minecraft.world.entity.Mob> mobs = new java.util.ArrayList<>();
+        mobs.add(h.spawn(com.stormreach.sky.SkyRegistry.SQUALL_SERPENT, new BlockPos(4, 6, 4)));
+        mobs.add(h.spawn(com.stormreach.sky.SkyRegistry.HAILSTONE_GOLEM, new BlockPos(1, 2, 1)));
+        mobs.add(h.spawn(com.stormreach.sky.SkyRegistry.AURORA_MOTH, new BlockPos(6, 4, 1)));
+        mobs.add(h.spawn(com.stormreach.sky.SkyRegistry.STORMFLY, new BlockPos(1, 4, 6)));
+        h.runAfterDelay(40, () -> {
+            for (var m : mobs) Check.isTrue(h, m.isAlive(), m.getType().toShortString() + " died within two seconds of spawning");
+            for (var m : mobs) m.discard();
+            h.succeed();
+        });
+    }
+
+    @GameTest(maxTicks = 20)
+    public void windTurbinePowerFollowsTheWind(GameTestHelper h) {
+        Check.isTrue(h, com.stormreach.sky.WindTurbineBlock.powerFor(0, true) == 0, "no wind should give no power");
+        Check.isTrue(h, com.stormreach.sky.WindTurbineBlock.powerFor(30, true) == 8, "30 mph should give about 8");
+        Check.isTrue(h, com.stormreach.sky.WindTurbineBlock.powerFor(90, true) == 15, "a gale should give full power");
+        Check.isTrue(h, com.stormreach.sky.WindTurbineBlock.powerFor(90, false) == 0, "a turbine without open sky gives nothing");
+        BlockPos pos = new BlockPos(1, 2, 1);
+        h.setBlock(pos, com.stormreach.sky.SkyRegistry.WIND_TURBINE.defaultBlockState().setValue(com.stormreach.sky.WindTurbineBlock.POWER, 9));
+        Check.isTrue(h, h.getBlockState(pos).getSignal(h.getLevel(), h.absolutePos(pos), net.minecraft.core.Direction.NORTH) == 9,
+                "the turbine should output its POWER as a redstone signal");
+        Check.isTrue(h, h.getLevel().getBlockEntity(h.absolutePos(pos)) instanceof com.stormreach.sky.WindTurbineBlockEntity, "turbine block entity missing");
+        h.succeed();
+    }
+
+    @GameTest(maxTicks = 20)
+    public void theStormchaserSuitBracesAndGrounds(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        Check.isTrue(h, com.stormreach.sky.ChaserGear.massFactor(p) == 1.0, "no jacket: normal mass");
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.CHEST, new ItemStack(com.stormreach.sky.SkyRegistry.CHASER_JACKET));
+        Check.isTrue(h, com.stormreach.sky.ChaserGear.massFactor(p) > 2.5, "the jacket should brace you against tornado winds");
+        Check.isTrue(h, !com.stormreach.weather.StormWeather.isLightningProof(p), "the jacket alone is not lightning-proof");
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, new ItemStack(com.stormreach.sky.SkyRegistry.CHASER_GOGGLES));
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.LEGS, new ItemStack(com.stormreach.sky.SkyRegistry.CHASER_TROUSERS));
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.FEET, new ItemStack(com.stormreach.sky.SkyRegistry.CHASER_BOOTS));
+        Check.isTrue(h, com.stormreach.weather.StormWeather.isLightningProof(p), "the full suit should make you lightning-proof");
+        h.succeed();
+    }
 }

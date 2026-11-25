@@ -803,6 +803,96 @@
     ],
     "subtitle": "subtitles.stormreach.item.conch"
   },
+  "creature.serpent_roar": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_serpent_roar",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.serpent_roar"
+  },
+  "creature.serpent_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_serpent_hurt",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.serpent_hurt"
+  },
+  "creature.serpent_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_serpent_death",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.serpent_death"
+  },
+  "creature.golem_crackle": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_golem_crackle",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.golem_crackle"
+  },
+  "creature.golem_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_golem_hurt",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.golem_hurt"
+  },
+  "creature.golem_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_golem_death",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.golem_death"
+  },
+  "creature.golem_throw": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_golem_throw",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.golem_throw"
+  },
+  "creature.moth_flutter": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_moth_flutter",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.moth_flutter"
+  },
+  "creature.stormfly_buzz": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_stormfly_buzz",
+        "attenuation_distance": 8
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.stormfly_buzz"
+  },
+  "item.radio_alert": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_radio_alert",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.radio_alert"
+  },
   "voice.cyrrus.l01": {
     "sounds": [
       {

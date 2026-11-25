@@ -106,7 +106,7 @@ public final class Stormgate {
                 level.setBlock(center.offset(dx, 0, dz), portal, Block.UPDATE_CLIENTS);
             }
         }
-        level.playSound(null, center, SoundEvents.END_PORTAL_SPAWN, SoundSource.BLOCKS, 1.5f, 0.8f);
+        level.playSound(null, center, com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, SoundSource.BLOCKS, 1.5f, 0.8f);
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, center.getX() + 0.5, center.getY() + 1, center.getZ() + 0.5, 200, 1.5, 0.5, 1.5, 0.5);
         for (ServerPlayer p : level.getPlayers(p -> p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(center)) < 48 * 48)) {
             p.sendSystemMessage(StormgateFrameBlock.hint("opened"));

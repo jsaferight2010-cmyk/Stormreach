@@ -67,13 +67,13 @@ public final class RealmItems {
     public static final ResourceKey<EquipmentAsset> CLOUDSTEP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("cloudstep"));
     public static final ArmorMaterial VOLTITE_ARMOR = new ArmorMaterial(26,
             Map.of(ArmorType.BOOTS, 2, ArmorType.LEGGINGS, 6, ArmorType.CHESTPLATE, 7, ArmorType.HELMET, 3, ArmorType.BODY, 9),
-            12, SoundEvents.ARMOR_EQUIP_IRON, 0.5f, 0.0f, VOLTITE_REPAIRS, VOLTITE_ASSET);
+            12, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 0.5f, 0.0f, VOLTITE_REPAIRS, VOLTITE_ASSET);
     public static final ArmorMaterial AURORITE_ARMOR = new ArmorMaterial(37,
             Map.of(ArmorType.BOOTS, 3, ArmorType.LEGGINGS, 6, ArmorType.CHESTPLATE, 8, ArmorType.HELMET, 3, ArmorType.BODY, 11),
-            15, SoundEvents.ARMOR_EQUIP_DIAMOND, 2.5f, 0.05f, AURORITE_REPAIRS, AURORITE_ASSET);
+            15, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 2.5f, 0.05f, AURORITE_REPAIRS, AURORITE_ASSET);
     public static final ArmorMaterial CLOUDSTEP_ARMOR = new ArmorMaterial(15,
             Map.of(ArmorType.BOOTS, 2, ArmorType.LEGGINGS, 3, ArmorType.CHESTPLATE, 4, ArmorType.HELMET, 2, ArmorType.BODY, 4),
-            20, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, CLOUDSTEP_REPAIRS, CLOUDSTEP_ASSET);
+            20, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_PACK), 0.0f, 0.0f, CLOUDSTEP_REPAIRS, CLOUDSTEP_ASSET);
 
     // ---------- The road to the realm ----------
     /** Creative-only shortcut to the realm and back (no recipe, no loot). */
@@ -91,7 +91,7 @@ public final class RealmItems {
     public static final Item STORMHAWK_FEATHER = register("stormhawk_feather", Item::new, new Item.Properties());
     public static final Item ION_SHARD = register("ion_shard", p -> new TooltipItem.Plain(p, 1), new Item.Properties()
             .food(new FoodProperties.Builder().nutrition(1).saturationModifier(0.1f).alwaysEdible().build(),
-                    Consumables.defaultFood().consumeSeconds(0.8f).sound(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.AMETHYST_BLOCK_CHIME))
+                    Consumables.defaultFood().consumeSeconds(0.8f).sound(net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(com.stormreach.registry.ModSfx.MAGIC_CHIME))
                             .onConsume(new ApplyStatusEffectsConsumeEffect(new MobEffectInstance(MobEffects.INSTANT_HEALTH, 1, 0))).build()));
 
     // ---------- Food ----------

@@ -49,9 +49,9 @@ public class Stormhawk extends Monster {
     }
 
     @Override public boolean causeFallDamage(double d, float m, DamageSource s) { return false; }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.PARROT_IMITATE_PHANTOM; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.PARROT_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.PHANTOM_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_AMBIENT; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.CREATURE_SMALL_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_DEATH; }
     @Override public float getVoicePitch() { return 0.7f; }
 
     static class DiveGoal extends Goal {

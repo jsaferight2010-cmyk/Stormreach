@@ -74,6 +74,375 @@
     ],
     "subtitle": "subtitles.stormreach.entity.hollow_keeper.screech"
   },
+  "weather.thunder": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/weather_thunder",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.stormreach.weather.thunder"
+  },
+  "weather.gust": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/weather_gust",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.weather.gust"
+  },
+  "weather.wind": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/weather_wind",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.weather.wind"
+  },
+  "magic.chime": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/magic_chime",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.magic.chime"
+  },
+  "magic.shatter": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/magic_shatter",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.magic.shatter"
+  },
+  "magic.hum": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/magic_hum",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.magic.hum"
+  },
+  "magic.activate": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/magic_activate",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.magic.activate"
+  },
+  "magic.dispel": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/magic_dispel",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.magic.dispel"
+  },
+  "magic.warp": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/magic_warp",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.magic.warp"
+  },
+  "block.metal_place": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_metal_place",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.metal_place"
+  },
+  "item.equip_pack": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_equip_pack",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.equip_pack"
+  },
+  "item.equip_metal": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_equip_metal",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.equip_metal"
+  },
+  "item.bottle": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_bottle",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.bottle"
+  },
+  "item.pick": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_pick",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.pick"
+  },
+  "item.pop": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_pop",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.pop"
+  },
+  "item.throw": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_throw",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.throw"
+  },
+  "item.spear_hit": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/item_spear_hit",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.item.spear_hit"
+  },
+  "block.chain": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_chain",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.chain"
+  },
+  "block.stone_tap": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_stone_tap",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.stone_tap"
+  },
+  "block.grind": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_grind",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.grind"
+  },
+  "block.boom": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_boom",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.boom"
+  },
+  "block.metal_door_open": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_metal_door_open",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.metal_door_open"
+  },
+  "block.metal_door_close": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_metal_door_close",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.metal_door_close"
+  },
+  "event.horn": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/event_horn",
+        "attenuation_distance": 128
+      }
+    ],
+    "subtitle": "subtitles.stormreach.event.horn"
+  },
+  "creature.small_ambient": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_small_ambient",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.small_ambient"
+  },
+  "creature.small_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_small_hurt",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.small_hurt"
+  },
+  "creature.small_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_small_death",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.small_death"
+  },
+  "creature.glide_ambient": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_glide_ambient",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.glide_ambient"
+  },
+  "creature.glide_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_glide_hurt",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.glide_hurt"
+  },
+  "creature.glide_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_glide_death",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.glide_death"
+  },
+  "creature.wind_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_wind_hurt",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.wind_hurt"
+  },
+  "creature.wind_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_wind_death",
+        "attenuation_distance": 16
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.wind_death"
+  },
+  "creature.titan_ambient": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_titan_ambient",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.titan_ambient"
+  },
+  "creature.titan_roar": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_titan_roar",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.titan_roar"
+  },
+  "creature.titan_hurt": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_titan_hurt",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.titan_hurt"
+  },
+  "creature.titan_death": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_titan_death",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.titan_death"
+  },
+  "creature.titan_charge": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_titan_charge",
+        "attenuation_distance": 32
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.titan_charge"
+  },
+  "creature.titan_blast": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/creature_titan_blast",
+        "attenuation_distance": 48
+      }
+    ],
+    "subtitle": "subtitles.stormreach.creature.titan_blast"
+  },
+  "weather.hail": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/weather_hail",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.stormreach.weather.hail"
+  },
+  "weather.puddle_splash": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/weather_puddle_splash",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.weather.puddle_splash"
+  },
+  "block.radar_ping": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/block_radar_ping",
+        "attenuation_distance": 24
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.radar_ping"
+  },
   "voice.cyrrus.l01": {
     "sounds": [
       {

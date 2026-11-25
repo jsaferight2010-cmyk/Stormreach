@@ -48,8 +48,8 @@ public class Glimmerstag extends Animal {
 
     @Override public boolean isFood(ItemStack s) { return s.is(ForestRegistry.STORMFRUIT); }
     @Override public AgeableMob getBreedOffspring(ServerLevel l, AgeableMob o) { return ForestRegistry.GLIMMERSTAG.create(l, EntitySpawnReason.BREEDING); }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.GOAT_AMBIENT; }
-    @Override protected SoundEvent getHurtSound(DamageSource s) { return SoundEvents.GOAT_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.GOAT_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_AMBIENT; }
+    @Override protected SoundEvent getHurtSound(DamageSource s) { return com.stormreach.registry.ModSfx.CREATURE_SMALL_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_DEATH; }
     @Override public float getVoicePitch() { return 1.3f; }
 }

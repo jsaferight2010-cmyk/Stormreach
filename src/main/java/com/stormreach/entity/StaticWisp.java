@@ -63,9 +63,9 @@ public class StaticWisp extends Monster {
 
     @Override public void thunderHit(ServerLevel level, LightningBolt lightning) { heal(6.0f); }
     @Override public boolean causeFallDamage(double d, float m, DamageSource s) { return false; }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.BEACON_AMBIENT; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.AMETHYST_BLOCK_HIT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.AMETHYST_CLUSTER_BREAK; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.MAGIC_HUM; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.MAGIC_CHIME; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.MAGIC_SHATTER; }
 
     static class ZapGoal extends Goal {
         private final StaticWisp wisp;
@@ -98,7 +98,7 @@ public class StaticWisp extends Monster {
                             wisp.getY() + (t.getY(0.5) - wisp.getY()) * k, wisp.getZ() + (t.getZ() - wisp.getZ()) * k, 1, 0, 0, 0, 0);
                 }
                 t.hurtServer(server, server.damageSources().lightningBolt(), 2.0f);
-                wisp.playSound(SoundEvents.TRIDENT_HIT, 0.8f, 2.0f);
+                wisp.playSound(com.stormreach.registry.ModSfx.ITEM_SPEAR_HIT, 0.8f, 2.0f);
                 cooldown = 60;
             }
         }

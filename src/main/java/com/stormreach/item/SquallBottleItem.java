@@ -21,7 +21,7 @@ public class SquallBottleItem extends Item {
     @Override
     public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.SPLASH_POTION_THROW,
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), com.stormreach.registry.ModSfx.ITEM_THROW,
                 SoundSource.PLAYERS, 0.5f, 0.6f);
         if (level instanceof ServerLevel server) {
             Projectile.spawnProjectileFromRotation((lvl, owner, s) -> new SquallBottleProjectile(lvl, owner, s),

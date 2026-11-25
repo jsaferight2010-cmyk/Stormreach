@@ -68,7 +68,7 @@ public class StormfruitPodBlock extends Block {
         if (s.getValue(AGE) < 2) return InteractionResult.PASS;
         if (level instanceof ServerLevel server) {
             popResource(server, pos, new ItemStack(ForestRegistry.STORMFRUIT, 1 + server.getRandom().nextInt(2)));
-            server.playSound(null, pos, SoundEvents.CAVE_VINES_PICK_BERRIES, SoundSource.BLOCKS, 1f, 1.2f);
+            server.playSound(null, pos, com.stormreach.registry.ModSfx.ITEM_PICK, SoundSource.BLOCKS, 1f, 1.2f);
             server.setBlock(pos, s.setValue(AGE, 0), Block.UPDATE_CLIENTS);
             if (player instanceof net.minecraft.server.level.ServerPlayer sp) com.stormreach.progress.StormAdvancements.award(sp, "pick_stormfruit");
         }

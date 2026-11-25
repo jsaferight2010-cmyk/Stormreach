@@ -115,6 +115,8 @@ public final class WeatherUi {
     /** Opens the device's screen for the player. */
     public static void open(ServerPlayer p, int device, BlockPos pos) {
         send(p, device, pos, true);
+        if (device == InstrumentBlock.Kind.TORNADO_RADAR.ordinal() || device == STORM_RADAR_ITEM)
+            p.level().playSound(null, pos, com.stormreach.registry.ModSfx.BLOCK_RADAR_PING, net.minecraft.sounds.SoundSource.BLOCKS, 0.6f, 1.0f);
     }
 
     static void send(ServerPlayer p, int device, BlockPos pos, boolean open) {

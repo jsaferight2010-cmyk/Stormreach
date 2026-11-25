@@ -60,7 +60,7 @@ public class BackpackItem extends Item {
             // sneak + use: put it on your back (or swap with the one you're wearing)
             if (!level.isClientSide()) {
                 BackpackEquipment.swapFromHand(player, hand);
-                level.playSound(null, player.blockPosition(), net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER.value(), net.minecraft.sounds.SoundSource.PLAYERS, 1f, 0.9f);
+                level.playSound(null, player.blockPosition(), com.stormreach.registry.ModSfx.ITEM_EQUIP_PACK, net.minecraft.sounds.SoundSource.PLAYERS, 1f, 0.9f);
             }
             return InteractionResult.SUCCESS;
         }

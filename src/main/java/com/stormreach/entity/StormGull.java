@@ -69,7 +69,7 @@ public class StormGull extends Animal {
         // Like chickens, adult gulls lay an egg every so often.
         if (level() instanceof ServerLevel server && isAlive() && !isBaby() && --eggTime <= 0) {
             spawnAtLocation(server, com.stormreach.registry.ModItems.GULL_EGG);
-            playSound(SoundEvents.CHICKEN_EGG, 1.0f, 1.2f);
+            playSound(com.stormreach.registry.ModSfx.ITEM_POP, 1.0f, 1.2f);
             eggTime = 6000 + random.nextInt(6000);
         }
         Vec3 motion = getDeltaMovement();
@@ -96,17 +96,17 @@ public class StormGull extends Animal {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.PARROT_AMBIENT;
+        return com.stormreach.registry.ModSfx.CREATURE_SMALL_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.PARROT_HURT;
+        return com.stormreach.registry.ModSfx.CREATURE_SMALL_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.PARROT_DEATH;
+        return com.stormreach.registry.ModSfx.CREATURE_SMALL_DEATH;
     }
 
     @Override

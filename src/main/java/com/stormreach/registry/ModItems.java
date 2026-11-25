@@ -60,7 +60,7 @@ public final class ModItems {
     /** Stormshard armor: a little better than iron. A full set makes you immune to lightning. */
     public static final ArmorMaterial STORMSHARD_ARMOR = new ArmorMaterial(22,
             Map.of(ArmorType.BOOTS, 3, ArmorType.LEGGINGS, 5, ArmorType.CHESTPLATE, 7, ArmorType.HELMET, 3, ArmorType.BODY, 9),
-            16, SoundEvents.ARMOR_EQUIP_IRON, 1.0f, 0.05f, STORM_SHARD_REPAIRS, STORMSHARD_ASSET);
+            16, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 1.0f, 0.05f, STORM_SHARD_REPAIRS, STORMSHARD_ASSET);
 
     // Materials
     public static final Item STORM_SHARD = register("storm_shard", Item::new, new Item.Properties());
@@ -157,7 +157,7 @@ public final class ModItems {
     public static final Item GALE_WINGS = register("gale_wings", Item::new, new Item.Properties().durability(300).rarity(Rarity.RARE)
             .component(DataComponents.GLIDER, Unit.INSTANCE)
             .component(DataComponents.EQUIPPABLE, Equippable.builder(EquipmentSlot.CHEST)
-                    .setEquipSound(SoundEvents.ARMOR_EQUIP_ELYTRA).setAsset(GALE_WINGS_ASSET).setDamageOnHurt(false).build())
+                    .setEquipSound(com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_PACK)).setAsset(GALE_WINGS_ASSET).setDamageOnHurt(false).build())
             .repairable(GULL_FEATHER));
     public static final Item SQUALL_IN_A_BOTTLE = register("squall_in_a_bottle", SquallBottleItem::new,
             new Item.Properties().stacksTo(16).useCooldown(0.5f));

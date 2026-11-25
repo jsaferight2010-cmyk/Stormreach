@@ -84,9 +84,9 @@ public class HollowKeeper extends Monster {
 
     @Override public void thunderHit(ServerLevel level, LightningBolt lightning) {}
     @Override public boolean removeWhenFarAway(double d) { return false; }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.WARDEN_AMBIENT; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.WARDEN_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.WARDEN_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.CREATURE_TITAN_AMBIENT; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.CREATURE_TITAN_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_TITAN_DEATH; }
     @Override public float getVoicePitch() { return 0.6f; }
 
     @Override
@@ -186,5 +186,5 @@ public class HollowKeeper extends Monster {
         }
     }
 
-    public static void unused(ServerLevel l) { l.playSound(null, BlockPos.ZERO, SoundEvents.WARDEN_AMBIENT, SoundSource.HOSTILE, 0, 0); }
+    public static void unused(ServerLevel l) { l.playSound(null, BlockPos.ZERO, com.stormreach.registry.ModSfx.CREATURE_TITAN_AMBIENT, SoundSource.HOSTILE, 0, 0); }
 }

@@ -38,7 +38,7 @@ public class SquallBottleProjectile extends ThrowableItemProjectile {
             Vec3 at = result.getLocation();
             server.sendParticles(ParticleTypes.GUST_EMITTER_SMALL, at.x, at.y, at.z, 1, 0, 0, 0, 0);
             server.sendParticles(ParticleTypes.CLOUD, at.x, at.y, at.z, 20, 0.6, 0.6, 0.6, 0.1);
-            server.playSound(null, at.x, at.y, at.z, SoundEvents.WIND_CHARGE_BURST.value(), SoundSource.NEUTRAL, 1.0f, 0.8f);
+            server.playSound(null, at.x, at.y, at.z, com.stormreach.registry.ModSfx.WEATHER_GUST, SoundSource.NEUTRAL, 1.0f, 0.8f);
             for (Entity e : server.getEntities(this, new AABB(at, at).inflate(4.5), e -> !e.isSpectator())) {
                 Vec3 away = e.position().subtract(at);
                 double dist = Math.max(0.5, away.length());

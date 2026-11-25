@@ -52,13 +52,13 @@ public class Cyclone extends Monster {
             p.push(side.x, 1.1, side.z);
             p.needsSync = true;
             p.hurtServer(server, damageSources().mobAttack(this), 2.0f);
-            playSound(SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), 1.2f, 1.2f);
+            playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 1.2f, 1.2f);
             flingCooldown = 40;
         }
     }
 
     @Override public boolean causeFallDamage(double d, float m, DamageSource s) { return false; }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.BREEZE_IDLE_GROUND; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.BREEZE_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.BREEZE_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.WEATHER_WIND; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.CREATURE_WIND_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_WIND_DEATH; }
 }

@@ -124,8 +124,8 @@ public class Skyray extends Animal {
         return RealmEntities.SKYRAY.create(level, EntitySpawnReason.BREEDING);
     }
 
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.DOLPHIN_AMBIENT; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.DOLPHIN_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.DOLPHIN_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.CREATURE_GLIDE_AMBIENT; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.CREATURE_GLIDE_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_GLIDE_DEATH; }
     @Override public float getVoicePitch() { return 0.6f + random.nextFloat() * 0.2f; }
 }

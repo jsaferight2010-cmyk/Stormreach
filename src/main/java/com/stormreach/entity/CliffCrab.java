@@ -75,11 +75,11 @@ public class CliffCrab extends Animal {
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.TURTLE_HURT;
+        return com.stormreach.registry.ModSfx.CREATURE_GLIDE_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.TURTLE_DEATH;
+        return com.stormreach.registry.ModSfx.CREATURE_GLIDE_DEATH;
     }
 }

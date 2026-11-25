@@ -549,4 +549,20 @@ public class StormreachGameTests {
         Check.isFalse(h, com.stormreach.guide.Guidebooks.giveOnce(p), "guidebooks were given twice");
         h.succeed();
     }
+
+    @GameTest
+    public void everyModSoundIsRegisteredAndOriginal(GameTestHelper h) {
+        int n = 0;
+        for (var f : com.stormreach.registry.ModSfx.class.getFields()) {
+            if (f.getType() != net.minecraft.sounds.SoundEvent.class) continue;
+            try {
+                var e = (net.minecraft.sounds.SoundEvent) f.get(null);
+                Check.isTrue(h, e.location().getNamespace().equals(Stormreach.MOD_ID), "not a Stormreach sound: " + e.location());
+                Check.isTrue(h, net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.containsKey(e.location()), "sound not registered: " + e.location());
+                n++;
+            } catch (IllegalAccessException ex) { throw new RuntimeException(ex); }
+        }
+        Check.isTrue(h, n >= 40, "expected the full set of original sound effects, found " + n);
+        h.succeed();
+    }
 }

@@ -33,7 +33,7 @@ public class ThunderheadHornItem extends Item {
         }
         int ticks = StormreachConfig.hornStormMinutes * 60 * 20;
         server.getServer().setWeatherParameters(0, ticks, true, true);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.RAID_HORN.value(),
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), com.stormreach.registry.ModSfx.EVENT_HORN,
                 SoundSource.PLAYERS, 2.0f, 0.8f);
         player.sendOverlayMessage(Component.translatable("item.stormreach.thunderhead_horn.used").withStyle(ChatFormatting.AQUA));
         stack.consume(1, player);

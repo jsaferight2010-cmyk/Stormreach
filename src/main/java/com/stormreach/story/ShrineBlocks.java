@@ -64,7 +64,7 @@ public final class ShrineBlocks {
             if (level instanceof ServerLevel server) {
                 stack.consume(1, player);
                 server.setBlock(pos, state.setValue(LIT, true), Block.UPDATE_ALL);
-                server.playSound(null, pos, SoundEvents.RESPAWN_ANCHOR_CHARGE, SoundSource.BLOCKS, 1.2f, 0.6f);
+                server.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, SoundSource.BLOCKS, 1.2f, 0.6f);
                 server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 20, 0.2, 0.3, 0.2, 0.02);
                 player.sendSystemMessage(Component.translatable("block.stormreach.relic_pedestal.accepted").withStyle(ChatFormatting.DARK_AQUA));
             }
@@ -116,7 +116,7 @@ public final class ShrineBlocks {
             int done = countStruck(level, at);
             if (order == done + 1) {
                 level.setBlock(at, s.setValue(Conduit.STRUCK, true), Block.UPDATE_ALL);
-                level.playSound(null, at, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 2f, 0.5f + order * 0.2f);
+                level.playSound(null, at, com.stormreach.registry.ModSfx.MAGIC_CHIME, SoundSource.BLOCKS, 2f, 0.5f + order * 0.2f);
                 playerMsg(level, at, order == 4 ? "block.stormreach.storm_conduit.complete" : "block.stormreach.storm_conduit.right");
             } else {
                 // wrong order: every conduit goes dark again
@@ -124,7 +124,7 @@ public final class ShrineBlocks {
                     BlockState qs = level.getBlockState(q);
                     if (qs.is(StoryRegistry.STORM_CONDUIT) && qs.getValue(Conduit.STRUCK)) level.setBlock(q, qs.setValue(Conduit.STRUCK, false), Block.UPDATE_ALL);
                 }
-                level.playSound(null, at, SoundEvents.WARDEN_SONIC_BOOM, SoundSource.BLOCKS, 1.5f, 0.5f);
+                level.playSound(null, at, com.stormreach.registry.ModSfx.CREATURE_TITAN_BLAST, SoundSource.BLOCKS, 1.5f, 0.5f);
                 playerMsg(level, at, "block.stormreach.storm_conduit.wrong");
             }
             return;

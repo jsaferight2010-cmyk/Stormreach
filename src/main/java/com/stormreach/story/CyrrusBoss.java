@@ -204,7 +204,7 @@ public class CyrrusBoss extends Monster {
             case "grow" -> targetScale = Double.parseDouble(kv[1]);
             case "thunder" -> {
                 if (level.dimension() == Level.OVERWORLD) level.getServer().setWeatherParameters(0, 12000, true, true);
-                level.playSound(null, blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 6f, 0.5f);
+                level.playSound(null, blockPosition(), com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.WEATHER, 6f, 0.5f);
             }
             case "rain" -> {
                 if (level.dimension() == Level.OVERWORLD) level.getServer().setWeatherParameters(0, 12000, true, false);
@@ -243,7 +243,7 @@ public class CyrrusBoss extends Monster {
         if (phaseLines != null) {
             for (DialogueScript.Cue cue : phaseLines.cues) if (cue.id().equals("phase" + phase)) Cinematics.speak(level, position().add(0, 3, 0), cue);
         }
-        level.playSound(null, blockPosition(), SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 5f, 0.6f + phase * 0.1f);
+        level.playSound(null, blockPosition(), com.stormreach.registry.ModSfx.CREATURE_TITAN_AMBIENT, SoundSource.HOSTILE, 5f, 0.6f + phase * 0.1f);
         for (ServerPlayer p : players(level, 96)) p.sendSystemMessage(Component.translatable("entity.stormreach.cyrrus.phase" + phase).withStyle(ChatFormatting.DARK_PURPLE));
     }
 
@@ -270,7 +270,7 @@ public class CyrrusBoss extends Monster {
             }
             case GALE_PUSH -> { // telegraph: a second of rising gusts and a charging sound, then the blast
                 galeWindup = 24;
-                playSound(SoundEvents.BREEZE_CHARGE, 4f, 0.6f);
+                playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 4f, 0.6f);
             }
             case CROSSWIND -> {
                 double ang = level.getRandom().nextDouble() * Math.PI * 2;
@@ -309,13 +309,13 @@ public class CyrrusBoss extends Monster {
                     double ang = level.getRandom().nextDouble() * Math.PI * 2;
                     BlockPos to = surface(level, target.getX() + Math.cos(ang) * 10, target.getZ() + Math.sin(ang) * 10);
                     teleportTo(to.getX() + 0.5, to.getY(), to.getZ() + 0.5);
-                    playSound(SoundEvents.ENDERMAN_TELEPORT, 3f, 0.5f);
+                    playSound(com.stormreach.registry.ModSfx.MAGIC_WARP, 3f, 0.5f);
                 }
             }
             case MAELSTROM -> {
                 maelstromTicks = 70;
                 for (ServerPlayer p : players(level, 64)) p.sendSystemMessage(Component.translatable("entity.stormreach.cyrrus.maelstrom").withStyle(ChatFormatting.DARK_RED));
-                playSound(SoundEvents.WARDEN_SONIC_CHARGE, 4f, 0.5f);
+                playSound(com.stormreach.registry.ModSfx.CREATURE_TITAN_CHARGE, 4f, 0.5f);
             }
         }
     }
@@ -419,9 +419,9 @@ public class CyrrusBoss extends Monster {
     @Override public boolean removeWhenFarAway(double d) { return false; }
     @Override public void startSeenByPlayer(ServerPlayer p) { super.startSeenByPlayer(p); bar.addPlayer(p); }
     @Override public void stopSeenByPlayer(ServerPlayer p) { super.stopSeenByPlayer(p); bar.removePlayer(p); }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.BREEZE_IDLE_AIR; }
-    @Override protected SoundEvent getHurtSound(DamageSource s) { return SoundEvents.WITHER_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.WITHER_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.WEATHER_WIND; }
+    @Override protected SoundEvent getHurtSound(DamageSource s) { return com.stormreach.registry.ModSfx.CREATURE_TITAN_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_TITAN_DEATH; }
 
     @Override
     protected void addAdditionalSaveData(ValueOutput out) {

@@ -73,7 +73,7 @@ public final class TempestRealm {
                     if (random.nextInt(4) == 0) StormWeather.strike(level, top, null);
                     else StormWeather.strikeVisual(level, top);
                 } else {
-                    level.playSound(null, player.blockPosition(), SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 2.0f, 0.6f + random.nextFloat() * 0.3f);
+                    level.playSound(null, player.blockPosition(), com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.WEATHER, 2.0f, 0.6f + random.nextFloat() * 0.3f);
                 }
             }
             if (random.nextInt(8) == 0) {

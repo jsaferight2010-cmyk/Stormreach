@@ -87,7 +87,7 @@ public class SovereignAltarBlock extends Block {
     private void begin(ServerLevel level, BlockPos pos, BlockState state, int stage) {
         level.setBlock(pos, state.setValue(RITUAL, stage), Block.UPDATE_ALL);
         level.scheduleTick(pos, this, stepTicks());
-        level.playSound(null, pos, SoundEvents.WITHER_SPAWN, SoundSource.HOSTILE, 1.5f, 1.6f);
+        level.playSound(null, pos, com.stormreach.registry.ModSfx.CREATURE_TITAN_ROAR, SoundSource.HOSTILE, 1.5f, 1.6f);
         for (ServerPlayer p : level.getPlayers(p -> p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos)) < 64 * 64)) {
             p.sendSystemMessage(msg(stage == 1 ? "ritual_begins" : "awakens"));
         }
@@ -103,7 +103,7 @@ public class SovereignAltarBlock extends Block {
         StormWeather.strikeVisual(level, ritualStrike(level, pos, angle, r));
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.2, pos.getZ() + 0.5, 20 + stage * 4, 0.4, 0.6, 0.4, 0.25);
         level.sendParticles(ParticleTypes.REVERSE_PORTAL, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 10 + stage * 3, 1.5, 1.5, 1.5, 0.05);
-        level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1.5f, 0.5f + stage * 0.08f);
+        level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_HUM, SoundSource.BLOCKS, 1.5f, 0.5f + stage * 0.08f);
         if (stage < 15) {
             level.setBlock(pos, state.setValue(RITUAL, stage + 1), Block.UPDATE_ALL);
             level.scheduleTick(pos, this, stepTicks());
@@ -116,7 +116,7 @@ public class SovereignAltarBlock extends Block {
         boss.setHome(pos);
         level.addFreshEntity(boss);
         for (int i = 0; i < 4; i++) StormWeather.strikeVisual(level, pos.offset(random.nextInt(7) - 3, 1, random.nextInt(7) - 3));
-        level.playSound(null, pos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 3.0f, 1.3f);
+        level.playSound(null, pos, com.stormreach.registry.ModSfx.CREATURE_TITAN_AMBIENT, SoundSource.HOSTILE, 3.0f, 1.3f);
         for (ServerPlayer p : level.getPlayers(p -> p.distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(pos)) < 96 * 96)) {
             p.sendSystemMessage(msg("descends"));
         }

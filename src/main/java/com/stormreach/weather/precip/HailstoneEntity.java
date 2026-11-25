@@ -151,7 +151,7 @@ public class HailstoneEntity extends Entity {
             broke = true;
         }
         float pitch = 1.8f - size.ordinal() * 0.22f;
-        level.playSound(null, pos, broke ? SoundEvents.GLASS_BREAK : SoundEvents.STONE_HIT, SoundSource.WEATHER, 0.25f + size.ordinal() * 0.15f, pitch);
+        level.playSound(null, pos, broke ? com.stormreach.registry.ModSfx.MAGIC_SHATTER : com.stormreach.registry.ModSfx.BLOCK_STONE_TAP, SoundSource.WEATHER, 0.25f + size.ordinal() * 0.15f, pitch);
         if (!broke && hit.getDirection() == Direction.UP && random.nextDouble() < size.accumulation()) {
             HailLayerBlock.accumulate(level, pos.above(), size);
         }

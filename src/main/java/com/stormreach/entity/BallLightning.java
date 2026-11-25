@@ -87,12 +87,12 @@ public class BallLightning extends Monster {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.BEACON_AMBIENT;
+        return com.stormreach.registry.ModSfx.MAGIC_HUM;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.FIREWORK_ROCKET_BLAST;
+        return com.stormreach.registry.ModSfx.BLOCK_BOOM;
     }
 
     static class DriftAtTargetGoal extends Goal {

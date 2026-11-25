@@ -55,7 +55,7 @@ public class CloudBlock extends Block {
                     entity.needsSync = true;
                     if (level instanceof ServerLevel server) {
                         server.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), entity.getY(), entity.getZ(), 12, 0.4, 0.2, 0.4, 0.2);
-                        level.playSound(null, pos, SoundEvents.TRIDENT_THUNDER.value(), SoundSource.BLOCKS, 0.4f, 1.8f);
+                        level.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.BLOCKS, 0.4f, 1.8f);
                     }
                 }
             }

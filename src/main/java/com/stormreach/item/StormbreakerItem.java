@@ -37,7 +37,7 @@ public class StormbreakerItem extends Item {
         Vec3 c = player.position();
         server.sendParticles(ParticleTypes.EXPLOSION, c.x, c.y + 0.5, c.z, 1, 0, 0, 0, 0);
         server.sendParticles(ParticleTypes.ELECTRIC_SPARK, c.x, c.y + 0.5, c.z, 60, 3.0, 0.3, 3.0, 0.3);
-        level.playSound(null, c.x, c.y, c.z, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.PLAYERS, 1.5f, 1.3f);
+        level.playSound(null, c.x, c.y, c.z, com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.PLAYERS, 1.5f, 1.3f);
         for (LivingEntity e : server.getEntitiesOfClass(LivingEntity.class, new AABB(player.blockPosition()).inflate(6.0),
                 e -> e != player && e.isAlive() && !e.isSpectator())) {
             Vec3 away = e.position().subtract(c).normalize().scale(1.5);

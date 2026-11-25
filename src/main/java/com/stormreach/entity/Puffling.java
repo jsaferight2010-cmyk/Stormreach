@@ -95,7 +95,7 @@ public class Puffling extends Animal implements Shearable {
 
     @Override
     public void shear(ServerLevel level, SoundSource source, ItemStack tool) {
-        level.playSound(null, this, SoundEvents.SHEEP_SHEAR, source, 1.0f, 1.3f);
+        level.playSound(null, this, com.stormreach.registry.ModSfx.ITEM_PICK, source, 1.0f, 1.3f);
         entityData.set(SHEARED, true);
         regrow = 3000 + random.nextInt(3000);
         int n = 1 + random.nextInt(2);
@@ -136,8 +136,8 @@ public class Puffling extends Animal implements Shearable {
         return RealmEntities.PUFFLING.create(level, EntitySpawnReason.BREEDING);
     }
 
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.SHEEP_AMBIENT; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.SHEEP_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.SHEEP_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_AMBIENT; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.CREATURE_SMALL_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_DEATH; }
     @Override public float getVoicePitch() { return 1.4f + random.nextFloat() * 0.2f; }
 }

@@ -49,7 +49,7 @@ public class StormCollectorBlock extends Block {
             if (chance > 0 && random.nextInt(chance) == 0) {
                 level.setBlock(pos, state.setValue(CHARGE, charge + 1), Block.UPDATE_ALL);
                 level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, 10, 0.3, 0.1, 0.3, 0.1);
-                level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 0.8f, 1.5f);
+                level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_CHIME, SoundSource.BLOCKS, 0.8f, 1.5f);
             }
         }
         level.scheduleTick(pos, this, 100);
@@ -61,7 +61,7 @@ public class StormCollectorBlock extends Block {
         if (level instanceof ServerLevel server) {
             Block.popResource(server, pos.above(), new ItemStack(ModItems.STORM_CELL));
             server.setBlock(pos, state.setValue(CHARGE, 0), Block.UPDATE_ALL);
-            server.playSound(null, pos, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 0.7f, 1.6f);
+            server.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_DISPEL, SoundSource.BLOCKS, 0.7f, 1.6f);
         }
         return InteractionResult.SUCCESS;
     }

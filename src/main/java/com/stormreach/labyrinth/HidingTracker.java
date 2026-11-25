@@ -60,7 +60,7 @@ public final class HidingTracker {
         p.addEffect(new MobEffectInstance(ModEffects.HIDDEN, 20 * 60 * 60, 0, true, false, true));
         p.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 20 * 60 * 60, 0, true, false, false));
         LockerNet.send(p, true, lower, facing.get2DDataValue());
-        p.level().playSound(null, lower, SoundEvents.IRON_TRAPDOOR_CLOSE, SoundSource.BLOCKS, 0.6f, 0.7f);
+        p.level().playSound(null, lower, com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_CLOSE, SoundSource.BLOCKS, 0.6f, 0.7f);
         p.sendOverlayMessage(Component.translatable("block.stormreach.rusted_locker.hidden").withStyle(ChatFormatting.DARK_AQUA));
         com.stormreach.progress.StormAdvancements.award(p, "hide_locker");
     }
@@ -79,7 +79,7 @@ public final class HidingTracker {
         if (h != null && stepOut) {
             Vec3 out = Vec3.atBottomCenterOf(h.locker().relative(h.facing()));
             p.teleportTo(out.x, out.y, out.z);
-            p.level().playSound(null, h.locker(), SoundEvents.IRON_TRAPDOOR_OPEN, SoundSource.BLOCKS, 0.6f, 0.7f);
+            p.level().playSound(null, h.locker(), com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_OPEN, SoundSource.BLOCKS, 0.6f, 0.7f);
         }
     }
 

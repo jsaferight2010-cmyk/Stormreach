@@ -43,7 +43,7 @@ public class DopplerRadarItem extends BlockItem {
         }
         if (!level.isClientSide()) {
             RadarStructure.build(level, base);
-            level.playSound(null, base, SoundEvents.ANVIL_PLACE, SoundSource.BLOCKS, 0.6f, 1.3f);
+            level.playSound(null, base, com.stormreach.registry.ModSfx.BLOCK_METAL_PLACE, SoundSource.BLOCKS, 0.6f, 1.3f);
             if (p == null || !p.isCreative()) ctx.getItemInHand().shrink(1);
         }
         return InteractionResult.SUCCESS;

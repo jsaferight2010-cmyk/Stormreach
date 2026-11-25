@@ -60,12 +60,12 @@ public class KeyholeBlock extends HorizontalDirectionalBlock {
         if (!stack.is(keyFor(kind))) {
             player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.wrong",
                     Component.translatable(KEY_NAMES[kind])).withStyle(ChatFormatting.RED));
-            server.playSound(null, pos, SoundEvents.CHAIN_HIT, SoundSource.BLOCKS, 1f, 0.6f);
+            server.playSound(null, pos, com.stormreach.registry.ModSfx.BLOCK_CHAIN, SoundSource.BLOCKS, 1f, 0.6f);
             return InteractionResult.FAIL;
         }
         stack.consume(1, player);
         server.setBlock(pos, state.setValue(FILLED, true), Block.UPDATE_ALL);
-        server.playSound(null, pos, SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1.2f, 0.55f + kind * 0.15f);
+        server.playSound(null, pos, com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_OPEN, SoundSource.BLOCKS, 1.2f, 0.55f + kind * 0.15f);
         server.sendParticles(ParticleTypes.ENCHANT, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 30, 0.4, 0.4, 0.4, 0.4);
         int set = VaultDoor.locksSet(server, pos);
         player.sendOverlayMessage(Component.translatable("block.stormreach.labyrinth_keyhole.keys", set).withStyle(ChatFormatting.GOLD));

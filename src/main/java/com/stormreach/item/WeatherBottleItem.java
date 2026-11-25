@@ -37,9 +37,9 @@ public class WeatherBottleItem extends Item {
             case RAIN -> server.getServer().setWeatherParameters(0, 6000, true, false);
             case THUNDER -> server.getServer().setWeatherParameters(0, 2400, true, true);
         }
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.BOTTLE_EMPTY, SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), com.stormreach.registry.ModSfx.ITEM_BOTTLE, SoundSource.PLAYERS, 1.0f, 1.0f);
         level.playSound(null, player.getX(), player.getY(), player.getZ(),
-                weather == Weather.CLEAR ? SoundEvents.AMETHYST_BLOCK_CHIME : SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 0.8f, 1.2f);
+                weather == Weather.CLEAR ? com.stormreach.registry.ModSfx.MAGIC_CHIME : com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.WEATHER, 0.8f, 1.2f);
         player.sendOverlayMessage(Component.translatable("item.stormreach.weather_bottle." + weather.name().toLowerCase(java.util.Locale.ROOT))
                 .withStyle(ChatFormatting.AQUA));
         stack.consume(1, player);

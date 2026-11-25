@@ -108,14 +108,14 @@ public class Stormwarden extends Monster {
                 squall.setTarget(target);
                 server.addFreshEntity(squall);
             }
-            playSound(SoundEvents.WARDEN_ROAR, 3.0f, 1.4f);
+            playSound(com.stormreach.registry.ModSfx.CREATURE_TITAN_ROAR, 3.0f, 1.4f);
         }
     }
 
     /** Knocks every nearby player away from the boss. */
     private void gust(ServerLevel server) {
         server.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, getX(), getY(), getZ(), 1, 0, 0, 0, 0);
-        playSound(SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), 3.0f, 0.6f);
+        playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 3.0f, 0.6f);
         for (Player p : server.getEntitiesOfClass(Player.class, new AABB(blockPosition()).inflate(10.0), p -> !p.isSpectator() && !p.isCreative())) {
             Vec3 away = p.position().subtract(position()).normalize().scale(1.6);
             p.push(away.x, 0.7, away.z);
@@ -153,17 +153,17 @@ public class Stormwarden extends Monster {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.BREEZE_IDLE_AIR;
+        return com.stormreach.registry.ModSfx.WEATHER_WIND;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.BREEZE_HURT;
+        return com.stormreach.registry.ModSfx.CREATURE_WIND_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.WITHER_DEATH;
+        return com.stormreach.registry.ModSfx.CREATURE_TITAN_DEATH;
     }
 
     /** Circles the target about six blocks up, swooping in occasionally. */

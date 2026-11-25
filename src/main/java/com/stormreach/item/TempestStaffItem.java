@@ -43,7 +43,7 @@ public class TempestStaffItem extends Item {
         }
 
         StormWeather.strike(server, hit.getBlockPos().above(), player instanceof ServerPlayer sp ? sp : null, true);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THUNDER.value(),
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), com.stormreach.registry.ModSfx.WEATHER_THUNDER,
                 SoundSource.PLAYERS, 0.6f, 1.2f);
         if (!server.isThundering()) {
             stack.hurtAndBreak(1, player, hand);

@@ -3,6 +3,21 @@
 ## 5.1.0 (in progress: the overhaul)
 Built in stages. This section grows as each stage lands.
 
+### Stage 9: original sound and a new Labyrinth score
+- **Every sound effect is now Stormreach's own.** 41 new sounds were synthesised from scratch for the mod. They replace every vanilla sound it used to borrow:
+  - thunder cracks and rolling rumbles, gusts and howling wind, hail clatter and taps, puddle splashes
+  - crystal chimes, storm surges, the Dispel Weather chime, the radar ping
+  - backpack straps and buckles, armour clinks
+  - the vault's lock rattle, grinding stone and boom, creaking locker doors
+  - a storm horn
+  - voices for the realm's small creatures, sky creatures and wind spirits, and for the bosses (rumbles, roars, hurt, death, charge, blast)
+  - Every sound has a subtitle.
+- **"Hollow Halls"**, the new Labyrinth music: an original, slow piece for soft piano and pads in D Dorian. It's split into the same three layers as before, which fade in and out with the danger:
+  - calm: the piano motif and pads
+  - tense: adds a low heartbeat pulse and a held, uneasy cluster
+  - chase: adds drums and a driving bass
+- Block footstep and break sounds are still vanilla.
+
 ### Stage 8: two guidebooks
 - **Every player gets two books the first time they join**, once only. If your inventory is full they drop at your feet.
   - **Stormreach Field Guide**: the whole player guide in a book, chapter by chapter, with headings, lists and the rarity tables.

@@ -69,8 +69,8 @@ public class StormheartBlock extends Block {
     public static void activate(ServerLevel level, BlockPos pos, BlockState state) {
         if (state.getValue(ACTIVE) || StormreachConfig.spreadMode == StormreachConfig.SpreadMode.OFF) return;
         level.setBlock(pos, state.setValue(ACTIVE, true), Block.UPDATE_ALL);
-        level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.5f, 0.6f);
-        level.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.BLOCKS, 1.0f, 1.4f);
+        level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, SoundSource.BLOCKS, 1.5f, 0.6f);
+        level.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.BLOCKS, 1.0f, 1.4f);
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 60, 0.8, 0.8, 0.8, 0.3);
         level.scheduleTick(pos, state.getBlock(), 10);
     }
@@ -98,14 +98,14 @@ public class StormheartBlock extends Block {
             if (front == null) return InteractionResult.FAIL;
             front.snapTo(pos.getX() + 0.5, pos.getY() + 12, pos.getZ() + 0.5, 0f, 0f);
             server.addFreshEntity(front);
-            server.playSound(null, pos, SoundEvents.RAID_HORN.value(), SoundSource.BLOCKS, 3.0f, 0.6f);
+            server.playSound(null, pos, com.stormreach.registry.ModSfx.EVENT_HORN, SoundSource.BLOCKS, 3.0f, 0.6f);
             stack.consume(1, player);
             player.sendOverlayMessage(Component.translatable("message.stormreach.front_released").withStyle(ChatFormatting.AQUA));
             return InteractionResult.SUCCESS_SERVER;
         }
         if (stack.is(ModItems.SALT) && state.getValue(ACTIVE)) {
             server.setBlock(pos, state.setValue(ACTIVE, false), Block.UPDATE_ALL);
-            server.playSound(null, pos, SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 1.2f, 0.8f);
+            server.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_DISPEL, SoundSource.BLOCKS, 1.2f, 0.8f);
             stack.consume(1, player);
             player.sendOverlayMessage(Component.translatable("message.stormreach.heart_calmed"));
             return InteractionResult.SUCCESS_SERVER;
@@ -148,7 +148,7 @@ public class StormheartBlock extends Block {
 
         level.sendParticles(ParticleTypes.ELECTRIC_SPARK, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 6, 0.4, 0.4, 0.4, 0.15);
         if (random.nextInt(8) == 0) {
-            level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 1.0f, 0.5f + random.nextFloat() * 0.3f);
+            level.playSound(null, pos, com.stormreach.registry.ModSfx.MAGIC_HUM, SoundSource.BLOCKS, 1.0f, 0.5f + random.nextFloat() * 0.3f);
         }
 
         if (!grown && random.nextInt(Math.max(1, 12 - StormreachConfig.spreadSpeed)) == 0) {
@@ -156,7 +156,7 @@ public class StormheartBlock extends Block {
             level.setBlock(pos, next, Block.UPDATE_CLIENTS);
             if (radius(next) >= StormreachConfig.heartMaxRadius) {
                 Stormblight.blightBiome(level, pos, StormreachConfig.heartMaxRadius);
-                level.playSound(null, pos, SoundEvents.LIGHTNING_BOLT_THUNDER, SoundSource.WEATHER, 4.0f, 0.7f);
+                level.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.WEATHER, 4.0f, 0.7f);
             }
         }
         // Once fully grown it keeps tidying up its area, but more slowly.

@@ -54,8 +54,8 @@ public class Thistlehop extends Animal {
 
     @Override public boolean isFood(ItemStack s) { return s.is(ForestRegistry.SPARKFERN.asItem()); }
     @Override public AgeableMob getBreedOffspring(ServerLevel l, AgeableMob o) { return ForestRegistry.THISTLEHOP.create(l, EntitySpawnReason.BREEDING); }
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.RABBIT_AMBIENT; }
-    @Override protected SoundEvent getHurtSound(DamageSource s) { return SoundEvents.RABBIT_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.RABBIT_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_AMBIENT; }
+    @Override protected SoundEvent getHurtSound(DamageSource s) { return com.stormreach.registry.ModSfx.CREATURE_SMALL_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_SMALL_DEATH; }
     @Override public boolean causeFallDamage(double d, float m, DamageSource s) { return false; }
 }

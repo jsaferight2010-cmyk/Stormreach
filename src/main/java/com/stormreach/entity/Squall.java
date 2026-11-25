@@ -96,7 +96,7 @@ public class Squall extends Monster {
             living.push(push.x, 0.45, push.z);
             living.needsSync = true;
             living.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 40, 0), this);
-            playSound(SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), 0.8f, 1.2f);
+            playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 0.8f, 1.2f);
         }
         return hit;
     }
@@ -113,17 +113,17 @@ public class Squall extends Monster {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.BREEZE_IDLE_AIR;
+        return com.stormreach.registry.ModSfx.WEATHER_WIND;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.BREEZE_HURT;
+        return com.stormreach.registry.ModSfx.CREATURE_WIND_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.BREEZE_DEATH;
+        return com.stormreach.registry.ModSfx.CREATURE_WIND_DEATH;
     }
 
     /** Flies straight at the target and rams it. */

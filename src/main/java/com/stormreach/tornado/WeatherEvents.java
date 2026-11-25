@@ -143,8 +143,8 @@ public final class WeatherEvents {
                     if (mphAt(Vec3.atCenterOf(pos)) >= BlockWind.failureMph(level, pos, s, m)) level.destroyBlock(pos, m != MaterialClass.FOLIAGE);
                 }
             }
-            if (age == 1) level.playSound(null, BlockPos.containing(centre), SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), SoundSource.WEATHER, 4f, wet ? 0.4f : 0.6f);
-            if (age % 30 == 5) level.playSound(null, BlockPos.containing(centre), SoundEvents.ELYTRA_FLYING, SoundSource.WEATHER, 3f, 0.5f);
+            if (age == 1) level.playSound(null, BlockPos.containing(centre), com.stormreach.registry.ModSfx.WEATHER_GUST, SoundSource.WEATHER, 4f, wet ? 0.4f : 0.6f);
+            if (age % 30 == 5) level.playSound(null, BlockPos.containing(centre), com.stormreach.registry.ModSfx.WEATHER_WIND, SoundSource.WEATHER, 3f, 0.5f);
         }
     }
 
@@ -168,6 +168,9 @@ public final class WeatherEvents {
         @Override
         void run() {
             double ramp = age < 100 ? age / 100.0 : age > duration - 100 ? (duration - age) / 100.0 : 1.0;
+            if (age % 30 == 0) for (Player p : level.players())   // the clatter of hail all around
+                if (Math.hypot(p.getX() - centre.x, p.getZ() - centre.z) < radius + 8)
+                    level.playSound(null, p.getX(), p.getY() + 2, p.getZ(), com.stormreach.registry.ModSfx.WEATHER_HAIL, SoundSource.WEATHER, (float) (0.4 + 0.6 * severity * ramp), 0.9f + level.getRandom().nextFloat() * 0.2f);
             double windX = Math.cos(age * 0.003) * 0.06, windZ = Math.sin(age * 0.003) * 0.06;
             for (Player p : level.players()) {
                 if (p.isSpectator() || Math.hypot(p.getX() - centre.x, p.getZ() - centre.z) > radius + 48) continue;
@@ -318,7 +321,7 @@ public final class WeatherEvents {
             }
         }
         level.sendParticles(ParticleTypes.END_ROD, player.getX(), player.getY() + 1.5, player.getZ(), 40, 0.3, 1.2, 0.3, 0.08);
-        level.playSound(null, player.getX(), player.getY(), player.getZ(), net.minecraft.sounds.SoundEvents.BEACON_DEACTIVATE,
+        level.playSound(null, player.getX(), player.getY(), player.getZ(), com.stormreach.registry.ModSfx.MAGIC_DISPEL,
                 net.minecraft.sounds.SoundSource.WEATHER, 1.2f, 1.4f);
         player.sendOverlayMessage(net.minecraft.network.chat.Component.translatable(n > 0 ? "event.stormreach.dispel" : "event.stormreach.dispel.clear"));
         return n;

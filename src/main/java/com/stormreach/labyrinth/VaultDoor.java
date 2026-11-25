@@ -60,7 +60,7 @@ public final class VaultDoor {
         }
         if (locks != 3 || filled != 3) return false;
         OPENING.add(new Opening(level, door, top, bottom, new int[]{0}));
-        level.playSound(null, lock, SoundEvents.WARDEN_EMERGE, SoundSource.BLOCKS, 2.5f, 0.6f);
+        level.playSound(null, lock, com.stormreach.registry.ModSfx.CREATURE_TITAN_ROAR, SoundSource.BLOCKS, 2.5f, 0.6f);
         return true;
     }
 
@@ -82,8 +82,8 @@ public final class VaultDoor {
                         p.getX() + 0.5, p.getY() + 0.5, p.getZ() + 0.5, 12, 0.4, 0.4, 0.4, 0.1);
             }
             BlockPos mid = o.blocks().get(o.blocks().size() / 2);
-            level.playSound(null, mid, SoundEvents.GRINDSTONE_USE, SoundSource.BLOCKS, 2f, 0.4f);
-            if (row == o.bottomY()) level.playSound(null, mid, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.BLOCKS, 1.5f, 0.5f);
+            level.playSound(null, mid, com.stormreach.registry.ModSfx.BLOCK_GRIND, SoundSource.BLOCKS, 2f, 0.4f);
+            if (row == o.bottomY()) level.playSound(null, mid, com.stormreach.registry.ModSfx.BLOCK_BOOM, SoundSource.BLOCKS, 1.5f, 0.5f);
         }
     }
 

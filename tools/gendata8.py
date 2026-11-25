@@ -220,6 +220,10 @@ sounds = {
     'entity.stranger.whisper': {'sounds': [{'name': 'stormreach:entity/stranger_whisper', 'attenuation_distance': 12}], 'subtitle': 'subtitles.stormreach.entity.stranger.whisper'},
     'entity.hollow_keeper.screech': {'sounds': [{'name': 'stormreach:entity/hollow_keeper_screech'}], 'subtitle': 'subtitles.stormreach.entity.hollow_keeper.screech'},
 }
+import sys as _sys; _sys.path.insert(0, f'{ROOT}/tools')
+from sfx_list import SFX
+for _sid, (_sub, _old, _att) in SFX.items():   # 5.1: every effect is the mod's own (tools/sfx51.py)
+    sounds[_sid] = {'sounds': [{'name': f'stormreach:sfx/{_sid.replace(".", "_")}', 'attenuation_distance': _att}], 'subtitle': f'subtitles.stormreach.{_sid}'}
 for k in VOICE: sounds[f'voice.cyrrus.{k}'] = {'sounds': [{'name': f'stormreach:voice/cyrrus/{k}', 'stream': True, 'attenuation_distance': 64}]}
 w(f'{A}/sounds.json', sounds)
 for k, v in {'block.tornado_siren': 'Tornado siren wails', 'entity.tornado.roar': 'Tornado roars', 'ambient.heartbeat': 'Heart pounds',
@@ -409,6 +413,7 @@ MSG = {
  'gui.stormreach.guide.kind.smoking': 'Smoker',
  'gui.stormreach.guide.kind.campfire_cooking': 'Campfire',
  'gui.stormreach.guide.kind.stonecutting': 'Stonecutter',
+ **{f'subtitles.stormreach.{_k}': _v[0] for _k, _v in __import__('sfx_list').SFX.items()},
  'item.stormreach.tornado_director': 'Tornado Director',
  'item.stormreach.tornado_director.tooltip': 'Creative only. Point at the ground and use it to send the nearest tornado there.',
  'item.stormreach.tornado_director.tooltip2': 'Sneak and use to let it wander on its own again.',

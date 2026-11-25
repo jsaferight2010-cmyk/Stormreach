@@ -134,7 +134,7 @@ public class TempestSovereign extends Monster {
                     orb.snapTo(getX(), getY() + 2, getZ(), 0f, 0f);
                     orb.setTarget(target);
                     server.addFreshEntity(orb);
-                    playSound(SoundEvents.EVOKER_CAST_SPELL, 2.0f, 1.5f);
+                    playSound(com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, 2.0f, 1.5f);
                 }
             }
             orbCooldown = 140;
@@ -156,7 +156,7 @@ public class TempestSovereign extends Monster {
             } else if (--vortexCooldown <= 0) {
                 vortexTicks = 40;
                 vortexCooldown = 220;
-                playSound(SoundEvents.WARDEN_SONIC_CHARGE, 3.0f, 0.7f);
+                playSound(com.stormreach.registry.ModSfx.CREATURE_TITAN_CHARGE, 3.0f, 0.7f);
             }
         }
     }
@@ -179,7 +179,7 @@ public class TempestSovereign extends Monster {
             addEffect(new MobEffectInstance(MobEffects.SPEED, 20 * 600, 1));
             addEffect(new MobEffectInstance(MobEffects.STRENGTH, 20 * 600, 1));
         }
-        playSound(SoundEvents.ENDER_DRAGON_GROWL, 4.0f, phase == 2 ? 1.2f : 0.8f);
+        playSound(com.stormreach.registry.ModSfx.CREATURE_TITAN_AMBIENT, 4.0f, phase == 2 ? 1.2f : 0.8f);
         for (ServerPlayer p : server.getPlayers(p -> p.distanceToSqr(this) < 64 * 64)) {
             p.sendSystemMessage(Component.translatable("entity.stormreach.tempest_sovereign.phase" + phase)
                     .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
@@ -192,7 +192,7 @@ public class TempestSovereign extends Monster {
 
     private void gust(ServerLevel server, double radius, double strength) {
         server.sendParticles(ParticleTypes.GUST_EMITTER_LARGE, getX(), getY(), getZ(), 1, 0, 0, 0, 0);
-        playSound(SoundEvents.BREEZE_WIND_CHARGE_BURST.value(), 3.0f, 0.5f);
+        playSound(com.stormreach.registry.ModSfx.WEATHER_GUST, 3.0f, 0.5f);
         for (Player p : nearbyPlayers(server, radius)) {
             Vec3 away = p.position().subtract(position()).normalize().scale(strength);
             p.push(away.x, 0.8, away.z);
@@ -267,9 +267,9 @@ public class TempestSovereign extends Monster {
         if (hasCustomName()) bossBar.setName(getDisplayName());
     }
 
-    @Override protected SoundEvent getAmbientSound() { return SoundEvents.BREEZE_IDLE_AIR; }
-    @Override protected SoundEvent getHurtSound(DamageSource source) { return SoundEvents.WITHER_HURT; }
-    @Override protected SoundEvent getDeathSound() { return SoundEvents.WITHER_DEATH; }
+    @Override protected SoundEvent getAmbientSound() { return com.stormreach.registry.ModSfx.WEATHER_WIND; }
+    @Override protected SoundEvent getHurtSound(DamageSource source) { return com.stormreach.registry.ModSfx.CREATURE_TITAN_HURT; }
+    @Override protected SoundEvent getDeathSound() { return com.stormreach.registry.ModSfx.CREATURE_TITAN_DEATH; }
 
     /** Circles high around its target, keeps near its spire, and dives in phase 3. */
     static class SovereignFlightGoal extends Goal {

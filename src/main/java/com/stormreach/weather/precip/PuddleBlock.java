@@ -73,6 +73,7 @@ public class PuddleBlock extends Block {
         if (e.isOnFire()) e.clearFire();
         if (level instanceof ServerLevel server && e.getDeltaMovement().horizontalDistanceSqr() > 0.004 && e.tickCount % 3 == 0) {
             server.sendParticles(ParticleTypes.SPLASH, e.getX(), pos.getY() + 0.1, e.getZ(), 4, 0.2, 0.0, 0.2, 0.05);
+            if (e.tickCount % 9 == 0) server.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_PUDDLE_SPLASH, net.minecraft.sounds.SoundSource.BLOCKS, 0.35f, 0.9f + server.getRandom().nextFloat() * 0.3f);
         }
     }
 

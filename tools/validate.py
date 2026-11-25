@@ -144,7 +144,7 @@ for eq in ('stormcrown', 'storm_chaser_cap'):
 ours |= {f'stormreach:{x}' for x in nb + ni + ne}
 # sounds: every registered sound event has a sounds.json entry, every entry's file exists, subtitles have lang
 sj = json.load(open(f'{A}/sounds.json'))
-for path in re.findall(r'register\("([a-z_.0-9]+)"\)', open(JAVA + '/com/stormreach/registry/ModSounds.java').read()):
+for path in re.findall(r'register\("([a-z_.0-9]+)"\)', open(JAVA + '/com/stormreach/registry/ModSounds.java').read() + open(JAVA + '/com/stormreach/registry/ModSfx.java').read()):
     if path not in sj: problems.append(f'sound {path} missing from sounds.json')
 for k, v in sj.items():
     for snd in v['sounds']:

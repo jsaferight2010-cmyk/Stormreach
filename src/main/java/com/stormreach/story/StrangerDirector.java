@@ -93,7 +93,7 @@ public final class StrangerDirector {
         switch (kind) {
             case 0 -> { // footsteps behind you
                 Vec3 behind = p.position().subtract(look.multiply(1, 0, 1).normalize().scale(10));
-                for (int i = 0; i < 4; i++) level.playSound(null, BlockPos.containing(behind), SoundEvents.GRAVEL_STEP, SoundSource.AMBIENT, 0.5f, 0.8f);
+                for (int i = 0; i < 4; i++) level.playSound(null, BlockPos.containing(behind), com.stormreach.registry.ModSfx.BLOCK_STONE_TAP, SoundSource.AMBIENT, 0.5f, 0.8f);
             }
             case 1 -> level.playSound(null, p.blockPosition().offset(r.nextInt(21) - 10, 0, r.nextInt(21) - 10), ModSounds.STRANGER_WHISPER, SoundSource.AMBIENT, 0.25f, 0.9f);
             case 2 -> { // smoke at the edge of sight

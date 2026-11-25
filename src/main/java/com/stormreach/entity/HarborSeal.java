@@ -83,17 +83,17 @@ public class HarborSeal extends Animal {
 
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.DOLPHIN_AMBIENT;
+        return com.stormreach.registry.ModSfx.CREATURE_GLIDE_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
-        return SoundEvents.DOLPHIN_HURT;
+        return com.stormreach.registry.ModSfx.CREATURE_GLIDE_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.DOLPHIN_DEATH;
+        return com.stormreach.registry.ModSfx.CREATURE_GLIDE_DEATH;
     }
 
     @Override

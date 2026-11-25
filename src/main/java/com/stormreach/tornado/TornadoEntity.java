@@ -243,7 +243,7 @@ public class TornadoEntity extends Entity {
         }
         flyDebris(level, down);
         if (tickCount % 40 == 0) {
-            level.playSound(null, blockPosition(), SoundEvents.ELYTRA_FLYING, SoundSource.WEATHER, 3.0f + intensity() * 4f, 0.4f);
+            level.playSound(null, blockPosition(), com.stormreach.registry.ModSfx.WEATHER_WIND, SoundSource.WEATHER, 3.0f + intensity() * 4f, 0.4f);
         }
     }
 

@@ -78,8 +78,9 @@ public final class RadarScan {
                     if (d > reach * 2) continue;
                     WindField.Sample s = f.sample(tx, tz, 30, t);
                     double fade = Math.exp(-(d / reach) * (d / reach));
-                    u = u + (s.u() - u) * fade;          // the vortex (with its own motion) takes over near the funnel
-                    v = v + (sampleV(s) - v) * fade;
+                    // the vortex's own circulation and inflow on top of the background flow it is embedded in
+                    u += (s.u() - f.translateX) * fade;
+                    v += (sampleV(s) - f.translateZ) * fade;
                     // the parent mesocyclone: a broad, weaker circulation the radar resolves even when the tornado
                     // itself is smaller than a gate (that is what a real velocity couplet usually is)
                     double rm = Math.max(70, f.coreRadius * 6), vm = Math.min(45, f.vMax * 0.45);

@@ -180,7 +180,9 @@ public final class StormBlocks {
         if (!vid.getPath().equals(bid.getPath())) return;
         Identifier sid = BuiltInRegistries.BLOCK.getKey(storm);
         ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, sid);
-        Item.Properties props = new Item.Properties().setId(key).useBlockDescriptionPrefix().stacksTo(v.getDefaultMaxStackSize());
+        Item.Properties props = new Item.Properties().setId(key).useBlockDescriptionPrefix()
+                // item components aren't bound yet at mod init, so the stack size can't be read from the vanilla item
+                .stacksTo(vanilla instanceof net.minecraft.world.level.block.CakeBlock ? 1 : 64);
         Item item;
         if (v instanceof DoubleHighBlockItem) item = new DoubleHighBlockItem(storm, props);
         else if (v instanceof PlaceOnWaterBlockItem) item = new PlaceOnWaterBlockItem(storm, props);

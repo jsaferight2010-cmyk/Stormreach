@@ -88,6 +88,8 @@ EVENT_KINDS = ['supercell', 'downburst', 'hailstorm', 'ball_lightning', 'dispel'
 for k in SPAWNER_KINDS: gen_item(f'tornado_spawner_{k}')
 for k in EVENT_KINDS: gen_item(f'weather_event_{k}')
 gen_item('tornado_director')
+# GameTest environment for tests that change world-wide state (weather, every tornado): its own batch, run apart
+w(f'{D}/test_environment/isolated.json', {'type': 'minecraft:all_of', 'definitions': []})
 # ---- 5.1 stage 3: hail on the ground, puddles
 for big in (False, True):
     tex = 'stormreach:block/hail_layer' + ('_big' if big else '')

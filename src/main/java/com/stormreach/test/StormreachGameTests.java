@@ -190,7 +190,8 @@ public class StormreachGameTests {
         });
     }
 
-    @GameTest(maxTicks = 60)
+    // runs in its own batch: dispelling ends every tornado in the level, which would break the tornado tests running beside it
+    @GameTest(maxTicks = 60, environment = "stormreach:isolated")
     public void dispelWeatherClearsTheStormAndTornadoes(GameTestHelper h) {
         MinecraftServer server = h.getLevel().getServer();
         server.setWeatherParameters(0, 6000, true, true);

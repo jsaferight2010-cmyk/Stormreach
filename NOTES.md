@@ -248,3 +248,23 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
 - Client: `WeatherMesh` (hailstone, storm cloud; no Minecraft classes, so it can be previewed), `HailstoneRenderer`, `StormCellRenderer`.
 - Config: `puddles`, `stormClouds` (properties file).
 - GameTests: hail smashes a pane, hurts a zombie, piles up with a melt timer; puddles form, cap and vanish without ground; a downburst pushes a zombie out; a storm cloud grows and collapses when dispelled.
+
+### 5.1 stages 4–6 (code-only; Minecraft not launched)
+- Stage 4, backpack slot: the worn pack lives in `EquipmentSlot.BODY`, so vanilla saves it, syncs it to trackers and drops it on death.
+  - `BackpackEquipment` holds the `WornSlot` and `WornContainer`; `BackpackEquipment.WORN = -2` marks a menu opened from the worn pack.
+  - `InventoryMenuMixin` adds the slot at (77, 44) and handles shift-click.
+  - Client: `InventoryScreenBackpackMixin` draws the slot frame, `CreativeInventoryBackpackMixin` (`@ModifyArgs`, `require = 0`) hides it in the creative tab, and `AvatarRendererMixin`, `AvatarRenderStateMixin`, `BackpackLayer` and `BackpackModel` draw the pack (textures from textures6.py, one per tier).
+- Stage 5, weather screens: `tornado/WeatherUi` (Report, the payloads, `measure`, `stillAt`) and the client `weather/WeatherScreen` (tabs per device, a radar scope with reflectivity and velocity). Instruments and handhelds open the screen; sneak + use gives the old chat reading.
+- Stage 6, Doppler radar: the `tornado/radar` package.
+  - `RadarLayout` is the 3x3x7 footprint, with the controller at (0, 4, 0).
+  - `RadarPartBlock` uses PART/OX/OY/OZ to find its controller; parts without one remove themselves through updateShape.
+  - `DopplerRadarBlock` is the `tornado_radar` id and has a block entity; `DopplerRadarItem` places the structure.
+  - Client: `DopplerRadarRenderer` with `RadarMesh`, and `RadarPlacementOutline`, which draws dust particles and follows the `radarPlacementOutline` config.
+- Preview tool modes: `cloud,…`, `hail,N,…`, `radar,yawDeg,label`.
+- Remaining from the overhaul spec:
+  - the maze, vault door and keys, guardian, treasure room
+  - the temple and boss arena
+  - original sounds and maze music
+  - the guidebooks
+  - the full 64x art pass for everything else
+  - particles

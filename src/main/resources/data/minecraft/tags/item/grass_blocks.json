@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_grass_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_podzol",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mycelium",
+   "required": false
+  }
+ ]
+}

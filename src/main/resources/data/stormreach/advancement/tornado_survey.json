@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tornado_survey.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tornado_survey.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_spawner_rope"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:witness_tornado"
+}

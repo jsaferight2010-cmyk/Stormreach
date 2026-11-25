@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "stormreach:storm_crystal_block",
+    "T": "stormreach:tempest_core",
+    "L": "stormreach:stormpine_log"
+  },
+  "pattern": [
+    "CTC",
+    " L ",
+    " L "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormbreaker"
+  }
+}

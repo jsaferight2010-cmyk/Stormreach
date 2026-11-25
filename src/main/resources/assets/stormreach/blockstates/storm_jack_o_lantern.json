@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=east": {
+   "model": "stormreach:block/storm_jack_o_lantern",
+   "y": 90
+  },
+  "facing=north": {
+   "model": "stormreach:block/storm_jack_o_lantern"
+  },
+  "facing=south": {
+   "model": "stormreach:block/storm_jack_o_lantern",
+   "y": 180
+  },
+  "facing=west": {
+   "model": "stormreach:block/storm_jack_o_lantern",
+   "y": 270
+  }
+ }
+}

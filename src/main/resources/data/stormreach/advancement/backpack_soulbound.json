@@ -1,0 +1,40 @@
+{
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#stormreach:backpacks",
+            "predicates": {
+              "minecraft:enchantments": [
+                {
+                  "enchantments": "stormreach:soulbound"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_soulbound.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_soulbound.description"
+    },
+    "icon": {
+      "id": "stormreach:diamond_backpack"
+    },
+    "frame": "task",
+    "hidden": true
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ],
+  "parent": "stormreach:open_backpack"
+}

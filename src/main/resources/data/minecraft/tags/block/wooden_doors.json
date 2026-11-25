@@ -1,0 +1,60 @@
+{
+  "values": [
+    "stormreach:driftwood_door",
+    "stormreach:stormpine_door",
+    {
+      "id": "stormreach:storm_oak_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_door",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_door",
+      "required": false
+    },
+    "stormreach:galewood_door",
+    "stormreach:elderstorm_door"
+  ]
+}

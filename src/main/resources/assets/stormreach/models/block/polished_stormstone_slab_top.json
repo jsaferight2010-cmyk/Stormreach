@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "stormreach:block/polished_stormstone",
+    "side": "stormreach:block/polished_stormstone",
+    "top": "stormreach:block/polished_stormstone"
+  }
+}

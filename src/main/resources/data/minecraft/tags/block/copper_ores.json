@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_copper_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_copper_ore",
+   "required": false
+  }
+ ]
+}

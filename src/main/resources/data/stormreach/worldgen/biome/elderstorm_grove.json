@@ -1,0 +1,113 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "stormreach:glimmerstag",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 12
+            },
+            {
+              "type": "stormreach:thistlehop",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 5,
+                "min_inclusive": 2
+              },
+              "weight": 14
+            },
+            {
+              "type": "stormreach:puffling",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 3
+            }
+          ],
+          "monster": [
+            {
+              "type": "stormreach:static_wisp",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 40
+            },
+            {
+              "type": "stormreach:stormhawk",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 10
+            }
+          ]
+        }
+      }
+    },
+    "minecraft:visual/sky_color": "#3f5f8c",
+    "minecraft:visual/fog_color": "#4a6f8f",
+    "minecraft:visual/water_fog_color": "#2a3f66",
+    "minecraft:visual/ambient_particles": {
+      "argument": [
+        {
+          "particle": {
+            "type": "minecraft:glow"
+          },
+          "probability": 0.003
+        },
+        {
+          "particle": {
+            "type": "minecraft:electric_spark"
+          },
+          "probability": 0.002
+        }
+      ],
+      "modifier": "append"
+    }
+  },
+  "carvers": [],
+  "downfall": 0.6,
+  "effects": {
+    "water_color": "#5b8fd8",
+    "grass_color": "#3fa0a8",
+    "foliage_color": "#3fa0a8"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "stormreach:cloud_nimbus"
+    ],
+    [],
+    [],
+    [],
+    [
+      "stormreach:ore_voltite",
+      "stormreach:ore_aurorite",
+      "stormreach:ore_ion"
+    ],
+    [],
+    [],
+    [
+      "stormreach:trees_elderstorm",
+      "stormreach:patch_sparkfern",
+      "stormreach:patch_thunderbloom",
+      "stormreach:patch_skybloom"
+    ],
+    []
+  ],
+  "has_precipitation": false,
+  "temperature": 0.5
+}

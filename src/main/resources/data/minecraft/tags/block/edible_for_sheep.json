@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_short_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_short_dry_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tall_dry_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_fern",
+   "required": false
+  }
+ ]
+}

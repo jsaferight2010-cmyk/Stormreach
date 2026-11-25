@@ -1,0 +1,77 @@
+{
+ "values": [
+  "stormreach:stormglass",
+  {
+   "id": "stormreach:storm_white_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magenta_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_blue_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_yellow_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lime_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gray_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_gray_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cyan_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purple_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_green_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_black_stained_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_glass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tinted_glass",
+   "required": false
+  }
+ ]
+}

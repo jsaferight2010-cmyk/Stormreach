@@ -1,0 +1,11 @@
+{
+  "values": [
+    "stormreach:conductive",
+    "stormreach:galeforce",
+    "stormreach:grounded",
+    "stormreach:capacity",
+    "stormreach:magnetism",
+    "stormreach:organization",
+    "stormreach:resilience"
+  ]
+}

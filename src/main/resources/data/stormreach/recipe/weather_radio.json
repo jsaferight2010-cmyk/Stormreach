@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "N": "minecraft:note_block",
+    "S": "stormreach:storm_shard",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    " I ",
+    "NSN",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:weather_radio"
+  }
+}

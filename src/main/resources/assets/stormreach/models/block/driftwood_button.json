@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button",
+  "textures": {
+    "texture": "stormreach:block/driftwood_planks"
+  }
+}

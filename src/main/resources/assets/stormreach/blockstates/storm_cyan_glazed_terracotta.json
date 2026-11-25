@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=east": {
+   "model": "stormreach:block/storm_cyan_glazed_terracotta",
+   "y": 270
+  },
+  "facing=north": {
+   "model": "stormreach:block/storm_cyan_glazed_terracotta",
+   "y": 180
+  },
+  "facing=south": {
+   "model": "stormreach:block/storm_cyan_glazed_terracotta"
+  },
+  "facing=west": {
+   "model": "stormreach:block/storm_cyan_glazed_terracotta",
+   "y": 90
+  }
+ }
+}

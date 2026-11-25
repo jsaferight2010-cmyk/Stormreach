@@ -1,0 +1,35 @@
+{
+  "parent": "stormreach:crab_breeder",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:thunder_crab"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.thunder_crab.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.thunder_crab.description"
+    },
+    "icon": {
+      "id": "stormreach:thunder_crab_spawn_egg"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:stormwarden",
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormbreaker"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormbreaker.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormbreaker.description"
+    },
+    "icon": {
+      "id": "stormreach:stormbreaker"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ]
+}

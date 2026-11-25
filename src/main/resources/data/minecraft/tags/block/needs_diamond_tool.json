@@ -1,0 +1,24 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_obsidian",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crying_obsidian",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_netherite_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_respawn_anchor",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_ancient_debris",
+   "required": false
+  }
+ ]
+}

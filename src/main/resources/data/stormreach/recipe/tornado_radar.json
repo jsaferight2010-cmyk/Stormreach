@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": "stormreach:glimmer_antler",
+    "D": "minecraft:daylight_detector",
+    "C": "stormreach:storm_cell",
+    "S": "stormreach:storm_detector",
+    "I": "minecraft:iron_block",
+    "T": "minecraft:observer"
+  },
+  "pattern": [
+    "ADA",
+    "CSC",
+    "ITI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tornado_radar"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:random_selector",
+  "default": "stormreach:elderstorm_checked",
+  "features": [
+    {
+      "chance": 0.4,
+      "feature": "stormreach:giant_elderstorm_checked"
+    }
+  ]
+}

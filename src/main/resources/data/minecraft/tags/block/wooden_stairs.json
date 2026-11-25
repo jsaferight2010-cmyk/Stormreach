@@ -1,0 +1,60 @@
+{
+  "values": [
+    "stormreach:driftwood_stairs",
+    "stormreach:stormpine_stairs",
+    {
+      "id": "stormreach:storm_oak_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_stairs",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_stairs",
+      "required": false
+    },
+    "stormreach:galewood_stairs",
+    "stormreach:elderstorm_stairs"
+  ]
+}

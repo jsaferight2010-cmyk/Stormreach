@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "stormreach:item/voltite_pickaxe"
+  }
+}

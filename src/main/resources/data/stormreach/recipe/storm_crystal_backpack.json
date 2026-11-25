@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "equipment",
+  "group": "stormreach_backpack",
+  "input": "stormreach:netherite_backpack",
+  "material": "stormreach:storm_crystal_backpack_upgrade",
+  "result": {
+    "id": "stormreach:storm_crystal_backpack"
+  }
+}

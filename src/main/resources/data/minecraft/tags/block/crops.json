@@ -1,0 +1,28 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_beetroots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_carrots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_potatoes",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wheat",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_torchflower_crop",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pitcher_crop",
+   "required": false
+  }
+ ]
+}

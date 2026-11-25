@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "m": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:weather_monitor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.forecaster_5.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.forecaster_5.description"
+    },
+    "icon": {
+      "id": "stormreach:weather_monitor"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "m"
+    ]
+  ],
+  "parent": "stormreach:forecaster_4",
+  "rewards": {
+    "experience": 150
+  }
+}

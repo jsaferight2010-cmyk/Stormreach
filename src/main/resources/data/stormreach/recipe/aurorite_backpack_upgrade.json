@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": "stormreach:aurorite_block",
+    "G": "stormreach:gilded_stormfruit",
+    "I": "stormreach:ion_lamp",
+    "E": "stormreach:tempest_eye"
+  },
+  "pattern": [
+    "AGA",
+    "IEI",
+    "AGA"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:aurorite_backpack_upgrade"
+  }
+}

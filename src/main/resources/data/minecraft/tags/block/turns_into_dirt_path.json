@@ -1,0 +1,29 @@
+{
+ "values": [
+  "stormreach:stormscar_turf",
+  {
+   "id": "stormreach:storm_grass_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_podzol",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_coarse_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mycelium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_rooted_dirt",
+   "required": false
+  }
+ ]
+}

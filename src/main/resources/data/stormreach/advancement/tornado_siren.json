@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:tornado_siren"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tornado_siren.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tornado_siren.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_siren"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ],
+  "parent": "stormreach:weather_radio"
+}

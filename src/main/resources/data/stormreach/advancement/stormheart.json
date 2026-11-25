@@ -1,0 +1,32 @@
+{
+  "parent": "stormreach:storm_cell",
+  "criteria": {
+    "h": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormheart"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormheart.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormheart.description"
+    },
+    "icon": {
+      "id": "stormreach:stormheart"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "h"
+    ]
+  ]
+}

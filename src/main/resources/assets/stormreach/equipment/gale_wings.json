@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "wings": [
+      {
+        "texture": "stormreach:gale_wings",
+        "use_player_texture": true
+      }
+    ]
+  }
+}

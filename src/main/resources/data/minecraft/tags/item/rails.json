@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_rail",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_powered_rail",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_detector_rail",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_activator_rail",
+   "required": false
+  }
+ ]
+}

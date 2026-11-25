@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_coarse_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_rooted_dirt",
+   "required": false
+  }
+ ]
+}

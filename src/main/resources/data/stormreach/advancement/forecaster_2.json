@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:weather_station"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.forecaster_2.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.forecaster_2.description"
+    },
+    "icon": {
+      "id": "stormreach:weather_station"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ],
+  "parent": "stormreach:forecaster_1"
+}

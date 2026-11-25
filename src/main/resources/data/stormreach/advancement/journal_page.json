@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "p": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "stormreach:journal_page_1",
+              "stormreach:journal_page_2",
+              "stormreach:journal_page_3",
+              "stormreach:journal_page_4",
+              "stormreach:journal_page_5"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.journal_page.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.journal_page.description"
+    },
+    "icon": {
+      "id": "stormreach:journal_page_1"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "p"
+    ]
+  ],
+  "parent": "stormreach:stranger_seen"
+}

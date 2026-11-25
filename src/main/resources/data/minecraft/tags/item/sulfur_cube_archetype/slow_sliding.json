@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_brown_mushroom_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_mushroom_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mycelium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_shroomlight",
+   "required": false
+  }
+ ]
+}

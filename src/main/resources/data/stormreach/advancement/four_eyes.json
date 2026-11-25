@@ -1,0 +1,36 @@
+{
+  "parent": "stormreach:tempest_sovereign",
+  "criteria": {
+    "e": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:tempest_eye",
+            "count": {
+              "min": 4
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.four_eyes.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.four_eyes.description"
+    },
+    "icon": {
+      "id": "stormreach:tempest_eye"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "e"
+    ]
+  ]
+}

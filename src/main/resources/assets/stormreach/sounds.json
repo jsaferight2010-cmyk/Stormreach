@@ -1,0 +1,212 @@
+{
+  "block.tornado_siren": {
+    "sounds": [
+      {
+        "name": "stormreach:block/tornado_siren",
+        "attenuation_distance": 96
+      }
+    ],
+    "subtitle": "subtitles.stormreach.block.tornado_siren"
+  },
+  "entity.tornado.roar": {
+    "sounds": [
+      {
+        "name": "stormreach:entity/tornado_roar",
+        "attenuation_distance": 64
+      }
+    ],
+    "subtitle": "subtitles.stormreach.entity.tornado.roar"
+  },
+  "music.labyrinth.calm": {
+    "sounds": [
+      {
+        "name": "stormreach:music/labyrinth_calm",
+        "stream": true
+      }
+    ]
+  },
+  "music.labyrinth.tense": {
+    "sounds": [
+      {
+        "name": "stormreach:music/labyrinth_tense",
+        "stream": true
+      }
+    ]
+  },
+  "music.labyrinth.chase": {
+    "sounds": [
+      {
+        "name": "stormreach:music/labyrinth_chase",
+        "stream": true
+      }
+    ]
+  },
+  "music.cyrrus": {
+    "sounds": [
+      {
+        "name": "stormreach:music/cyrrus",
+        "stream": true
+      }
+    ]
+  },
+  "ambient.heartbeat": {
+    "sounds": [
+      {
+        "name": "stormreach:ambient/heartbeat"
+      }
+    ],
+    "subtitle": "subtitles.stormreach.ambient.heartbeat"
+  },
+  "entity.stranger.whisper": {
+    "sounds": [
+      {
+        "name": "stormreach:entity/stranger_whisper",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.entity.stranger.whisper"
+  },
+  "entity.hollow_keeper.screech": {
+    "sounds": [
+      {
+        "name": "stormreach:entity/hollow_keeper_screech"
+      }
+    ],
+    "subtitle": "subtitles.stormreach.entity.hollow_keeper.screech"
+  },
+  "voice.cyrrus.l01": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l01",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l02": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l02",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l03": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l03",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l04": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l04",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l05": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l05",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l06": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l06",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l07": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l07",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.l08": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/l08",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.phase2": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/phase2",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.phase3": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/phase3",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.phase4": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/phase4",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.phase5": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/phase5",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.d01": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/d01",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.d02": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/d02",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  },
+  "voice.cyrrus.d03": {
+    "sounds": [
+      {
+        "name": "stormreach:voice/cyrrus/d03",
+        "stream": true,
+        "attenuation_distance": 64
+      }
+    ]
+  }
+}

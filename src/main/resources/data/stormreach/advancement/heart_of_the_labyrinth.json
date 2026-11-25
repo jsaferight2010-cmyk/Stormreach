@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "h": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:heart_of_the_labyrinth"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.heart_of_the_labyrinth.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.heart_of_the_labyrinth.description"
+    },
+    "icon": {
+      "id": "stormreach:heart_of_the_labyrinth"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "h"
+    ]
+  ],
+  "parent": "stormreach:labyrinth_unsealed",
+  "rewards": {
+    "experience": 200
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormreach:cloudstep"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormreach:cloudstep"
+      }
+    ]
+  }
+}

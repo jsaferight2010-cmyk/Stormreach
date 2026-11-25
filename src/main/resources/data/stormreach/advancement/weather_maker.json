@@ -1,0 +1,43 @@
+{
+  "parent": "stormreach:storm_cell",
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:bottled_sunshine"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "r": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:bottled_rain"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.weather_maker.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.weather_maker.description"
+    },
+    "icon": {
+      "id": "stormreach:bottled_sunshine"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "s",
+      "r"
+    ]
+  ]
+}

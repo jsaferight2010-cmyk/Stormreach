@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 666013,
+    "separation": 40,
+    "spacing": 120
+  },
+  "structures": [
+    {
+      "structure": "stormreach:hollow_shrine",
+      "weight": 1
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "F": "stormreach:fulgurite",
+    "C": "stormreach:charged_stormstone",
+    "S": "stormreach:storm_crystal_block"
+  },
+  "pattern": [
+    "FCF",
+    "CSC",
+    "FCF"
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:stormgate_frame"
+  }
+}

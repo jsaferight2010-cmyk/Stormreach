@@ -1,0 +1,72 @@
+{
+  "parent": "stormreach:aurorite",
+  "criteria": {
+    "helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:aurorite_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:aurorite_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "leggings": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:aurorite_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:aurorite_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.aurorite_armor.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.aurorite_armor.description"
+    },
+    "icon": {
+      "id": "stormreach:aurorite_chestplate"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "helmet"
+    ],
+    [
+      "chestplate"
+    ],
+    [
+      "leggings"
+    ],
+    [
+      "boots"
+    ]
+  ]
+}

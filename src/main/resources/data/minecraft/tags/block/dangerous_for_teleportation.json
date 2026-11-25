@@ -1,0 +1,28 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_cactus",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magma_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sweet_berry_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wither_rose",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pointed_dripstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_powder_snow",
+   "required": false
+  }
+ ]
+}

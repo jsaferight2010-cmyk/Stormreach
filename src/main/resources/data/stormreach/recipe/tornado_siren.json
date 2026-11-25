@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "N": "minecraft:note_block",
+    "R": "minecraft:redstone_block",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    "GNG",
+    "GRG",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tornado_siren"
+  }
+}

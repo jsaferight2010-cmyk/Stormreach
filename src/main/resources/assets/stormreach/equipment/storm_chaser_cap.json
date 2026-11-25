@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormreach:storm_chaser_cap"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormreach:storm_chaser_cap"
+      }
+    ]
+  }
+}

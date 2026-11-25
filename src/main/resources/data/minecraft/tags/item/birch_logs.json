@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_birch_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_birch_wood",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_birch_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_birch_wood",
+   "required": false
+  }
+ ]
+}

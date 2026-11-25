@@ -1,0 +1,145 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "particle": "#texture",
+  "texture": "minecraft:block/bamboo_fence"
+ },
+ "elements": [
+  {
+   "name": "top bar",
+   "from": [
+    0,
+    12,
+    7
+   ],
+   "to": [
+    9,
+    15,
+    9
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      4,
+      4,
+      13,
+      7
+     ],
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "south": {
+     "uv": [
+      4,
+      4,
+      13,
+      7
+     ],
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "west": {
+     "uv": [
+      15,
+      4,
+      13,
+      7
+     ],
+     "texture": "#texture",
+     "cullface": "west",
+     "tintindex": 0
+    },
+    "up": {
+     "uv": [
+      13,
+      7,
+      15,
+      16
+     ],
+     "rotation": 270,
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "down": {
+     "uv": [
+      13,
+      7,
+      15,
+      16
+     ],
+     "rotation": 90,
+     "texture": "#texture",
+     "tintindex": 0
+    }
+   }
+  },
+  {
+   "name": "lower bar",
+   "from": [
+    0,
+    6,
+    7
+   ],
+   "to": [
+    9,
+    9,
+    9
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      4,
+      4,
+      13,
+      7
+     ],
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "south": {
+     "uv": [
+      4,
+      4,
+      13,
+      7
+     ],
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "west": {
+     "uv": [
+      15,
+      4,
+      13,
+      7
+     ],
+     "texture": "#texture",
+     "cullface": "west",
+     "tintindex": 0
+    },
+    "up": {
+     "uv": [
+      13,
+      7,
+      15,
+      16
+     ],
+     "rotation": 270,
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "down": {
+     "uv": [
+      13,
+      7,
+      15,
+      16
+     ],
+     "rotation": 90,
+     "texture": "#texture",
+     "tintindex": 0
+    }
+   }
+  }
+ ]
+}

@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "half=lower": {
+   "model": "stormreach:block/storm_tall_grass_bottom"
+  },
+  "half=upper": {
+   "model": "stormreach:block/storm_tall_grass_top"
+  }
+ }
+}

@@ -1,0 +1,492 @@
+[
+ {
+  "id": "open_backpack",
+  "parent": "root",
+  "title": "Pack Mule",
+  "description": "Open a backpack",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "backpack_obsidian",
+  "parent": "open_backpack",
+  "title": "Volcanic Luggage",
+  "description": "Upgrade to an Obsidian Backpack",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "backpack_netherite",
+  "parent": "backpack_obsidian",
+  "title": "Fireproof Freight",
+  "description": "Upgrade to a Netherite Backpack",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": 100
+ },
+ {
+  "id": "backpack_storm_crystal",
+  "parent": "backpack_netherite",
+  "title": "Bottled Lightning, Packed Neatly",
+  "description": "Upgrade to a Storm Crystal Backpack",
+  "frame": "task",
+  "hidden": false,
+  "reward": "packrat",
+  "xp": 150
+ },
+ {
+  "id": "backpack_voltite",
+  "parent": "backpack_storm_crystal",
+  "title": "Current Carrier",
+  "description": "Upgrade to a Voltite Backpack",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "backpack_aurorite",
+  "parent": "backpack_voltite",
+  "title": "Northern Satchel",
+  "description": "Upgrade to an Aurorite Backpack",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": 250
+ },
+ {
+  "id": "backpack_maelstrom",
+  "parent": "backpack_aurorite",
+  "title": "The Eye of the Bag",
+  "description": "Upgrade to a Maelstrom Backpack",
+  "frame": "challenge",
+  "hidden": false,
+  "reward": null,
+  "xp": 750
+ },
+ {
+  "id": "backpack_soulbound",
+  "parent": "open_backpack",
+  "title": "Till Death Do Us Pack",
+  "description": "Hold a backpack enchanted with Soulbound",
+  "frame": "task",
+  "hidden": true,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "struck_by_lightning",
+  "parent": "root",
+  "title": "Lightning Rod",
+  "description": "Be struck by lightning and live",
+  "frame": "task",
+  "hidden": false,
+  "reward": "lightning_rod",
+  "xp": null
+ },
+ {
+  "id": "channeler",
+  "parent": "struck_by_lightning",
+  "title": "Conductor",
+  "description": "Call lightning down with a Channeling trident",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "rod_placed",
+  "parent": "struck_by_lightning",
+  "title": "Better Safe",
+  "description": "Place a Lightning Rod",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "elderstorm_grove",
+  "parent": "tempest_realm",
+  "title": "Old Growth",
+  "description": "Find an Elderstorm Grove in the Tempest Realm",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "pick_stormfruit",
+  "parent": "elderstorm_grove",
+  "title": "Shocking Snack",
+  "description": "Pick a ripe Stormfruit",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "gilded_stormfruit",
+  "parent": "pick_stormfruit",
+  "title": "Gold Leaf",
+  "description": "Make a Gilded Stormfruit",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "breed_glimmerstag",
+  "parent": "elderstorm_grove",
+  "title": "Fawn Over It",
+  "description": "Breed two Glimmerstags with Stormfruit",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "thistle_down",
+  "parent": "elderstorm_grove",
+  "title": "Gone With the Wind",
+  "description": "Collect Thistle Down from a Thistlehop",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "meteorology",
+  "parent": null,
+  "title": "Stormreach: Meteorology",
+  "description": "Build or find any weather instrument",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "forecaster_1",
+  "parent": "meteorology",
+  "title": "Forecaster I: Which Way the Wind Blows",
+  "description": "Make an Anemometer",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "forecaster_2",
+  "parent": "forecaster_1",
+  "title": "Forecaster II: Station Chief",
+  "description": "Build a Weather Station",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "forecaster_3",
+  "parent": "forecaster_2",
+  "title": "Forecaster III: Something on the Scope",
+  "description": "Build a Storm Detector",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "forecaster_4",
+  "parent": "forecaster_3",
+  "title": "Forecaster IV: Hook Echo",
+  "description": "Build a Doppler Radar",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": 100
+ },
+ {
+  "id": "forecaster_5",
+  "parent": "forecaster_4",
+  "title": "Forecaster V: The Whole Picture",
+  "description": "Build a Weather Monitor",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": 150
+ },
+ {
+  "id": "weather_radio",
+  "parent": "meteorology",
+  "title": "This Is a Test",
+  "description": "Carry a Weather Radio or a Handheld Storm Radar",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "tornado_siren",
+  "parent": "weather_radio",
+  "title": "Civil Defence",
+  "description": "Build a Tornado Siren",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "witness_tornado",
+  "parent": "meteorology",
+  "title": "Funnel Cloud",
+  "description": "Be within 400 blocks of a tornado as it touches down",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "tornado_survey",
+  "parent": "witness_tornado",
+  "title": "Damage Survey",
+  "description": "Be near a tornado when it lifts and read its EF rating",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "violent_tornado",
+  "parent": "tornado_survey",
+  "title": "Violent",
+  "description": "Witness a tornado rated EF4 or stronger",
+  "frame": "goal",
+  "hidden": false,
+  "reward": "violent",
+  "xp": 250
+ },
+ {
+  "id": "ef5_tornado",
+  "parent": "violent_tornado",
+  "title": "Incredible",
+  "description": "Witness a tornado rated EF5",
+  "frame": "challenge",
+  "hidden": false,
+  "reward": "ef5",
+  "xp": 500
+ },
+ {
+  "id": "inside_tornado",
+  "parent": "witness_tornado",
+  "title": "Into the Bear's Cage",
+  "description": "Get caught inside a tornado's wind field and survive",
+  "frame": "goal",
+  "hidden": true,
+  "reward": "into_the_cage",
+  "xp": null
+ },
+ {
+  "id": "enter_labyrinth",
+  "parent": null,
+  "title": "The Hollow Labyrinth",
+  "description": "Find your way into a Hollow Labyrinth",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "hide_locker",
+  "parent": "enter_labyrinth",
+  "title": "Hold Still",
+  "description": "Hide inside a Rusted Locker",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "hide_survived",
+  "parent": "hide_locker",
+  "title": "Holding My Breath",
+  "description": "Stay hidden while the Hollow Keeper searches right outside your locker",
+  "frame": "goal",
+  "hidden": true,
+  "reward": null,
+  "xp": 100
+ },
+ {
+  "id": "labyrinth_key",
+  "parent": "enter_labyrinth",
+  "title": "Skeleton Key",
+  "description": "Find a Labyrinth Key in a corner vault",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "three_keys",
+  "parent": "labyrinth_key",
+  "title": "Three Corners",
+  "description": "Hold all three Labyrinth Keys",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "labyrinth_unsealed",
+  "parent": "three_keys",
+  "title": "Unsealed",
+  "description": "Set three keys in the Labyrinth Keyhole",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "heart_of_the_labyrinth",
+  "parent": "labyrinth_unsealed",
+  "title": "A Heart Left Behind",
+  "description": "Take the Heart of the Labyrinth from the treasure chamber",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": 200
+ },
+ {
+  "id": "kill_keeper",
+  "parent": "enter_labyrinth",
+  "title": "Keeper of Nothing",
+  "description": "Defeat the Hollow Keeper",
+  "frame": "challenge",
+  "hidden": false,
+  "reward": "keeper",
+  "xp": 300
+ },
+ {
+  "id": "stranger_seen",
+  "parent": null,
+  "title": "Someone in the Trees",
+  "description": "See something that shouldn't be there",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "stranger_five",
+  "parent": "stranger_seen",
+  "title": "Followed",
+  "description": "Catch sight of the Stranger five times",
+  "frame": "task",
+  "hidden": true,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "hollow_remnant",
+  "parent": "stranger_five",
+  "title": "What It Leaves Behind",
+  "description": "Pick up a Hollow Remnant",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "journal_page",
+  "parent": "stranger_seen",
+  "title": "Dear Diary",
+  "description": "Find a torn journal page",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "all_pages",
+  "parent": "journal_page",
+  "title": "Every Last Page",
+  "description": "Collect all five journal pages",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "weathered_journal",
+  "parent": "all_pages",
+  "title": "Bound Again",
+  "description": "Rebind the Weathered Journal",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "hollow_shrine",
+  "parent": "stranger_seen",
+  "title": "Where It Waits",
+  "description": "Find the Hollow Shrine in the Tempest Realm",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "shrine_ritual",
+  "parent": "hollow_shrine",
+  "title": "The Ritual",
+  "description": "Light every pedestal, strike every conduit, and lay the journal on the altar",
+  "frame": "goal",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "defeat_cyrrus",
+  "parent": "shrine_ritual",
+  "title": "Let the Sky Decide",
+  "description": "Defeat Cyrrus, the Hollow Storm",
+  "frame": "challenge",
+  "hidden": false,
+  "reward": "cyrrus",
+  "xp": 1000
+ },
+ {
+  "id": "stormcrown",
+  "parent": "defeat_cyrrus",
+  "title": "Don't Ask It for Anything",
+  "description": "Claim the Stormcrown",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "weatherbreaker",
+  "parent": "defeat_cyrrus",
+  "title": "Weatherbreaker",
+  "description": "Forge the Weatherbreaker from a Maelstrom Core",
+  "frame": "task",
+  "hidden": false,
+  "reward": null,
+  "xp": null
+ },
+ {
+  "id": "stormreach_complete",
+  "parent": "defeat_cyrrus",
+  "title": "Eye of the Hollow Storm",
+  "description": "Defeat the Sovereign, the Keeper and Cyrrus, and carry a Maelstrom Backpack",
+  "frame": "challenge",
+  "hidden": true,
+  "reward": null,
+  "xp": 2000
+ }
+]

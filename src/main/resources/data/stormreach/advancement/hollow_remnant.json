@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "r": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:hollow_remnant"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.hollow_remnant.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.hollow_remnant.description"
+    },
+    "icon": {
+      "id": "stormreach:hollow_remnant"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "r"
+    ]
+  ],
+  "parent": "stormreach:stranger_five"
+}

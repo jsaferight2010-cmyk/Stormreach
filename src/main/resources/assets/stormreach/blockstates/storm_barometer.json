@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "power=0": {
+      "model": "stormreach:block/storm_barometer_clear"
+    },
+    "power=1": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=2": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=3": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=4": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=5": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=6": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=7": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=8": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=9": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=10": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=11": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=12": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=13": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=14": {
+      "model": "stormreach:block/storm_barometer_rain"
+    },
+    "power=15": {
+      "model": "stormreach:block/storm_barometer_storm"
+    }
+  }
+}

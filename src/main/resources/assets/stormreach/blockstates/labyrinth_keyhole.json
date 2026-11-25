@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=north,keys=0": {
+      "model": "stormreach:block/labyrinth_keyhole_0"
+    },
+    "facing=north,keys=1": {
+      "model": "stormreach:block/labyrinth_keyhole_1"
+    },
+    "facing=north,keys=2": {
+      "model": "stormreach:block/labyrinth_keyhole_2"
+    },
+    "facing=north,keys=3": {
+      "model": "stormreach:block/labyrinth_keyhole_3"
+    },
+    "facing=east,keys=0": {
+      "model": "stormreach:block/labyrinth_keyhole_0",
+      "y": 90
+    },
+    "facing=east,keys=1": {
+      "model": "stormreach:block/labyrinth_keyhole_1",
+      "y": 90
+    },
+    "facing=east,keys=2": {
+      "model": "stormreach:block/labyrinth_keyhole_2",
+      "y": 90
+    },
+    "facing=east,keys=3": {
+      "model": "stormreach:block/labyrinth_keyhole_3",
+      "y": 90
+    },
+    "facing=south,keys=0": {
+      "model": "stormreach:block/labyrinth_keyhole_0",
+      "y": 180
+    },
+    "facing=south,keys=1": {
+      "model": "stormreach:block/labyrinth_keyhole_1",
+      "y": 180
+    },
+    "facing=south,keys=2": {
+      "model": "stormreach:block/labyrinth_keyhole_2",
+      "y": 180
+    },
+    "facing=south,keys=3": {
+      "model": "stormreach:block/labyrinth_keyhole_3",
+      "y": 180
+    },
+    "facing=west,keys=0": {
+      "model": "stormreach:block/labyrinth_keyhole_0",
+      "y": 270
+    },
+    "facing=west,keys=1": {
+      "model": "stormreach:block/labyrinth_keyhole_1",
+      "y": 270
+    },
+    "facing=west,keys=2": {
+      "model": "stormreach:block/labyrinth_keyhole_2",
+      "y": 270
+    },
+    "facing=west,keys=3": {
+      "model": "stormreach:block/labyrinth_keyhole_3",
+      "y": 270
+    }
+  }
+}

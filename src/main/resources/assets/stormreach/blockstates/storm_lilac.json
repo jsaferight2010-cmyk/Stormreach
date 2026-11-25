@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "half=lower": {
+   "model": "stormreach:block/storm_lilac_bottom"
+  },
+  "half=upper": {
+   "model": "stormreach:block/storm_lilac_top"
+  }
+ }
+}

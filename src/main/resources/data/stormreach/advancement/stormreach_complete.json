@@ -1,0 +1,81 @@
+{
+  "criteria": {
+    "sov": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:tempest_sovereign"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "keep": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:hollow_keeper"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "cyr": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:cyrrus"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    },
+    "pack": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:maelstrom_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormreach_complete.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormreach_complete.description"
+    },
+    "icon": {
+      "id": "stormreach:maelstrom_core"
+    },
+    "frame": "challenge",
+    "hidden": true
+  },
+  "requirements": [
+    [
+      "sov"
+    ],
+    [
+      "keep"
+    ],
+    [
+      "cyr"
+    ],
+    [
+      "pack"
+    ]
+  ],
+  "parent": "stormreach:defeat_cyrrus",
+  "rewards": {
+    "experience": 2000
+  }
+}

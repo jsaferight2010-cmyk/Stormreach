@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_soul_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_lantern",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_wall_torch",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#stormreach:stormpine_logs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "stormreach:stormpine_planks"
+  }
+}

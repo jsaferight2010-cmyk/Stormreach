@@ -1,0 +1,78 @@
+{
+  "values": [
+    "stormreach:sea_thrift",
+    "stormreach:sea_rocket",
+    "stormreach:saltgrass",
+    {
+      "id": "stormreach:storm_dandelion",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_open_eyeblossom",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poppy",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_blue_orchid",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_allium",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_azure_bluet",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_red_tulip",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_orange_tulip",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_white_tulip",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pink_tulip",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_oxeye_daisy",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cornflower",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_lily_of_the_valley",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_wither_rose",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_torchflower",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_closed_eyeblossom",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_golden_dandelion",
+      "required": false
+    },
+    "stormreach:skybloom",
+    "stormreach:stormcap",
+    "stormreach:thunderbloom"
+  ]
+}

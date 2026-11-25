@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:tempest_realm",
+  "criteria": {
+    "v": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:voltite_ingot"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.voltite.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.voltite.description"
+    },
+    "icon": {
+      "id": "stormreach:voltite_ingot"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "v"
+    ]
+  ]
+}

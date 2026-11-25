@@ -1,0 +1,63 @@
+{
+  "values": [
+    "stormreach:stormpine_leaves",
+    {
+      "id": "stormreach:storm_jungle_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_oak_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_azalea_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_flowering_azalea_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_red_poplar_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_orange_poplar_leaves",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_yellow_poplar_leaves",
+      "required": false
+    },
+    "stormreach:galewood_leaves",
+    "stormreach:elderstorm_leaves"
+  ]
+}

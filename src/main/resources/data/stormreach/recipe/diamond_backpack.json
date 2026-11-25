@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "D": "minecraft:diamond",
+    "L": "minecraft:leather",
+    "S": "stormreach:storm_shard",
+    "C": "minecraft:chest"
+  },
+  "pattern": [
+    "DLD",
+    "SCS",
+    "DLD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:diamond_backpack"
+  }
+}

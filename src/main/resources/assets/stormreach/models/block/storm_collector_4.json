@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "stormreach:block/storm_collector_bottom",
+    "top": "stormreach:block/storm_collector_top_4",
+    "side": "stormreach:block/storm_collector_side"
+  }
+}

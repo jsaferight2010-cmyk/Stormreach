@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_mycelium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_podzol",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_nylium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_nylium",
+   "required": false
+  }
+ ]
+}

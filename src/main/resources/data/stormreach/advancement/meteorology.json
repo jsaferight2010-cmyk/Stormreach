@@ -1,0 +1,47 @@
+{
+  "criteria": {
+    "i": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "stormreach:anemometer",
+              "stormreach:thermometer",
+              "stormreach:storm_barometer",
+              "stormreach:wind_vane",
+              "stormreach:weather_station",
+              "stormreach:storm_detector",
+              "stormreach:tornado_radar",
+              "stormreach:tornado_siren",
+              "stormreach:weather_monitor",
+              "stormreach:storm_radar",
+              "stormreach:weather_radio"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.meteorology.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.meteorology.description"
+    },
+    "icon": {
+      "id": "stormreach:weather_station"
+    },
+    "frame": "task",
+    "hidden": false,
+    "background": "stormreach:gui/advancements/backgrounds/meteorology",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "requirements": [
+    [
+      "i"
+    ]
+  ]
+}

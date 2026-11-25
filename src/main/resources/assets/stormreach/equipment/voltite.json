@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormreach:voltite"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormreach:voltite"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "stormreach:voltite"
+      }
+    ]
+  }
+}

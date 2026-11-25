@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "baro": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:storm_barometer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.barometer.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.barometer.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_barometer"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "baro"
+    ]
+  ],
+  "parent": "stormreach:storm_shard"
+}

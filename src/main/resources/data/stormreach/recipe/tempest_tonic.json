@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:storm_cell",
+    "minecraft:honey_bottle",
+    "stormreach:stormberries"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tempest_tonic"
+  }
+}

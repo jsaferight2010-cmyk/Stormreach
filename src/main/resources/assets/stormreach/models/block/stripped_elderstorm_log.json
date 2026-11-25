@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "stormreach:block/stripped_elderstorm_log_top",
+    "side": "stormreach:block/stripped_elderstorm_log"
+  }
+}

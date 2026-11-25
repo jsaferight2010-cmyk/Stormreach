@@ -1,0 +1,72 @@
+{
+  "parent": "stormreach:storm_shard",
+  "criteria": {
+    "helmet": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormshard_helmet"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "chestplate": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormshard_chestplate"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "leggings": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormshard_leggings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "boots": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormshard_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormshard_armor.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormshard_armor.description"
+    },
+    "icon": {
+      "id": "stormreach:stormshard_chestplate"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "helmet"
+    ],
+    [
+      "chestplate"
+    ],
+    [
+      "leggings"
+    ],
+    [
+      "boots"
+    ]
+  ]
+}

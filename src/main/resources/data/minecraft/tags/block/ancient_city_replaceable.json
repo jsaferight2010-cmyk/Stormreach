@@ -1,0 +1,52 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_tiles",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_brick_slab",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_tile_slab",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_brick_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_tile_wall",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_brick_wall",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cobbled_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_deepslate_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_deepslate_tiles",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gray_wool",
+   "required": false
+  }
+ ]
+}

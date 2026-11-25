@@ -1,0 +1,28 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stranger_seen.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stranger_seen.description"
+    },
+    "icon": {
+      "id": "stormreach:stranger_spawn_egg"
+    },
+    "frame": "task",
+    "hidden": false,
+    "background": "stormreach:gui/advancements/backgrounds/chronicle",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ]
+}

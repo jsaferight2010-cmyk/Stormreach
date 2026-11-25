@@ -1,0 +1,35 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "child": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:glimmerstag"
+          }
+        }
+      },
+      "trigger": "minecraft:bred_animals"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.breed_glimmerstag.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.breed_glimmerstag.description"
+    },
+    "icon": {
+      "id": "stormreach:glimmer_antler"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:elderstorm_grove"
+}

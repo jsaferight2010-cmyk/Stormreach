@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_anvil",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chipped_anvil",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_damaged_anvil",
+   "required": false
+  }
+ ]
+}

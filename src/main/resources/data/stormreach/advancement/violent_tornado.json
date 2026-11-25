@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.violent_tornado.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.violent_tornado.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_spawner_wedge"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:tornado_survey",
+  "rewards": {
+    "loot": [
+      "stormreach:ach/violent"
+    ],
+    "experience": 250
+  }
+}

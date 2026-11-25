@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.witness_tornado.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.witness_tornado.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_spawner_cone"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:meteorology"
+}

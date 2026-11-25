@@ -1,0 +1,380 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_tall_seagrass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wall_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_redstone_wall_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_wall_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_copper_wall_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weeping_vines_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_twisting_vines_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cave_vines_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bamboo_sapling",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cobweb",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_snow",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_end_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chorus_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chorus_flower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_big_dripleaf",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_scaffolding",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_powder_snow",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_short_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_fern",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dead_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_short_dry_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tall_dry_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_seagrass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dandelion",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_golden_dandelion",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_torchflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_poppy",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_orchid",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_allium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_azure_bluet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_white_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_oxeye_daisy",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cornflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wither_rose",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lily_of_the_valley",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_mushroom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_mushroom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wheat",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lever",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_redstone_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cactus_flower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_copper_torch",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_vine",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_glow_lichen",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_resin_clump",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_wart",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tripwire_hook",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_carrots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_potatoes",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sunflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lilac",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_rose_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_peony",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tall_grass",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_large_fern",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_torchflower_crop",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pitcher_crop",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pitcher_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_beetroots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sweet_berry_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_fungus",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_sprouts",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_fungus",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weeping_vines",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_twisting_vines",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cave_vines",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_spore_blossom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_petals",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wildflowers",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_leaf_litter",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_small_dripleaf",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_hanging_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_frogspawn",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pale_hanging_moss",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_open_eyeblossom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_closed_eyeblossom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_firefly_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_repeater",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lily_pad",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cocoa",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sea_pickle",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_moss_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_heavy_core",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pale_moss_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_shrub",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_shelf_mushroom",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "charge=0": {
+      "model": "stormreach:block/storm_collector_0"
+    },
+    "charge=1": {
+      "model": "stormreach:block/storm_collector_1"
+    },
+    "charge=2": {
+      "model": "stormreach:block/storm_collector_2"
+    },
+    "charge=3": {
+      "model": "stormreach:block/storm_collector_3"
+    },
+    "charge=4": {
+      "model": "stormreach:block/storm_collector_4"
+    }
+  }
+}

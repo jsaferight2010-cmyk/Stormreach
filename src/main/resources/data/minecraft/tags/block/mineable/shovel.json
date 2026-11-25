@@ -1,0 +1,80 @@
+{
+  "values": [
+    "stormreach:fulgurite",
+    "stormreach:stormscar_turf",
+    {
+      "id": "stormreach:storm_clay",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dirt",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_coarse_dirt",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_podzol",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_farmland",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_grass_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_gravel",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mycelium",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sand",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_red_sand",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_snow_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_snow",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_soul_sand",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dirt_path",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_soul_soil",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_rooted_dirt",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_muddy_mangrove_roots",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mud",
+      "required": false
+    },
+    "stormreach:skysoil",
+    "stormreach:static_grass"
+  ]
+}

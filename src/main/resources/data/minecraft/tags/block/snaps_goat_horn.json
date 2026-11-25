@@ -1,0 +1,28 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_packed_ice",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_iron_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_coal_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_copper_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_emerald_ore",
+   "required": false
+  }
+ ]
+}

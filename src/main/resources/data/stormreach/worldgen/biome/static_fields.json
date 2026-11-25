@@ -1,0 +1,99 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "stormreach:puffling",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 5,
+                "min_inclusive": 3
+              },
+              "weight": 14
+            },
+            {
+              "type": "stormreach:skyray",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 4
+            }
+          ],
+          "monster": [
+            {
+              "type": "stormreach:static_wisp",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 70
+            },
+            {
+              "type": "stormreach:cyclone",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 2,
+                "min_inclusive": 1
+              },
+              "weight": 25
+            }
+          ]
+        }
+      }
+    },
+    "minecraft:visual/sky_color": "#5a7ab8",
+    "minecraft:visual/fog_color": "#6d8cc4",
+    "minecraft:visual/water_fog_color": "#2a3f66",
+    "minecraft:visual/ambient_particles": {
+      "argument": [
+        {
+          "particle": {
+            "type": "minecraft:electric_spark"
+          },
+          "probability": 0.004
+        }
+      ],
+      "modifier": "append"
+    }
+  },
+  "carvers": [],
+  "downfall": 0.6,
+  "effects": {
+    "water_color": "#5b8fd8",
+    "grass_color": "#4fb8c4",
+    "foliage_color": "#7fc8d8"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "stormreach:cloud_nimbus",
+      "stormreach:cloud_thunder"
+    ],
+    [],
+    [],
+    [],
+    [
+      "stormreach:ore_voltite",
+      "stormreach:ore_aurorite",
+      "stormreach:ore_ion"
+    ],
+    [],
+    [],
+    [
+      "stormreach:trees_galewood_sparse",
+      "stormreach:patch_gale_grass",
+      "stormreach:patch_skybloom",
+      "stormreach:patch_stormcap"
+    ],
+    []
+  ],
+  "has_precipitation": false,
+  "temperature": 0.5
+}

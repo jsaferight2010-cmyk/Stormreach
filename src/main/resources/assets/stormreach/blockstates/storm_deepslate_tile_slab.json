@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_deepslate_tile_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_deepslate_tiles"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_deepslate_tile_slab_top"
+  }
+ }
+}

@@ -1,0 +1,16 @@
+{
+ "variants": {
+  "axis=x": {
+   "model": "stormreach:block/storm_copper_chain",
+   "x": 90,
+   "y": 90
+  },
+  "axis=y": {
+   "model": "stormreach:block/storm_copper_chain"
+  },
+  "axis=z": {
+   "model": "stormreach:block/storm_copper_chain",
+   "x": 90
+  }
+ }
+}

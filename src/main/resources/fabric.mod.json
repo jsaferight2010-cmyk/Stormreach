@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "stormreach",
+  "version": "${version}",
+  "name": "Stormreach",
+  "description": "A storm-swept coast for Minecraft: the Stormreach Coast biome, Thunderhead and Gale weather, Cliff Crabs, Storm Gulls and Squalls, stormstone and driftwood blocks, storm crystal gear and seaside food. Fully configurable through Mod Menu.",
+  "authors": [
+    "Stormreach contributors"
+  ],
+  "license": "MIT",
+  "icon": "assets/stormreach/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.stormreach.Stormreach"
+    ],
+    "client": [
+      "com.stormreach.client.StormreachClient"
+    ],
+    "fabric-gametest": [
+      "com.stormreach.test.StormreachGameTests"
+    ],
+    "modmenu": [
+      "com.stormreach.client.compat.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "stormreach.mixins.json",
+    {
+      "config": "stormreach.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

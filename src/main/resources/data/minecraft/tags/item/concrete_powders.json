@@ -1,0 +1,68 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_white_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magenta_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_blue_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_yellow_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lime_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gray_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_gray_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cyan_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purple_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_green_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_concrete_powder",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_black_concrete_powder",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "bred": {
+      "conditions": {
+        "child": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:cliff_crab"
+          }
+        }
+      },
+      "trigger": "minecraft:bred_animals"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.crab_breeder.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.crab_breeder.description"
+    },
+    "icon": {
+      "id": "stormreach:stormberries"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "bred"
+    ]
+  ],
+  "parent": "stormreach:root"
+}

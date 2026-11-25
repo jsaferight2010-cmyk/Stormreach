@@ -1,0 +1,152 @@
+{
+  "values": [
+    "stormreach:driftwood_log",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_stairs",
+    "stormreach:driftwood_slab",
+    "stormreach:driftwood_fence",
+    "stormreach:driftwood_fence_gate",
+    "stormreach:driftwood_door",
+    "stormreach:driftwood_trapdoor",
+    "stormreach:driftwood_button",
+    "stormreach:driftwood_pressure_plate",
+    "stormreach:stormpine_log",
+    "stormreach:stripped_stormpine_log",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_stairs",
+    "stormreach:stormpine_slab",
+    "stormreach:stormpine_fence",
+    "stormreach:stormpine_fence_gate",
+    "stormreach:stormpine_door",
+    "stormreach:stormpine_trapdoor",
+    "stormreach:stormpine_button",
+    "stormreach:stormpine_pressure_plate",
+    {
+      "id": "stormreach:storm_note_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_big_dripleaf",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bookshelf",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_brown_mushroom_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cartography_table",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_carved_pumpkin",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_chorus_flower",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_chorus_plant",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cocoa",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_composter",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crafting_table",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_fletching_table",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_glow_lichen",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jack_o_lantern",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_ladder",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_loom",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_melon",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pumpkin",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_red_mushroom_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_smithing_table",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_vine",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_roots",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_mosaic",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_mosaic_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_mosaic_stairs",
+      "required": false
+    },
+    "stormreach:galewood_log",
+    "stormreach:stripped_galewood_log",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_stairs",
+    "stormreach:galewood_slab",
+    "stormreach:galewood_fence",
+    "stormreach:galewood_fence_gate",
+    "stormreach:galewood_door",
+    "stormreach:galewood_trapdoor",
+    "stormreach:galewood_button",
+    "stormreach:galewood_pressure_plate",
+    "stormreach:elderstorm_log",
+    "stormreach:stripped_elderstorm_log",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_stairs",
+    "stormreach:elderstorm_slab",
+    "stormreach:elderstorm_fence",
+    "stormreach:elderstorm_fence_gate",
+    "stormreach:elderstorm_door",
+    "stormreach:elderstorm_trapdoor",
+    "stormreach:elderstorm_button",
+    "stormreach:elderstorm_pressure_plate",
+    "stormreach:stormfruit_pod"
+  ]
+}

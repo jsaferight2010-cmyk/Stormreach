@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "stormreach:block/stormfruit_pod_stage2"
+  }
+}

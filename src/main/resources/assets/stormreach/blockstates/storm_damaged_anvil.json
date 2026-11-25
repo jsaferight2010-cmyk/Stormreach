@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=east": {
+   "model": "stormreach:block/storm_damaged_anvil",
+   "y": 270
+  },
+  "facing=north": {
+   "model": "stormreach:block/storm_damaged_anvil",
+   "y": 180
+  },
+  "facing=south": {
+   "model": "stormreach:block/storm_damaged_anvil"
+  },
+  "facing=west": {
+   "model": "stormreach:block/storm_damaged_anvil",
+   "y": 90
+  }
+ }
+}

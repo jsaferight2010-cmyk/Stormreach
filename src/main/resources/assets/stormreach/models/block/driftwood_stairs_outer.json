@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "stormreach:block/driftwood_planks",
+    "side": "stormreach:block/driftwood_planks",
+    "top": "stormreach:block/driftwood_planks"
+  }
+}

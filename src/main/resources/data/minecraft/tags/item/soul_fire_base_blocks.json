@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_soul_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_soil",
+   "required": false
+  }
+ ]
+}

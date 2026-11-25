@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "stormreach:block/storm_detector_side",
+    "north": "stormreach:block/storm_detector_front",
+    "south": "stormreach:block/storm_detector_side",
+    "east": "stormreach:block/storm_detector_side",
+    "west": "stormreach:block/storm_detector_side",
+    "up": "stormreach:block/storm_detector_top",
+    "down": "stormreach:block/storm_detector_side"
+  }
+}

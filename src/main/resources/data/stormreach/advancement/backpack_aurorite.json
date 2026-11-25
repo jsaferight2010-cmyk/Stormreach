@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:aurorite_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_aurorite.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_aurorite.description"
+    },
+    "icon": {
+      "id": "stormreach:aurorite_backpack"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:backpack_voltite",
+  "rewards": {
+    "experience": 250
+  }
+}

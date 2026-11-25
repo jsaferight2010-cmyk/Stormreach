@@ -1,0 +1,63 @@
+{
+  "values": [
+    "stormreach:stormpine_leaves",
+    {
+      "id": "stormreach:storm_nether_wart_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_wart_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_hay_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dried_kelp_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_target",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_shroomlight",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sponge",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_wet_sponge",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_moss_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_moss_carpet",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_moss_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_moss_carpet",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sculk",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sculk_vein",
+      "required": false
+    },
+    "stormreach:galewood_leaves",
+    "stormreach:elderstorm_leaves"
+  ]
+}

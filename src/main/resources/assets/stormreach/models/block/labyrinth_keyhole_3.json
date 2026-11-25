@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "stormreach:block/labyrinth_keyhole_3",
+    "side": "stormreach:block/labyrinth_keyhole_side",
+    "top": "stormreach:block/labyrinth_keyhole_side"
+  }
+}

@@ -1,0 +1,16 @@
+{
+ "model": {
+  "type": "minecraft:model",
+  "model": "stormreach:block/storm_polished_blackstone_slab",
+  "tints": [
+   {
+    "type": "minecraft:constant",
+    "value": -6310696
+   },
+   {
+    "type": "minecraft:constant",
+    "value": -6310696
+   }
+  ]
+ }
+}

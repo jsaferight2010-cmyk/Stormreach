@@ -1,0 +1,20 @@
+{
+ "variants": {
+  "": [
+   {
+    "model": "stormreach:block/storm_sculk"
+   },
+   {
+    "model": "stormreach:block/storm_sculk_mirrored"
+   },
+   {
+    "model": "stormreach:block/storm_sculk",
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_sculk_mirrored",
+    "y": 180
+   }
+  ]
+ }
+}

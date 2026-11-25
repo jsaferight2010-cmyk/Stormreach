@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "com.stormreach.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "EntityRenderersAccessor",
+    "LivingEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,100 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_tube_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brain_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bubble_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_fire_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_horn_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dead_tube_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dead_brain_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dead_bubble_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dead_fire_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dead_horn_coral_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sponge",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wet_sponge",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dried_kelp_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_resin_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_resin_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_resin_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_melon",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_hay_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pumpkin",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_carved_pumpkin",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_jack_o_lantern",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_ochre_froglight",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pearlescent_froglight",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_verdant_froglight",
+   "required": false
+  }
+ ]
+}

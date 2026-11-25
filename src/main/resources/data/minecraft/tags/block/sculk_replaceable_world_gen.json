@@ -1,0 +1,28 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_deepslate_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_tiles",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cobbled_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_deepslate_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_deepslate_tiles",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_deepslate",
+   "required": false
+  }
+ ]
+}

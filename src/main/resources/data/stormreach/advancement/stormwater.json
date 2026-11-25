@@ -1,0 +1,32 @@
+{
+ "parent": "stormreach:stormheart",
+ "criteria": {
+  "b": {
+   "conditions": {
+    "items": [
+     {
+      "items": "stormreach:stormwater_bucket"
+     }
+    ]
+   },
+   "trigger": "minecraft:inventory_changed"
+  }
+ },
+ "display": {
+  "title": {
+   "translate": "advancements.stormreach.stormwater.title"
+  },
+  "description": {
+   "translate": "advancements.stormreach.stormwater.description"
+  },
+  "icon": {
+   "id": "stormreach:stormwater_bucket"
+  },
+  "frame": "task"
+ },
+ "requirements": [
+  [
+   "b"
+  ]
+ ]
+}

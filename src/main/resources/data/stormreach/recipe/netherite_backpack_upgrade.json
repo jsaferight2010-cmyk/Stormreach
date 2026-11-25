@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "stormreach:storm_crystal_block",
+    "B": "minecraft:blaze_rod",
+    "S": "stormreach:storm_cell",
+    "N": "minecraft:netherite_ingot"
+  },
+  "pattern": [
+    "CBC",
+    "SNS",
+    "CBC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:netherite_backpack_upgrade"
+  }
+}

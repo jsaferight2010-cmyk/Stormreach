@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "j": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:weathered_journal"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.weathered_journal.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.weathered_journal.description"
+    },
+    "icon": {
+      "id": "stormreach:weathered_journal"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "j"
+    ]
+  ],
+  "parent": "stormreach:all_pages"
+}

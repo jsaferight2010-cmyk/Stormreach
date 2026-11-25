@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "G": "stormreach:stormglass",
+    "S": "stormreach:storm_crystal_block",
+    "C": "minecraft:copper_ingot",
+    "R": "minecraft:lightning_rod",
+    "P": "stormreach:polished_stormstone"
+  },
+  "pattern": [
+    "GSG",
+    "CRC",
+    "PPP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:storm_collector"
+  }
+}

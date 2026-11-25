@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "stormreach:block/stormgate_frame_top_eye",
+    "side": "stormreach:block/stormgate_frame_side",
+    "bottom": "stormreach:block/stormgate_frame_bottom"
+  }
+}

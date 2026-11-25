@@ -1,0 +1,37 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "l": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "stormreach:lighthouse"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.lighthouse.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.lighthouse.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_lantern"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "l"
+    ]
+  ]
+}

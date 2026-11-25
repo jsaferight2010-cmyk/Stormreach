@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_blue_ice",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_packed_ice",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_snow_block",
+   "required": false
+  }
+ ]
+}

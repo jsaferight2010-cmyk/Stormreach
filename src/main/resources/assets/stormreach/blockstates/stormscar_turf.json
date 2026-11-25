@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "stormreach:block/stormscar_turf",
+        "y": 0
+      },
+      {
+        "model": "stormreach:block/stormscar_turf",
+        "y": 90
+      },
+      {
+        "model": "stormreach:block/stormscar_turf",
+        "y": 180
+      },
+      {
+        "model": "stormreach:block/stormscar_turf",
+        "y": 270
+      }
+    ]
+  }
+}

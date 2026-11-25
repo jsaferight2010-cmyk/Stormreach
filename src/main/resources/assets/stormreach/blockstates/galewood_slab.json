@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormreach:block/galewood_slab"
+    },
+    "type=double": {
+      "model": "stormreach:block/galewood_planks"
+    },
+    "type=top": {
+      "model": "stormreach:block/galewood_slab_top"
+    }
+  }
+}

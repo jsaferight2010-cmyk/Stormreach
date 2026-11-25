@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "V": "stormreach:voltite_block",
+    "I": "stormreach:ion_shard",
+    "F": "stormreach:stormhawk_feather",
+    "S": "stormreach:storm_cell"
+  },
+  "pattern": [
+    "VIV",
+    "FSF",
+    "VIV"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:voltite_backpack_upgrade"
+  }
+}

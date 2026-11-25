@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "O": "minecraft:obsidian",
+    "F": "stormreach:fulgurite",
+    "C": "stormreach:charged_stormstone",
+    "S": "stormreach:storm_cell"
+  },
+  "pattern": [
+    "OFO",
+    "CSC",
+    "OFO"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:obsidian_backpack_upgrade"
+  }
+}

@@ -1,0 +1,202 @@
+# Stormreach development notes
+
+A running log of what was built, why, and what is left. Patch notes for players are in CHANGELOG.md. Technical handoff notes are in CLAUDE.md.
+
+## Stage 4.0: The Tempest Realm (in progress, started 2026-11-24)
+
+### What was asked
+- A rare boss that spawns at a special structure in the Stormreach biomes. Both the structure and the biome work with `/locate`.
+- The boss appears only during a thunderstorm. The storm can be natural, or started by a hard-to-make item that takes a while to use.
+- The boss drops one new item. You need several of them (4 or more) to activate a portal.
+- The portal leads to a whole new dimension built around the mod.
+- The whole mod should lean toward an Aether-like sky adventure without copying it: a dimension of floating islands with its own blocks, ores, tool tiers, mobs, mounts and dungeons.
+- Opening the portal should be very elaborate, not a simple frame-and-light.
+- Lots of new things, plus notes on everything (this file) and patch notes.
+
+### Design: the road into the Tempest Realm
+1. **Find a Tempest Spire.** It's a rare ruined tower of Tempest Bricks in Stormreach Coast and Thunderspire Highlands (`/locate structure stormreach:tempest_spire`). A Sovereign Altar sits on its top floor.
+2. **Wake the Tempest Sovereign.** Either:
+   - **Naturally:** during a thunderstorm the altar may stir (a random tick, configurable chance) when a player is near. The awakening takes about 20 seconds.
+   - **With a Tempest Sigil:** crafted from a Tempest Core (Stormwarden drop), a Thunderhead Horn, a Stormheart, 2 Blocks of Storm Crystal and 4 Storm Cells. Using it on the altar forces a thunderstorm and starts a 60-second ritual (configurable): lightning rings the tower, and then the boss descends.
+3. **Defeat the Tempest Sovereign.** It's a three-phase flying boss: lightning and storm orbs, then Squalls and gust shockwaves, then enraged dives and a vortex pull. It drops exactly one **Tempest Eye**.
+4. **Collect 4 Tempest Eyes** (configurable 4–16). That means beating the boss four times.
+5. **Build a Stormgate.** It's a flat 5×5 ring of 16 Stormgate Frames (expensive to craft) around a 3×3 pool of stormwater sources. Each Eye goes into a frame.
+6. **Call lightning onto the pool** (natural storm, Tempest Staff, Thunderhead Horn…). The stormwater turns into a Stormgate portal.
+7. **Step in.** You arrive in the Tempest Realm, where a return gate is built for you if none is near. Coordinates are 1:1.
+
+### Design: the Tempest Realm (Aether-like, storm themed)
+- A dimension of floating islands (vanilla floating-island density) in a permanent dark-storm sky with sparks and lightning. Falling off the bottom drops you back into the Overworld sky with Slow Falling.
+- Biomes: Galewood Highlands, Static Fields, Cloudsea Expanse, Aurora Spires.
+- Blocks:
+  - stone: Skyshale (+ cobbled, polished, bricks, stairs, slabs, walls)
+  - soil: Skysoil and Static Grass
+  - clouds: Nimbus Cloud (soft, no fall damage), Thundercloud (bounces you up), Gale Cloud (pushes you with the wind)
+  - wood: the full Galewood set
+  - ores: Voltite (iron-plus tier), Aurorite (diamond-plus tier), Ion (glowing healing shards)
+  - other: Ion Lamp, Skybloom, Gale Grass
+- Gear:
+  - Voltite tools and armor
+  - Aurorite tools and armor (a full set makes you lightning-proof and spares you fall damage)
+  - Cloudstep Boots (sneak in mid-air to glide, no fall damage)
+- Food: Cloudberries (from Galewood leaves), Cloudberry Tart, Skyray fillet, Storm Nectar, Ion Shards (instant healing).
+- Mobs:
+  - Skyray: a passive flying mount you can saddle and ride; you steer by looking
+  - Puffling: a cloud sheep; shear it for Nimbus Clouds
+  - Static Wisp: hostile, zaps you
+  - Cyclone: hostile whirlwind that flings you
+  - Stormhawk: hostile diving bird that drops Stormhawk Feathers
+- Structure: **Sky Vaults**, floating ruins high in the realm sky with loot (Aurorite, Voltite, Ion, Tempest gear).
+
+### Log
+- Researched the 26.3 data formats from the vanilla jar:
+  - dimension_type uses an `attributes` map, `default_clock` and `timelines`
+  - noise_settings `default_block` is a plain id, and surface rules moved to `worldgen/material_rule` (`material_rule` references one)
+  - level stems are `data/<ns>/dimension/<name>.json`
+  - `TeleportTransition(ServerLevel, Vec3 pos, Vec3 velocity, yRot, xRot, PostTeleportTransition)`
+  - `entityInside(state, level, pos, entity, InsideBlockEffectApplier, boolean)`
+  - riding hooks: `tickRidden`, `getRiddenInput`, `getRiddenSpeed`, `getControllingPassenger`
+- **Code written (compiles against the real jar, main and client):**
+  - `realm/RealmBlocks`: 47 blocks. They cover the Tempest Spire set, the Sovereign Altar, the Stormgate Frame and portal, the Skyshale family, Skysoil, Static Grass, the 3 clouds, the Galewood family, the Voltite/Aurorite/Ion ores and blocks, the Ion Lamp, and the Skybloom, Stormcap and Gale Grass plants.
+  - `realm/RealmItems`:
+    - the Tempest Sigil and Tempest Eye
+    - materials, and the Voltite and Aurorite tool and armor tiers
+    - Cloudstep Boots
+    - food: Cloudberries, Tart, Skyray, Storm Nectar, Gale Bread
+    - Ion Shards (instant healing)
+    - 6 spawn eggs
+    - its own creative tab
+  - `realm/SovereignAltarBlock`: a natural awakening needs a thunderstorm, a player within 32 blocks and a random-tick chance. It starts at stage 10, so it takes about 5 steps. The Sigil forces a storm in the Overworld and starts at stage 1, so it runs 15 steps across `sigilRitualSeconds`. Each step strikes visual lightning around the spire; at the end the boss spawns 5 blocks above the altar.
+  - `realm/Stormgate`:
+    - ring check: a 5×5 ring of 16 frames, a 3×3 stormwater-source pool, and at least `eyesRequired` Eyes
+    - gate status messages
+    - opening on a lightning strike (hooked from `StormWeather.onLightning`)
+    - building the return gate
+  - `realm/TempestRealm`:
+    - Portal travel is queued and done at the end of the level tick, because the portal is detected inside entity movement.
+    - Coordinates are 1:1. It finds an open gate within 20 blocks or builds one. Gates in the void go at y=120.
+    - Falling below y−8 puts you back at the top of the Overworld with Slow Falling.
+    - The realm's lightning and spark ambience also live here.
+  - `realm/RealmGear`: Cloudstep glide and no fall damage. Full Aurorite gives no fall damage and lightning-proofing (added to `StormWeather.isLightningProof`). Full Voltite gives Speed and Haste in the realm.
+  - Entities:
+    - TempestSovereign: 3 phases, a home leash, and saves its phase and home
+    - Skyray: saddle with a vanilla saddle (needs the `minecraft:can_equip_saddle` entity tag) and steer by looking
+    - Puffling: shear it; it regrows in 3000–6000 ticks
+    - StaticWisp, Cyclone, Stormhawk
+  - Client: new SovereignModel (128×64), SkyrayModel and PufflingModel (with its own render state that hides the fluff once sheared). StaticWisp, Cyclone and Stormhawk reuse the Orb, Waterspout and Gull models with new textures.
+  - Config: 11 new options on a sixth Mod Menu page called "Tempest Realm".
+- **Assets and data written** by `tools/textures4.py` and `tools/gendata7.py`, both added to `run_all`:
+  - all block, item, entity, armor and egg textures (our own pixel art; the tool icons are recoloured from our own Stormshard art)
+  - an animated, translucent Stormgate texture
+  - loot:
+    - The Sovereign drops exactly 1 Tempest Eye, and Looting doesn't add more.
+    - Galewood leaves drop Cloudberries the way oak drops apples.
+    - Spire and Sky Vault chests have their own loot.
+  - about 60 recipes:
+    - The Sigil needs a Tempest Core, so the Stormwarden is a prerequisite.
+    - Frames are crafted 2 at a time from Fulgurite, Charged Stormstone and Storm Crystal.
+  - tags:
+    - vanilla wood, stone, tool and armor tags; `can_equip_saddle`; `dirt` and `grass_blocks`, so plants and saplings grow on realm soil
+    - `cannot_replace_below_tree_trunk`, so trees don't turn Static Grass into dirt
+    - `c:` ores, ingots and gems
+  - the dimension: floating-island density with the overworld temperature and vegetation noise added, so `multi_noise` can pick between the 4 biomes; and our own material rule
+  - features:
+    - Galewood trees (birch and fancy-oak shapes)
+    - ores that replace Skyshale
+    - **clouds, made as ore features that replace air**
+    - flower and grass patches
+    - Ion spires (a `block_column`)
+  - structures:
+    - Tempest Spire: 11×11×34; 3 floors with chests, a ladder shaft and a roof altar. It spawns 1 per 48×48 chunks at most.
+    - Sky Vault: a floating ruin at y 150–200 that doesn't attach to terrain.
+  - 12 advancements and all the lang.
+- **Checks:**
+  - `validate.py` was updated to read the realm registries. All checks pass: 103 hand-made blocks, 187 items, 15 mobs.
+  - A separate worldgen reference check (biome → placed → feature, dimension → type, settings and rule, structure → pool and biome tag, NBT palette → blockstates) passes.
+  - Clean compile of main and client.
+
+### What to test first in game (4.0)
+1. A world loads with the new dimension and there's no datapack error.
+2. `/locate structure stormreach:tempest_spire` and `/locate structure stormreach:sky_vault` (from inside the realm).
+3. Sigil on the altar: the storm starts, then the ritual, then the boss spawns. Then check the boss phases, and that it drops 1 Eye.
+4. Build the gate, use `/summon lightning_bolt` on the pool, and check that it opens. Travel both ways, check the return gate is built, and check that falling out of the realm works.
+5. Saddle and ride a Skyray. Shear a Puffling. Check the clouds' effects and the Cloudstep glide.
+6. Check renderers: the Sovereign, Skyray and Puffling models are new and have never been seen in game.
+
+### Ideas for later stages
+- Realm dungeon tiers with their own bosses (for example a Thunder Citadel boss) and keys, like the Aether's dungeon chain.
+- A double-jump accessory slot (needs a client-to-server packet).
+- Hoe-tilling Skysoil into farmland (needs Fabric's tillable registry stubbed).
+- Realm weather that actually rains (custom sky and weather rendering).
+
+
+---
+
+## 5.0 dev log (the Hollow Storm update)
+Built from the user's "complete mod expansion" spec. The user also asked for rarity tables in the doc, allowed any testing method, and asked for Mod Menu to keep only performance settings.
+
+### Design and code (new packages)
+- `sim/`: pure Java, no Minecraft classes, unit tested.
+  - EFScale, TornadoMorphology, TornadoFormation, VortexStructure, TornadoRelation, TornadoStage
+  - WindField: modified Rankine vortex with inflow, updraft, subvortices and translation; calibrated so the ground-relative peak equals the target gust
+  - TornadoProfile: climatology, morphology weights per EF, multiple-vortex chance, lifetimes
+  - StructuralIntegrity, DebrisBudget, BackpackTier, MazeLayout, HidingRules, BossPlan, DialogueScript, ShadowRules
+- `tornado/`:
+  - TornadoEntity: lifecycle, movement, sampled block damage within budget, debris as falling blocks, entity drag/lift/damage, damage survey, roar
+  - TornadoManager: natural genesis, satellites and companions, warnings
+  - WeatherEvents: downburst, hail, supercell, ball lightning
+  - Instruments: wind, pressure with tornado deficit, temperature, humidity, dew point, outlook, forecast
+  - InstrumentBlock, WeatherItems: spawners and event items
+- `backpack/`:
+  - Backpacks, BackpackItem, BackpackStorage, BackpackMenu (ChestMenu with paging; locked slot; swap blocked), BackpackEnchants
+  - open-backpack payload and B key
+  - mixins: InventoryMixin (Soulbound), ItemEntityMixin (Resilience)
+- `labyrinth/`:
+  - LabyrinthStructure and Piece: deterministic rebuild per piece from the seed
+  - Locker, Keyhole, HidingTracker
+  - HollowKeeper: confined to its maze; hunts by sight and sound; searches lockers
+  - LabyrinthTracker: applies the effect, spawns and despawns the Keeper
+- `forest/`: Elderstorm wood set and TreeGrower (trees, mega trees, flower trees, fallback), Stormfruit pod, Glimmerstag, Thistlehop.
+- `story/`:
+  - Stranger and StrangerDirector: peripheral appearances, vanishing, signs, sighting stat
+  - ShrineBlocks: pedestals, conduits hooked into StormWeather.onLightning, altar
+  - Cinematics
+  - CyrrusBoss: scripted intro with rise, grow, corrupt, music and fight actions; five themed phases; telegraphed attacks
+  - RewardItems, StoryRegistry
+- `TabOrganizer`: categorised creative tabs. The Mod Menu screen was reduced to two performance pages.
+- `test/StormreachGameTests` (fabric-gametest entrypoint) plus JUnit in build.gradle, a `runGametest` Loom run, and CI steps.
+
+### Assets and data
+- `tools/textures5.py`: all 5.0 textures (procedural PIL), including the tornado funnel, humanoid and forest mob skins, equipment layers and advancement backgrounds.
+- `tools/audio5.py`:
+  - 15 voice lines: Piper TTS, then an ffmpeg corruption chain whose strength rises line by line
+  - 3 synced Labyrinth music layers (32 s, 90 bpm, same key so they cross-fade cleanly) and a 64 s boss theme
+  - siren, roar, heartbeat, a noise-vocoded whisper and a screech
+  - **Intelligibility check:** the speech-envelope correlation between each processed line and its raw TTS take is 0.75–0.93.
+- `tools/gendata8.py`:
+  - models, blockstates, item definitions, equipment, sounds.json
+  - cinematic scripts, **timed from the measured line lengths**
+  - lang, loot, recipes (transmute for backpack upgrades), tags, 5 enchantments
+  - worldgen: Elderstorm Grove biome added to the realm's multi-noise list; trees with an attached_to_leaves Stormfruit decorator; labyrinth and shrine structures and sets; the shrine NBT
+  - 49 advancements (code-awarded ones use a single impossible "trigger")
+- `tools/guide_tables.py` and `tools/make_guide.py`: GUIDE.md with rarity and drop-rate tables computed from the real files.
+
+### Fixes along the way
+- TreeGrower argument order (trees, mega trees, flower trees, fallback): checked with javap. The giant tree is the 2×2 mega tree.
+- 26.3 data format: loot entries and pools use a singular `condition` object; `placed_block` uses `match_block`; damage tags are written `#minecraft:is_lightning`.
+- The boss phases were rethemed to the spec (lightning / rain / wind / summons / all), and the gale and hail attacks got telegraphs.
+- The Cyrrus `rise` action became a smooth emergence.
+- The siren description was corrected (it's redstone-driven).
+- Removed a redundant ternary in tornado genesis.
+
+### Checks run here
+- Clean compile of main and client against the real 26.3 jar.
+- `tools/validate.py`: 0 problems. It now also checks the 5.0 registries, sounds, scripts, advancement parents, rewards and uniqueness, template-pool NBT, and placed-feature/biome references.
+- 36 unit tests pass (local JUnit shim; the same sources run under real JUnit via Gradle).
+
+### What to test first in game (5.0)
+1. `./gradlew runGametest`: the datapack loads (no format waves) and all 7 GameTests pass.
+2. Weather Events tab: spawn each tornado shape at a few EF levels. Watch the funnel renderer, debris, the survey message and performance.
+3. Backpacks: open with B, paging, sort, upgrade a tier (contents kept), Soulbound on death, Resilience in lava.
+4. `/locate structure stormreach:hollow_labyrinth`: the maze generates across chunk borders. Check the keys, keyhole, Keeper pathing, lockers and music.
+5. `/locate biome stormreach:elderstorm_grove` (in the realm): trees, fruit, mobs.
+6. Shrine ritual end to end, then the Cyrrus intro (sync, scaling, multiplayer), the phases and the drops.

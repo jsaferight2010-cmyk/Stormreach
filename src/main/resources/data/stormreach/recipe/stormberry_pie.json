@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:stormberries",
+    "stormreach:stormberries",
+    "minecraft:sugar",
+    "minecraft:egg"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormberry_pie"
+  }
+}

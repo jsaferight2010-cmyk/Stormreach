@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "stormreach:polished_stormstone",
+    "S": "stormreach:storm_shard",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "PPP",
+    "PSP",
+    "PRP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:storm_barometer"
+  }
+}

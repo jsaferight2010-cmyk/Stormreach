@@ -1,0 +1,28 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_magma_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_brick_fence",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_brick_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_wart",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_netherrack",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_basalt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blackstone",
+   "required": false
+  }
+ ]
+}

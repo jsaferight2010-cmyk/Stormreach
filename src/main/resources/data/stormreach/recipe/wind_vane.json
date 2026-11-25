@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "C": "minecraft:copper_ingot",
+    "S": "stormreach:storm_shard",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    " C ",
+    " C ",
+    "SIS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:wind_vane"
+  }
+}

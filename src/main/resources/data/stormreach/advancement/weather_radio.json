@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "r": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "stormreach:weather_radio",
+              "stormreach:storm_radar"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.weather_radio.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.weather_radio.description"
+    },
+    "icon": {
+      "id": "stormreach:weather_radio"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "r"
+    ]
+  ],
+  "parent": "stormreach:meteorology"
+}

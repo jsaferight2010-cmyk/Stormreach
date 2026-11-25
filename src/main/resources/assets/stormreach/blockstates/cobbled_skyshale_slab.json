@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormreach:block/cobbled_skyshale_slab"
+    },
+    "type=double": {
+      "model": "stormreach:block/cobbled_skyshale"
+    },
+    "type=top": {
+      "model": "stormreach:block/cobbled_skyshale_slab_top"
+    }
+  }
+}

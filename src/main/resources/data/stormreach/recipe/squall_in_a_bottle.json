@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": "stormreach:gull_feather",
+    "S": "stormreach:storm_shard",
+    "B": "minecraft:glass_bottle"
+  },
+  "pattern": [
+    " F ",
+    "SBS"
+  ],
+  "result": {
+    "count": 3,
+    "id": "stormreach:squall_in_a_bottle"
+  }
+}

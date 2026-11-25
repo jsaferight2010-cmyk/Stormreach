@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormreach:block/elderstorm_slab"
+    },
+    "type=double": {
+      "model": "stormreach:block/elderstorm_planks"
+    },
+    "type=top": {
+      "model": "stormreach:block/elderstorm_slab_top"
+    }
+  }
+}

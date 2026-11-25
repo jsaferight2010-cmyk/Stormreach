@@ -1,0 +1,32 @@
+{
+ "parent": "stormreach:stormwater",
+ "criteria": {
+  "b": {
+   "conditions": {
+    "items": [
+     {
+      "items": "stormreach:stormlava_bucket"
+     }
+    ]
+   },
+   "trigger": "minecraft:inventory_changed"
+  }
+ },
+ "display": {
+  "title": {
+   "translate": "advancements.stormreach.stormlava.title"
+  },
+  "description": {
+   "translate": "advancements.stormreach.stormlava.description"
+  },
+  "icon": {
+   "id": "stormreach:stormlava_bucket"
+  },
+  "frame": "task"
+ },
+ "requirements": [
+  [
+   "b"
+  ]
+ ]
+}

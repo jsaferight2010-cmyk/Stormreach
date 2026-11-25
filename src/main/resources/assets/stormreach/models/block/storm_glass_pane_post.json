@@ -1,0 +1,51 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "particle": "#pane",
+  "edge": {
+   "force_translucent": true,
+   "sprite": "minecraft:block/glass_pane_top"
+  },
+  "pane": {
+   "force_translucent": true,
+   "sprite": "minecraft:block/glass"
+  }
+ },
+ "elements": [
+  {
+   "from": [
+    7,
+    0,
+    7
+   ],
+   "to": [
+    9,
+    16,
+    9
+   ],
+   "faces": {
+    "down": {
+     "uv": [
+      7,
+      7,
+      9,
+      9
+     ],
+     "texture": "#edge",
+     "tintindex": 0
+    },
+    "up": {
+     "uv": [
+      7,
+      7,
+      9,
+      9
+     ],
+     "texture": "#edge",
+     "tintindex": 0
+    }
+   }
+  }
+ ],
+ "ambientocclusion": false
+}

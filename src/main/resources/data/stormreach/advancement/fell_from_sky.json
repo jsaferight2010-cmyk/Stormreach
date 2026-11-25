@@ -1,0 +1,30 @@
+{
+  "parent": "stormreach:tempest_realm",
+  "criteria": {
+    "d": {
+      "conditions": {
+        "from": "stormreach:tempest_realm",
+        "to": "minecraft:overworld"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.fell_from_sky.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.fell_from_sky.description"
+    },
+    "icon": {
+      "id": "stormreach:nimbus_cloud"
+    },
+    "frame": "task",
+    "hidden": true
+  },
+  "requirements": [
+    [
+      "d"
+    ]
+  ]
+}

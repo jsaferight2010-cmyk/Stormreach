@@ -1,0 +1,36 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_exposed_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weathered_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_oxidized_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_exposed_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_weathered_copper_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_oxidized_copper_door",
+   "required": false
+  }
+ ]
+}

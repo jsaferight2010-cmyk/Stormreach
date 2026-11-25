@@ -1,0 +1,196 @@
+{
+  "variants": {
+    "active=true,stage=0": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=1": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=2": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=3": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=4": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=5": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=6": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=7": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=8": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=9": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=10": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=11": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=12": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=13": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=14": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=15": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=16": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=17": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=18": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=19": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=20": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=21": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=22": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=23": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=24": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=25": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=26": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=27": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=28": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=29": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=30": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=true,stage=31": {
+      "model": "stormreach:block/stormheart_active"
+    },
+    "active=false,stage=0": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=1": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=2": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=3": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=4": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=5": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=6": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=7": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=8": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=9": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=10": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=11": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=12": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=13": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=14": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=15": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=16": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=17": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=18": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=19": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=20": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=21": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=22": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=23": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=24": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=25": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=26": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=27": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=28": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=29": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=30": {
+      "model": "stormreach:block/stormheart"
+    },
+    "active=false,stage=31": {
+      "model": "stormreach:block/stormheart"
+    }
+  }
+}

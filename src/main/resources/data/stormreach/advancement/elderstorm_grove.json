@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "biomes": "stormreach:elderstorm_grove"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.elderstorm_grove.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.elderstorm_grove.description"
+    },
+    "icon": {
+      "id": "stormreach:elderstorm_sapling"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:tempest_realm"
+}

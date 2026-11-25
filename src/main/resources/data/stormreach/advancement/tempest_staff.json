@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "staff": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:tempest_staff"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tempest_staff.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tempest_staff.description"
+    },
+    "icon": {
+      "id": "stormreach:tempest_staff"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "staff"
+    ]
+  ],
+  "parent": "stormreach:storm_shard"
+}

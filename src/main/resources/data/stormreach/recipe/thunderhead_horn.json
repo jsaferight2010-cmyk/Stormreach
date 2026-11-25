@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "stormreach:gull_feather",
+    "S": "stormreach:storm_shard",
+    "H": "minecraft:goat_horn",
+    "C": "stormreach:storm_crystal_block"
+  },
+  "pattern": [
+    " F ",
+    "SHS",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:thunderhead_horn"
+  }
+}

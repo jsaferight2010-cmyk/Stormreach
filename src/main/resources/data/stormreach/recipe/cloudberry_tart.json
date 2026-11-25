@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:cloudberries",
+    "stormreach:cloudberries",
+    "stormreach:cloudberries",
+    "minecraft:sugar",
+    "minecraft:egg",
+    "minecraft:wheat"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:cloudberry_tart"
+  }
+}

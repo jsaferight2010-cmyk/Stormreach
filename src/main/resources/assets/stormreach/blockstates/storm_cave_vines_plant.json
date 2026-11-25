@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "berries=false": {
+   "model": "stormreach:block/storm_cave_vines_plant"
+  },
+  "berries=true": {
+   "model": "stormreach:block/storm_cave_vines_plant_lit"
+  }
+ }
+}

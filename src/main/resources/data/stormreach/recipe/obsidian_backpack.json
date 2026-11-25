@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_transmute",
+  "category": "equipment",
+  "group": "stormreach_backpack",
+  "input": "stormreach:diamond_backpack",
+  "material": "stormreach:obsidian_backpack_upgrade",
+  "result": {
+    "id": "stormreach:obsidian_backpack"
+  }
+}

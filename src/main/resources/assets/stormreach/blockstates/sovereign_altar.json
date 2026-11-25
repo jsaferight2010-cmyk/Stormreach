@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "ritual=0": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=1": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=2": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=3": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=4": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=5": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=6": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=7": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=8": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=9": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=10": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=11": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=12": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=13": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=14": {
+      "model": "stormreach:block/sovereign_altar"
+    },
+    "ritual=15": {
+      "model": "stormreach:block/sovereign_altar"
+    }
+  }
+}

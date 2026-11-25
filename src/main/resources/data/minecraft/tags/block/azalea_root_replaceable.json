@@ -1,0 +1,28 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_red_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_clay",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gravel",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_snow_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_powder_snow",
+   "required": false
+  }
+ ]
+}

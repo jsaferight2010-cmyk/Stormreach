@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "stormreach:block/skyshale_bricks",
+    "side": "stormreach:block/skyshale_bricks",
+    "top": "stormreach:block/skyshale_bricks"
+  }
+}

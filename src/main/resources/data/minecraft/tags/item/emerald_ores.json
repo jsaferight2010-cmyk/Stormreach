@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_emerald_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_emerald_ore",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_tube_coral",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brain_coral",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bubble_coral",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_fire_coral",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_horn_coral",
+   "required": false
+  }
+ ]
+}

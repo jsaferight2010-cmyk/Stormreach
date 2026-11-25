@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "stormreach:rusted_locker",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "stormreach:rusted_locker"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "stormreach:blocks/rusted_locker"
+}

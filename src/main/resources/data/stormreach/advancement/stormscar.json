@@ -1,0 +1,38 @@
+{
+  "parent": "stormreach:stormheart",
+  "criteria": {
+    "s": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:stepping_on": {
+              "block": {
+                "blocks": "stormreach:stormscar_turf"
+              }
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormscar.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormscar.description"
+    },
+    "icon": {
+      "id": "stormreach:stormscar_turf"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ]
+}

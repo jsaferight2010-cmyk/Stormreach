@@ -1,0 +1,55 @@
+{
+  "values": [
+    "stormreach:stormpine_sapling",
+    {
+      "id": "stormreach:storm_oak_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_azalea",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_flowering_azalea",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_propagule",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_sapling",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_sapling",
+      "required": false
+    },
+    "stormreach:galewood_sapling",
+    "stormreach:elderstorm_sapling"
+  ]
+}

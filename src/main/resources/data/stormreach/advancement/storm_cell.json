@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:barometer",
+  "criteria": {
+    "c": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:storm_cell"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.storm_cell.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.storm_cell.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_cell"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ]
+}

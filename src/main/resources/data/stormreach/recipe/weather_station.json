@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": "stormreach:anemometer",
+    "B": "stormreach:storm_barometer",
+    "T": "stormreach:thermometer",
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:comparator",
+    "R": "minecraft:redstone_block"
+  },
+  "pattern": [
+    "ABT",
+    "ICI",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:weather_station"
+  }
+}

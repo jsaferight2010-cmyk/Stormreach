@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:storm_shard",
+  "criteria": {
+    "f": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:fulgurite_shard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.fulgurite.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.fulgurite.description"
+    },
+    "icon": {
+      "id": "stormreach:fulgurite_shard"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "f"
+    ]
+  ]
+}

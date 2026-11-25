@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_brown_wool_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_brown_wool"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_brown_wool_slab_top"
+  }
+ }
+}

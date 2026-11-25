@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_glow_lichen",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_vine",
+   "required": false
+  }
+ ]
+}

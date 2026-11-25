@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:advancement_reward",
+  "pools": [
+    {
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "stormreach:chasers_badge"
+        }
+      ],
+      "rolls": 1
+    }
+  ]
+}

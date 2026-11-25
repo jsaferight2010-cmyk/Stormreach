@@ -1,0 +1,47 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_vine",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_glow_lichen",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pumpkin",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_carved_pumpkin",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jack_o_lantern",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_melon",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cocoa",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_big_dripleaf",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_chorus_plant",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_chorus_flower",
+      "required": false
+    },
+    "stormreach:gale_grass",
+    "stormreach:sparkfern",
+    "stormreach:stormfruit_pod"
+  ]
+}

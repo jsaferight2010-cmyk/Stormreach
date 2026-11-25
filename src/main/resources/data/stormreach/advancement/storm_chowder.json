@@ -1,0 +1,30 @@
+{
+  "criteria": {
+    "ate": {
+      "conditions": {
+        "item": {
+          "items": "stormreach:storm_chowder"
+        }
+      },
+      "trigger": "minecraft:consume_item"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.storm_chowder.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.storm_chowder.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_chowder"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "ate"
+    ]
+  ],
+  "parent": "stormreach:crab_breeder"
+}

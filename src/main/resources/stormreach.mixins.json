@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "com.stormreach.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "InventoryMixin",
+    "ItemEntityMixin",
+    "LightningBoltMixin",
+    "LivingEntityMixin",
+    "MobMixin",
+    "OverworldBiomeBuilderInvoker",
+    "OverworldBiomeBuilderMixin",
+    "ServerLevelMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

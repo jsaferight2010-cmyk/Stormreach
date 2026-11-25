@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.open_backpack.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.open_backpack.description"
+    },
+    "icon": {
+      "id": "stormreach:diamond_backpack"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:root"
+}

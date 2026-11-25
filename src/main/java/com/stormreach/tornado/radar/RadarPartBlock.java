@@ -84,6 +84,14 @@ public class RadarPartBlock extends Block {
         return super.playerWillDestroy(level, pos, s, player);
     }
 
+    /** 6.0: removed by anything but a player (explosion, tornado, command): take the radar down too, dropping it once. */
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState s, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean moved) {
+        BlockPos c = controllerOf(s, pos);
+        if (level.getBlockState(c).is(WeatherItems.TORNADO_RADAR)) level.destroyBlock(c, true);
+        super.affectNeighborsAfterRemoval(s, level, pos, moved);
+    }
+
     @Override
     protected BlockState updateShape(BlockState s, LevelReader level, ScheduledTickAccess ticks, BlockPos pos, Direction dir, BlockPos nPos, BlockState n, RandomSource r) {
         // a part without its controller goes away (the removal spreads cell to cell through neighbour updates)

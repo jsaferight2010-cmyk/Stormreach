@@ -78,6 +78,14 @@ public class MachinePartBlock extends Block {
         return super.playerWillDestroy(level, pos, s, player);
     }
 
+    /** Removed any other way (explosion, tornado debris, a command): the whole machine comes down and drops once. */
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState s, net.minecraft.server.level.ServerLevel level, BlockPos pos, boolean moved) {
+        BlockPos c = controllerOf(s, pos);
+        if (level.getBlockState(c).getBlock() instanceof Multiblock) level.destroyBlock(c, true);
+        super.affectNeighborsAfterRemoval(s, level, pos, moved);
+    }
+
     @Override
     protected ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState s, boolean includeData) {
         BlockState cs = level.getBlockState(controllerOf(s, pos));

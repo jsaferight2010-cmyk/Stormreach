@@ -987,13 +987,16 @@ public class StormreachGameTests {
         Check.isTrue(h, r.scan() != null, "the Doppler radar sent no scan");
         int in = 0, out = 0;
         double range = r.range();
+        // storm-relative: take the ambient wind's radial component out, the way forecasters read a couplet
+        double[] amb = com.stormreach.tornado.RadarScan.ambient(h.getLevel(), t.getX(), t.getZ());
+        double bias = com.stormreach.sim.RadarMath.radial(amb[0], amb[1], t.getX() - at.x, t.getZ() - at.z);
         for (int az = 0; az < com.stormreach.sim.RadarMath.AZIMUTHS; az++) for (int g = 0; g < com.stormreach.sim.RadarMath.GATES; g++) {
             double[] o = com.stormreach.sim.RadarMath.gateOffset(az, g, range);
             if (Math.hypot(o[0] - (t.getX() - at.x), o[1] - (t.getZ() - at.z)) > 120) continue;
             byte v = r.scan().velocity()[com.stormreach.sim.RadarMath.index(az, g)];
             if (v == com.stormreach.sim.RadarMath.NO_DATA) continue;
-            if (v < -15) in++;
-            if (v > 15) out++;
+            if (v - bias < -10) in++;
+            if (v - bias > 10) out++;
         }
         t.discard();
         Check.isTrue(h, in > 0 && out > 0, "no velocity couplet around the tornado: inbound gates " + in + ", outbound " + out);

@@ -29,6 +29,19 @@ jobs:
         run: |
           for j in $(find ~/.gradle -name 'fabric-particles*.jar' | grep -v sources | head -2); do unzip -l "$j" | grep -oE 'net/fabricmc/fabric/api/[a-z/]*particle[a-zA-Z/0-9$]*\.class' | sed 's/^/FABRICAPI: /'; done || true
 
+      - name: Collect Fabric API jars (for offline development)
+        run: |
+          mkdir -p devlibs
+          find ~/.gradle -name 'fabric-*.jar' -path '*net.fabricmc.fabric-api*' | grep -v sources | xargs -I{} cp {} devlibs/ || true
+          ls devlibs | head -100
+
+      - name: Upload Fabric API jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: devlibs
+          path: devlibs/
+          if-no-files-found: ignore
+
       # Boots a headless Minecraft server with the mod, loads every datapack file and runs the in-game tests.
       - name: Run the in-game GameTests
         run: ./gradlew runGametest --stacktrace

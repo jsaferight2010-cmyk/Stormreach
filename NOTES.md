@@ -405,3 +405,22 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
 - JEI: read the user's installed jei-26.3-fabric-31.17.0.108.jar (read-only) to compile against its API locally (class files patched to Java 21 in /tmp for javac). Gradle uses `mezz.jei:jei-26.3-fabric-api:${jei_version}` from maven.blamejared.com (blocked from the workspace, so CI is the check). Avoided two APIs JEI marks for removal (addFluidStack, addRecipeArrow). Fluid amounts are Fabric droplets (81 per mB).
 - Stormheart: it already had an item but was buried in the Building tab; now first in Storm Blocks and listed under Weather Events.
 - Tests: aCapacitorPowersALampDownACable, rainBarrelsDrainIntoCisternsAndKeepStormwaterApart, aPumpLiftsWaterIntoATank, aSprinklerWetsFarmland, aShockPlateZapsAMonster.
+
+## 6.0.0 Overhaul (in progress)
+
+Source: the 25-section overhaul request (crash, visuals, tornadoes, gameplay, structures, sound, perf) plus the
+crash report from 2026-11-25 15:54. Order of work follows its priority list. No game launched by me; CI GameTests
+boot the headless test server in GitHub Actions as before.
+
+### Stage 1: worldgen crash (done)
+- Cause: `stormreach:trees_thunderspire` (configured random_selector, used by placed `trees_thunderspire` in
+  Thunderspire Highlands and by placed `trees_marsh` in Brinewater Marsh) picked `stormreach:fallen_driftwood` 5% of
+  the time. That placed feature is the coastal decoration and carries `minecraft:biome`. Nested placement has no
+  top-level feature, so `BiomeFilter.shouldPlace` threw. Only on the 5% branch, which is why it was intermittent.
+- Fix: new `placed_feature/fallen_driftwood_checked` (survival filter only) for the selector; the coastal step keeps
+  its biome filter. Generated in gendata3.py.
+- `tools/worldgen_check.py` (called from validate.py): resolves every biome step, placed->configured link and nested
+  placed reference (ids, inline, weighted entries, recursively), rejects biome filters on nested placed features and
+  biome-filtered placed features that no biome uses. Self-tests against vanilla data. It flagged exactly the two
+  crash paths above and nothing else.
+- GameTest `thunderspireTreesPlaceWithoutABiomeCheckCrash` places the three tree selectors 200x each.

@@ -301,3 +301,12 @@ The user asked for the overhaul to be tested with builds, compiles, unit tests a
 - Verified by CI only (headless server GameTests, 28 of them); never run in a client:
   - all rendering: tornado and cloud meshes, radar dish, backpack layer, screens, particles, locker camera
   - generation of the new maze and temple in a real world
+
+### 5.1.0 finished (stages 13–14)
+- Stage 13:
+  - `sim/KeeperSenses` (noise radii, hearing, guess error, listen rate, lunge), used by the HollowKeeper HuntGoal. The Keeper also enrages below 50% health and dims lamps within 4 blocks.
+  - `registry/ModSoundTypes` holds seven material families of original block sounds (`block.mat.*` in sfx_list), applied by `BlockStateSoundMixin` to blocks in the stormreach namespace only.
+- Stage 14: `tools/hd64.py` now covers items (to 64x) and entity/armour textures (4x small sheets, 2x medium). It skips the procedural textures.
+- Final: GUIDE.md regenerated, 55 unit tests, 30 GameTests, validator clean.
+- Still never run in a real client.
+- Not done: Meshy models (the Meshy CLI needs the user to sign in in a browser), and new mob geometry (the mob models are the 5.0 ones, with the new textures).

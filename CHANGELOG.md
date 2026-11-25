@@ -1,7 +1,7 @@
 # Stormreach patch notes
 
-## 5.1.0 (in progress: the overhaul)
-Built in stages. This section grows as each stage lands.
+## 5.1.0 (the Overhaul)
+Built and tested in fourteen stages.
 
 ### Stage 14: 64x items, mobs and armour
 - **Every Stormreach item texture is now 64x**, and **mob and armour textures are 4x their old resolution**, with the same detail pass as the blocks: crisp pixel-art cells with a soft bevel and fine grain.

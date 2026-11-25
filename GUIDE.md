@@ -440,8 +440,8 @@ Minecraft colours item names by rarity: white = Common, yellow = Uncommon, aqua 
 
 | Rarity | Items |
 |---|---|
-| Epic (magenta) | Chaser's Badge, Heart of the Labyrinth, Maelstrom Core, Storm Chaser's Pack, Stormcrown, Weatherbreaker, Weathered Journal, Weathervane Scepter |
-| Rare (aqua) | Gilded Stormfruit, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap |
+| Epic (magenta) | Chaser's Badge, Heart of the Labyrinth, Maelstrom Core, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter |
+| Rare (aqua) | Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Thunder Key |
 | Uncommon (yellow) | Glimmer Antler, Handheld Storm Radar, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V) |
 
 

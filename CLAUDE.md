@@ -56,6 +56,7 @@ This project was built in a claude.ai cloud session that couldn't reach Fabric's
 - Prefers working features over many unfinished ones, delivered in stages.
 
 ## Status
+- 5.1.0 (the Overhaul) is code-complete: 14 stages, all compiled against the real 26.3 jar, `tools/validate.py` passes, 55 unit tests and 30 GameTests pass in CI. Nothing client-side has been run in a real client yet (renderers, screens, particles, locker camera, backpack layer). NOTES.md has the per-stage dev log. Audio is regenerated with `tools/sfx51.py` (effects and the Labyrinth score, listed in `tools/sfx_list.py`, Java constants in `ModSfx`). `tools/hd64.py` runs last in run_all and gives every block/item texture its 64x detail pass (mob and armour textures 4x); draw real 64x art and it is left alone.
 - 5.0.0 (Hollow Storm) is code-complete: main and client compile against the real 26.3 jar, `tools/validate.py` passes, 36 unit tests pass. **Not run in game.** `./gradlew runGametest` (also in CI) is the first real check of the datapack and the new systems. Highest risk:
   - datapack format waves at load (new: enchantments, block_state_provider, attached_to_leaves decorator, advancement criteria, structure type `stormreach:labyrinth`)
   - the client-only code (tornado funnel renderer, backpack screen, adaptive music, humanoid/forest renderers), which a server never exercises

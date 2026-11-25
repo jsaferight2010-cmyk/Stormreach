@@ -45,7 +45,8 @@
             }
           ]
         }
-      }
+      },
+      "modifier": "overlay"
     },
     "minecraft:visual/sky_color": "#5a7ab8",
     "minecraft:visual/fog_color": "#6d8cc4",

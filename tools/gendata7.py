@@ -420,7 +420,7 @@ for name, ((t, h), sky, fog) in REALM_BIOMES.items():
     feats[2] = air; feats[6] = ores; feats[9] = veg
     w(f'{WG}/biome/{name}.json', {
         'attributes': {
-            'minecraft:gameplay/natural_mob_spawns': {'argument': {'spawn_costs': {}, 'spawns_by_category': {'creature': creatures, 'monster': monsters}}},
+            'minecraft:gameplay/natural_mob_spawns': {'argument': {'spawn_costs': {}, 'spawns_by_category': {'creature': creatures, 'monster': monsters}}, 'modifier': 'overlay'},
             'minecraft:visual/sky_color': sky, 'minecraft:visual/fog_color': fog, 'minecraft:visual/water_fog_color': '#2a3f66',
             'minecraft:visual/ambient_particles': {'argument': [{'particle': {'type': 'minecraft:electric_spark'}, 'probability': 0.004 if name != 'aurora_spires' else 0.012}], 'modifier': 'append'}},
         'carvers': [], 'downfall': 0.6, 'effects': {'water_color': '#5b8fd8', 'grass_color': '#4fb8c4', 'foliage_color': '#7fc8d8'},

@@ -118,6 +118,7 @@ public final class StormBlocks {
 
         String path = "storm_" + BuiltInRegistries.BLOCK.getKey(v).getPath();
         ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, Stormreach.id(path));
+        if (BuiltInRegistries.BLOCK.containsKey(key)) return null; // Stormreach already has a hand-made block by this name
         BlockBehaviour.Properties props = BlockBehaviour.Properties.ofFullCopy(v).setId(key);
 
         for (Constructor<?> ctor : cls.getDeclaredConstructors()) {

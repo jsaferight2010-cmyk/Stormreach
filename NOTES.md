@@ -709,7 +709,17 @@ boot the headless test server in GitHub Actions as before.
 - Local hand-built jar: `~/tools/makejar60.sh` (artifact downloads from Actions are blocked by the proxy here). Checked:
   only com/stormreach classes, every entrypoint and mixin class present, icon present, version 6.0.0.
 
+### 6.0.1: swords in Creative
+- The user asked for Stormreach swords to break blocks in Creative (vanilla's sword Tool component has
+  canDestroyBlocksInCreative=false, checked in Item.canDestroyBlock). `item/StormSwords.sword(...)` applies vanilla
+  sword properties and then replaces the TOOL component with the same rules (cobweb 15, sword_instantly_mines, sword_efficient
+  1.5, default 1.0, 2 damage a block) but canDestroyBlocksInCreative=true. Used by all six swords. GameTest
+  stormSwordsBreakBlocksInCreative. CI run 45841172947: 74/74.
+- The user also said breaking "didn't work in survival". Nothing in the mod blocks it (no break callbacks, no
+  canDestroyBlock overrides), so a sword there behaves like vanilla: slow on most blocks, no drops from stone.
+  Asked the user what they saw.
+
 ### Resume point
-6.0.0 delivered (Stormreach-6.0.0-mc26.3.zip). Waiting on the user's in-game test. Open questions: Stormreach swords
-breaking blocks in Creative (vanilla says no); the Hollow Shrine crash log. Optional: further sound redesign of the
+6.0.1 delivered (Stormreach-6.0.1-mc26.3.zip). Waiting on the user's in-game test. Open question: what "swords didn't work in
+Survival" looked like. No Hollow Shrine crash log exists. Optional: further sound redesign of the
 5.x sounds listed under stage 8 part 2; more "even more" content (ideas: sea fog, rainbows after storms, storm surge).

@@ -1,6 +1,6 @@
 # Stormreach: Claude Code handoff
 
-Fabric content mod for **Minecraft Java 26.3** (Java 25, Mojang names, no remapping). Theme: a storm-swept coast where everything connects. Storms grow crystals, crystals make gear, gear calls storms, and the Stormblight spreads storm versions of things. Version **6.0.0**. Patch notes are in `CHANGELOG.md` and the player guide is in `README.md`.
+Fabric content mod for **Minecraft Java 26.3** (Java 25, Mojang names, no remapping). Theme: a storm-swept coast where everything connects. Storms grow crystals, crystals make gear, gear calls storms, and the Stormblight spreads storm versions of things. Version **6.0.1**. Patch notes are in `CHANGELOG.md` and the player guide is in `README.md`.
 
 This project was built in a claude.ai cloud session that couldn't reach Fabric's or Mojang's servers. Everything was compile-checked against the real 26.3 jar using stubs, but it has **never been built with Gradle or run in game**. On this PC you can do both, so start there.
 

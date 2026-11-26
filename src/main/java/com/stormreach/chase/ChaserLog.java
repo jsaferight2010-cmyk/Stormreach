@@ -111,15 +111,18 @@ public final class ChaserLog {
     }
 
     /** The log, as chat lines. */
-    public static List<Component> summary(ItemStack book) {
+    public static List<Component> summary(ItemStack book) { return summary(book, null); }
+
+    /** 6.0: the summary in {@code reader}'s units (null: the server's). */
+    public static List<Component> summary(ItemStack book, net.minecraft.world.entity.player.Player reader) {
         CompoundTag t = read(book);
         int maxEf = t.getIntOr("MaxEF", -1), closest = t.getIntOr("Closest", 99999);
         List<Component> out = new ArrayList<>();
         out.add(Component.translatable("item.stormreach.chasers_logbook.title").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
         out.add(Component.translatable("item.stormreach.chasers_logbook.seen", t.getIntOr("Seen", 0),
-                maxEf < 0 ? "-" : EFScale.values()[maxEf].name(), closest == 99999 ? "-" : closest + " m").withStyle(ChatFormatting.YELLOW));
+                maxEf < 0 ? "-" : EFScale.values()[maxEf].name(), closest == 99999 ? "-" : com.stormreach.units.PlayerUnits.distance(reader, closest)).withStyle(ChatFormatting.YELLOW));
         out.add(Component.translatable("item.stormreach.chasers_logbook.field", t.getIntOr("Intercepts", 0), t.getIntOr("Probes", 0),
-                t.getIntOr("ProbePeak", 0), t.getIntOr("Balloons", 0)).withStyle(ChatFormatting.GRAY));
+                com.stormreach.units.PlayerUnits.speed(reader, t.getIntOr("ProbePeak", 0)), t.getIntOr("Balloons", 0)).withStyle(ChatFormatting.GRAY));
         return out;
     }
 }

@@ -217,4 +217,15 @@ public final class Stormblight {
             }
         }
     }
+
+    /** 6.0: repaints one loaded chunk's biome around its surface (the powered Stormheart's frontier). */
+    public static void blightChunk(ServerLevel level, net.minecraft.world.level.ChunkPos cp) {
+        if (!StormreachConfig.blightBiome || !level.hasChunk(cp.x(), cp.z())) return;
+        net.minecraft.resources.ResourceKey<Biome> key = level.dimension() == net.minecraft.world.level.Level.NETHER ? ModBiomes.STORM_WASTES
+                : level.dimension() == net.minecraft.world.level.Level.END ? ModBiomes.STORM_VOID : ModBiomes.STORMREACH_COAST;
+        Holder<Biome> biome = level.registryAccess().lookupOrThrow(Registries.BIOME).getOrThrow(key);
+        int top = level.getHeight(net.minecraft.world.level.levelgen.Heightmap.Types.WORLD_SURFACE, cp.getMiddleBlockX(), cp.getMiddleBlockZ());
+        int minY = Math.max(level.getMinY(), top - 24), maxY = Math.min(level.getMaxY() - 1, top + 40);
+        FillBiomeCommand.fill(level, new BlockPos(cp.getMinBlockX(), minY, cp.getMinBlockZ()), new BlockPos(cp.getMaxBlockX(), maxY, cp.getMaxBlockZ()), biome);
+    }
 }

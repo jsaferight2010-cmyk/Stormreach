@@ -45,6 +45,7 @@ public final class TabOrganizer {
         meteo.add(com.stormreach.registry.ModBlocks.WIND_VANE.asItem());
         meteo.add(com.stormreach.registry.ModBlocks.STORM_COLLECTOR.asItem());
         meteo.add(com.stormreach.sky.SkyRegistry.WIND_TURBINE.asItem()); meteo.add(com.stormreach.front.FrontRegistry.OMEN_FEATHER); meteo.add(com.stormreach.power.PowerRegistry.MULTIMETER);
+        meteo.add(com.stormreach.wind.WindRegistry.WIND_GENERATOR_ITEM);   // 6.0 (creative only)
         events.add(com.stormreach.registry.ModBlocks.STORMHEART.asItem());
         events.add(com.stormreach.sky.SkyRegistry.CLOUD_SEEDER); events.add(com.stormreach.sky.SkyRegistry.SUPERCELL_SEEDER);
         for (Item item : BuiltInRegistries.ITEM) {

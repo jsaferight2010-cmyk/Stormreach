@@ -24,11 +24,21 @@ public abstract class CameraMixin {
 
     @Inject(method = "alignWithEntity(F)V", at = @At("TAIL"))
     private void stormreach$lockerView(float partialTick, CallbackInfo ci) {
+        Vec3 out = LockerClient.exitingFrom();
+        if (out != null) {   // stepping out: glide from the locker's eye point to the player's own view
+            Vec3 now = ((net.minecraft.client.Camera) (Object) this).position();
+            Vec3 p = out.lerp(now, LockerClient.transition());
+            setPosition(p.x, p.y, p.z);
+            return;
+        }
         if (!LockerClient.hidden()) return;
         Vec3 eye = LockerClient.eye();
+        Vec3 in = LockerClient.enteringFrom();
+        if (in != null) eye = in.lerp(eye, LockerClient.transition());   // stepping in: glide into the locker
         float front = LockerClient.facing().toYRot();
-        float yaw = front + Mth.clamp(Mth.wrapDegrees(yRot() - front), -70f, 70f);
-        float pitch = Mth.clamp(xRot(), -35f, 35f);
+        // look around freely within a wide window through the grate (it was a narrow 70 x 35 degree box)
+        float yaw = front + Mth.clamp(Mth.wrapDegrees(yRot() - front), -85f, 85f);
+        float pitch = Mth.clamp(xRot(), -50f, 50f);
         setRotation(yaw, pitch);
         setPosition(eye.x, eye.y, eye.z);
         detached = false; // always first person from inside the locker (so your own body isn't drawn in front of you)

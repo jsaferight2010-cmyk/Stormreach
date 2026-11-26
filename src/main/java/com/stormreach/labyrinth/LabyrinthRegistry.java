@@ -58,6 +58,12 @@ public final class LabyrinthRegistry {
             EntityType.Builder.of(HollowKeeper::new, MobCategory.MONSTER).sized(0.9f, 3.1f).eyeHeight(2.8f).fireImmune().clientTrackingRange(10)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("hollow_keeper"))));
 
+    /** 6.0: what a hiding player sits on inside a locker. */
+    public static final EntityType<LockerSeat> LOCKER_SEAT = Registry.register(BuiltInRegistries.ENTITY_TYPE,
+            ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("locker_seat")),
+            EntityType.Builder.<LockerSeat>of(LockerSeat::new, MobCategory.MISC).sized(0.2f, 0.2f).noSummon().clientTrackingRange(8)
+                    .build(ResourceKey.create(Registries.ENTITY_TYPE, Stormreach.id("locker_seat"))));
+
     public static final Item[] KEYS = {
             item("labyrinth_key_gale", p -> new com.stormreach.realm.TooltipItem.Plain(p, 1), new Item.Properties().stacksTo(1).rarity(Rarity.RARE)),
             item("labyrinth_key_thunder", p -> new com.stormreach.realm.TooltipItem.Plain(p, 1), new Item.Properties().stacksTo(1).rarity(Rarity.RARE)),
@@ -90,6 +96,7 @@ public final class LabyrinthRegistry {
     public static void init() {
         LockerNet.init();
         net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.JOIN.register(HidingTracker::onJoin);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> HidingTracker.onDisconnect(handler.player));
         FabricDefaultAttributeRegistry.register(HOLLOW_KEEPER, HollowKeeper.createAttributes());
         SpawnPlacements.register(HOLLOW_KEEPER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (t, l, r, p, rnd) -> false);
     }

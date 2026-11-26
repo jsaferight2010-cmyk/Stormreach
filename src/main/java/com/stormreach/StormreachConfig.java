@@ -74,6 +74,10 @@ public final class StormreachConfig {
     public static boolean convertMobs = true;
     public static boolean blightBiome = true;
     public static boolean heartActivatesOnPlace = false;
+    /** 6.0: a fully grown, awake Stormheart on a power network keeps spreading past heartMaxRadius while it is fed. */
+    public static boolean heartPoweredSpread = true;
+    public static int heartPowerDraw = 400;          // SU a second while overcharged (50-10000)
+    public static int heartPoweredMaxRadius = 0;     // 0 = no limit (then only the world border stops it)
     public static boolean stormFront = true;
     public static int stormFrontMinutes = 4;   // 1-15
 
@@ -178,6 +182,9 @@ public final class StormreachConfig {
         spreadSpeed = num(p, "spreadSpeed", spreadSpeed, 1, 10);
         convertMobs = bool(p, "convertMobs", convertMobs);
         blightBiome = bool(p, "blightBiome", blightBiome);
+        heartPoweredSpread = bool(p, "heartPoweredSpread", heartPoweredSpread);
+        heartPowerDraw = num(p, "heartPowerDraw", heartPowerDraw, 50, 10000);
+        heartPoweredMaxRadius = num(p, "heartPoweredMaxRadius", heartPoweredMaxRadius, 0, 30000000);
         heartActivatesOnPlace = bool(p, "heartActivatesOnPlace", heartActivatesOnPlace);
         stormFront = bool(p, "stormFront", stormFront);
         stormFrontMinutes = num(p, "stormFrontMinutes", stormFrontMinutes, 1, 15);
@@ -271,6 +278,9 @@ public final class StormreachConfig {
         p.setProperty("spreadSpeed", String.valueOf(spreadSpeed));
         p.setProperty("convertMobs", String.valueOf(convertMobs));
         p.setProperty("blightBiome", String.valueOf(blightBiome));
+        p.setProperty("heartPoweredSpread", String.valueOf(heartPoweredSpread));
+        p.setProperty("heartPowerDraw", String.valueOf(heartPowerDraw));
+        p.setProperty("heartPoweredMaxRadius", String.valueOf(heartPoweredMaxRadius));
         p.setProperty("heartActivatesOnPlace", String.valueOf(heartActivatesOnPlace));
         p.setProperty("stormFront", String.valueOf(stormFront));
         p.setProperty("stormFrontMinutes", String.valueOf(stormFrontMinutes));
@@ -352,7 +362,7 @@ public final class StormreachConfig {
         wildlifeSpawning = true; thunderbirdChance = 6; hailGolemChance = 5;
         tempestStaffCooldown = 3; tempestStaffRange = 32; stormbladeLightningChance = 15; hornStormMinutes = 5;
         spreadMode = SpreadMode.CONTAINED; heartMaxRadius = 32; spreadSpeed = 5; convertMobs = true; blightBiome = true;
-        heartActivatesOnPlace = false; stormFront = true; stormFrontMinutes = 4;
+        heartActivatesOnPlace = false; heartPoweredSpread = true; heartPowerDraw = 400; heartPoweredMaxRadius = 0; stormFront = true; stormFrontMinutes = 4;
         useGeneratedBlocks = true; useGeneratedMobs = true; stormMobPerks = true; stormwaterShocks = true; stormInOtherDimensions = true;
         sovereignNaturalSpawns = true; sovereignSpawnChance = 20; sigilRitualSeconds = 60; eyesRequired = 4; sovereignHealth = 400; realmFallToOverworld = true; realmLightning = true; skyraySpeed = 15; realmMobSpawning = true; cloudBlocks = true; returnGateBuilt = true;
         tornadoDestruction = true; tornadoSimulationDistance = 256; maxActiveTornadoes = 2; tornadoBlockChecksPerTick = 96; tornadoDebrisLimit = 80; tornadoSizePercent = 35; particleDensity = 100; backpackMagnetInterval = 10; naturalTornadoes = true; tornadoFrequency = 100; tornadoIntensityBias = 100; tornadoDurationPercent = 50; landspouts = true; downbursts = true; shadowAppearanceRate = 100; shadowSigns = true; labyrinthGeneration = true; bossDifficulty = 100; guardianDifficulty = 100;

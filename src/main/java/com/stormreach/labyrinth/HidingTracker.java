@@ -21,7 +21,7 @@ import java.util.UUID;
 
 /** Who is hiding in which locker, and whether they've given themselves away. Server-side only. */
 public final class HidingTracker {
-    public record Hide(BlockPos locker, Direction facing, Vec3 spot, long sinceTick, boolean[] moved) {}
+    public record Hide(BlockPos locker, Direction facing, Vec3 spot, long sinceTick, boolean[] moved, LockerSeat seat) {}
 
     private static final Map<UUID, Hide> HIDING = new HashMap<>();
     /** Last game tick a guardian could see each player. */
@@ -48,14 +48,22 @@ public final class HidingTracker {
             p.sendOverlayMessage(Component.translatable("block.stormreach.rusted_locker.occupied").withStyle(ChatFormatting.GRAY));
             return;
         }
-        // stand in the middle of the locker, facing out through the grate
+        // sit on an invisible seat in the middle of the locker, facing out through the grate: riding holds you still
+        // without teleporting you every tick, and the client glides the camera in (LockerClient/CameraMixin)
         Vec3 spot = Vec3.atBottomCenterOf(lower);
-        p.teleportTo(spot.x, spot.y, spot.z);
+        if (p.isPassenger()) p.stopRiding();
+        LockerSeat seat = LabyrinthRegistry.LOCKER_SEAT.create(p.level(), net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        if (seat == null) return;
+        seat.setPos(spot.x, spot.y - 0.2, spot.z);   // the seat is 0.2 tall and carries you on its top: feet on the locker floor
+        seat.setYRot(facing.toYRot());
+        p.level().addFreshEntity(seat);
+        p.startRiding(seat, true, true);
+        seat.positionRider(p);
         p.setYRot(facing.toYRot());
         p.setYHeadRot(facing.toYRot());
         p.setDeltaMovement(Vec3.ZERO);
         p.setShiftKeyDown(false);
-        HIDING.put(p.getUUID(), new Hide(lower, facing, spot, p.level().getGameTime(), new boolean[]{false}));
+        HIDING.put(p.getUUID(), new Hide(lower, facing, spot, p.level().getGameTime(), new boolean[]{false}, seat));
         // Hidden: the Keeper can't see you. Invisible (no particles, no icon): other players don't see you standing in it.
         p.addEffect(new MobEffectInstance(ModEffects.HIDDEN, 20 * 60 * 60, 0, true, false, true));
         p.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 20 * 60 * 60, 0, true, false, false));
@@ -75,12 +83,19 @@ public final class HidingTracker {
     public static void leave(ServerPlayer p, boolean stepOut) {
         Hide h = HIDING.remove(p.getUUID());
         clearEffects(p);
+        if (h != null) { if (p.getVehicle() == h.seat()) p.stopRiding(); h.seat().discard(); }
         LockerNet.send(p, false, h == null ? p.blockPosition() : h.locker(), 0);
         if (h != null && stepOut) {
             Vec3 out = Vec3.atBottomCenterOf(h.locker().relative(h.facing()));
             p.teleportTo(out.x, out.y, out.z);
             p.level().playSound(null, h.locker(), com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_OPEN, SoundSource.BLOCKS, 0.6f, 0.7f);
         }
+    }
+
+    /** Logging out while hiding: forget the hide and remove the seat, so nobody comes back stuck in a locker. */
+    public static void onDisconnect(ServerPlayer p) {
+        Hide h = HIDING.remove(p.getUUID());
+        if (h != null) { clearEffects(p); h.seat().discard(); }
     }
 
     /** A player who logged out while hiding comes back with the locker's effects still on: take them off. */
@@ -102,6 +117,8 @@ public final class HidingTracker {
             if (!level.getBlockState(h.locker()).is(LabyrinthRegistry.LOCKER) || p.isDeadOrDying() || p.isSpectator()) {
                 it.remove();
                 clearEffects(p);
+                if (p.getVehicle() == h.seat()) p.stopRiding();
+                h.seat().discard();
                 LockerNet.send(p, false, h.locker(), 0);
                 continue;
             }
@@ -122,8 +139,8 @@ public final class HidingTracker {
     }
 
     private static void hold(ServerPlayer p, Hide h) {
-        if (p.position().distanceToSqr(h.spot()) > 1.0E-4) p.teleportTo(h.spot().x, h.spot().y, h.spot().z);
-        p.setDeltaMovement(Vec3.ZERO);
+        // the seat does the holding; only if something knocked them off do we sit them back down
+        if (p.getVehicle() != h.seat() && !h.seat().isRemoved()) { p.startRiding(h.seat(), true, true); h.seat().positionRider(p); }
         p.setShiftKeyDown(false);
     }
 

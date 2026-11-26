@@ -145,13 +145,12 @@ public class InstrumentBlock extends Block implements com.stormreach.structure.M
         double t = Instruments.temperatureC(level, pos);
         double rh = Instruments.humidity(level, pos);
         switch (kind) {
-            case ANEMOMETER -> player.sendSystemMessage(line("anemometer", Math.round(wind[0]), Math.round(wind[1]),
-                    Math.round(EFScale.mphToKmh(wind[1])), Instruments.beaufort(wind[0])).withStyle(ChatFormatting.AQUA));
+            case ANEMOMETER -> player.sendSystemMessage(line("anemometer", com.stormreach.units.PlayerUnits.speed(player, wind[0]), com.stormreach.units.PlayerUnits.speed(player, wind[1]),
+                    Instruments.beaufort(wind[0])).withStyle(ChatFormatting.AQUA));
             case WIND_VANE -> player.sendSystemMessage(line("vane", Instruments.windFrom()).withStyle(ChatFormatting.AQUA));
-            case BAROMETER -> player.sendSystemMessage(line("barometer", String.format("%.1f", Instruments.pressureHpa(level, pos)),
-                    String.format("%.2f", Instruments.pressureHpa(level, pos) * 0.02953)).withStyle(ChatFormatting.AQUA));
-            case THERMOMETER -> player.sendSystemMessage(line("thermometer", String.format("%.1f", t), String.format("%.1f", t * 9 / 5 + 32),
-                    String.format("%.1f", Instruments.dewPointC(t, rh)), Math.round(rh)).withStyle(ChatFormatting.AQUA));
+            case BAROMETER -> player.sendSystemMessage(line("barometer", com.stormreach.units.PlayerUnits.pressure(player, Instruments.pressureHpa(level, pos))).withStyle(ChatFormatting.AQUA));
+            case THERMOMETER -> player.sendSystemMessage(line("thermometer", com.stormreach.units.PlayerUnits.temperature(player, t),
+                    com.stormreach.units.PlayerUnits.temperature(player, Instruments.dewPointC(t, rh)), Math.round(rh)).withStyle(ChatFormatting.AQUA));
             case STORM_DETECTOR -> {
                 TornadoEntity n = TornadoManager.nearest(level, Vec3.atCenterOf(pos), 512);
                 player.sendSystemMessage(line(level.isThundering() ? "detector.storm" : level.isRaining() ? "detector.rain" : "detector.clear").withStyle(ChatFormatting.AQUA));
@@ -191,9 +190,9 @@ public class InstrumentBlock extends Block implements com.stormreach.structure.M
         player.sendSystemMessage(line("station.header").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD));
         player.sendSystemMessage(line("station.now", Component.translatable(level.isThundering() ? "weather.stormreach.thunderstorm"
                 : level.isRaining() ? "weather.stormreach.rain" : "weather.stormreach.clear")));
-        player.sendSystemMessage(line("station.wind", Math.round(wind[0]), Math.round(wind[1]), Instruments.windFrom()));
-        player.sendSystemMessage(line("station.air", String.format("%.1f", t), Math.round(rh), String.format("%.1f", Instruments.dewPointC(t, rh)),
-                String.format("%.1f", Instruments.pressureHpa(level, pos))));
+        player.sendSystemMessage(line("station.wind", com.stormreach.units.PlayerUnits.speed(player, wind[0]), com.stormreach.units.PlayerUnits.speed(player, wind[1]), Instruments.windFrom()));
+        player.sendSystemMessage(line("station.air", com.stormreach.units.PlayerUnits.temperature(player, t), Math.round(rh), com.stormreach.units.PlayerUnits.temperature(player, Instruments.dewPointC(t, rh)),
+                com.stormreach.units.PlayerUnits.pressure(player, Instruments.pressureHpa(level, pos))));
         player.sendSystemMessage(line("station.forecast", Instruments.forecast(level)));
         if (advanced) player.sendSystemMessage(line("station.risk", Instruments.stormRisk(level, pos)).withStyle(ChatFormatting.YELLOW));
     }
@@ -209,11 +208,11 @@ public class InstrumentBlock extends Block implements com.stormreach.structure.M
             double couplet = EFScale.msToMph(f.vMax * 2); // gate-to-gate velocity difference across the vortex
             double motion = EFScale.msToMph(Math.hypot(f.translateX, f.translateZ));
             String heading = Instruments.compass(Math.toDegrees(Math.atan2(f.translateX, -f.translateZ)));
-            MutableComponent c = line("radar.contact", Instruments.bearing(from, t.position()), Math.round(d), Math.round(couplet),
-                    Math.round(motion), heading);
+            MutableComponent c = line("radar.contact", Instruments.bearing(from, t.position()), com.stormreach.units.PlayerUnits.distance(player, d), com.stormreach.units.PlayerUnits.speed(player, couplet),
+                    com.stormreach.units.PlayerUnits.speed(player, motion), heading);
             if (detailed) {
                 EFScale est = t.estimatedRating();
-                c.append(line("radar.detail", est == null ? "EF-U" : est.name(), Math.round(t.visualWidth()),
+                c.append(line("radar.detail", est == null ? "EF-U" : est.name(), com.stormreach.units.PlayerUnits.distance(player, t.visualWidth()),
                         Component.translatable("tornado.stormreach.morph." + t.morphology().name().toLowerCase()),
                         t.subvortices() > 0 ? Component.translatable("tornado.stormreach.multivortex") : Component.literal("")));
             }

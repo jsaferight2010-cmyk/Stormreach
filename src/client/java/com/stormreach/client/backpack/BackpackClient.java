@@ -13,6 +13,8 @@ public final class BackpackClient {
 
     private BackpackClient() {}
 
+    private static boolean heldInScreen;
+
     public static void init() {
         for (int rows = 1; rows <= 6; rows++) MenuScreens.register(Backpacks.MENUS[rows], BackpackScreen::new);
         KeyMapping.Category category = com.stormreach.client.StormKeys.category();
@@ -21,6 +23,12 @@ public final class BackpackClient {
             while (openKey.consumeClick()) {
                 if (client.player != null && client.gui.screen() == null) ClientPlayNetworking.send(new Backpacks.OpenBackpackPayload());
             }
+            // 6.0: the key also works with the inventory open (key mappings don't fire while a screen is up)
+            boolean inInventory = client.player != null && client.gui.screen() instanceof net.minecraft.client.gui.screens.inventory.InventoryScreen;
+            int code = net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper.getBoundKeyOf(openKey).getValue();
+            boolean down = inInventory && code > 0 && com.mojang.blaze3d.platform.InputConstants.isKeyDown(code);
+            if (down && !heldInScreen) ClientPlayNetworking.send(new Backpacks.OpenBackpackPayload());
+            heldInScreen = down;
         });
     }
 }

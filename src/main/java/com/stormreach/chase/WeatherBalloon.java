@@ -63,14 +63,16 @@ public class WeatherBalloon extends PathfinderMob {
         level.sendParticles(ParticleTypes.POOF, getX(), getY() + 1, getZ(), 20, 0.5, 0.5, 0.5, 0.05);
         level.playSound(null, blockPosition(), ModSfx.ITEM_POP, SoundSource.NEUTRAL, 3.0f, 0.7f);
         if (owner != null && level.getPlayerByUUID(owner) instanceof ServerPlayer p) {
-            for (Component line : sounding(level, launch == null ? blockPosition() : launch, peakY)) p.sendSystemMessage(line);
+            for (Component line : sounding(level, launch == null ? blockPosition() : launch, peakY, p)) p.sendSystemMessage(line);
             StormAdvancements.award(p, "weather_balloon");
         }
         discard();
     }
 
     /** The sounding: what the radiosonde measured on the way up. */
-    static java.util.List<Component> sounding(ServerLevel level, BlockPos at, double top) {
+    static java.util.List<Component> sounding(ServerLevel level, BlockPos at, double top) { return sounding(level, at, top, null); }
+
+    static java.util.List<Component> sounding(ServerLevel level, BlockPos at, double top, net.minecraft.world.entity.player.Player reader) {
         double t = Instruments.temperatureC(level, at), rh = Instruments.humidity(level, at), dew = Instruments.dewPointC(t, rh);
         double[] wind = Instruments.windMph(level, at);
         boolean storm = level.isThundering(), rain = level.isRaining();
@@ -91,15 +93,12 @@ public class WeatherBalloon extends PathfinderMob {
         ChatFormatting col = cape > 2500 && shearKt > 40 ? ChatFormatting.RED : cape > 1000 ? ChatFormatting.GOLD : ChatFormatting.GREEN;
         return java.util.List.of(
                 Component.translatable("chase.stormreach.sounding.title", at.getX(), at.getZ()).withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD),
-                Component.translatable("chase.stormreach.sounding.surface", fmt(t), fmt(dew), Math.round(rh), Math.round(Instruments.pressureHpa(level, at))).withStyle(ChatFormatting.GRAY),
-                Component.translatable("chase.stormreach.sounding.aloft", Math.round(top), fmt(topTemp), Math.round(lcl), Math.round(freezing)).withStyle(ChatFormatting.GRAY),
+                Component.translatable("chase.stormreach.sounding.surface", com.stormreach.units.PlayerUnits.temperature(reader, t), com.stormreach.units.PlayerUnits.temperature(reader, dew), Math.round(rh), com.stormreach.units.PlayerUnits.pressure(reader, Instruments.pressureHpa(level, at))).withStyle(ChatFormatting.GRAY),
+                Component.translatable("chase.stormreach.sounding.aloft", Math.round(top), com.stormreach.units.PlayerUnits.temperature(reader, topTemp), com.stormreach.units.PlayerUnits.distance(reader, lcl), com.stormreach.units.PlayerUnits.distance(reader, freezing)).withStyle(ChatFormatting.GRAY),
                 Component.translatable("chase.stormreach.sounding.cape", Math.round(cape / 50) * 50, Math.round(shearKt)).withStyle(col),
                 Component.translatable("chase.stormreach.sounding.risk", risk).withStyle(col));
     }
 
-    private static String fmt(double v) {
-        return String.format(java.util.Locale.ROOT, "%.1f", v);
-    }
 
     @Override public boolean isPushable() { return false; }
     @Override public boolean removeWhenFarAway(double d) { return false; }

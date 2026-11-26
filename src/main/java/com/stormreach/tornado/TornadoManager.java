@@ -154,7 +154,7 @@ public final class TornadoManager {
                 StormAdvancements.award(p, "witness_tornado");
                 if (Instruments.hasWarningDevice(p)) {
                     p.sendSystemMessage(Component.translatable("event.stormreach.tornado.warning", Instruments.bearing(p.position(), t.position()),
-                            Math.round(d)).withStyle(ChatFormatting.RED));
+                            com.stormreach.units.PlayerUnits.distance(p, d)).withStyle(ChatFormatting.RED));
                 }
             }
         }

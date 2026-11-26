@@ -16,6 +16,10 @@ import net.minecraft.world.phys.Vec3;
 public final class LockerClient {
     private static BlockPos locker;
     private static Direction facing = Direction.NORTH;
+    /** 6.0: smooth transitions. The camera glides between where it was and the locker's eye point over ~0.35 s. */
+    private static long transitionAt;
+    private static Vec3 from, exitEye;
+    private static final double TRANSITION_S = 0.35;
 
     private LockerClient() {}
 
@@ -30,10 +34,31 @@ public final class LockerClient {
         return c.add(facing.getStepX() * inset, 1.6, facing.getStepZ() * inset);
     }
 
+    /** 0..1 through the current glide, eased (smoothstep). */
+    public static double transition() {
+        double t = Math.min(1, (System.nanoTime() - transitionAt) / 1e9 / TRANSITION_S);
+        return t * t * (3 - 2 * t);
+    }
+
+    /** Where the camera is gliding from while entering (null when not entering). */
+    public static Vec3 enteringFrom() { return locker != null && transition() < 1 ? from : null; }
+
+    /** The locker eye point the camera is gliding away from while stepping out (null otherwise). */
+    public static Vec3 exitingFrom() { return locker == null && exitEye != null && transition() < 1 ? exitEye : null; }
+
     public static void init() {
         ClientPlayNetworking.registerGlobalReceiver(LockerNet.HidePayload.TYPE, (payload, ctx) -> ctx.client().execute(() -> {
-            locker = payload.hidden() ? payload.locker() : null;
-            facing = Direction.from2DDataValue(payload.facing());
+            Minecraft mc = ctx.client();
+            if (payload.hidden()) {
+                from = mc.gameRenderer.mainCamera().position();
+                exitEye = null;
+                locker = payload.locker();
+                facing = Direction.from2DDataValue(payload.facing());
+            } else {
+                exitEye = locker != null ? eye() : null;
+                locker = null;
+            }
+            transitionAt = System.nanoTime();
             LockerBlock.clientHiddenAt = locker;
         }));
         ClientTickEvents.END_CLIENT_TICK.register(LockerClient::tick);

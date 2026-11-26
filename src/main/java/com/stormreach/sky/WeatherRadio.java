@@ -61,9 +61,9 @@ public final class WeatherRadio {
                 var f = t.windField();
                 String bearing = Instruments.compass(Math.toDegrees(Math.atan2(t.getX() - p.getX(), -(t.getZ() - p.getZ()))));
                 String heading = Instruments.compass(Math.toDegrees(Math.atan2(f.translateX, -f.translateZ)));
-                long mph = Math.round(EFScale.msToMph(Math.hypot(f.translateX, f.translateZ)));
+                String mph = com.stormreach.units.PlayerUnits.speed(p, EFScale.msToMph(Math.hypot(f.translateX, f.translateZ)));
                 alert(p, "radio.stormreach.emergency", ChatFormatting.RED,
-                        Component.translatable("radio.stormreach.tornado.detail", ef == null ? "EF0" : ef.name(), Math.round(d), bearing, heading, mph));
+                        Component.translatable("radio.stormreach.tornado.detail", ef == null ? "EF0" : ef.name(), com.stormreach.units.PlayerUnits.distance(p, d), bearing, heading, mph));
             }
             boolean rain = level.isRaining(), thunder = level.isThundering();
             if (thunder && !st.thundering) alert(p, "radio.stormreach.severe", ChatFormatting.GOLD, Component.translatable("radio.stormreach.severe.detail"));

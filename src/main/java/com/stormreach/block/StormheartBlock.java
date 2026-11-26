@@ -36,7 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
  *  - Use a Thunderhead Horn on it to release a Storm Front: a travelling storm that converts the land it passes over.
  *  - Use Salt on an awake heart to calm it again.
  */
-public class StormheartBlock extends Block {
+public class StormheartBlock extends Block implements net.minecraft.world.level.block.EntityBlock {
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     /** Grows from 0 to 31; the conversion radius is 2 + stage * 2 blocks (capped by the config). */
     public static final IntegerProperty STAGE = IntegerProperty.create("stage", 0, 31);
@@ -44,6 +44,18 @@ public class StormheartBlock extends Block {
     public StormheartBlock(Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(ACTIVE, false).setValue(STAGE, 0));
+    }
+
+    @Override
+    public net.minecraft.world.level.block.entity.BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new com.stormreach.blight.StormheartBlockEntity(pos, state);
+    }
+
+    @Override
+    public <T extends net.minecraft.world.level.block.entity.BlockEntity> net.minecraft.world.level.block.entity.BlockEntityTicker<T> getTicker(
+            Level level, BlockState s, net.minecraft.world.level.block.entity.BlockEntityType<T> type) {
+        return level.isClientSide() || type != com.stormreach.blight.HeartRegistry.HEART_ENTITY ? null
+                : (l, p, st, be) -> com.stormreach.blight.StormheartBlockEntity.tickFrom((ServerLevel) l, p, st, be);
     }
 
     public static int radius(BlockState state) {
@@ -116,9 +128,12 @@ public class StormheartBlock extends Block {
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide()) {
-            player.sendOverlayMessage(state.getValue(ACTIVE)
-                    ? Component.translatable("message.stormreach.heart_status", radius(state), StormreachConfig.heartMaxRadius)
-                    : Component.translatable("message.stormreach.heart_dormant"));
+            var be = level.getBlockEntity(pos) instanceof com.stormreach.blight.StormheartBlockEntity h ? h : null;
+            if (!state.getValue(ACTIVE)) player.sendOverlayMessage(Component.translatable("message.stormreach.heart_dormant"));
+            else if (be != null && be.frontier() > 0)    // 6.0: overcharged
+                player.sendOverlayMessage(Component.translatable(be.powered() ? "message.stormreach.heart_overcharged" : "message.stormreach.heart_unpowered",
+                        be.frontier(), be.pendingChunks()).withStyle(be.powered() ? ChatFormatting.LIGHT_PURPLE : ChatFormatting.GRAY));
+            else player.sendOverlayMessage(Component.translatable("message.stormreach.heart_status", radius(state), StormreachConfig.heartMaxRadius));
         }
         return InteractionResult.SUCCESS;
     }
@@ -126,6 +141,7 @@ public class StormheartBlock extends Block {
     @Override
     protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (!state.getValue(ACTIVE)) return;
+        level.getBlockEntity(pos);   // 6.0: hearts placed before 6.0 get their block entity (the powered frontier) here
         if (StormreachConfig.spreadMode == StormreachConfig.SpreadMode.OFF) {
             // Paused by the config: check back later so it resumes if the Stormblight is turned on again.
             level.scheduleTick(pos, this, 200);

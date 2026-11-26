@@ -263,3 +263,56 @@ def locker_doors():
 locker_doors()
 
 print('textures60: done')
+
+
+def wind_generator():
+    """6.0 Creative Wind Generator: a caged fan on the front, riveted steel sides with a violet creative stripe, a vented back."""
+    import math
+    N = 64
+    def steel(x, y):
+        v = 92 + ((x * 13 + y * 7) % 9) - (6 if (x // 16 + y // 16) % 2 else 0)
+        return (v, v + 4, v + 12, 255)
+    side = Image.new('RGBA', (N, N))
+    for y in range(N):
+        for x in range(N):
+            c = steel(x, y)
+            if x < 3 or x > 60 or y < 3 or y > 60: c = (52, 58, 70, 255)
+            if 26 <= y <= 37: c = (122, 72, 196, 255) if (x + y) % 9 else (150, 98, 222, 255)   # creative stripe
+            if (x in (7, 56)) and (y in (7, 56)): c = (190, 196, 206, 255)                      # rivets
+            side.putpixel((x, y), c)
+    save(side, 'block/wind_generator_side.png')
+    top = Image.new('RGBA', (N, N))
+    for y in range(N):
+        for x in range(N):
+            c = steel(x, y)
+            if x < 3 or x > 60 or y < 3 or y > 60: c = (52, 58, 70, 255)
+            top.putpixel((x, y), c)
+    save(top, 'block/wind_generator_top.png')
+    back = Image.new('RGBA', (N, N))
+    for y in range(N):
+        for x in range(N):
+            c = steel(x, y)
+            if x < 3 or x > 60 or y < 3 or y > 60: c = (52, 58, 70, 255)
+            elif 10 <= x <= 53 and 10 <= y <= 53 and (y - 10) % 6 < 3: c = (26, 30, 38, 255)        # vent slots
+            back.putpixel((x, y), c)
+    save(back, 'block/wind_generator_back.png')
+    front = Image.new('RGBA', (N, N))
+    cx = cy = 31.5
+    for y in range(N):
+        for x in range(N):
+            dx, dy = x - cx, y - cy
+            r = math.hypot(dx, dy); a = math.atan2(dy, dx)
+            c = steel(x, y)
+            if x < 3 or x > 60 or y < 3 or y > 60: c = (52, 58, 70, 255)
+            elif r < 28:
+                c = (18, 22, 30, 255)                                                           # dark housing
+                blade = (math.degrees(a) % 72) < 30 + 10 * (1 - r / 28)                        # five swept blades
+                if 5 < r < 26 and blade: c = (178, 196, 214, 255) if r < 22 else (150, 168, 190, 255)
+                if r <= 5: c = (122, 72, 196, 255)                                              # violet hub
+                if abs(r - 27) < 1.2 or (r < 27 and (abs(dx) < 0.7 or abs(dy) < 0.7) and r > 5): c = (210, 214, 222, 255)  # cage
+                if abs(r - 16) < 0.6: c = (200, 204, 212, 255)
+            front.putpixel((x, y), c)
+    save(front, 'block/wind_generator_front.png')
+
+
+wind_generator()

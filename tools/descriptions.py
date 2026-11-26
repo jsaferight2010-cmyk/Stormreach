@@ -156,7 +156,8 @@ d('tornado_probe', 'A weighted instrument barrel no tornado can move. Set it in 
 d('weather_balloon', 'A radiosonde balloon. Launch it to get a sounding of the upper air.')
 d('intercept_vehicle', 'An armoured chase truck with a tornado dashboard. Park it in the path and ride the tornado out.')
 d('chasers_logbook', 'A chaser\'s log. It records every tornado you witness: rating, distance, and your records.')
-d('wind_turbine', 'A small turbine that turns in the wind and gives redstone power for how hard it blows.')
+d('wind_turbine', 'A tall three-bladed wind turbine: the rotor turns into the wind and makes storm power for how hard it blows.')
+d('wind_generator', 'A creative-only fan that blows wind of any strength, from a breeze to EF5, for testing turbines, instruments and storm gear.')
 d('stormreach_field_guide', 'The complete guide to Stormreach: weather, tornadoes, the Labyrinth, the realm and drop rates.')
 d('storm_crafters_handbook', 'Every Stormreach recipe, with the real items.')
 
@@ -309,7 +310,8 @@ DETAILS = {
     'block.stormreach.storm_shelter_hatch': ['Blast resistance like obsidian. Opens by hand or redstone.'],
     'block.stormreach.stormfly_jar': ['Light 12. Place it on the ground or under a block to hang it.'],
     'block.stormreach.glacial_lamp': ['Light 15.'], 'block.stormreach.aurora_glass': ['Light 7. Needs Silk Touch to pick back up.'],
-    'block.stormreach.stormheart': ['Wake it with a Storm Cell, lightning or redstone.', 'The radius is set in the config.'],
+    'block.stormreach.stormheart': ['Wake it with a Storm Cell, lightning or redstone.', 'The radius is set in the config.',
+                                    'Fully grown and fed storm power (400 SU/s): overcharges and keeps spreading, with no limit.'],
     'block.stormreach.skylight_lantern': ['Light 15.'],
     'item.stormreach.weather_balloon': ['Use outdoors to launch it. The sounding comes back as it climbs.'],
     'item.stormreach.intercept_vehicle': ['Right-click to drive: W/S throttle, A/D steer, sneak to get out.', 'Press the anchor key (default Z) to drop the hydraulic spikes: no tornado can move it. Press again to raise them.',
@@ -371,14 +373,18 @@ DETAILS.update({
                                      'Drains into a tank below it. Bucket or bottle to take water out.'],
     'block.stormreach.cistern': ['Holds 32 buckets. Bucket or bottle to take water out; pour buckets in.', 'Comparators read how full it is.'],
     'item.stormreach.multimeter': ['Use on a power block, tank or cable for a reading.'],
-    'block.stormreach.wind_turbine': ['Must stand under open sky.', 'Redstone: about 1 per 4 mph of wind (a gale gives 15).',
-                                      'Power: 2 SU a tick per level of wind (up to 30), sent along Copper Cable.', 'Use: read the wind.'],
+    'block.stormreach.wind_turbine': ['Needs a clear column 16 blocks tall; the rotor sits at the top.', 'Redstone: about 1 per 4 mph of wind (a gale gives 15).',
+                                      'Power: 6 SU a tick per level of wind (up to 90), sent along Copper Cable.', 'Use: read the wind.'],
+    'block.stormreach.wind_generator': ['Creative only. Use: set wind speed (0 to 320 mph), reach, gustiness and block damage.',
+                                        'Blows out of its fan face. Instruments, vanes and turbines all feel it. Redstone switches it off.'],
+    'block.stormreach.storm_barometer': ['Use: open the barometer dial (needle, set hand and trend).', 'Redstone: 0 clear, 7 rain, 15 thunder.'],
+    'block.stormreach.wind_vane': ['Use: open the wind vane dial.', 'Swings to the wind in rain and thunder.'],
     'block.stormreach.tesla_coil': ['Charges from lightning within 24 blocks, a Storm Cell, a power network, or slowly in a thunderstorm.',
                                     'Zaps the nearest hostile mob in sight within 10 blocks (6 damage), once a second.',
                                     'A redstone signal holds its fire. Comparators read the charge.'],
 })
 
-OVERRIDE = {'block.stormreach.wind_turbine', 'block.stormreach.tesla_coil'}
+OVERRIDE = {'block.stormreach.stormheart', 'block.stormreach.wind_turbine', 'block.stormreach.tesla_coil', 'block.stormreach.storm_barometer', 'block.stormreach.wind_vane'}
 with open(LANG) as f: lang = json.load(f)
 for k, v in ENCH.items(): lang[f'enchantment.stormreach.{k}.desc'] = v
 for k, v in D.items(): lang[f'desc.stormreach.{k}'] = v

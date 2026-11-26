@@ -139,8 +139,8 @@ public class InterceptVehicle extends PathfinderMob {
         Component msg;
         if (best == null) {
             double[] wind = Instruments.windMph(level, blockPosition());
-            msg = Component.translatable("chase.stormreach.dash.clear", Math.round(Math.abs(speed) * 20 * 2.237),
-                    Math.round(wind[0]), Instruments.windFrom(), Math.round(Instruments.pressureHpa(level, blockPosition()))).withStyle(ChatFormatting.AQUA);
+            msg = Component.translatable("chase.stormreach.dash.clear", com.stormreach.units.PlayerUnits.speed(driver, Math.abs(speed) * 20 * 2.237),
+                    com.stormreach.units.PlayerUnits.speed(driver, wind[0]), Instruments.windFrom(), com.stormreach.units.PlayerUnits.pressure(driver, Instruments.pressureHpa(level, blockPosition()))).withStyle(ChatFormatting.AQUA);
         } else {
             double peak = best.currentPeakMph();
             EFScale ef = EFScale.fromGustMph(peak);
@@ -151,8 +151,8 @@ public class InterceptVehicle extends PathfinderMob {
             double motion = EFScale.msToMph(Math.hypot(f.translateX, f.translateZ));
             double here = best.windMphAt(position().add(0, 10, 0));
             ChatFormatting col = bestD < 60 ? ChatFormatting.RED : bestD < 250 ? ChatFormatting.GOLD : ChatFormatting.YELLOW;
-            msg = Component.translatable("chase.stormreach.dash.tornado", ef == null ? "EF?" : ef.name(), Math.round(bestD), bearing, heading,
-                    Math.round(motion), Math.round(peak), Math.round(here), isAnchored() ? Component.translatable("chase.stormreach.dash.anchored") : Component.empty())
+            msg = Component.translatable("chase.stormreach.dash.tornado", ef == null ? "EF?" : ef.name(), com.stormreach.units.PlayerUnits.distance(driver, bestD), bearing, heading,
+                    com.stormreach.units.PlayerUnits.speed(driver, motion), com.stormreach.units.PlayerUnits.speed(driver, peak), com.stormreach.units.PlayerUnits.speed(driver, here), isAnchored() ? Component.translatable("chase.stormreach.dash.anchored") : Component.empty())
                     .withStyle(col);
             if (bestD < 40 && isAnchored() && peak > 85) StormAdvancements.award(driver, "tiv_intercept");
             ChaserLog.recordIntercept(driver, best, bestD, isAnchored());

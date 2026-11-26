@@ -10,6 +10,8 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 public final class StormreachClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
+        ClientUnits.init();
+        com.stormreach.client.wind.WindGeneratorScreen.register();
         EntityRendererRegistry.register(ModEntities.CLIFF_CRAB, StormreachRenderers.CliffCrabRenderer::new);
         EntityRendererRegistry.register(ModEntities.STORM_GULL, StormreachRenderers.StormGullRenderer::new);
         EntityRendererRegistry.register(ModEntities.SQUALL, StormreachRenderers.SquallRenderer::new);
@@ -28,6 +30,7 @@ public final class StormreachClient implements ClientModInitializer {
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.CYCLONE, com.stormreach.client.render.RealmRenderers.CycloneRenderer::new);
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.STORMHAWK, com.stormreach.client.render.RealmRenderers.StormhawkRenderer::new);
         EntityRendererRegistry.register(com.stormreach.tornado.TornadoTypes.TORNADO, com.stormreach.client.tornado.TornadoRenderer::new);
+        EntityRendererRegistry.register(com.stormreach.labyrinth.LabyrinthRegistry.LOCKER_SEAT, net.minecraft.client.renderer.entity.NoopRenderer::new);
         EntityRendererRegistry.register(com.stormreach.tornado.TornadoTypes.FIRE_WHIRL, com.stormreach.client.tornado.FireWhirlRenderer::new);
         EntityRendererRegistry.register(com.stormreach.weather.precip.PrecipContent.HAILSTONE, com.stormreach.client.weather.HailstoneRenderer::new);
         EntityRendererRegistry.register(com.stormreach.weather.precip.PrecipContent.STORM_CELL, com.stormreach.client.weather.StormCellRenderer::new);

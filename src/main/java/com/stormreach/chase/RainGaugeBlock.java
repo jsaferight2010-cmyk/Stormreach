@@ -72,7 +72,7 @@ public class RainGaugeBlock extends Block {
             player.sendOverlayMessage(Component.translatable("block.stormreach.rain_gauge.emptied").withStyle(ChatFormatting.AQUA));
         } else {
             player.sendOverlayMessage(Component.translatable("block.stormreach.rain_gauge.reading",
-                    String.format(java.util.Locale.ROOT, "%.1f", lv * MM_PER_LEVEL)).withStyle(ChatFormatting.AQUA));
+                    com.stormreach.units.PlayerUnits.smallLength(player, lv * MM_PER_LEVEL)).withStyle(ChatFormatting.AQUA));
         }
         return InteractionResult.SUCCESS;
     }

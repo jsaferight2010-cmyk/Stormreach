@@ -67,13 +67,13 @@ public final class ChaserGear {
         Component msg;
         if (best == null) {
             double[] wind = Instruments.windMph(level, p.blockPosition());
-            msg = Component.translatable("item.stormreach.stormchaser_goggles.clear", Math.round(wind[0]), Instruments.windFrom(),
-                    Math.round(Instruments.pressureHpa(level, p.blockPosition()))).withStyle(ChatFormatting.AQUA);
+            msg = Component.translatable("item.stormreach.stormchaser_goggles.clear", com.stormreach.units.PlayerUnits.speed(p, wind[0]), Instruments.windFrom(),
+                    com.stormreach.units.PlayerUnits.pressure(p, Instruments.pressureHpa(level, p.blockPosition()))).withStyle(ChatFormatting.AQUA);
         } else {
             EFScale ef = EFScale.fromGustMph(best.currentPeakMph());
             String bearing = Instruments.compass(Math.toDegrees(Math.atan2(best.getX() - p.getX(), -(best.getZ() - p.getZ()))));
-            msg = Component.translatable("item.stormreach.stormchaser_goggles.tornado", ef == null ? "EF?" : ef.name(), Math.round(bestD), bearing,
-                    Math.round(best.currentPeakMph())).withStyle(bestD < 120 ? ChatFormatting.RED : ChatFormatting.GOLD);
+            msg = Component.translatable("item.stormreach.stormchaser_goggles.tornado", ef == null ? "EF?" : ef.name(), com.stormreach.units.PlayerUnits.distance(p, bestD), bearing,
+                    com.stormreach.units.PlayerUnits.speed(p, best.currentPeakMph())).withStyle(bestD < 120 ? ChatFormatting.RED : ChatFormatting.GOLD);
         }
         p.sendOverlayMessage(msg);
     }

@@ -30,6 +30,9 @@ public final class Instruments {
         double gust = sustained * (level.isThundering() ? 1.6 : 1.35);
         double tornado = TornadoManager.tornadoWindMph(level, Vec3.atCenterOf(pos));
         double burst = WeatherEvents.downburstMph(level, Vec3.atCenterOf(pos));
+        double fan = com.stormreach.wind.WindSources.mphAt(level, Vec3.atCenterOf(pos));   // 6.0: Wind Generators
+        sustained = Math.max(sustained, fan);
+        gust = Math.max(gust, fan * 1.15);
         return new double[]{Math.max(sustained, Math.max(tornado, burst) * 0.75), Math.max(gust, Math.max(tornado, burst))};
     }
 

@@ -66,7 +66,7 @@ public final class ChaseItems {
 
         @Override
         public InteractionResult use(Level level, Player player, InteractionHand hand) {
-            if (!level.isClientSide()) for (Component c : ChaserLog.summary(player.getItemInHand(hand))) player.sendSystemMessage(c);
+            if (!level.isClientSide()) for (Component c : ChaserLog.summary(player.getItemInHand(hand), player)) player.sendSystemMessage(c);
             return InteractionResult.SUCCESS;
         }
 

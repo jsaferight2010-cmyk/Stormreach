@@ -117,7 +117,9 @@ public final class WeatherUi {
         if (device == STORM_RADAR_ITEM) return p.isHolding(WeatherItems.STORM_RADAR);
         if (device == WEATHER_RADIO_ITEM) return p.isHolding(WeatherItems.WEATHER_RADIO);
         return p.level().isLoaded(pos) && p.distanceToSqr(Vec3.atCenterOf(pos)) < 10 * 10
-                && p.level().getBlockState(pos).getBlock() instanceof InstrumentBlock;
+                && (p.level().getBlockState(pos).getBlock() instanceof InstrumentBlock
+                    || p.level().getBlockState(pos).getBlock() instanceof com.stormreach.block.StormBarometerBlock
+                    || p.level().getBlockState(pos).getBlock() instanceof com.stormreach.block.WindVaneBlock);
     }
 
     /** Opens the device's screen for the player. */
@@ -179,7 +181,8 @@ public final class WeatherUi {
             scan = RadarScan.scan(level, c, range, tors, sc, ev);
         }
         int sky = level.isThundering() ? 2 : level.isRaining() ? 1 : 0;
-        return new Report(device, pos, (float) wind[0], (float) wind[1], Instruments.windFrom(), (float) t, (float) rh, (float) Instruments.dewPointC(t, rh),
+        String from = com.stormreach.wind.WindSources.fromAt(level, Vec3.atCenterOf(pos));   // 6.0: a Wind Generator's wind wins locally
+        return new Report(device, pos, (float) wind[0], (float) wind[1], from != null ? from : Instruments.windFrom(), (float) t, (float) rh, (float) Instruments.dewPointC(t, rh),
                 (float) Instruments.pressureHpa(level, pos), sky, (float) RainAccumulation.wetness(level), Instruments.forecast(level),
                 Instruments.stormRisk(level, pos), range, linked, contacts, cells, cores, scan);
     }

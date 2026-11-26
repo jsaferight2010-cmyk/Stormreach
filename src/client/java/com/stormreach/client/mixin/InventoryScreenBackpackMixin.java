@@ -14,10 +14,7 @@ public abstract class InventoryScreenBackpackMixin {
     private void stormreach$backpackSlotFrame(GuiGraphicsExtractor g, int mouseX, int mouseY, float partial, CallbackInfo ci) {
         AbstractContainerScreenAccessor a = (AbstractContainerScreenAccessor) this;
         int x = a.stormreach$left() + 76, y = a.stormreach$top() + 43;
-        g.fill(x, y, x + 18, y + 18, 0xFF8B8B8B);          // slot well
-        g.fill(x, y, x + 17, y + 1, 0xFF373737);           // dark top and left edges
-        g.fill(x, y, x + 1, y + 17, 0xFF373737);
-        g.fill(x + 1, y + 17, x + 18, y + 18, 0xFFFFFFFF); // light bottom and right edges
-        g.fill(x + 17, y + 1, x + 18, y + 18, 0xFFFFFFFF);
+        // 6.0: the game's own slot sprite, so the backpack slot looks like every other slot
+        g.blitSprite(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, net.minecraft.resources.Identifier.withDefaultNamespace("container/slot"), x, y, 18, 18);
     }
 }

@@ -492,11 +492,39 @@ boot the headless test server in GitHub Actions as before.
 - Waterspout satellites no longer follow a parent ashore (landfall still dissipates them deliberately).
 - Fire whirl (`FireWhirlEntity`, Nether only, rare natural spawn near lava/soul ground, config fireWhirls).
 
+### Stage 5: gameplay
+- Rusted Locker: doors repainted (solid lower door, louvres only in the upper half). Hiding now seats the player on an
+  invisible `LockerSeat` entity instead of teleporting every tick; `LockerClient` + `CameraMixin` glide the camera in and
+  out over 0.35 s and limit the look to ±85° yaw / ±50° pitch. Seats discard themselves when empty and on disconnect.
+- Backpack: the worn slot draws the game's own `container/slot` sprite; in the Creative inventory tab it now has its own
+  spot (127, 20) with a frame instead of being moved off-screen. B also opens the pack while the inventory is open
+  (key mappings don't fire under a screen, so the key is polled there).
+- Barometer and Wind Vane open the weather screen with their own first tab: an aneroid dial (pointer that settles, brass
+  set hand, rising/falling/steady trend from the last two minutes, outlook words) and a vane on a damped spring with
+  gust wobble. Physics step once a tick, not per frame.
+- Units everywhere: the weather screen formats every reading through `ClientUnits`. On the server `units/PlayerUnits`
+  keeps each player's setting (the client sends it on join and when it changes) and every chat/overlay reading
+  (instruments, station, radar, tornado warning, damage survey, rain gauge, probe, logbook, TIV, sounding, radio,
+  goggles, turbine) is formatted per recipient. The lang strings no longer carry units.
+- Creative Wind Generator (`wind/`): creative-only fan block (no recipe, no drop, unbreakable in survival). Settings
+  screen: 0-320 mph, reach 8-64, gustiness, on/off, block damage (also needs mobGriefing). `WindSources` is the field
+  (`sim/FanField` cone shape, unit-tested); `Instruments.windMph` and the weather report's wind direction include it,
+  so anemometers, vanes, the HUD and turbines all react. Pushes entities with a v² force capped at the air speed;
+  anchored TIVs hold. Redstone switches it off. Client streak particles from the synced block entity.
+- Stormheart overcharge (`blight/StormheartBlockEntity`): a grown, awake heart on a power network draws
+  `heartPowerDraw` SU a second (storage first, then generators) and pushes a frontier ring (`sim/HeartFrontier`) out a
+  block at a time, converting surface columns; every 8 blocks the ring's loaded chunks get the storm biome. Chunks
+  that were unloaded when the ring passed are queued (up to 4096) and converted when they load. No limit except the
+  world border or `heartPoweredMaxRadius`. Starved of power it stops where it is. Config: `heartPoweredSpread`,
+  `heartPowerDraw`, `heartPoweredMaxRadius` (properties file, not Mod Menu).
+- JEI rows for the overcharged heart and the generator; descriptions for generator, barometer, vane and the 6.0
+  turbine numbers.
+- Tests: GameplayStage5Test (fan field, frontier, units); GameTests windGeneratorBlowsAndInstrumentsFeelIt,
+  poweredStormheartKeepsSpreading, readingsFollowEachPlayersUnits.
+
 ### Resume point (overhaul in progress)
-Done: stages 1-4 (crash, visuals, weather, tornadoes), CI green at 58 GameTests / 64 unit tests.
-Stage 5 in progress: locker doors repainted (solid lower door, louvres only in the upper half, textures60.py).
-Next: locker seat entity + smooth camera transitions (LockerSeat, HidingTracker, CameraMixin, LockerClient), then
-backpack slot/B key, barometer + wind vane GUIs, units everywhere, creative Wind Generator, Stormheart spread on
-power. Then stage 6 (mobs/gear/Dispel Weather/saplings/creative dimension item), 7 (maze/vault, shrine arena +
-sigil crash, spire chests/stairs + Eye reward, cinematic), 8 (sound redesign, guidebooks, perf), 9 (tests, docs,
-final check, jar). No jar is delivered until everything is done and checked.
+Done: stages 1-5 (crash, visuals, weather, tornadoes, gameplay).
+Next: stage 6 (mobs/gear/Dispel Weather/saplings/creative dimension item), 7 (maze/vault, shrine arena + sigil crash,
+spire chests/stairs + Eye reward, cinematic), 8 (sound redesign, guidebooks, perf), then the multiplayer pass and
+"even more" storm content, 9 (tests, docs, final check). Last of all: branding (name, icon and description for Mod
+Menu, GitHub, the .zip and the .jar). No jar is delivered until everything is done and checked.

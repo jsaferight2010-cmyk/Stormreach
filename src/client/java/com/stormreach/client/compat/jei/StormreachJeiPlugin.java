@@ -96,7 +96,9 @@ public class StormreachJeiPlugin implements IModPlugin {
                 JeiRow.of(List.of(cable, Part.fluid(Fluids.WATER, 1000)), List.of(Part.of(PowerRegistry.ELECTRIC_PUMP), Part.fluid(Fluids.WATER, 250)), t("power.pump")),
                 JeiRow.of(List.of(cable, Part.fluid(Fluids.WATER, 50)), List.of(Part.of(PowerRegistry.SPRINKLER), Part.of(Items.WHEAT)), t("power.sprinkler")),
                 JeiRow.of(List.of(cable), List.of(Part.of(FrontRegistry.TESLA_COIL)), t("power.tesla")),
-                JeiRow.of(List.of(Part.of(ModItems.STORM_CELL), Part.of(FrontRegistry.TESLA_COIL)), List.of(Part.of(FrontRegistry.TESLA_COIL)), t("power.tesla_cell")));
+                JeiRow.of(List.of(Part.of(ModItems.STORM_CELL), Part.of(FrontRegistry.TESLA_COIL)), List.of(Part.of(FrontRegistry.TESLA_COIL)), t("power.tesla_cell")),
+                JeiRow.of(List.of(Part.of(PowerRegistry.STORM_CAPACITOR), cable), List.of(Part.of(com.stormreach.registry.ModBlocks.STORMHEART)), t("power.stormheart")),
+                JeiRow.of(List.of(Part.of(com.stormreach.wind.WindRegistry.WIND_GENERATOR_ITEM)), List.of(Part.of(SkyRegistry.WIND_TURBINE), cable), t("power.wind_generator")));
     }
 
     static List<JeiRow> water() {

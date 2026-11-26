@@ -75,8 +75,8 @@ public class TornadoProbeBlock extends Block implements EntityBlock {
             player.sendOverlayMessage(Component.translatable("block.stormreach.tornado_probe.armed").withStyle(ChatFormatting.GRAY));
         } else {
             var ef = com.stormreach.sim.EFScale.fromGustMph(probe.peakMph());
-            player.sendSystemMessage(Component.translatable("block.stormreach.tornado_probe.reading", Math.round(probe.peakMph()),
-                    ef == null ? "-" : ef.name(), Math.round(probe.closest()), probe.day()).withStyle(ChatFormatting.GOLD));
+            player.sendSystemMessage(Component.translatable("block.stormreach.tornado_probe.reading", com.stormreach.units.PlayerUnits.speed(player, probe.peakMph()),
+                    ef == null ? "-" : ef.name(), com.stormreach.units.PlayerUnits.distance(player, probe.closest()), probe.day()).withStyle(ChatFormatting.GOLD));
             if (player instanceof ServerPlayer sp && probe.peakMph() >= 65) {
                 StormAdvancements.award(sp, "probe_hit");
                 if (probe.peakMph() >= 166) StormAdvancements.award(sp, "probe_violent");

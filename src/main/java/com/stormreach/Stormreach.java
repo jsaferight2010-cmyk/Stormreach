@@ -54,6 +54,9 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.guide.Guidebooks.init();
         com.stormreach.realm.SovereignArena.init();
         com.stormreach.backpack.Backpacks.init();
+        com.stormreach.units.PlayerUnits.init();
+        com.stormreach.wind.WindRegistry.init();
+        com.stormreach.blight.HeartRegistry.init();
         com.stormreach.labyrinth.LabyrinthRegistry.init();
         com.stormreach.forest.ForestRegistry.init();
         com.stormreach.wild.WildRegistry.init();

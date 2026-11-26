@@ -52,7 +52,8 @@ public class WindVaneBlock extends Block {
     @Override
     protected net.minecraft.world.InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
             net.minecraft.world.entity.player.Player player, net.minecraft.world.phys.BlockHitResult hit) {
-        if (level instanceof ServerLevel server) com.stormreach.tornado.InstrumentBlock.report(com.stormreach.tornado.InstrumentBlock.Kind.WIND_VANE, server, pos, player);
+        if (player instanceof net.minecraft.server.level.ServerPlayer sp)
+            com.stormreach.tornado.WeatherUi.open(sp, com.stormreach.tornado.InstrumentBlock.Kind.WIND_VANE.ordinal(), pos);  // 6.0: its own dial screen
         return net.minecraft.world.InteractionResult.SUCCESS;
     }
 }

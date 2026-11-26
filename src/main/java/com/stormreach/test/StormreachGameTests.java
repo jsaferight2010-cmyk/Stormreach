@@ -1128,4 +1128,88 @@ public class StormreachGameTests {
         fb1.discard(); fb2.discard();
         h.succeed();
     }
+
+    /** 6.0: the Creative Wind Generator's wind is real: instruments read it, the vane points to it and it pushes mobs. */
+    @GameTest(maxTicks = 80, padding = 10)
+    public void windGeneratorBlowsAndInstrumentsFeelIt(GameTestHelper h) {
+        BlockPos fan = new BlockPos(0, 2, 3);
+        for (int x = 0; x < 8; x++) for (int z = 0; z < 8; z++) h.setBlock(new BlockPos(x, 1, z), Blocks.STONE);
+        h.setBlock(fan, com.stormreach.wind.WindRegistry.WIND_GENERATOR.defaultBlockState()
+                .setValue(com.stormreach.wind.WindGeneratorBlock.FACING, net.minecraft.core.Direction.EAST));
+        var level = h.getLevel();
+        if (!(level.getBlockEntity(h.absolutePos(fan)) instanceof com.stormreach.wind.WindGeneratorBlockEntity be)) { h.fail("no generator block entity"); return; }
+        be.configure(120, 8, 0f, true, false);
+        var pig = h.spawn(net.minecraft.world.entity.EntityTypes.PIG, new BlockPos(2, 2, 3));
+        pig.setNoAi(true);
+        double x0 = pig.getX();
+        h.runAfterDelay(40, () -> {
+            BlockPos probe = h.absolutePos(new BlockPos(4, 2, 3));
+            double[] wind = com.stormreach.tornado.Instruments.windMph(level, probe);
+            Check.isTrue(h, wind[0] >= 50, "4 blocks in front of a 120 mph fan the anemometer read " + Math.round(wind[0]) + " mph");
+            var report = com.stormreach.tornado.WeatherUi.measure(level, com.stormreach.tornado.InstrumentBlock.Kind.WIND_VANE.ordinal(), probe);
+            Check.isTrue(h, "W".equals(report.windFrom()), "a fan blowing east should read wind from the W, got " + report.windFrom());
+            Check.isTrue(h, pig.getX() > x0 + 0.5, "the pig wasn't pushed downwind (moved " + (pig.getX() - x0) + ")");
+            double behind = com.stormreach.tornado.Instruments.windMph(level, h.absolutePos(fan).west(2))[0];
+            Check.isTrue(h, behind < wind[0] / 2, "behind the fan should be calm");
+            be.configure(120, 8, 0f, false, false);
+            pig.discard();
+            h.succeed();
+        });
+    }
+
+    /** 6.0: a grown, awake Stormheart fed storm power spreads past its radius; starved of power it stops. */
+    @GameTest(maxTicks = 40, padding = 10)
+    public void poweredStormheartKeepsSpreading(GameTestHelper h) {
+        BlockPos heart = new BlockPos(4, 2, 4);
+        h.setBlock(new BlockPos(4, 1, 4), Blocks.STONE);
+        h.setBlock(heart, com.stormreach.registry.ModBlocks.STORMHEART.defaultBlockState()
+                .setValue(com.stormreach.block.StormheartBlock.ACTIVE, true).setValue(com.stormreach.block.StormheartBlock.STAGE, 31));
+        var level = h.getLevel();
+        BlockPos abs = h.absolutePos(heart);
+        if (!(level.getBlockEntity(abs) instanceof com.stormreach.blight.StormheartBlockEntity be)) { h.fail("no Stormheart block entity"); return; }
+        var mode = com.stormreach.StormreachConfig.spreadMode;
+        boolean was = com.stormreach.StormreachConfig.blightBiome;
+        int maxR = com.stormreach.StormreachConfig.heartMaxRadius, capR = com.stormreach.StormreachConfig.heartPoweredMaxRadius;
+        com.stormreach.StormreachConfig.heartMaxRadius = 3;           // keep the spread inside this test's own space
+        com.stormreach.StormreachConfig.heartPoweredMaxRadius = 6;
+        com.stormreach.StormreachConfig.spreadMode = com.stormreach.StormreachConfig.SpreadMode.CONTAINED;
+        com.stormreach.StormreachConfig.blightBiome = false;   // keep the test area's biome as it is
+        try {
+            com.stormreach.blight.StormheartBlockEntity.cycle(level, abs, level.getBlockState(abs), be);
+            Check.isTrue(h, !be.powered() && be.frontier() == 0, "an unpowered heart overcharged");
+            h.setBlock(new BlockPos(5, 2, 4), com.stormreach.power.PowerRegistry.STORM_CAPACITOR);
+            if (!(level.getBlockEntity(h.absolutePos(new BlockPos(5, 2, 4))) instanceof com.stormreach.power.PowerNode cap)) { h.fail("no capacitor node"); return; }
+            cap.insert(100_000);
+            int before = cap.stored();
+            for (int i = 0; i < 60; i++) com.stormreach.blight.StormheartBlockEntity.cycle(level, abs, level.getBlockState(abs), be);
+            Check.isTrue(h, be.powered(), "a heart touching a charged capacitor isn't overcharged");
+            Check.isTrue(h, be.frontier() > 3, "the frontier didn't move past the normal radius: " + be.frontier());
+            Check.isTrue(h, be.frontier() <= 6, "the frontier ignored heartPoweredMaxRadius: " + be.frontier());
+            Check.isTrue(h, cap.stored() <= before - 50 * com.stormreach.StormreachConfig.heartPowerDraw, "the heart didn't draw its power");
+            int reached = be.frontier();
+            cap.extract(cap.stored());
+            com.stormreach.blight.StormheartBlockEntity.cycle(level, abs, level.getBlockState(abs), be);
+            Check.isTrue(h, !be.powered() && be.frontier() == reached, "a starved heart kept spreading");
+        } finally {
+            com.stormreach.StormreachConfig.spreadMode = mode;
+            com.stormreach.StormreachConfig.blightBiome = was;
+            com.stormreach.StormreachConfig.heartMaxRadius = maxR;
+            com.stormreach.StormreachConfig.heartPoweredMaxRadius = capR;
+        }
+        h.succeed();
+    }
+
+    /** 6.0: chat readings follow each player's units; barometer and vane open their own dial screens. */
+    @GameTest
+    public void readingsFollowEachPlayersUnits(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.CREATIVE) instanceof ServerPlayer a) || !(h.makeMockPlayer(GameType.CREATIVE) instanceof ServerPlayer b)) { h.succeed(); return; }
+        com.stormreach.units.PlayerUnits.set(a, com.stormreach.sim.Units.System.METRIC);
+        com.stormreach.units.PlayerUnits.set(b, com.stormreach.sim.Units.System.IMPERIAL);
+        Check.isTrue(h, com.stormreach.units.PlayerUnits.speed(a, 100).equals("161 km/h"), "metric player got " + com.stormreach.units.PlayerUnits.speed(a, 100));
+        Check.isTrue(h, com.stormreach.units.PlayerUnits.speed(b, 100).equals("100 mph"), "imperial player got " + com.stormreach.units.PlayerUnits.speed(b, 100));
+        var report = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.BAROMETER.ordinal(), h.absolutePos(new BlockPos(1, 2, 1)));
+        Check.isTrue(h, report.pressure() > 900 && report.pressure() < 1100, "barometer screen reading out of range: " + report.pressure());
+        h.succeed();
+    }
 }
+

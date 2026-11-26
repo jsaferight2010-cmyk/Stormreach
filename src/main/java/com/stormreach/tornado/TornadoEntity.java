@@ -715,12 +715,13 @@ public class TornadoEntity extends Entity {
     private void finish(ServerLevel level) {
         EFScale survey = EFScale.fromGustMph(survivedMaxMph);
         String rating = survey == null ? "EF-U (no damage found)" : survey.name();
-        Component msg = Component.translatable("event.stormreach.tornado.survey", rating,
-                        Math.round(survivedMaxMph), Math.round(profile.peakGustMph()), damagedBlocks,
-                        String.format("%.1f", pathLength / 1000.0), Math.round(maxWidth),
-                        Component.translatable("tornado.stormreach.morph." + profile.morphology().name().toLowerCase()))
-                .withStyle(ChatFormatting.GRAY);
         for (ServerPlayer p : level.players()) {
+            // 6.0: each player reads the survey in their own units
+            Component msg = Component.translatable("event.stormreach.tornado.survey", rating,
+                            com.stormreach.units.PlayerUnits.speed(p, survivedMaxMph), com.stormreach.units.PlayerUnits.speed(p, profile.peakGustMph()), damagedBlocks,
+                            com.stormreach.units.PlayerUnits.distance(p, pathLength), com.stormreach.units.PlayerUnits.distance(p, maxWidth),
+                            Component.translatable("tornado.stormreach.morph." + profile.morphology().name().toLowerCase()))
+                    .withStyle(ChatFormatting.GRAY);
             if (p.distanceToSqr(this) < 768 * 768) p.sendSystemMessage(msg);
             if (p.distanceToSqr(this) < 300 * 300 && survey != null) {
                 com.stormreach.progress.StormAdvancements.award(p, "tornado_survey");

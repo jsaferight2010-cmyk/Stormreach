@@ -101,7 +101,7 @@ public class WindTurbineBlock extends Block implements EntityBlock, com.stormrea
     protected InteractionResult useWithoutItem(BlockState s, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (level instanceof ServerLevel server) {
             double[] wind = com.stormreach.tornado.Instruments.windMph(server, pos.above());
-            player.sendOverlayMessage(Component.translatable("block.stormreach.wind_turbine.reading", Math.round(wind[0]), Math.round(wind[1]), s.getValue(POWER))
+            player.sendOverlayMessage(Component.translatable("block.stormreach.wind_turbine.reading", com.stormreach.units.PlayerUnits.speed(player, wind[0]), com.stormreach.units.PlayerUnits.speed(player, wind[1]), s.getValue(POWER))
                     .withStyle(ChatFormatting.AQUA));
         }
         return InteractionResult.SUCCESS;

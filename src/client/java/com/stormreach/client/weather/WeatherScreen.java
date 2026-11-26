@@ -20,7 +20,7 @@ import java.util.List;
  * see each tornado's rotation couplet (inbound green, outbound red).
  */
 public class WeatherScreen extends Screen {
-    enum Tab { OVERVIEW, RADAR, WIND, AIR, FORECAST }
+    enum Tab { OVERVIEW, RADAR, WIND, AIR, FORECAST, BAROMETER, VANE }
 
     private WeatherUi.Report report;
     private Tab tab;
@@ -46,8 +46,10 @@ public class WeatherScreen extends Screen {
     static List<Tab> tabs(WeatherUi.Report r) {
         List<Tab> t = new ArrayList<>();
         switch (r.device()) {
-            case 0, 8 -> t.add(Tab.WIND);                                  // anemometer, wind vane
-            case 1, 7 -> t.add(Tab.AIR);                                   // thermometer, barometer
+            case 0 -> t.add(Tab.WIND);                                     // anemometer
+            case 8 -> t.addAll(List.of(Tab.VANE, Tab.WIND));               // wind vane: its own dial first
+            case 1 -> t.add(Tab.AIR);                                      // thermometer
+            case 7 -> t.addAll(List.of(Tab.BAROMETER, Tab.AIR));           // barometer: its own dial first
             case 2 -> t.addAll(List.of(Tab.OVERVIEW, Tab.WIND, Tab.AIR, Tab.FORECAST));
             case 4, WeatherUi.STORM_RADAR_ITEM -> t.add(Tab.RADAR);
             case 6 -> {                                                    // Weather Monitor: the central interface
@@ -65,6 +67,7 @@ public class WeatherScreen extends Screen {
 
     public void update(WeatherUi.Report r) {
         this.report = r;
+        notePressure(r.pressure());
         if (!tabs(r).contains(tab)) tab = tabs(r).get(0);
     }
 
@@ -89,6 +92,7 @@ public class WeatherScreen extends Screen {
     @Override
     public void tick() {
         ticks++;
+        stepDials();
         if (ticks % 20 == 0) ClientPlayNetworking.send(new WeatherUi.RefreshPayload(report.device(), report.pos()));
         modeButton.visible = tab == Tab.RADAR;
         modeButton.setMessage(Component.translatable(velocity ? "gui.stormreach.weather.velocity" : "gui.stormreach.weather.reflectivity"));
@@ -109,6 +113,8 @@ public class WeatherScreen extends Screen {
             case WIND -> wind(g, l + 8, y);
             case AIR -> air(g, l + 8, y);
             case FORECAST -> forecast(g, l + 8, y);
+            case BAROMETER -> barometer(g, l + 8, y);
+            case VANE -> vane(g, l + 8, y, partial);
         }
     }
 
@@ -131,8 +137,8 @@ public class WeatherScreen extends Screen {
 
     private void overview(GuiGraphicsExtractor g, int x, int y) {
         line(g, x, y, "sky", 0xFFFFFFFF, Component.translatable("gui.stormreach.weather.sky." + sky(report.sky())));
-        line(g, x, y + 14, "wind_line", 0xFFB8E0FF, Math.round(report.windAvg()), Math.round(report.windGust()), report.windFrom());
-        line(g, x, y + 28, "air_line", 0xFFB8E0FF, String.format("%.1f", report.tempC()), Math.round(report.humidity()));
+        line(g, x, y + 14, "wind_line", 0xFFB8E0FF, com.stormreach.client.ClientUnits.speed(report.windAvg()), com.stormreach.client.ClientUnits.speed(report.windGust()), report.windFrom());
+        line(g, x, y + 28, "air_line", 0xFFB8E0FF, com.stormreach.client.ClientUnits.temperature(report.tempC()), Math.round(report.humidity()));
         line(g, x, y + 42, "risk", riskColor(report.risk()), report.risk());
         if (report.contacts().isEmpty()) {
             line(g, x, y + 62, "no_tornadoes", 0xFF7CE07C);
@@ -140,7 +146,7 @@ public class WeatherScreen extends Screen {
             line(g, x, y + 62, "tornado_warning", 0xFFFF5050);
             int yy = y + 76;
             for (WeatherUi.Contact c : report.contacts()) {
-                line(g, x + 6, yy, "contact_short", 0xFFFFB0B0, Instruments.compass(Math.toDegrees(Math.atan2(c.dx(), -c.dz()))), Math.round(c.distance()),
+                line(g, x + 6, yy, "contact_short", 0xFFFFB0B0, Instruments.compass(Math.toDegrees(Math.atan2(c.dx(), -c.dz()))), com.stormreach.client.ClientUnits.distance(c.distance()),
                         c.estRating() < 0 ? "EF-U" : "EF" + c.estRating());
                 yy += 12;
                 if (yy > top() + 190) break;
@@ -163,22 +169,144 @@ public class WeatherScreen extends Screen {
             int px = cx + (int) Math.round(Math.sin(a) * i), py = cy - (int) Math.round(Math.cos(a) * i);
             g.fill(px - 1, py - 1, px + 2, py + 2, i > r - 14 ? 0xFFFF7050 : 0xFFE0E0E0);
         }
-        line(g, x, y, "wind_avg", 0xFFFFFFFF, Math.round(report.windAvg()), Math.round(report.windAvg() * 1.609));
-        line(g, x, y + 14, "wind_gust", 0xFFFFFFFF, Math.round(report.windGust()), Math.round(report.windGust() * 1.609));
+        line(g, x, y, "wind_avg", 0xFFFFFFFF, com.stormreach.client.ClientUnits.speed(report.windAvg()));
+        line(g, x, y + 14, "wind_gust", 0xFFFFFFFF, com.stormreach.client.ClientUnits.speed(report.windGust()));
         line(g, x, y + 28, "wind_from", 0xFFB8E0FF, report.windFrom());
         g.text(font, Instruments.beaufort(report.windAvg()), x, y + 42, 0xFFB8E0FF);
         bar(g, x, y + 60, 120, report.windGust() / 120f, 0xFF60B0FF);
     }
 
     private void air(GuiGraphicsExtractor g, int x, int y) {
-        line(g, x, y, "temperature", 0xFFFFFFFF, String.format("%.1f", report.tempC()), String.format("%.1f", report.tempC() * 9 / 5 + 32));
-        line(g, x, y + 14, "dew_point", 0xFFB8E0FF, String.format("%.1f", report.dewC()));
+        line(g, x, y, "temperature", 0xFFFFFFFF, com.stormreach.client.ClientUnits.temperature(report.tempC()));
+        line(g, x, y + 14, "dew_point", 0xFFB8E0FF, com.stormreach.client.ClientUnits.temperature(report.dewC()));
         line(g, x, y + 28, "humidity", 0xFFB8E0FF, Math.round(report.humidity()));
         bar(g, x, y + 40, 160, report.humidity() / 100f, 0xFF50A0E0);
-        line(g, x, y + 54, "pressure", 0xFFFFFFFF, String.format("%.1f", report.pressure()), String.format("%.2f", report.pressure() * 0.02953));
+        line(g, x, y + 54, "pressure", 0xFFFFFFFF, com.stormreach.client.ClientUnits.pressure(report.pressure()));
         bar(g, x, y + 66, 160, (report.pressure() - 960) / 80f, 0xFFB0B0FF);
         line(g, x, y + 80, "ground", 0xFFB8E0FF, Math.round(report.wetness() * 100));
         bar(g, x, y + 92, 160, report.wetness(), 0xFF4060C0);
+    }
+
+    // ------------------------------------------------------------------ barometer (6.0)
+
+    /** Pressure samples taken from each refresh (one a second), for the trend hand. */
+    private final java.util.ArrayDeque<Float> pressureHistory = new java.util.ArrayDeque<>();
+    private float shownPressure = Float.NaN, setHand = Float.NaN;
+    private float vaneShown = Float.NaN, vaneVel;
+
+    private void notePressure(float p) {
+        pressureHistory.addLast(p);
+        while (pressureHistory.size() > 120) pressureHistory.removeFirst();
+        if (Float.isNaN(setHand)) setHand = p;  // the brass "set" hand marks the reading when the screen opened
+    }
+
+    /** hPa change over the stored history (about two minutes), positive when rising. */
+    private float pressureTrend() {
+        if (pressureHistory.size() < 4) return 0;
+        return pressureHistory.peekLast() - pressureHistory.peekFirst();
+    }
+
+    /** Dial angle for a pressure: 950 hPa at the lower left, 1050 hPa at the lower right (a 270 degree sweep). */
+    private static double dialAngle(float hpa) {
+        float f = Mth.clamp((hpa - 950f) / 100f, 0, 1);
+        return Math.toRadians(-135 + 270 * f);
+    }
+
+    private void hand(GuiGraphicsExtractor g, int cx, int cy, double a, int len, int width, int color) {
+        for (int i = 0; i < len; i++) {
+            int px = cx + (int) Math.round(Math.sin(a) * i), py = cy - (int) Math.round(Math.cos(a) * i);
+            int hw = i > len - 6 ? Math.max(0, width - 1) : width;
+            g.fill(px - hw, py - hw, px + hw + 1, py + hw + 1, color);
+        }
+    }
+
+    /** Steps the needle and the vane once a tick (so they move the same at any frame rate). */
+    private void stepDials() {
+        float p = report.pressure();
+        shownPressure = Float.isNaN(shownPressure) ? p : shownPressure + (p - shownPressure) * 0.15f;  // the needle settles rather than jumping
+        double target = compassDeg(report.windFrom());
+        // a damped spring with gust wobble, so the vane swings and settles like the real thing
+        if (Float.isNaN(vaneShown)) vaneShown = (float) target;
+        float diff = (float) Mth.wrapDegrees(target - vaneShown);
+        float gust = report.windGust() - report.windAvg();
+        float wobble = (float) Math.sin(ticks * 0.7) * Mth.clamp(gust, 0, 30) * 0.5f;
+        vaneVel = vaneVel * 0.8f + (diff + wobble) * 0.06f;
+        vaneShown += vaneVel;
+    }
+
+    private void barometer(GuiGraphicsExtractor g, int x, int y) {
+        float p = report.pressure();
+        if (Float.isNaN(shownPressure)) shownPressure = p;
+        int cx = left() + 214, cy = top() + 112, r = 66;
+        disc(g, cx, cy, r + 4, 0xFF6A4A22);               // brass bezel
+        disc(g, cx, cy, r, 0xFFEDE4CC);                    // enamel face
+        // weather words around the face, as on an aneroid barometer
+        String[] words = {"stormy", "rain", "change", "fair", "very_dry"};
+        int[] colours = {0xFF8A1A1A, 0xFF2A4A8A, 0xFF404040, 0xFF2A6A2A, 0xFF8A6A1A};
+        for (int i = 0; i < words.length; i++) {
+            double a = Math.toRadians(-135 + 270 * (i + 0.5) / words.length);
+            int tx = cx + (int) Math.round(Math.sin(a) * (r - 22)), ty = cy - (int) Math.round(Math.cos(a) * (r - 22));
+            g.centeredText(font, Component.translatable("gui.stormreach.weather.baro." + words[i]), tx, ty - 4, colours[i]);
+        }
+        // tick marks every 5 hPa, long ones every 10
+        for (int hpa = 950; hpa <= 1050; hpa += 5) {
+            double a = dialAngle(hpa);
+            int len = hpa % 10 == 0 ? 7 : 3;
+            for (int i = r - len; i < r - 1; i++) {
+                int px = cx + (int) Math.round(Math.sin(a) * i), py = cy - (int) Math.round(Math.cos(a) * i);
+                g.fill(px, py, px + 1, py + 1, 0xFF201810);
+            }
+        }
+        hand(g, cx, cy, dialAngle(setHand), r - 8, 0, 0xFFC09030);        // set hand
+        hand(g, cx, cy, dialAngle(shownPressure), r - 6, 1, 0xFF101010);  // pointer
+        disc(g, cx, cy, 4, 0xFF6A4A22);
+        // readings on the left
+        line(g, x, y, "pressure", 0xFFFFFFFF, com.stormreach.client.ClientUnits.pressure(p));
+        float trend = pressureTrend();
+        String dir = trend > 0.15f ? "rising" : trend < -0.15f ? "falling" : "steady";
+        int dirCol = trend < -0.6f ? 0xFFFF6050 : trend < -0.15f ? 0xFFFFB050 : trend > 0.15f ? 0xFF80E080 : 0xFFB8E0FF;
+        line(g, x, y + 16, "baro.trend." + dir, dirCol);
+        String outlook = p < 990 ? "stormy" : p < 1004 ? "rain" : p < 1016 ? "change" : p < 1030 ? "fair" : "very_dry";
+        if (trend < -0.6f) outlook = "stormy";
+        g.textWithWordWrap(font, Component.translatable("gui.stormreach.weather.baro.outlook." + outlook), x, y + 34, 120, 0xFFB8E0FF);
+        line(g, x, y + 78, "baro.hint", 0xFF808890);
+    }
+
+    // ------------------------------------------------------------------ wind vane (6.0)
+
+    private void vane(GuiGraphicsExtractor g, int x, int y, float partial) {
+        if (Float.isNaN(vaneShown)) vaneShown = (float) compassDeg(report.windFrom());
+        int cx = left() + 214, cy = top() + 112, r = 66;
+        disc(g, cx, cy, r + 3, 0xFF3A5A78);
+        disc(g, cx, cy, r, 0xFF0E1A24);
+        String[] pts = {"N", "NE", "E", "SE", "S", "SW", "W", "NW"};
+        for (int i = 0; i < 8; i++) {
+            double a = Math.toRadians(i * 45);
+            int tx = cx + (int) Math.round(Math.sin(a) * (r - 10)), ty = cy - (int) Math.round(Math.cos(a) * (r - 10));
+            g.centeredText(font, pts[i], tx, ty - 4, i == 0 ? 0xFFFF7050 : i % 2 == 0 ? 0xFFE0E0E0 : 0xFF8090A0);
+        }
+        // the vane: the arrow head points INTO the wind (where it blows from); the tail fin trails downwind
+        double a = Math.toRadians(vaneShown);
+        hand(g, cx, cy, a, r - 22, 1, 0xFFD8D8D8);
+        hand(g, cx, cy, a + Math.PI, r - 26, 1, 0xFFA0A0A0);
+        for (int i = 0; i < 9; i++) {                       // arrow head
+            double side = Math.toRadians(vaneShown) + Math.PI / 2;
+            int bx = cx + (int) Math.round(Math.sin(a) * (r - 22 - i)), by = cy - (int) Math.round(Math.cos(a) * (r - 22 - i));
+            int sx = (int) Math.round(Math.sin(side) * i * 0.6), sy = (int) Math.round(-Math.cos(side) * i * 0.6);
+            g.fill(Math.min(bx - sx, bx + sx), Math.min(by - sy, by + sy), Math.max(bx - sx, bx + sx) + 1, Math.max(by - sy, by + sy) + 1, 0xFFFF7050);
+        }
+        for (int i = 0; i < 12; i++) {                      // tail fin
+            double side = Math.toRadians(vaneShown) + Math.PI / 2;
+            int bx = cx - (int) Math.round(Math.sin(a) * (r - 30 - i)), by = cy + (int) Math.round(Math.cos(a) * (r - 30 - i));
+            int sx = (int) Math.round(Math.sin(side) * (12 - i) * 0.7), sy = (int) Math.round(-Math.cos(side) * (12 - i) * 0.7);
+            g.fill(Math.min(bx - sx, bx + sx), Math.min(by - sy, by + sy), Math.max(bx - sx, bx + sx) + 1, Math.max(by - sy, by + sy) + 1, 0xFF7090B0);
+        }
+        disc(g, cx, cy, 3, 0xFFE0E0E0);
+        line(g, x, y, "wind_from", 0xFFFFFFFF, report.windFrom());
+        line(g, x, y + 14, "wind_avg", 0xFFB8E0FF, com.stormreach.client.ClientUnits.speed(report.windAvg()));
+        line(g, x, y + 28, "wind_gust", 0xFFB8E0FF, com.stormreach.client.ClientUnits.speed(report.windGust()));
+        g.text(font, Instruments.beaufort(report.windAvg()), x, y + 42, 0xFFB8E0FF);
+        line(g, x, y + 60, "vane.hint", 0xFF808890);
     }
 
     private void forecast(GuiGraphicsExtractor g, int x, int y) {
@@ -223,15 +351,15 @@ public class WeatherScreen extends Screen {
                 g.fill(px, py, px + 1, py + 1, (alpha << 24) | 0x40FF60);
             }
         }
-        g.text(font, Component.translatable("gui.stormreach.weather.range", Math.round(range)), l + 18, t + 30, 0xFF7CE07C);
+        g.text(font, Component.translatable("gui.stormreach.weather.range", com.stormreach.client.ClientUnits.distance(range)), l + 18, t + 30, 0xFF7CE07C);
         // contact list
         int x = l + 192, y = t + 30;
         if (report.contacts().isEmpty()) line(g, x, y, "no_tornadoes", 0xFF7CE07C);
         for (WeatherUi.Contact c : report.contacts()) {
             String brg = Instruments.compass(Math.toDegrees(Math.atan2(c.dx(), -c.dz())));
-            g.text(font, brg + " " + Math.round(c.distance()) + "m  " + (c.estRating() < 0 ? "EF-U" : "EF" + c.estRating()), x, y, 0xFFFF8080);
-            g.text(font, Math.round(c.coupletMph()) + " mph shear", x + 4, y + 10, 0xFFB0B0B0);
-            g.text(font, "moving " + Instruments.compass(c.headingDeg()) + " " + Math.round(c.motionMph()) + " mph", x + 4, y + 20, 0xFFB0B0B0);
+            g.text(font, brg + " " + com.stormreach.client.ClientUnits.distance(c.distance()) + "  " + (c.estRating() < 0 ? "EF-U" : "EF" + c.estRating()), x, y, 0xFFFF8080);
+            g.text(font, com.stormreach.client.ClientUnits.speed(c.coupletMph()) + " shear", x + 4, y + 10, 0xFFB0B0B0);
+            g.text(font, "moving " + Instruments.compass(c.headingDeg()) + " " + com.stormreach.client.ClientUnits.speed(c.motionMph()), x + 4, y + 20, 0xFFB0B0B0);
             y += 34;
             if (y > t + 160) break;
         }

@@ -59,12 +59,12 @@ public final class StoryRegistry {
     public static final ResourceKey<EquipmentAsset> STORMCROWN_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("stormcrown"));
     public static final ResourceKey<EquipmentAsset> CHASER_CAP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("storm_chaser_cap"));
     public static final TagKey<Item> MAELSTROM_REPAIRS = TagKey.create(Registries.ITEM, Stormreach.id("maelstrom_repair_materials"));
-    public static final ArmorMaterial STORMCROWN_ARMOR = new ArmorMaterial(40, Map.of(ArmorType.HELMET, 4, ArmorType.BOOTS, 4,
-            ArmorType.LEGGINGS, 4, ArmorType.CHESTPLATE, 4, ArmorType.BODY, 4), 20, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 3.5f, 0.1f, MAELSTROM_REPAIRS, STORMCROWN_ASSET);
+    public static final ArmorMaterial STORMCROWN_ARMOR = new ArmorMaterial(45, Map.of(ArmorType.HELMET, 4, ArmorType.BOOTS, 4,
+            ArmorType.LEGGINGS, 4, ArmorType.CHESTPLATE, 4, ArmorType.BODY, 4), 22, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 4.0f, 0.15f, MAELSTROM_REPAIRS, STORMCROWN_ASSET);
     public static final ArmorMaterial CHASER_CAP_ARMOR = new ArmorMaterial(10, Map.of(ArmorType.HELMET, 1, ArmorType.BOOTS, 1,
             ArmorType.LEGGINGS, 1, ArmorType.CHESTPLATE, 1, ArmorType.BODY, 1), 15, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_PACK), 0f, 0f, MAELSTROM_REPAIRS, CHASER_CAP_ASSET);
     /** Maelstrom: the strongest tool tier, from Cyrrus's core. */
-    public static final ToolMaterial MAELSTROM = new ToolMaterial(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2600, 10f, 5f, 18, MAELSTROM_REPAIRS);
+    public static final ToolMaterial MAELSTROM = new ToolMaterial(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 3200, 11f, 5.5f, 20, MAELSTROM_REPAIRS);   // 6.0: the endgame tier
 
     public static final Item JOURNAL_PAGE_1 = item("journal_page_1", p -> new RewardItems.Lore(p, 2), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), ITEMS);
     public static final Item JOURNAL_PAGE_2 = item("journal_page_2", p -> new RewardItems.Lore(p, 2), new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), ITEMS);

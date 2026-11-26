@@ -53,14 +53,14 @@ public final class ModItems {
 
     /** Storm Shard tools: between iron and diamond, and they love bad weather. */
     public static final ToolMaterial STORM_SHARD_MATERIAL = new ToolMaterial(
-            BlockTags.INCORRECT_FOR_IRON_TOOL, 750, 7.0f, 2.5f, 18, STORM_SHARD_REPAIRS);
+            BlockTags.INCORRECT_FOR_IRON_TOOL, 1100, 7.5f, 3.0f, 18, STORM_SHARD_REPAIRS);   // 6.0: a clear step past iron
 
     public static final ResourceKey<EquipmentAsset> STORMSHARD_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("stormshard"));
     public static final ResourceKey<EquipmentAsset> GALE_WINGS_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("gale_wings"));
-    /** Stormshard armor: a little better than iron. A full set makes you immune to lightning. */
-    public static final ArmorMaterial STORMSHARD_ARMOR = new ArmorMaterial(22,
-            Map.of(ArmorType.BOOTS, 3, ArmorType.LEGGINGS, 5, ArmorType.CHESTPLATE, 7, ArmorType.HELMET, 3, ArmorType.BODY, 9),
-            16, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 1.0f, 0.05f, STORM_SHARD_REPAIRS, STORMSHARD_ASSET);
+    /** Stormshard armor: a clear step past iron (6.0: 19 armour, toughness 1.5). A full set makes you immune to lightning. */
+    public static final ArmorMaterial STORMSHARD_ARMOR = new ArmorMaterial(26,
+            Map.of(ArmorType.BOOTS, 3, ArmorType.LEGGINGS, 6, ArmorType.CHESTPLATE, 7, ArmorType.HELMET, 3, ArmorType.BODY, 9),
+            16, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 1.5f, 0.05f, STORM_SHARD_REPAIRS, STORMSHARD_ASSET);
 
     // Materials
     public static final Item STORM_SHARD = register("storm_shard", Item::new, new Item.Properties());

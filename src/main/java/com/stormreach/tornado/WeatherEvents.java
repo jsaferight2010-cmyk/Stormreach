@@ -326,7 +326,7 @@ public final class WeatherEvents {
     /**
      * Dispel Weather. Clears the weather itself, not just its effects:
      * tornadoes rope out and lift, Stormreach events (downbursts, hail, supercells) end, storm fronts, squalls and
-     * ball lightning break up, and the vanilla rain and thunder stop (rain fades out over a few seconds the normal
+     * ball lightning break up, falling hail stops (server and client), and the vanilla rain and thunder stop (rain fades out over a few seconds the normal
      * way, which every client sees because weather is server-side and synced).
      * @return how many things were dispelled (0 means the sky was already clear)
      */
@@ -344,6 +344,8 @@ public final class WeatherEvents {
             e.discard();
             if (!(e instanceof com.stormreach.weather.precip.HailstoneEntity)) n++;
         }
+        // 6.0: hail from the entity-less hail field (stage 3) was left falling, and the clients kept drawing it
+        if (com.stormreach.weather.precip.HailSim.clear(level) > 0) n++;
         for (com.stormreach.weather.cloud.StormCellEntity c : level.getEntitiesOfClass(com.stormreach.weather.cloud.StormCellEntity.class, player.getBoundingBox().inflate(600, 400, 600))) {
             c.dissipate();
             n++;

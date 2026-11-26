@@ -52,8 +52,9 @@ public final class ModBlocks {
     public static final List<Block> WITH_ITEMS = new ArrayList<>();
 
     public static final ResourceKey<Feature> STORMPINE_TREE = ResourceKey.create(Registries.FEATURE, Stormreach.id("stormpine"));
+    // 6.0: the tree goes in the single-sapling slot (it was in the 2x2 slot, so a lone sapling never grew)
     public static final TreeGrower STORMPINE_GROWER = new TreeGrower("stormreach_stormpine",
-            WeightedList.of(), WeightedList.of(STORMPINE_TREE), WeightedList.of(), STORMPINE_TREE);
+            WeightedList.of(STORMPINE_TREE), WeightedList.of(), WeightedList.of(), STORMPINE_TREE);
 
     // ---------- Stormstone family (cliff stone of the coast) ----------
     public static final Block STORMSTONE = register("stormstone", Block::new, stone(), true);

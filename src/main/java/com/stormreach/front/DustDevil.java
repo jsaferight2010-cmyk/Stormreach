@@ -30,20 +30,22 @@ import net.minecraft.world.phys.Vec3;
 
 /**
  * Dust Devil: a whirlwind of hot, clear afternoons in deserts, badlands and savannas. It skitters across the ground
- * for a minute or so, lifting sand and loose items and spinning anyone it crosses, then falls apart. It does no harm;
- * hit it and it scatters. Catch one in a glass bottle. A thrown Bottled Dust Devil sets a short-lived one down that
+ * for a minute or so, lifting sand and loose items and spinning anyone it crosses, then falls apart. It does no harm.
+ * 6.0: it has 20 health (each hit tears dust out of it) instead of vanishing at one touch; an explosion still blows it
+ * apart. Its spawn egg is intentional (for builders and testing): an egg-spawned devil isn't broken up by rain. Catch one in a glass bottle. A thrown Bottled Dust Devil sets a short-lived one down that
  * stays put and sweeps up the dropped items around it.
  */
 public class DustDevil extends PathfinderMob {
     private int life = 900;
     private boolean anchored;
+    private boolean fromEgg;
 
     public DustDevil(EntityType<? extends DustDevil> type, Level level) {
         super(type, level);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return PathfinderMob.createMobAttributes().add(Attributes.MAX_HEALTH, 1).add(Attributes.MOVEMENT_SPEED, 0.32);
+        return PathfinderMob.createMobAttributes().add(Attributes.MAX_HEALTH, 20).add(Attributes.MOVEMENT_SPEED, 0.32);
     }
 
     /** A bottled devil: stays where it lands for {@code ticks} and sweeps items in (radius 8). */
@@ -65,7 +67,7 @@ public class DustDevil extends PathfinderMob {
     public void tick() {
         super.tick();
         if (!(level() instanceof ServerLevel server)) return;
-        if (--life <= 0 || isInWater() || (server.isRaining() && !anchored)) { scatter(server); return; }
+        if (--life <= 0 || isInWater() || (server.isRaining() && !anchored && !fromEgg)) { scatter(server); return; }
         if (anchored) setDeltaMovement(0, getDeltaMovement().y, 0);
         double reach = anchored ? 8 : 2.5;
         Vec3 c = position();
@@ -104,8 +106,19 @@ public class DustDevil extends PathfinderMob {
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
-        if (source.getEntity() instanceof Player || source.is(net.minecraft.tags.DamageTypeTags.IS_EXPLOSION)) scatter(level);
-        return false;
+        if (source.is(net.minecraft.tags.DamageTypeTags.IS_EXPLOSION)) { scatter(level); return true; }
+        if (isInvulnerableTo(level, source)) return false;
+        // each hit tears dust out of it; the last one breaks it up (it never leaves a body)
+        level.sendParticles(ParticleTypes.POOF, getX(), getY() + 1.0, getZ(), 6 + (int) amount, 0.4, 0.6, 0.4, 0.04);
+        if (amount >= getHealth()) { scatter(level); return true; }
+        return super.hurtServer(level, source, amount);
+    }
+
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance diff,
+                                                                   net.minecraft.world.entity.EntitySpawnReason reason, net.minecraft.world.entity.SpawnGroupData data) {
+        if (reason == net.minecraft.world.entity.EntitySpawnReason.SPAWN_ITEM_USE) fromEgg = true;
+        return super.finalizeSpawn(level, diff, reason, data);
     }
 
     @Override
@@ -135,6 +148,7 @@ public class DustDevil extends PathfinderMob {
         super.addAdditionalSaveData(out);
         out.putInt("Life", life);
         out.putBoolean("Anchored", anchored);
+        out.putBoolean("FromEgg", fromEgg);
     }
 
     @Override
@@ -142,5 +156,6 @@ public class DustDevil extends PathfinderMob {
         super.readAdditionalSaveData(in);
         life = in.getIntOr("Life", 900);
         anchored = in.getBooleanOr("Anchored", false);
+        fromEgg = in.getBooleanOr("FromEgg", false);
     }
 }

@@ -391,29 +391,57 @@ def tiv_spikes():
         ring = np.sin(2 * np.pi * (140 + 23 * k) * t_(0.25)) * expdecay(0.25, 25) * 0.5
         place(out, th + ring, at)
     return reverb(out, 0.8, 0.18, 3500)
-NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes}
-
-def fire_whirl_roar():
-    # a low turbulent roar (filtered noise with a slow swirl) under a bed of crackling embers
-    sec = 3.5; n = int(sec * SR); t = t_(sec)
-    roar = lp(noise(sec), 260) * (0.7 + 0.3 * np.sin(2 * np.pi * 0.9 * t)) * 1.4
-    body = bp(noise(sec), 300, 1400) * 0.35 * (0.6 + 0.4 * np.sin(2 * np.pi * 1.7 * t + 1))
-    crack = np.zeros(n)
-    for _ in range(90):
-        at = rng.uniform(0, sec - 0.05); c = hp(noise(0.03), 2500) * expdecay(0.03, 140) * rng.uniform(0.2, 0.7)
-        place(crack, c, at)
-    x = (roar + body + crack) * adsr(n, 0.3, 0.2, 0.9, 0.6)
-    return reverb(x, 1.4, 0.25, 2500)
-def tiv_spikes():
-    # hydraulic hiss, then four heavy steel spikes biting into the ground almost together
-    sec = 1.2; n = int(sec * SR); out = np.zeros(n)
-    place(out, bp(noise(0.35), 1800, 6000) * adsr(int(0.35 * SR), 0.02, 0.1, 0.6, 0.15) * 0.4, 0)
-    for k, at in enumerate((0.28, 0.31, 0.335, 0.36)):
-        th = lp(noise(0.25), 180) * expdecay(0.25, 18) * 1.2
-        ring = np.sin(2 * np.pi * (140 + 23 * k) * t_(0.25)) * expdecay(0.25, 25) * 0.5
-        place(out, th + ring, at)
-    return reverb(out, 0.8, 0.18, 3500)
-NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes}
+def eel_discharge():
+    # a fat electric buzz (60 Hz mains-like hum with harmonics) that swells and snaps off, over sizzling sparks and a watery fizz
+    sec = 0.9; n = int(sec * SR); t = t_(sec)
+    buzz = sum(np.sign(np.sin(2 * np.pi * f * t)) * a for f, a in ((60, 0.5), (120, 0.3), (180, 0.15)))
+    buzz = bp(buzz * (0.6 + 0.4 * np.sin(2 * np.pi * 13 * t)), 80, 2400) * adsr(n, 0.05, 0.1, 0.9, 0.08)
+    snap = np.zeros(n); place(snap, hp(noise(0.06), 1800) * expdecay(0.06, 60) * 1.2, 0.0)
+    fizz = bp(noise(sec), 2500, 9000) * 0.25 * np.linspace(1, 0.2, n)
+    return reverb(mix(buzz, crackle(sec, 70), snap, fizz), 0.6, 0.15, 4000)
+def _moan(sec, f0, f1, vowel=(300, 870), rough=0.35):
+    # a drowned voice: a breathy sawtooth glottal source, slow vibrato, pushed through two vowel formants
+    t = t_(sec); f = np.linspace(f0, f1, len(t)) * (1 + 0.02 * np.sin(2 * np.pi * 5.5 * t))
+    ph = np.cumsum(f) / SR; src = 2 * (ph % 1) - 1 + rough * noise(sec)
+    return bp(src, vowel[0] * 0.7, vowel[0] * 1.3) * 1.2 + bp(src, vowel[1] * 0.8, vowel[1] * 1.2) * 0.6
+def _bubbles(sec, count, lo=300, hi=900):
+    out = np.zeros(int(sec * SR))
+    for _ in range(count):
+        d = rng.uniform(0.02, 0.06); f = rng.uniform(lo, hi)
+        b = np.sin(2 * np.pi * np.cumsum(np.linspace(f, f * 1.8, int(d * SR))) / SR) * expdecay(d, 50)   # a rising plip
+        place(out, b * rng.uniform(0.2, 0.6), rng.uniform(0, sec - d))
+    return out
+def brine_ambient():
+    sec = 2.2; n = int(sec * SR)
+    v = _moan(sec, 92, 74, (320, 800)) * adsr(n, 0.25, 0.3, 0.7, 0.6)
+    gurgle = lp(noise(sec), 500) * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * 7 * t_(sec)))) * 0.4
+    return reverb(mix(v, gurgle, _bubbles(sec, 26)), 1.1, 0.25, 2200)
+def brine_hurt():
+    sec = 0.55; n = int(sec * SR)
+    v = _moan(sec, 160, 110, (380, 950), 0.6) * adsr(n, 0.005, 0.08, 0.6, 0.2)
+    splash = hp(noise(0.25), 1200) * expdecay(0.25, 18) * 0.6
+    out = mix(v, _bubbles(sec, 12, 500, 1400)); place(out, splash, 0)
+    return reverb(out, 0.6, 0.2, 3000)
+def brine_death():
+    sec = 2.6; n = int(sec * SR); t = t_(sec)
+    v = _moan(1.4, 120, 55, (300, 700), 0.5) * adsr(int(1.4 * SR), 0.02, 0.2, 0.7, 0.8)
+    drain = lp(noise(sec), 900) * np.clip((t - 0.6) / 0.6, 0, 1) * np.exp(-np.clip(t - 1.2, 0, None) * 1.6) * 0.5   # water running off
+    hiss = bp(noise(sec), 3000, 9000) * np.clip((t - 1.0), 0, 1) * np.exp(-np.clip(t - 1.6, 0, None) * 2) * 0.2      # salt fizzing
+    out = mix(drain, hiss, _bubbles(sec, 40)); place(out, v, 0)
+    return reverb(out, 1.4, 0.3, 2000)
+def brine_step():
+    sec = 0.25
+    squelch = lp(noise(sec), 700) * expdecay(sec, 22) * 0.9 + bp(noise(sec), 1500, 5000) * expdecay(sec, 40) * 0.3
+    return mix(squelch, _bubbles(sec, 3, 400, 900) * 0.5)
+def brine_spit():
+    sec = 0.9; n = int(sec * SR); t = t_(sec)
+    retch = _moan(0.35, 140, 200, (420, 1100), 0.8) * adsr(int(0.35 * SR), 0.01, 0.05, 0.8, 0.1)
+    spray = bp(noise(sec), 900, 7000) * np.clip(t / 0.25 - 0.9, 0, 1) * np.exp(-np.clip(t - 0.4, 0, None) * 5) * 0.9
+    out = mix(spray, _bubbles(sec, 20, 600, 1600)); place(out, retch, 0)
+    return reverb(out, 0.7, 0.2, 3500)
+NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes, 'creature.eel_discharge': eel_discharge,
+         'creature.brine_ambient': brine_ambient, 'creature.brine_hurt': brine_hurt, 'creature.brine_death': brine_death,
+         'creature.brine_step': brine_step, 'creature.brine_spit': brine_spit}
 
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,

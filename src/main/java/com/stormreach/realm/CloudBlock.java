@@ -21,12 +21,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * Clouds of the Tempest Realm. You fall into them rather than onto them.
- * Nimbus clouds catch you softly, thunderclouds fling you upward, gale clouds carry you with the wind.
+ * Nimbus clouds catch you softly, thunderclouds fling you upward, gale clouds gust you onward the way you came in.
  */
 public class CloudBlock extends Block {
     public enum Kind { NIMBUS, THUNDER, GALE }
 
     private final Kind kind;
+    /** When each entity last got a gust (weak keys: entities aren't kept alive by this). */
+    private static final java.util.Map<Entity, Long> GUSTED = new java.util.WeakHashMap<>();
 
     public CloudBlock(Kind kind, Properties properties) {
         super(properties);
@@ -60,9 +62,24 @@ public class CloudBlock extends Block {
                 }
             }
             case GALE -> {
-                Vec3 wind = StormWeather.windVector().scale(0.12);
-                entity.setDeltaMovement(m.x + wind.x, Math.max(m.y, 0.02), m.z + wind.z);
+                // 6.0: one gust per entry, aimed from the way the entity met the cloud (sim/GaleLaunch);
+                // while still inside after a gust it just keeps its momentum
+                long now = level.getGameTime();
+                Long last;
+                synchronized (GUSTED) { last = GUSTED.get(entity); }
+                if (last != null && now - last < 12 && now >= last) return;
+                Vec3 c = entity.getBoundingBox().getCenter();
+                Vec3 look = entity.getLookAngle();
+                double[] v = com.stormreach.sim.GaleLaunch.vector(m.x, m.y, m.z, c.x - (pos.getX() + 0.5), c.y - (pos.getY() + 0.5),
+                        c.z - (pos.getZ() + 0.5), look.x, look.z);
+                if (entity.isShiftKeyDown()) { v[0] *= 0.5; v[1] *= 0.6; v[2] *= 0.5; }   // crouching braces you
+                entity.setDeltaMovement(v[0], v[1], v[2]);
                 entity.needsSync = true;
+                synchronized (GUSTED) { GUSTED.put(entity, now); }
+                if (level instanceof ServerLevel server) {
+                    server.sendParticles(ParticleTypes.CLOUD, c.x, c.y, c.z, 14, 0.3, 0.3, 0.3, 0.12);
+                    level.playSound(null, pos, com.stormreach.registry.ModSfx.WEATHER_GUST, SoundSource.BLOCKS, 0.7f, 1.1f + level.getRandom().nextFloat() * 0.3f);
+                }
             }
         }
     }

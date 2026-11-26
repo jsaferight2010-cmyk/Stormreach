@@ -58,19 +58,19 @@ public final class RealmItems {
     public static final TagKey<Item> CLOUDSTEP_REPAIRS = TagKey.create(Registries.ITEM, Stormreach.id("cloudstep_repair_materials"));
 
     /** Voltite: the realm's working metal, a step above iron. */
-    public static final ToolMaterial VOLTITE = new ToolMaterial(BlockTags.INCORRECT_FOR_IRON_TOOL, 900, 7.0f, 2.5f, 16, VOLTITE_REPAIRS);
+    public static final ToolMaterial VOLTITE = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1700, 8.5f, 3.5f, 16, VOLTITE_REPAIRS);   // 6.0: diamond tier and a bit more
     /** Aurorite: storm-gem that outclasses diamond. */
-    public static final ToolMaterial AURORITE = new ToolMaterial(BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1900, 9.5f, 3.5f, 15, AURORITE_REPAIRS);
+    public static final ToolMaterial AURORITE = new ToolMaterial(BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 2400, 10.0f, 4.5f, 18, AURORITE_REPAIRS);   // 6.0: past netherite
 
     public static final ResourceKey<EquipmentAsset> VOLTITE_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("voltite"));
     public static final ResourceKey<EquipmentAsset> AURORITE_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("aurorite"));
     public static final ResourceKey<EquipmentAsset> CLOUDSTEP_ASSET = ResourceKey.create(EquipmentAssets.ROOT_ID, Stormreach.id("cloudstep"));
-    public static final ArmorMaterial VOLTITE_ARMOR = new ArmorMaterial(26,
-            Map.of(ArmorType.BOOTS, 2, ArmorType.LEGGINGS, 6, ArmorType.CHESTPLATE, 7, ArmorType.HELMET, 3, ArmorType.BODY, 9),
-            12, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 0.5f, 0.0f, VOLTITE_REPAIRS, VOLTITE_ASSET);
-    public static final ArmorMaterial AURORITE_ARMOR = new ArmorMaterial(37,
+    public static final ArmorMaterial VOLTITE_ARMOR = new ArmorMaterial(33,      // 6.0: matches diamond, plus its set bonus
             Map.of(ArmorType.BOOTS, 3, ArmorType.LEGGINGS, 6, ArmorType.CHESTPLATE, 8, ArmorType.HELMET, 3, ArmorType.BODY, 11),
-            15, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 2.5f, 0.05f, AURORITE_REPAIRS, AURORITE_ASSET);
+            14, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 2.0f, 0.0f, VOLTITE_REPAIRS, VOLTITE_ASSET);
+    public static final ArmorMaterial AURORITE_ARMOR = new ArmorMaterial(40,      // 6.0: a little past netherite
+            Map.of(ArmorType.BOOTS, 3, ArmorType.LEGGINGS, 7, ArmorType.CHESTPLATE, 8, ArmorType.HELMET, 3, ArmorType.BODY, 12),
+            18, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_METAL), 3.5f, 0.1f, AURORITE_REPAIRS, AURORITE_ASSET);
     public static final ArmorMaterial CLOUDSTEP_ARMOR = new ArmorMaterial(15,
             Map.of(ArmorType.BOOTS, 2, ArmorType.LEGGINGS, 3, ArmorType.CHESTPLATE, 4, ArmorType.HELMET, 2, ArmorType.BODY, 4),
             20, com.stormreach.registry.ModSfx.holder(com.stormreach.registry.ModSfx.ITEM_EQUIP_PACK), 0.0f, 0.0f, CLOUDSTEP_REPAIRS, CLOUDSTEP_ASSET);

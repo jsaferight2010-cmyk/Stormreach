@@ -133,6 +133,7 @@ public class TempestSovereign extends Monster {
                 if (orb != null) {
                     orb.snapTo(getX(), getY() + 2, getZ(), 0f, 0f);
                     orb.setTarget(target);
+                    orb.summonedBy(this);   // 6.0: short-lived, gone with the fight
                     com.stormreach.anim.AnimPulse.fire(this, com.stormreach.anim.AnimPulse.CAST);
                     server.addFreshEntity(orb);
                     playSound(com.stormreach.registry.ModSfx.MAGIC_ACTIVATE, 2.0f, 1.5f);

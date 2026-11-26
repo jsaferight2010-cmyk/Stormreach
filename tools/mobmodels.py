@@ -1114,6 +1114,62 @@ M.append(Model('ThistlehopModel', 'thistlehop', {'fur': ('fur', C('#8a7a5a'), C(
     look=[('head', 1.0, 1.0)]))
 
 
+# ---- Brine Wraith (6.0: its own body, no longer a zombie) ---------------------------------------------------------
+bleg = P('left_leg', (2, 12, 0), boxes=[Box(-1.5, 0, -1.5, 3, 6, 3, 'trousers')]).add(
+    P('left_shin', (0, 6, 0), boxes=[Box(-1.2, 0, -1.2, 2.4, 5, 2.4, 'skin'), Box(-1.5, 0, -1.5, 3, 1.5, 3, 'rags')]).add(
+        P('left_foot', (0, 5, 0), boxes=[Box(-1.5, 0, -3, 3, 1, 4, 'skin2')])))
+bhips = P('hips', (0, 11, 0), boxes=[Box(-4, -1, -2.5, 8, 3, 5, 'coat')]).add(
+    P('coat_back', (0, 1.5, 2.6), boxes=[Box(-4, 0, -0.5, 8, 6, 1, 'coat')]).add(P('coat_back_low', (0, 6, 0), boxes=[Box(-4, 0, -0.5, 8, 5, 1, 'rags')])),
+    P('coat_left', (2.2, 1.5, -2.6), boxes=[Box(-1.8, 0, -0.5, 3.6, 6, 1, 'coat')]).add(P('coat_left_low', (0, 6, 0), boxes=[Box(-1.8, 0, -0.5, 3.6, 4, 1, 'rags')])),
+    P('coat_right', (-2.2, 1.5, -2.6), boxes=[Box(-1.8, 0, -0.5, 3.6, 5, 1, 'coat')]).add(P('coat_right_low', (0, 5, 0), boxes=[Box(-1.8, 0, -0.5, 3.6, 5, 1, 'rags')])))
+btorso = P('torso', (0, -1, 0), (0.3, 0, 0), [Box(-4, -11, -2.5, 8, 11, 5, 'coat'), Box(-2.5, -10, -2.9, 5, 7, 1, 'skin'), Box(-2, -8.5, -3.2, 4, 4, 0.5, 'bone'),
+                                             Box(1.2, -11.6, -1.8, 3.2, 1.6, 3.4, 'barnacle'), Box(-4.4, -6, 0.5, 1.4, 2, 2, 'barnacle'),
+                                             Box(-4.2, -2, -2.8, 8.4, 1.2, 5.6, 'metal')])
+for side, x in (('left', 3.6), ('right', -3.6)):
+    btorso.add(P(f'weed_{side}', (x, -11, 1.2), (0.1, 0, 0), [Box(-0.5, 0, -0.5, 1, 6, 1, 'weed')]).add(
+        P(f'weed_{side}_low', (0, 6, 0), boxes=[Box(-0.5, 0, -0.5, 1, 5, 1, 'weed2')])))
+bhead = P('head', (0, -2.5, -0.5), boxes=[Box(-3.5, -7, -3.5, 7, 7, 7, 'skin'), Box(-3.6, -8.0, -3.6, 7.2, 1.4, 7.2, 'cap'), Box(-3.85, -7.1, -3.85, 7.7, 0.9, 7.7, 'cap2'),
+                                         Box(-3.9, -7, 1, 7.8, 5, 2.9, 'weed'), Box(-3.9, -6.5, -2.5, 1, 5, 3.5, 'weed'), Box(2.9, -6.5, -2.5, 1, 5, 3.5, 'weed'),
+                                         Box(-2.6, -4.6, -3.7, 2, 1.2, 0.5, 'eye'), Box(0.6, -4.6, -3.7, 2, 1.2, 0.5, 'eye'),
+                                         Box(-1, -3.6, -4.2, 2, 1.6, 1, 'skin2'), Box(2.2, -2.4, -3.6, 1.2, 1.2, 1, 'barnacle')]).add(
+    P('jaw', (0, -1.2, -0.5), (0.15, 0, 0), [Box(-3, 0, -3.2, 6, 2, 3.7, 'skin'), Box(-2.5, -0.3, -3.3, 5, 0.6, 0.5, 'bone')]))
+btorso.add(P('neck', (0, -11, -1), (0.35, 0, 0), [Box(-1.2, -3, -1.2, 2.4, 3, 2.4, 'skin')]).add(bhead))
+barm = P('left_arm', (5, -10, 0), (0, 0, -0.08), [Box(-1, -1, -1.5, 3, 7, 3, 'coat'), Box(-1.3, 5, -1.8, 3.6, 1.5, 3.6, 'rags')]).add(
+    P('left_fore', (0.5, 6.5, 0), boxes=[Box(-1, 0, -1, 2, 6, 2, 'skin'), Box(-1.3, 3, -1.3, 2.6, 1, 2.6, 'metal')]).add(
+        P('left_hand', (0, 6, 0), boxes=[Box(-1.5, 0, -1.5, 3, 2, 3, 'skin2'), Box(-1.5, 2, -1.5, 1, 1.5, 1, 'bone'), Box(0.5, 2, -1.5, 1, 1.5, 1, 'bone')])))
+btorso.add(*pair(barm))
+bhips.add(btorso)
+grab = {(f'{s}_arm', 'rx'): [(0, 0), (0.3, -105), (0.5, -80), (0.75, -75), (1, 0)] for s in ('left', 'right')}
+grab.update({(f'{s}_fore', 'rx'): [(0, 0), (0.3, -10), (0.5, -45), (0.75, -40), (1, 0)] for s in ('left', 'right')})
+M.append(Model('BrineWraithModel', 'brine_wraith', {
+    'skin': ('skin', C('#8fa39a'), C('#4e5f58')), 'skin2': ('skin', C('#7a8f86'), C('#3e4e48')), 'coat': ('cloth', C('#2b3a4a'), C('#1a232e')),
+    'rags': ('tatter', C('#32424f'), C('#1a232e')), 'trousers': ('cloth', C('#5d5546'), C('#38322a')), 'weed': ('tatter', C('#3f6b3a'), C('#1f3a1d')),
+    'weed2': ('tatter', C('#4d7f3f'), C('#24401f')), 'barnacle': ('stone', C('#cfc8b8'), C('#8a8070')), 'eye': ('glow', C('#7ff5d8'), C('#0a2a24')),
+    'bone': ('bone', C('#e0dccb'), C('#8a8270')), 'metal': ('metal', C('#6a5a4a'), C('#7a4a2a')), 'cap': ('cloth', C('#6a2a2a'), C('#341414')), 'cap2': ('cloth', C('#5a2222'), C('#2a1010'))},
+    [bhips, *pair(bleg)], [
+    Clip('time', 70, sym(T(torso_rz=even(-3, 3), torso_rx=[(0, 0), (0.5, 2)], head_rz=shift(even(4, -4), 0.2), jaw_rx=[(0, 0), (0.5, 8)],
+                           left_arm_rx=even(-6, -2), left_fore_rx=shift(even(-8, -3), 0.1), weed_left_rx=shift(even(-6, 6), 0.15),
+                           weed_left_low_rx=shift(even(-9, 9), 0.3), coat_back_low_rx=even(-3, 3))), 'idleW'),
+    Clip('fidget', 160, T(head_rz=[(0, 0), (0.1, 24), (0.6, 22), (0.8, 0)], jaw_rx=[(0, 0), (0.15, 18), (0.3, 4), (0.45, 18), (0.6, 4), (1, 0)]), 'idleW', dur=30),
+    Clip('dist', 0.13, merge(gait_leg('left_leg', 'left_shin', 0, 30, 45), gait_leg('right_leg', 'right_shin', 0.5, 18, 20),     # the right leg drags
+                             T(left_foot_rx=[(0, 12), (0.3, 0), (0.6, -14), (0.8, 8)], right_foot_rx=shift([(0, 6), (0.6, -4)], 0.5),
+                               hips_py=even(0, 0.9, 0, 0.5), hips_rz=even(5, -2), torso_rz=even(-5, 3), torso_ry=even(-6, 6), head_rz=even(6, -4),
+                               left_arm_rx=[(0, 18), (0.5, -14)], right_arm_rx=[(0, -10), (0.5, 12)], left_fore_rx=shift([(0, -4), (0.5, -20)], 0.15),
+                               right_fore_rx=shift([(0, -20), (0.5, -4)], 0.15), coat_back_rx=even(8, -4), coat_back_low_rx=shift(even(12, -6), 0.2),
+                               coat_left_rx=even(-10, 6), coat_right_rx=even(6, -10), weed_left_rx=shift(even(10, -10), 0.25),
+                               weed_right_rx=shift(even(-10, 10), 0.25))), 'moveW'),
+    Clip('attack', 18, merge(grab, T(torso_rx=[(0, 0), (0.3, -6), (0.5, 9), (0.75, 8), (1, 0)], hips_pz=[(0, 0), (0.5, -1.2), (0.75, -1.2), (1, 0)],
+                                     jaw_rx=[(0, 0), (0.3, 40), (0.6, 35), (1, 0)], head_rx=[(0, 0), (0.3, -15), (0.5, 10), (1, 0)]))),
+    Clip('cast', 24, T(neck_rx=[(0, 0), (0.3, -22), (0.5, 14), (0.8, 12), (1, 0)], jaw_rx=[(0, 0), (0.3, 10), (0.45, 55), (0.85, 50), (1, 0)],
+                       torso_rx=[(0, 0), (0.3, -8), (0.5, 5), (0.85, 4), (1, 0)], left_arm_rz=[(0, 0), (0.45, -20), (0.85, -20), (1, 0)],
+                       right_arm_rz=[(0, 0), (0.45, 20), (0.85, 20), (1, 0)])),
+    hurt_clip('torso', 'head', 0.8)],
+    doc='The Brine Wraith: a hunched, waterlogged drowned sailor in a rotting navy coat and red knit cap, salt-pale skin, barnacles and '
+        'seaweed hanging off it, glowing sea-green eyes and a loose jaw; it shambles dragging one leg, lunges to grab with both hands, '
+        'and retches a spray of brine.',
+    look=[('neck', 0.3, 0.3), ('head', 0.7, 0.7)], extra='        torso.yRot -= turn * 0.02f;\n'))
+
+
 # ---- Hollow Keeper (the Labyrinth's guardian) ----------------------------------------------------------------
 kleg = P('left_leg', (2, 8, 0), boxes=[Box(-1.5, 0, -1.5, 3, 8, 3, 'cloth')]).add(
     P('left_shin', (0, 8, 0), boxes=[Box(-1, 0, -1, 2, 7, 2, 'bone')]).add(P('left_foot', (0, 7, 0), boxes=[Box(-1.5, 0, -3, 3, 1, 4, 'bone')])))
@@ -1539,11 +1595,11 @@ M.append(Model('RainfrogModel', 'rainfrog', {'skin': ('skin', C('#3fae8a'), C('#
     'belly': ('scale', C('#eae2b0'), C('#a89a66')), 'sac': ('skin', C('#c8eef6'), C('#7ab8d0')), 'toe': ('skin', C('#2f8a6c'), C('#f2c94c')),
     'eye': ('eye', C('#f2c94c'), C('#c8962c'))}, [rf], [
     Clip('time', 50, T(body_sy=[(0, 0), (0.5, 0.03)], sac_s=[(0, 0), (0.5, 0.25)]), 'idleW'),
-    Clip('dist', 0.45, hop, 'moveW'),
+    Clip('attack', 16, hop),                      # 6.0: one hop per leap, fired by the frog's HopMoveControl
     Clip('cast', 26, croak),
     Clip('fidget', 140, T(head_ry=[(0, 0), (0.2, 25), (0.7, 25), (1, 0)], left_arm_rz=[(0, 0), (0.3, -20), (0.6, 0)]), 'idleW', dur=24),
     hurt_clip('body', 'head', 0.8)],
-    doc='The Rainfrog: a blue-green tree frog with bulging golden eyes, spotted skin and a pale throat sac; it hops with its long hind legs kicking out behind, and croaks with its throat puffing up twice.',
+    doc='The Rainfrog: a blue-green tree frog with bulging golden eyes, spotted skin and a pale throat sac; it moves only in hops (crouch, spring, legs kicking out behind, land), and croaks with its throat puffing up twice.',
     look=[('head', 0.6, 0.3)]))
 
 # ---- Storm Petrel ---------------------------------------------------------------------------------------------

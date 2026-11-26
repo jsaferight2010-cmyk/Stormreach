@@ -269,5 +269,13 @@ L('jei.stormreach.power.stormheart', 'A fully grown, awake Stormheart touching a
 L('jei.stormreach.power.wind_generator', 'Creative only: blows wind at a set speed. Turbines in its wind make power from it like any other wind.')
 L('jei.stormreach.power.turbine', 'Makes 6 SU a tick per level of wind, up to 90 in a gale. Needs a clear column 16 blocks tall.')
 
+# ---------------------------------------------------------------- Shock Eel shock (stage 6)
+w(f'{D}/damage_type/shock.json', {'effects': 'hurt', 'exhaustion': 0.1, 'message_id': 'stormreach.shock', 'scaling': 'when_caused_by_living_non_player'})
+L('death.attack.stormreach.shock', '%1$s was electrocuted')
+L('death.attack.stormreach.shock.player', '%1$s was electrocuted by %2$s')
+
+# ---------------------------------------------------------------- gear (stage 6)
+L('tooltip.stormreach.storm_surge', 'Storm Surge: in rain +8% damage and +15% mining speed; in a thunderstorm +15% and +30%.')
+
 with open(f'{A}/lang/en_us.json', 'w') as f: json.dump(lang, f, indent=2, ensure_ascii=False); f.write('\n')
 print('gendata60: overhaul data written')

@@ -199,7 +199,9 @@ public class StormreachGameTests {
         TornadoEntity t = TornadoEntity.spawn(h.getLevel(), at,
                 TornadoProfile.rollWith(new Random(3), TornadoFormation.SUPERCELL, EFScale.EF1, null, 0.3, 0.05, 90));
         if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { if (t != null) t.discard(); h.succeed(); return; }
+        com.stormreach.weather.precip.HailSim.schedule(h.getLevel(), p.getX(), p.getY() + 60, p.getZ(), com.stormreach.sim.HailSize.values()[0], 0, 0);
         int n = com.stormreach.tornado.WeatherEvents.dispel(h.getLevel(), p);
+        Check.isTrue(h, com.stormreach.weather.precip.HailSim.pending(h.getLevel()) == 0, "hail kept falling after dispel");
         Check.isTrue(h, n > 0, "dispel reported nothing cleared");
         Check.isFalse(h, server.getWeatherData().isRaining(), "rain still set after dispel");
         Check.isFalse(h, server.getWeatherData().isThundering(), "thunder still set after dispel");
@@ -1210,6 +1212,77 @@ public class StormreachGameTests {
         var report = com.stormreach.tornado.WeatherUi.measure(h.getLevel(), com.stormreach.tornado.InstrumentBlock.Kind.BAROMETER.ordinal(), h.absolutePos(new BlockPos(1, 2, 1)));
         Check.isTrue(h, report.pressure() > 900 && report.pressure() < 1100, "barometer screen reading out of range: " + report.pressure());
         h.succeed();
+    }
+
+    /** 6.0: grows a sapling at {@code at} on dirt with bone meal (or, if {@code natural}, by its normal growth step). */
+    private static boolean growSapling(GameTestHelper h, net.minecraft.world.level.block.Block sapling, BlockPos at, boolean natural) {
+        h.setBlock(at.below(), Blocks.DIRT);
+        for (int y = 0; y < 16; y++) for (int dx = -3; dx <= 3; dx++) for (int dz = -3; dz <= 3; dz++)
+            if (y > 0 || dx != 0 || dz != 0) h.setBlock(at.offset(dx, y, dz), Blocks.AIR);
+        h.setBlock(at, sapling);
+        var level = h.getLevel();
+        BlockPos abs = h.absolutePos(at);
+        for (int i = 0; i < 60 && level.getBlockState(abs).is(sapling); i++) {
+            if (natural) ((net.minecraft.world.level.block.SaplingBlock) sapling).advanceTree(level, abs, level.getBlockState(abs), level.getRandom());
+            else net.minecraft.world.item.BoneMealItem.growCrop(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BONE_MEAL), level, abs);
+        }
+        return level.getBlockState(abs).is(net.minecraft.tags.BlockTags.LOGS);
+    }
+
+    @GameTest(padding = 14)
+    public void stormpineSaplingGrows(GameTestHelper h) {
+        Check.isTrue(h, growSapling(h, com.stormreach.registry.ModBlocks.STORMPINE_SAPLING, new BlockPos(2, 2, 2), false), "a Stormpine sapling didn't grow with bone meal");
+        Check.isTrue(h, growSapling(h, com.stormreach.registry.ModBlocks.STORMPINE_SAPLING, new BlockPos(9, 2, 9), true), "a Stormpine sapling didn't grow on its own");
+        h.succeed();
+    }
+
+    @GameTest(padding = 14)
+    public void galewoodSaplingGrows(GameTestHelper h) {
+        Check.isTrue(h, growSapling(h, com.stormreach.realm.RealmBlocks.GALEWOOD_SAPLING, new BlockPos(2, 2, 2), false), "a Galewood sapling didn't grow with bone meal");
+        Check.isTrue(h, growSapling(h, com.stormreach.realm.RealmBlocks.GALEWOOD_SAPLING, new BlockPos(9, 2, 9), true), "a Galewood sapling didn't grow on its own");
+        h.succeed();
+    }
+
+    @GameTest(padding = 14)
+    public void elderstormSaplingGrows(GameTestHelper h) {
+        Check.isTrue(h, growSapling(h, com.stormreach.forest.ForestRegistry.ELDERSTORM_SAPLING, new BlockPos(2, 2, 2), false), "an Elderstorm sapling didn't grow with bone meal");
+        Check.isTrue(h, growSapling(h, com.stormreach.forest.ForestRegistry.ELDERSTORM_SAPLING, new BlockPos(9, 2, 9), true), "an Elderstorm sapling didn't grow on its own");
+        h.succeed();
+    }
+
+    /** 6.0: the Gale Cloud's gust follows the way you met it; ball lightning from a boss is short-lived and never saved. */
+    @GameTest
+    public void bossOrbsAreShortLived(GameTestHelper h) {
+        var orb = h.spawn(com.stormreach.registry.ModEntities.BALL_LIGHTNING, new BlockPos(2, 3, 2));
+        var boss = h.spawn(net.minecraft.world.entity.EntityTypes.ARMOR_STAND, new BlockPos(4, 2, 4));
+        orb.summonedBy(boss);
+        Check.isTrue(h, orb.life() == com.stormreach.entity.BallLightning.BOSS_ORB_LIFE, "a boss orb should get the short boss lifetime");
+        Check.isFalse(h, orb.shouldBeSaved(), "a boss orb must not be saved with the world");
+        boss.discard();
+        h.runAfterDelay(15, () -> {
+            Check.isTrue(h, orb.isRemoved(), "an orb outlived the boss that summoned it");
+            h.succeed();
+        });
+    }
+
+    /** 6.0: the Creative Realm Pass takes a Creative player into the Tempest Realm (generating it safely) and back. */
+    @GameTest(maxTicks = 200, environment = "stormreach:isolated")
+    public void realmPassTravelsToTheRealmAndBack(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.CREATIVE) instanceof ServerPlayer p)) { h.succeed(); return; }
+        var server = h.getLevel().getServer();
+        if (server.getLevel(com.stormreach.realm.TempestRealm.LEVEL) == null) { h.fail("the Tempest Realm dimension is missing"); return; }
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, new net.minecraft.world.item.ItemStack(com.stormreach.realm.RealmItems.REALM_PASS));
+        com.stormreach.realm.RealmItems.REALM_PASS.use(h.getLevel(), p, net.minecraft.world.InteractionHand.MAIN_HAND);
+        h.runAfterDelay(5, () -> {
+            ServerPlayer there = server.getPlayerList().getPlayer(p.getUUID()) != null ? server.getPlayerList().getPlayer(p.getUUID()) : p;
+            Check.isTrue(h, com.stormreach.realm.TempestRealm.isRealm(there.level()), "the Realm Pass didn't take the player into the realm");
+            h.runAfterDelay(45, () -> com.stormreach.realm.RealmItems.REALM_PASS.use(there.level(), there, net.minecraft.world.InteractionHand.MAIN_HAND));   // after the item cooldown
+            h.runAfterDelay(55, () -> {
+                ServerPlayer back = server.getPlayerList().getPlayer(p.getUUID()) != null ? server.getPlayerList().getPlayer(p.getUUID()) : there;
+                Check.isTrue(h, back.level().dimension() == net.minecraft.world.level.Level.OVERWORLD, "the Realm Pass didn't bring the player back");
+                h.succeed();
+            });
+        });
     }
 }
 

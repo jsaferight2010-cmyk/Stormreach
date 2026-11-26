@@ -28,6 +28,40 @@ import java.util.EnumSet;
  */
 public class BallLightning extends Monster {
     private int life = 600;
+    /** 6.0: the boss that summoned this orb (null for wild ones). Orbs from a fight fizzle when it ends. */
+    private java.util.UUID summoner;
+    public static final int BOSS_ORB_LIFE = 160;   // 8 seconds in a boss fight
+
+    /** Marks this orb as a boss summon: a short life, gone with its summoner, never saved with the world. */
+    public void summonedBy(net.minecraft.world.entity.Entity boss) {
+        this.summoner = boss.getUUID();
+        this.life = BOSS_ORB_LIFE;
+    }
+
+    public int life() { return life; }
+
+    @Override
+    public boolean shouldBeSaved() { return summoner == null && super.shouldBeSaved(); }
+
+    @Override
+    protected void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput out) {
+        super.addAdditionalSaveData(out);
+        out.putInt("life", life);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput in) {
+        super.readAdditionalSaveData(in);
+        life = in.getIntOr("life", 600);
+    }
+
+    /** Fades out with a puff and a fizz, leaving nothing behind. */
+    public void fizzle(ServerLevel server) {
+        server.sendParticles(ParticleTypes.SMOKE, getX(), getY() + 0.3, getZ(), 8, 0.2, 0.2, 0.2, 0.02);
+        server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + 0.3, getZ(), 6, 0.2, 0.2, 0.2, 0.05);
+        playSound(com.stormreach.registry.ModSfx.MAGIC_DISPEL, 0.6f, 1.8f);
+        discard();
+    }
 
     public BallLightning(EntityType<? extends BallLightning> type, Level level) {
         super(type, level);
@@ -62,10 +96,12 @@ public class BallLightning extends Monster {
             if (tickCount % 3 == 0) {
                 server.sendParticles(com.stormreach.particle.ModParticles.STORM_SPARK, getX(), getY() + 0.3, getZ(), 3, 0.15, 0.15, 0.15, 0.08);
             }
-            if (--life <= 0) {
-                server.sendParticles(ParticleTypes.SMOKE, getX(), getY() + 0.3, getZ(), 8, 0.2, 0.2, 0.2, 0.02);
-                discard();
+            boolean orphaned = false;
+            if (summoner != null && tickCount % 10 == 0) {
+                var boss = server.getEntity(summoner);
+                orphaned = boss == null || !boss.isAlive() || boss.distanceToSqr(this) > 64 * 64;
             }
+            if (--life <= 0 || orphaned) fizzle(server);
         }
     }
 

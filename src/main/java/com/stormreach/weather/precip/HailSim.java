@@ -61,6 +61,14 @@ public final class HailSim {
         return true;
     }
 
+    /** 6.0 (Dispel Weather): drops every hailstone still falling and tells clients the hail field is gone. */
+    public static int clear(ServerLevel level) {
+        List<Stone> list = PENDING.remove(level);
+        FieldPayload none = new FieldPayload(0, 0, 0, 0, 0, 0, 0);
+        for (ServerPlayer pl : level.players()) if (ServerPlayNetworking.canSend(pl, FieldPayload.TYPE)) ServerPlayNetworking.send(pl, none);
+        return list == null ? 0 : list.size();
+    }
+
     public static void tick(ServerLevel level) {
         List<Stone> list = PENDING.get(level);
         if (list == null || list.isEmpty()) return;

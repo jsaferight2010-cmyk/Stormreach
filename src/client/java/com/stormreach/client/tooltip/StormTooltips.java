@@ -65,6 +65,7 @@ public final class StormTooltips {
         }
         lines.removeIf(c -> c.getContents() instanceof TranslatableContents tc && tc.getArgs().length == 0 && tc.getKey().startsWith(base + ".tooltip"));
         details.removeIf(key -> I18n.get(key).contains("%s"));
+        if (com.stormreach.realm.RealmGear.stormGear(stack)) details.add("tooltip.stormreach.storm_surge");   // 6.0
 
         List<Component> add = new ArrayList<>();
         String desc = description(stack.getItem(), id);

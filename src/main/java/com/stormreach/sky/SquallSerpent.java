@@ -103,7 +103,19 @@ public class SquallSerpent extends Monster {
         }
     }
 
-    @Override public void thunderHit(ServerLevel level, LightningBolt bolt) { heal(10); }
+    private long lastStormHeal = -10_000;
+
+    /**
+     * 6.0: the storm feeds it only a little, and only from natural lightning: at most 6 health every 10 seconds.
+     * A player's lightning (Stormblade, Lightning Staff, Channeling) used to heal it 10 a bolt, so storm weapons healed
+     * it faster than they hurt it; now such bolts hurt it like any other mob.
+     */
+    @Override
+    public void thunderHit(ServerLevel level, LightningBolt bolt) {
+        if (bolt.getCause() != null) { super.thunderHit(level, bolt); return; }
+        long now = level.getGameTime();
+        if (now - lastStormHeal >= 200) { heal(6); lastStormHeal = now; }
+    }
     @Override public boolean causeFallDamage(double d, float m, DamageSource s) { return false; }
     @Override public int getAmbientSoundInterval() { return 220; }
     @Override protected float getSoundVolume() { return 4.0f; }
@@ -148,6 +160,7 @@ public class SquallSerpent extends Monster {
                     Vec3 mouth = position().add(Vec3.directionFromRotation(0, getYRot()).scale(1.5)).add(0, 0.6, 0);
                     orb.snapTo(mouth.x + (i - 1) * 0.8, mouth.y, mouth.z, 0f, 0f);
                     orb.setTarget(target);
+                    orb.summonedBy(SquallSerpent.this);   // 6.0: short-lived, gone with the fight
                     server.addFreshEntity(orb);
                 }
             }

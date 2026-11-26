@@ -522,9 +522,50 @@ boot the headless test server in GitHub Actions as before.
 - Tests: GameplayStage5Test (fan field, frontier, units); GameTests windGeneratorBlowsAndInstrumentsFeelIt,
   poweredStormheartKeepsSpreading, readingsFollowEachPlayersUnits.
 
+### Stage 6: mobs, gear, Dispel Weather, saplings
+- Gale Cloud: one gust per entry, aimed by `sim/GaleLaunch` from the entity's velocity, its offset inside the cloud
+  and its facing (side entries carry on through with lift, falls bounce up, jumps from below go higher; standing
+  still pushes out the far side). It used to add the global wind vector, so everyone went the same way.
+- Ball lightning: boss summons (`summonedBy`) live 8 s, fizzle when the boss dies, leaves or is 64+ blocks away,
+  and are never saved. Wild orbs keep 30 s; `life` is saved now.
+- Stormwarden: fights on the ground (walk + melee, rare lightning). Takes off only after a long ground phase (never in
+  the first 15 s) or when the target is out of reach for 3 s; 7 s in the air (circle, lightning, small gusts), then
+  lands in a knock-up shockwave and is staggered 3 s taking +40% damage. Swaps ground/air navigation and move control.
+- Squall Serpent and Thunderbird: natural lightning heals 6 at most every 10 s; a player's lightning (Stormblade,
+  staff, Channeling) now hurts them. It used to heal 10/20 per bolt. Thunderbird: no boss bar; hunt is circle 3-5 s,
+  a lock-on stoop that leads the target and accelerates to 1.5 b/t, talon hit + knock, recover climb.
+- Rainfrog: `HopMoveControl` (never walks on land: crouch 2 ticks, leap, pause); the hop animation is an attack-pulse
+  clip fired per leap.
+- Dust Devil: 20 health (each hit tears dust out; dies in a scatter, explosions still scatter it). Its egg is kept on
+  purpose; egg-spawned devils aren't broken up by rain.
+- Stranger egg: egg/command-spawned Strangers mirror the nearest player for a minute and only leave if you walk up to
+  one (the natural one vanished on its first tick with no player to watch). Strangers are never saved.
+- Shock Eel (the user's "Shock Ray"): its bite gave the victim Static Charge, a protective buff. Now `shock()` deals
+  `stormreach:shock` damage, Slowness III and Mining Fatigue briefly, with a spark arc; being hit makes it discharge
+  into everything in the same water within 4 blocks (or a close attacker on the bank), every 2 s at most. New sound
+  `creature.eel_discharge`.
+- Brine Wraith: own rig model (`BrineWraithModel` in mobmodels.py: hunched drowned sailor, navy coat, red knit cap,
+  barnacles, seaweed, sea-green eyes, loose jaw; idle sway, dragging shamble, two-handed grab, brine-retch cast) and
+  original sounds (`creature.brine_*`, synthesised voice with formants + bubbles). Behaviour: brine spit cone (3-8
+  blocks, Hunger II, Slowness, 2 damage), undertow on hits in water, no gear, no zombie villagers, no reinforcements.
+- Gear: Stormshard 1100/7.5/3.0, armour 3/6/7/3 t1.5; Voltite diamond tier 1700/8.5/3.5, armour 3/6/8/3 t2;
+  Aurorite netherite tier 2400/10/4.5, armour 3/7/8/3 t3.5 kb0.1; Maelstrom 3200/11/5.5; Gale material 1800/9/4;
+  Stormcrown t4. Storm Surge (`RealmGear.stormSurge`): Stormreach weapons/tools in rain +8% damage/+15% mining, in a
+  thunderstorm +15%/+30% (transient attribute modifiers). Swords use the vanilla sword tool (they mine in Survival;
+  vanilla blocks every sword from breaking blocks in Creative); asked the user whether to change that.
+- Lightning Staff: its bolts already never ignite (FirelessLightning, no Fire Resistance); now holding the staff also
+  stops any lightning setting the holder alight.
+- Dispel Weather: also clears the entity-less hail (`HailSim.clear`, plus an empty hail field to clients).
+- Saplings: 26.3 `TreeGrower(name, trees, megaTrees, flowerTrees, shortest)`. Galewood and Stormpine had their trees
+  in the 2x2 slot, so a lone sapling never grew. Fixed (Galewood 4:1 normal:tall).
+- Creative dimension access: the Creative Realm Pass already exists (first in the Materials tab); a GameTest now
+  takes a Creative player into the realm and back.
+- Tests: MobFixesStage6Test (Gale launch); GameTests for the three saplings (bone meal and natural growth separately),
+  boss orbs, realm travel, dispel + hail.
+
 ### Resume point (overhaul in progress)
-Done: stages 1-5 (crash, visuals, weather, tornadoes, gameplay).
-Next: stage 6 (mobs/gear/Dispel Weather/saplings/creative dimension item), 7 (maze/vault, shrine arena + sigil crash,
+Done: stages 1-6 (crash, visuals, weather, tornadoes, gameplay, mobs/gear).
+Next: 7 (maze/vault, shrine arena + sigil crash,
 spire chests/stairs + Eye reward, cinematic), 8 (sound redesign, guidebooks, perf), then the multiplayer pass and
 "even more" storm content, 9 (tests, docs, final check). Last of all: branding (name, icon and description for Mod
 Menu, GitHub, the .zip and the .jar). No jar is delivered until everything is done and checked.

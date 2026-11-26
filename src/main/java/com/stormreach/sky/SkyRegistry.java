@@ -63,7 +63,7 @@ public final class SkyRegistry {
     public static final ArmorMaterial CHASER_ARMOR = new ArmorMaterial(22,
             Map.of(ArmorType.BOOTS, 2, ArmorType.LEGGINGS, 5, ArmorType.CHESTPLATE, 6, ArmorType.HELMET, 2, ArmorType.BODY, 6),
             14, ModSfx.holder(ModSfx.ITEM_EQUIP_PACK), 1.0f, 0.1f, CHASER_REPAIRS, CHASER_ASSET);
-    public static final ToolMaterial GALE_MATERIAL = new ToolMaterial(net.minecraft.tags.BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1400, 8.0f, 3.0f, 16, GALE_BLADE_REPAIRS);
+    public static final ToolMaterial GALE_MATERIAL = new ToolMaterial(net.minecraft.tags.BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 1800, 9.0f, 4.0f, 16, GALE_BLADE_REPAIRS);   // 6.0
 
     // ---- blocks
     public static final Block WIND_TURBINE = block("wind_turbine", WindTurbineBlock::new, BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)

@@ -47,14 +47,18 @@ public final class StormreachRenderers2 {
         @Override protected void scale(RigState state, PoseStack poseStack) { if (state.isBaby) poseStack.scale(0.5f, 0.5f, 0.5f); }
     }
 
-    public static class BrineWraithRenderer extends ZombieRenderer {
+    /** 6.0: the Brine Wraith's own rigged model (it used to be a reskinned zombie). */
+    public static class BrineWraithRenderer extends RigRenderer<com.stormreach.entity.BrineWraith, com.stormreach.client.model.gen.BrineWraithModel> {
         private static final Identifier TEXTURE = Stormreach.id("textures/entity/brine_wraith.png");
 
         public BrineWraithRenderer(EntityRendererProvider.Context context) {
-            super(context);
+            super(context, new com.stormreach.client.model.gen.BrineWraithModel(com.stormreach.client.model.gen.BrineWraithModel.createBodyLayer().bakeRoot()), 0.5f);
         }
 
-        @Override public Identifier getTextureLocation(ZombieRenderState state) { return TEXTURE; }
+        @Override public Identifier getTextureLocation(com.stormreach.client.anim.RigState s) { return TEXTURE; }
+        @Override protected void scale(com.stormreach.client.anim.RigState s, com.mojang.blaze3d.vertex.PoseStack pose) {
+            if (s.isBaby) pose.scale(0.5f, 0.5f, 0.5f);
+        }
     }
 
     public static class BallLightningRenderer extends RigRenderer<BallLightning, BallLightningModel> {

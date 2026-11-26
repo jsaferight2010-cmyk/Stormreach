@@ -36,8 +36,8 @@ import java.util.EnumSet;
  * leaves. Drops Thunderbird Plumes (for the Stormkite) and Charged Scales.
  */
 public class Thunderbird extends Monster {
-    private final ServerBossEvent bossBar = new ServerBossEvent(java.util.UUID.randomUUID(),
-            Component.translatable("entity.stormreach.thunderbird"), BossEvent.BossBarColor.BLUE, BossEvent.BossBarOverlay.NOTCHED_6);
+    // 6.0: no boss bar (it is a dangerous wild animal, not a boss)
+    private long lastStormHeal = -10_000;
     private int calmTicks;
     private Vec3 pendingStrike;
     private int strikeDelay;
@@ -74,7 +74,6 @@ public class Thunderbird extends Monster {
     @Override
     public void aiStep() {
         super.aiStep();
-        bossBar.setProgress(getHealth() / getMaxHealth());
         if (!(level() instanceof ServerLevel server)) {
             if (random.nextFloat() < 0.25f) level().addParticle(ParticleTypes.ELECTRIC_SPARK, getRandomX(1.2), getRandomY(), getRandomZ(1.2), 0, 0, 0);
             return;
@@ -94,9 +93,12 @@ public class Thunderbird extends Monster {
         }
     }
 
+    /** Natural lightning feeds it a little (6 health, at most every 10 s); a player's lightning hurts it. */
     @Override
     public void thunderHit(ServerLevel level, LightningBolt bolt) {
-        heal(20);
+        if (bolt.getCause() != null) { super.thunderHit(level, bolt); return; }
+        long now = level.getGameTime();
+        if (now - lastStormHeal >= 200) { heal(6); lastStormHeal = now; }
     }
 
     @Override public boolean causeFallDamage(double d, float m, DamageSource s) { return false; }
@@ -106,45 +108,68 @@ public class Thunderbird extends Monster {
     @Override protected SoundEvent getHurtSound(DamageSource s) { return ModSfx.CREATURE_THUNDERBIRD_HURT; }
     @Override protected SoundEvent getDeathSound() { return ModSfx.CREATURE_THUNDERBIRD_DEATH; }
 
-    @Override
-    public void startSeenByPlayer(ServerPlayer player) {
-        super.startSeenByPlayer(player);
-        bossBar.addPlayer(player);
-    }
 
-    @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
-        super.stopSeenByPlayer(player);
-        bossBar.removePlayer(player);
-    }
-
-    /** Circles 14 blocks above its prey, then folds and dives every few seconds. */
+    /**
+     * 6.0: a real hunt. Circles 10 blocks up for 3-5 s, then locks onto where its prey is and stoops straight at it,
+     * accelerating; talons hit when it reaches you (8 damage and a hard knock), then it climbs out and goes round
+     * again. A miss (you dodged, or it overshot) also sends it back up. Hit it while it recovers.
+     */
     class DiveGoal extends Goal {
+        private static final int CIRCLE = 0, STOOP = 1, RECOVER = 2;
+        private int state = CIRCLE, timer, circleFor = 70;
         private float angle;
-        private int timer;
+        private Vec3 aim;
 
         DiveGoal() { setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK)); }
 
         @Override public boolean canUse() { return getTarget() != null && getTarget().isAlive(); }
         @Override public boolean requiresUpdateEveryTick() { return true; }
+        @Override public void start() { state = CIRCLE; timer = 0; }
 
         @Override
         public void tick() {
             LivingEntity t = getTarget();
             if (t == null) return;
             timer++;
-            angle += 0.035f;
-            boolean dive = timer % 120 > 85;
-            double r = dive ? 0.5 : 14.0;
-            double y = t.getY() + (dive ? 0.8 : 14.0);
-            getMoveControl().setWantedPosition(t.getX() + Math.cos(angle) * r, y, t.getZ() + Math.sin(angle) * r, dive ? 2.4 : 1.0);
             getLookControl().setLookAt(t, 30f, 30f);
-            if (dive && distanceToSqr(t) < 6.0 && timer % 8 == 0 && level() instanceof ServerLevel server) {
-                doHurtTarget(server, t);
-                t.push((t.getX() - getX()) * 0.3, 0.5, (t.getZ() - getZ()) * 0.3);
-                timer = 120 * (timer / 120 + 1) - 1;   // climb back out
+            switch (state) {
+                case CIRCLE -> {
+                    angle += 0.05f;
+                    getMoveControl().setWantedPosition(t.getX() + Math.cos(angle) * 12, t.getY() + 10, t.getZ() + Math.sin(angle) * 12, 1.2);
+                    if (timer > circleFor && hasLineOfSight(t)) {
+                        state = STOOP; timer = 0;
+                        aim = t.position().add(0, t.getBbHeight() * 0.5, 0).add(t.getDeltaMovement().scale(8));   // leads a running target
+                        playSound(ModSfx.CREATURE_THUNDERBIRD_CRY, 4.0f, 0.8f);
+                    }
+                }
+                case STOOP -> {
+                    // track the target a little (it can still be dodged), accelerating to about 1.5 blocks a tick
+                    aim = aim.lerp(t.position().add(0, t.getBbHeight() * 0.5, 0), 0.08);
+                    Vec3 to = aim.subtract(position());
+                    double speed = Math.min(1.5, 0.5 + timer * 0.06);
+                    Vec3 want = to.normalize().scale(speed);
+                    setDeltaMovement(getDeltaMovement().lerp(want, 0.35));
+                    getMoveControl().setWantedPosition(aim.x, aim.y, aim.z, 2.0);
+                    if (getBoundingBox().inflate(0.8).intersects(t.getBoundingBox()) && level() instanceof ServerLevel server) {
+                        AnimPulse.fire(Thunderbird.this, AnimPulse.ATTACK);
+                        doHurtTarget(server, t);
+                        Vec3 knock = getDeltaMovement().multiply(1, 0, 1).normalize().scale(0.9);
+                        t.push(knock.x, 0.45, knock.z);
+                        t.needsSync = true;
+                        recover();
+                    } else if (timer > 50 || to.lengthSqr() < 1.0 || onGround() || horizontalCollision) {
+                        recover();   // missed
+                    }
+                }
+                case RECOVER -> {
+                    setDeltaMovement(getDeltaMovement().add(0, 0.07, 0));
+                    getMoveControl().setWantedPosition(getX() + getDeltaMovement().x * 6, t.getY() + 10, getZ() + getDeltaMovement().z * 6, 1.3);
+                    if (timer > 30) { state = CIRCLE; timer = 0; circleFor = 60 + random.nextInt(40); angle = (float) Math.atan2(getZ() - t.getZ(), getX() - t.getX()); }
+                }
             }
         }
+
+        private void recover() { state = RECOVER; timer = 0; }
     }
 
     /** Every 8-11 seconds, calls lightning onto its target, after a short warning screech. */

@@ -29,6 +29,8 @@ public class Stranger extends PathfinderMob {
             net.minecraft.network.syncher.SynchedEntityData.defineId(Stranger.class, net.minecraft.network.syncher.EntityDataSerializers.STRING);
     private UUID watching;
     private int lifetime = 200 + 200;
+    /** 6.0: placed with its spawn egg: it mirrors the nearest player and stays a minute, even while you look at it. */
+    private boolean fromEgg;
 
     public Stranger(EntityType<? extends Stranger> type, Level level) {
         super(type, level);
@@ -75,6 +77,10 @@ public class Stranger extends PathfinderMob {
             return;
         }
         if (!(level() instanceof ServerLevel level)) return;
+        if (fromEgg && watching == null) {
+            Player near = level.getNearestPlayer(this, 64);
+            if (near instanceof ServerPlayer sp) watch(sp, lifetime);
+        }
         Player p = watching == null ? null : level.getPlayerByUUID(watching);
         if (p == null || --lifetime <= 0) {
             vanish(level, null);
@@ -86,9 +92,24 @@ public class Stranger extends PathfinderMob {
         yHeadRot = getYRot();
         yBodyRot = getYRot();
         Vec3 look = p.getViewVector(1.0f);
+        if (fromEgg) {   // only walking right up to it makes it go (and that doesn't count as a sighting)
+            if (p.distanceToSqr(this) < 3 * 3) vanish(level, null);
+            return;
+        }
         boolean stared = p.hasLineOfSight(this) && ShadowRules.beingStaredAt(look.x, look.y, look.z, to.x, to.y, to.z);
         if (stared || p.distanceToSqr(this) < 14 * 14) vanish(level, p instanceof ServerPlayer sp ? sp : null);
     }
+
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level, net.minecraft.world.DifficultyInstance diff,
+                                                                   net.minecraft.world.entity.EntitySpawnReason reason, net.minecraft.world.entity.SpawnGroupData data) {
+        if (reason == net.minecraft.world.entity.EntitySpawnReason.SPAWN_ITEM_USE
+                || reason == net.minecraft.world.entity.EntitySpawnReason.COMMAND) { fromEgg = true; lifetime = 1200; }
+        return super.finalizeSpawn(level, diff, reason, data);
+    }
+
+    @Override
+    public boolean shouldBeSaved() { return false; }   // it is never there when you come back
 
     private void vanish(ServerLevel level, ServerPlayer witness) {
         level.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY() + 1, getZ(), 20, 0.3, 0.8, 0.3, 0.01);

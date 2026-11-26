@@ -81,6 +81,12 @@ public final class ModSfx {
     public static final SoundEvent CREATURE_WHALE_DEATH = ModSounds.register("creature.whale_death");
     public static final SoundEvent CREATURE_EEL_CRACKLE = ModSounds.register("creature.eel_crackle");
     public static final SoundEvent CREATURE_EEL_ZAP = ModSounds.register("creature.eel_zap");
+    public static final SoundEvent CREATURE_EEL_DISCHARGE = ModSounds.register("creature.eel_discharge");   // 6.0
+    public static final SoundEvent CREATURE_BRINE_AMBIENT = ModSounds.register("creature.brine_ambient");   // 6.0 Brine Wraith
+    public static final SoundEvent CREATURE_BRINE_HURT = ModSounds.register("creature.brine_hurt");
+    public static final SoundEvent CREATURE_BRINE_DEATH = ModSounds.register("creature.brine_death");
+    public static final SoundEvent CREATURE_BRINE_STEP = ModSounds.register("creature.brine_step");
+    public static final SoundEvent CREATURE_BRINE_SPIT = ModSounds.register("creature.brine_spit");
     public static final SoundEvent CREATURE_EEL_HURT = ModSounds.register("creature.eel_hurt");
     public static final SoundEvent CREATURE_EEL_DEATH = ModSounds.register("creature.eel_death");
     public static final SoundEvent CREATURE_SKINK_CHIRP = ModSounds.register("creature.skink_chirp");

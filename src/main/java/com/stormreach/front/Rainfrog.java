@@ -40,6 +40,47 @@ public class Rainfrog extends Animal {
     public Rainfrog(EntityType<? extends Rainfrog> type, Level level) {
         super(type, level);
         chorusTimer = 40 + random.nextInt(80);
+        this.moveControl = new HopMoveControl(this);   // 6.0: it hops, it doesn't run
+    }
+
+    /**
+     * 6.0: moves in leaps like a real frog. On the ground it never walks: when it wants to go somewhere it crouches
+     * (the hop animation starts) and two ticks later springs forward and up, then waits a moment before the next
+     * hop. Faster moves (panic, following food) are longer, higher, quicker hops. In water it swims normally.
+     */
+    static class HopMoveControl extends net.minecraft.world.entity.ai.control.MoveControl {
+        private final Rainfrog frog;
+        private int cooldown, crouch;
+
+        HopMoveControl(Rainfrog frog) { super(frog); this.frog = frog; }
+
+        @Override
+        public void tick() {
+            if (cooldown > 0) cooldown--;
+            if (frog.isInWater() || operation != Operation.MOVE_TO) { super.tick(); return; }
+            double dx = wantedX - frog.getX(), dz = wantedZ - frog.getZ();
+            if (dx * dx + dz * dz < 0.2) { operation = Operation.WAIT; frog.setZza(0); return; }
+            float yaw = (float) (net.minecraft.util.Mth.atan2(dz, dx) * (180 / Math.PI)) - 90f;
+            frog.setYRot(rotlerp(frog.getYRot(), yaw, 40f));
+            frog.yBodyRot = frog.getYRot();
+            frog.setZza(0);
+            frog.setSpeed(0);                                    // no running along the ground
+            if (!frog.onGround()) return;
+            if (crouch > 0) {
+                if (--crouch == 0) {
+                    double fast = Math.min(1.8, Math.max(0.6, speedModifier));
+                    double f = 0.26 * fast, rad = Math.toRadians(frog.getYRot());
+                    frog.setDeltaMovement(-Math.sin(rad) * f, 0.42 + 0.06 * (fast - 1), Math.cos(rad) * f);
+                    frog.needsSync = true;
+                    cooldown = (int) Math.round((10 + frog.getRandom().nextInt(8)) / fast);
+                }
+                return;
+            }
+            if (cooldown == 0) {
+                com.stormreach.anim.AnimPulse.fire(frog, com.stormreach.anim.AnimPulse.ATTACK);   // the hop animation
+                crouch = 2;
+            }
+        }
     }
 
     public static AttributeSupplier.Builder createAttributes() {

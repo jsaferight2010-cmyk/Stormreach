@@ -29,8 +29,10 @@ public final class RealmBlocks {
 
     public static final ResourceKey<Feature> GALEWOOD_TREE = ResourceKey.create(Registries.FEATURE, Stormreach.id("galewood"));
     public static final ResourceKey<Feature> TALL_GALEWOOD_TREE = ResourceKey.create(Registries.FEATURE, Stormreach.id("tall_galewood"));
+    // 6.0: TreeGrower takes (name, single-sapling trees, 2x2 trees, trees near flowers, shortest). The trees were in the
+    // 2x2 slot, so a lone sapling could never grow (naturally or with bone meal). Now: mostly Galewood, sometimes tall.
     public static final TreeGrower GALEWOOD_GROWER = new TreeGrower("stormreach_galewood",
-            WeightedList.of(), WeightedList.of(GALEWOOD_TREE), WeightedList.of(), TALL_GALEWOOD_TREE);
+            WeightedList.<ResourceKey<Feature>>builder().add(GALEWOOD_TREE, 4).add(TALL_GALEWOOD_TREE, 1).build(), WeightedList.of(), WeightedList.of(), GALEWOOD_TREE);
 
     // ---------- Tempest Spire (Overworld structure) ----------
     public static final Block TEMPEST_BRICKS = register("tempest_bricks", Block::new, stone(MapColor.COLOR_PURPLE).strength(2.5f, 9.0f), true);

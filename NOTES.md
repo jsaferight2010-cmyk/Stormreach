@@ -605,12 +605,30 @@ boot the headless test server in GitHub Actions as before.
 - Storm Crafter's Handbook: look unchanged. The 12 brewing recipes were missing: they now appear on the same kind
   of page (ingredient over the bottle, the result potion with its real name).
 
+### Stage 8 (part 2): sound
+- Audit (`/tmp/audit.py`-style check, now described here): 125 of 129 files mono (positional, correct); the 4 stereo
+  files are music (correct). A narrow-peak scan found a pipeline artifact: Vorbis at q5 added thin whistles near 8 kHz
+  ("birdies") to low, rumbling sounds (thunder, booms, roars). Fix in both encoders (sfx51.py, audio5.py): a -70 dB
+  high noise floor before encoding, quality 6. `tools/reencode_audio.py` re-encoded the audio5 files (blocks, entities,
+  ambience, voices, Cyrrus score) the same way without re-running the voice synthesis.
+- Redesign (sfx51.py "6.0 sound redesign" block): new primitives `modal` (noise strike into a resonator bank),
+  `grains` (noise-grain clouds), `voice` (jittery glottal source + breath through formants), `thump`. Rewritten:
+  every block material sound (stone, metal, glass, crystal, soft, plant, loose; break/step/place) with 3 variants each,
+  hail and stone taps, equip (metal), and the small creature voices (small ambient/hurt/death, skink, sprite, petrel,
+  thunderbird hurt, hermit click; skink/petrel/small ambient also get variants). sounds.json lists variants.
+- Ranges: tornado roar 160 blocks, siren 192, fire whirl 80 (thunder and serpent already 128).
+- Still the 5.x designs (birdie fix applied, not redesigned yet): titan voices, glide calls, whale, jellyfish bells,
+  frog, moth, stormfly, golem, serpent, eel zap, radio tones, machine hum and capacitor, chimes, horn, doors, splash,
+  radar ping, the tornado roar and siren (audio5), and the Labyrinth and Cyrrus scores. Candidates for the next sound
+  pass; tell the user honestly which remain.
+
 ### Resume point (overhaul in progress)
 Done: stages 1-7 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
 break blocks in Creative (vanilla says no)?
 Next, in order:
-2. Stage 8: original sound redesign pass, performance pass (guidebooks done; placement previews done in stage 2).
+2. Stage 8: second sound pass (the 5.x designs listed under stage 8 part 2), performance pass (guidebooks, sound
+   pass 1 and placement previews done).
 3. Multiplayer pass, then "even more" storm content.
 4. Tests, CHANGELOG/NOTES/CLAUDE.md, final double-check.
 5. Last of all: branding (name, icon and description for Mod Menu, GitHub, the .zip and the .jar). No jar is

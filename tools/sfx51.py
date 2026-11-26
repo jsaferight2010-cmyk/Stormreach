@@ -19,10 +19,15 @@ def ogg(path, data, stereo=False):
     path = pathlib.Path(path); path.parent.mkdir(parents=True, exist_ok=True)
     data = np.asarray(data, dtype=np.float64)
     peak = np.max(np.abs(data)) or 1.0
-    data = (data / peak * 0.89 * 32767).astype(np.int16)
+    data = data / peak
+    # 6.0: a faint high noise floor (about -70 dB) stops the Vorbis encoder inventing "birdies" (thin whistles near
+    # 8 kHz) on low, rumbling sounds whose highs are almost silent; it is far below anything you can hear
+    floor = hp(rng.standard_normal(data.shape[0]), 6000) * 3e-4
+    data = data + (floor[:, None] if data.ndim == 2 else floor)
+    data = (data / (np.max(np.abs(data)) or 1.0) * 0.89 * 32767).astype(np.int16)
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as t:
         wavfile.write(t.name, SR, data)
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', t.name, '-ac', '2' if stereo else '1', '-c:a', 'libvorbis', '-q:a', '5', str(path)], check=True)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', t.name, '-ac', '2' if stereo else '1', '-c:a', 'libvorbis', '-q:a', '6', str(path)], check=True)
     os.unlink(t.name)
 
 def lp(x, hz, o=4): return sosfilt(butter(o, min(hz, SR / 2 - 100), 'low', fs=SR, output='sos'), x)
@@ -443,6 +448,120 @@ NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_sp
          'creature.brine_ambient': brine_ambient, 'creature.brine_hurt': brine_hurt, 'creature.brine_death': brine_death,
          'creature.brine_step': brine_step, 'creature.brine_spit': brine_spit}
 
+# ================================================================================================ 6.0 sound redesign
+# The 5.x recipes leaned on pure sine tones and chirps, which read as squeaky and synthetic. These replace the worst of
+# them with physically-minded designs:
+#   * impacts are a short noise strike exciting the material's own resonant modes (a bank of decaying resonators),
+#     with a low "body" thump, so stone thuds, metal rings inharmonically, glass ticks, crystal chimes softly;
+#   * plants and loose ground are clouds of tiny noise grains (rustle, crunch), never tones;
+#   * small creature voices are a breathy, jittery glottal source through vocal-tract formants, pitched low enough to
+#     sound like an animal rather than a whistle.
+# Every block-material sound gets three variants (see VARIANTS below) so footsteps and breaking never loop audibly.
+from scipy.signal import lfilter
+def resonator(x, f, decay):
+    """A two-pole resonance at f Hz that rings for about 1/decay seconds."""
+    r = np.exp(-decay / SR); w = 2 * np.pi * f / SR
+    return lfilter([1 - r], [1, -2 * r * np.cos(w), r * r], x)
+def strike(sec=0.01, bright=4000):
+    """The excitation of a hit: a few milliseconds of shaped noise (brighter = harder)."""
+    n = int(sec * SR); return lp(rng.standard_normal(n) * np.linspace(1, 0, n) ** 2, bright)
+def modal(modes, sec, bright=4000, jitter=0.03):
+    """A struck object: modes are (Hz, gain, decay per second). Each hit detunes its modes slightly."""
+    x = np.zeros(int(sec * SR)); e = strike(0.008, bright); x[:len(e)] = e
+    out = np.zeros_like(x)
+    for f, g, d in modes: out += resonator(x, f * (1 + rng.uniform(-jitter, jitter)), d) * g
+    return out / (np.max(np.abs(out)) or 1)
+def grains(n, sec, lo, hi, grain=0.012, decay=None, env=None):
+    """A cloud of n tiny noise grains between lo and hi Hz spread over sec seconds (rustle, crunch, patter)."""
+    out = np.zeros(int((sec + 0.05) * SR))
+    for _ in range(n):
+        g = int(grain * rng.uniform(0.5, 1.6) * SR)
+        bit = bp(rng.standard_normal(g), lo * rng.uniform(0.8, 1.2), hi * rng.uniform(0.85, 1.1), 2) * np.hanning(g)
+        at = rng.random() ** (decay or 1.0) * sec
+        place(out, bit * rng.uniform(0.2, 1.0), at)
+    if env is not None: out[:len(env)] *= env[:len(out)]
+    return out
+def thump(f=90, sec=0.12, k=30): t = t_(sec); return np.sin(2 * np.pi * f * t * (1 - 0.3 * t / sec)) * np.exp(-t * k)
+def voice(sec, f0, f1, formants, breath=0.25, jitter=0.02, buzz=0.7):
+    """A creature voice: a glottal pulse train (with pitch jitter) plus breath, shaped by vocal-tract formants."""
+    t = t_(sec); f = np.linspace(f0, f1, len(t)) * (1 + jitter * lp(rng.standard_normal(len(t)), 30) * 8)
+    ph = np.cumsum(f) / SR
+    pulse = np.maximum(0, np.sin(2 * np.pi * ph)) ** 6 * buzz          # narrow glottal pulses, rich in harmonics
+    src = pulse + breath * rng.standard_normal(len(t)) * 0.3
+    out = sum(resonator(src, F, 80 + F * 0.06) * g for F, g in formants)
+    return hp(out, 80) / (np.max(np.abs(out)) or 1)
+
+# ---- block materials (break, step, place)
+STONE = ((180, 1.0, 60), (430, 0.7, 70), (790, 0.4, 90), (1350, 0.25, 120))
+METAL = ((320, 1.0, 5), (745, 0.7, 7), (1290, 0.5, 9), (1980, 0.3, 12), (2710, 0.2, 16))
+GLASS = ((1150, 0.8, 28), (2480, 0.5, 35), (3900, 0.3, 45))
+CRYSTAL = ((880, 0.8, 9), (1320, 0.55, 11), (2110, 0.35, 14))
+def m_stone_break(): return mix(modal(STONE, 0.4, 3000) * 0.8, thump(85, 0.2, 18) * 0.9, grains(28, 0.22, 400, 3500, decay=1.6) * 0.6)
+def m_stone_step(): return mix(modal(STONE, 0.12, 2200) * 0.5, thump(110, 0.08, 45) * 0.6, grains(4, 0.04, 600, 3000) * 0.3)
+def m_stone_place(): return mix(modal(STONE, 0.3, 2500) * 0.7, thump(75, 0.18, 22))
+def m_metal_break(): return mix(modal(METAL, 0.9, 5000) * 0.8, grains(10, 0.2, 1500, 6000, decay=1.5) * 0.25, thump(120, 0.1, 30) * 0.4)
+def m_metal_step(): return mix(modal(tuple((f, g, d * 5) for f, g, d in METAL[:3]), 0.12, 2200) * 0.35, thump(140, 0.06, 50) * 0.6)   # a footfall on plate: a dull clank
+def m_metal_place(): return mix(modal(METAL, 0.8, 3500) * 0.8, thump(90, 0.15, 25) * 0.5)
+def m_glass_break():
+    out = mix(modal(GLASS, 0.3, 7000) * 0.5, grains(46, 0.35, 2000, 7500, grain=0.006, decay=2.0) * 0.8)
+    for _ in range(6): place(out, modal(((rng.uniform(2200, 4200), 1, 60),), 0.12, 8000) * 0.25, rng.uniform(0.02, 0.3))
+    return out
+def m_glass_step(): return mix(modal(GLASS, 0.08, 5000) * 0.35, thump(160, 0.05, 60) * 0.4)
+def m_glass_place(): return mix(modal(tuple((f, g, d * 2) for f, g, d in GLASS), 0.15, 4000) * 0.45, thump(120, 0.08, 40) * 0.5)
+def m_crystal_break(): return mix(modal(CRYSTAL, 1.2, 6000) * 0.6, grains(30, 0.3, 1800, 6500, grain=0.008, decay=1.8) * 0.6, thump(100, 0.12, 30) * 0.3)
+def m_crystal_step(): return mix(modal(tuple((f, g, d * 4) for f, g, d in CRYSTAL), 0.15, 2000) * 0.25, thump(130, 0.06, 50) * 0.5)
+def m_crystal_place(): return mix(modal(CRYSTAL, 1.0, 4000) * 0.55, thump(90, 0.12, 28) * 0.5)
+def m_soft_break(): return mix(thump(70, 0.25, 15), grains(22, 0.2, 150, 1800, grain=0.02, decay=1.4) * 0.7)
+def m_soft_step(): return mix(thump(90, 0.1, 35) * 0.7, grains(6, 0.06, 200, 1500, grain=0.02) * 0.5)
+def m_soft_place(): return mix(thump(75, 0.18, 22), grains(8, 0.1, 150, 1200, grain=0.02) * 0.4)
+def m_plant_break(): return mix(grains(70, 0.4, 900, 6000, grain=0.01, decay=1.3) * 0.8, grains(8, 0.3, 300, 1500, grain=0.02) * 0.4)   # leaves and twigs
+def m_plant_step(): return grains(16, 0.12, 900, 5000, grain=0.01) * 0.6
+def m_plant_place(): return mix(grains(22, 0.18, 800, 4500, grain=0.012) * 0.6, thump(110, 0.08, 40) * 0.3)
+def m_loose_break(): return mix(grains(90, 0.35, 250, 3200, grain=0.008, decay=1.5) * 0.9, thump(70, 0.2, 18) * 0.6)    # gravel and sand
+def m_loose_step(): return mix(grains(30, 0.12, 300, 3000, grain=0.008) * 0.8, thump(90, 0.06, 45) * 0.4)
+def m_loose_place(): return mix(grains(45, 0.2, 200, 2500, grain=0.01, decay=1.4) * 0.7, thump(70, 0.15, 25) * 0.5)
+MAT = {m: (globals()[f'm_{m}_break'], globals()[f'm_{m}_step'], globals()[f'm_{m}_place']) for m in ('stone', 'crystal', 'metal', 'soft', 'plant', 'loose', 'glass')}
+MAT_SYNTH = {f'block.mat.{m}.{ev}': fns[i] for m, fns in MAT.items() for i, ev in enumerate(('break', 'step', 'place'))}
+def stone_tap(): return mix(modal(((900, 1, 120), (2100, 0.5, 160)), 0.1, 6000) * 0.6, grains(3, 0.03, 1500, 5000) * 0.4)   # hail on stone
+def hail():
+    out = np.zeros(int(1.5 * SR))
+    for k in range(55): place(out, stone_tap() * (0.15 + rng.random() * 0.6), rng.random() * 1.4)
+    return mix(out, grains(120, 1.4, 600, 4000, grain=0.004) * 0.25)
+def equip_metal(): out = modal(METAL, 0.5, 5000) * 0.5; place(out, grains(12, 0.15, 800, 4000, grain=0.01) * 0.6, 0.0); return out   # mail settling
+
+# ---- small creatures: animal voices instead of whistles
+def small_ambient():   # a soft chirruping trill, low and breathy
+    out = np.zeros(int(0.6 * SR))
+    for k in range(3): place(out, voice(0.08, 900, 1150, ((1200, 1), (2600, 0.4)), 0.35) * 0.7, k * 0.13)
+    return out
+def small_hurt(): return voice(0.22, 1100, 700, ((1100, 1), (2400, 0.5)), 0.5, 0.05)
+def small_death(): return mix(voice(0.55, 950, 380, ((900, 1), (2100, 0.45)), 0.45, 0.04), grains(10, 0.3, 300, 2000) * 0.2)
+def skink_chirp(): return mix(voice(0.05, 1500, 1700, ((1600, 1), (3000, 0.3)), 0.3) * 0.6, grains(6, 0.05, 2000, 5000, grain=0.004) * 0.4)
+def sprite_trill():   # a fluttering, airy trill (it is made of wind and light, not a bird whistle)
+    out = np.zeros(int(1.2 * SR))
+    for k in range(8): place(out, voice(0.05, 1300 + 60 * k, 1500 + 60 * k, ((1500, 1), (3200, 0.3)), 0.6) * 0.5, k * 0.07)
+    return reverb(mix(out, grains(40, 0.9, 1500, 6000, grain=0.01) * 0.15), 0.9, 0.3, 4000)
+def petrel_call():   # a dry, purring chatter: pulses of a throaty voice
+    out = np.zeros(int(0.75 * SR))
+    for k in range(9): place(out, voice(0.04, 780, 820, ((850, 1), (1900, 0.5)), 0.4) * (0.5 + 0.3 * np.sin(k)), k * 0.05)
+    place(out, voice(0.2, 700, 950, ((900, 1), (2100, 0.45)), 0.35) * 0.7, 0.48)
+    return out
+def thunderbird_hurt(): return reverb(mix(voice(0.5, 420, 300, ((700, 1), (1500, 0.6), (2600, 0.3)), 0.6, 0.06), grains(30, 0.3, 1500, 6000) * 0.25), 0.9, 0.25, 3000)
+def hermit_click():
+    out = np.zeros(int(0.35 * SR))
+    for k in range(4): place(out, modal(((1400, 1, 220), (2600, 0.4, 300)), 0.04, 5000) * 0.6, k * 0.06 + rng.uniform(0, 0.015))
+    return out
+
+# the per-release tables captured the old functions when they were built: point them at the redesigned ones
+_REDONE = {'small_ambient', 'small_hurt', 'small_death', 'skink_chirp', 'sprite_trill', 'petrel_call', 'thunderbird_hurt',
+           'hermit_click', 'stone_tap', 'hail', 'equip_metal'}
+for _d in (NEW52, NEW53, NEW54, NEW55):
+    for _k, _f in list(_d.items()):
+        if getattr(_f, '__name__', '') in _REDONE: _d[_k] = globals()[_f.__name__]
+
+# sounds that get three variants (files _2 and _3 next to the first)
+VARIANTS = set(MAT_SYNTH) | {'block.stone_tap', 'creature.small_ambient', 'creature.skink_chirp', 'creature.petrel_call'}
+
 SYNTH = {
     'weather.thunder': thunder, 'weather.gust': gust, 'weather.wind': wind, 'magic.chime': chime, 'magic.shatter': shatter, 'magic.hum': hum,
     'magic.activate': activate, 'magic.dispel': dispel, 'magic.warp': warp, 'block.metal_place': metal_place, 'item.equip_pack': equip_pack,
@@ -513,9 +632,10 @@ def loopify(buf):
 
 if __name__ == '__main__':
     for sid, fn in SYNTH.items():
-        x = fn()
-        x = x * 0.9 / (np.max(np.abs(x)) or 1)
-        ogg(SND / 'sfx' / (sid.replace('.', '_') + '.ogg'), x)
+        for v in range(3 if sid in VARIANTS else 1):   # 6.0: variants, so repeated sounds don't sound identical
+            x = fn()
+            x = x * 0.9 / (np.max(np.abs(x)) or 1)
+            ogg(SND / 'sfx' / (sid.replace('.', '_') + ('' if v == 0 else f'_{v + 1}') + '.ogg'), x)
     missing = [s for s in SFX if s not in SYNTH]
     if missing: sys.exit(f'no synth for {missing}')
     calm, tense, chase = score_calm(), score_tense(), score_chase()

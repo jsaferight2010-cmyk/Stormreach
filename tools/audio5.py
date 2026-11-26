@@ -45,10 +45,15 @@ def ogg(path, data, sr=SR, stereo=False):
     path = pathlib.Path(path); path.parent.mkdir(parents=True, exist_ok=True)
     data = np.asarray(data, dtype=np.float64)
     peak = np.max(np.abs(data)) or 1.0
-    data = (data / peak * 0.89 * 32767).astype(np.int16)
+    data = data / peak
+    # 6.0: a faint high noise floor (about -70 dB) so the Vorbis encoder doesn't add whistles to rumbling sounds
+    from scipy.signal import butter, sosfilt
+    floor = sosfilt(butter(4, 6000, 'high', fs=sr, output='sos'), np.random.default_rng(7).standard_normal(data.shape[0])) * 3e-4
+    data = data + (floor[:, None] if data.ndim == 2 else floor)
+    data = (data / (np.max(np.abs(data)) or 1.0) * 0.89 * 32767).astype(np.int16)
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False) as t:
         wavfile.write(t.name, sr, data)
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', t.name, '-ac', '2' if stereo else '1', '-c:a', 'libvorbis', '-q:a', '5', str(path)], check=True)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', t.name, '-ac', '2' if stereo else '1', '-c:a', 'libvorbis', '-q:a', '6', str(path)], check=True)
     os.unlink(t.name)
 
 

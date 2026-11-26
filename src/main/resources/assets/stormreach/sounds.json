@@ -3,7 +3,7 @@
     "sounds": [
       {
         "name": "stormreach:block/tornado_siren",
-        "attenuation_distance": 96
+        "attenuation_distance": 192
       }
     ],
     "subtitle": "subtitles.stormreach.block.tornado_siren"
@@ -12,7 +12,7 @@
     "sounds": [
       {
         "name": "stormreach:entity/tornado_roar",
-        "attenuation_distance": 64
+        "attenuation_distance": 160
       }
     ],
     "subtitle": "subtitles.stormreach.entity.tornado.roar"
@@ -168,7 +168,7 @@
     "sounds": [
       {
         "name": "stormreach:sfx/entity_fire_whirl_roar",
-        "attenuation_distance": 48
+        "attenuation_distance": 80
       }
     ],
     "subtitle": "subtitles.stormreach.entity.fire_whirl.roar"

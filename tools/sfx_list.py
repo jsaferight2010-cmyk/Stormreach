@@ -12,7 +12,7 @@ SFX = {
     'magic.dispel': ('The storm breaks up', ['BEACON_DEACTIVATE'], 48),
     'magic.warp': ('Something warps away', ['ENDERMAN_TELEPORT'], 16),
     'block.metal_place': ('Metal frame clanks into place', ['ANVIL_PLACE'], 16),
-    'entity.fire_whirl.roar': ('Fire whirl roars', [], 48),
+    'entity.fire_whirl.roar': ('Fire whirl roars', [], 80),
     'vehicle.tiv.spikes': ('TIV anchors slam down', [], 24),
     'item.equip_pack': ('Backpack straps on', ['ARMOR_EQUIP_LEATHER', 'ARMOR_EQUIP_ELYTRA'], 16),
     'item.equip_metal': ('Armour clinks', ['ARMOR_EQUIP_IRON', 'ARMOR_EQUIP_DIAMOND', 'ARMOR_EQUIP_NETHERITE'], 16),

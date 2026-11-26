@@ -210,8 +210,8 @@ for n in ('stormfruit', 'gilded_stormfruit', 'stormfruit_preserve', 'thistle_dow
 # =====================================================================================
 VOICE = rj(f'{ROOT}/tools/voice_lines.json')['lines']
 sounds = {
-    'block.tornado_siren': {'sounds': [{'name': 'stormreach:block/tornado_siren', 'attenuation_distance': 96}], 'subtitle': 'subtitles.stormreach.block.tornado_siren'},
-    'entity.tornado.roar': {'sounds': [{'name': 'stormreach:entity/tornado_roar', 'attenuation_distance': 64}], 'subtitle': 'subtitles.stormreach.entity.tornado.roar'},
+    'block.tornado_siren': {'sounds': [{'name': 'stormreach:block/tornado_siren', 'attenuation_distance': 192}], 'subtitle': 'subtitles.stormreach.block.tornado_siren'},
+    'entity.tornado.roar': {'sounds': [{'name': 'stormreach:entity/tornado_roar', 'attenuation_distance': 160}], 'subtitle': 'subtitles.stormreach.entity.tornado.roar'},
     'music.labyrinth.calm': {'sounds': [{'name': 'stormreach:music/labyrinth_calm', 'stream': True}]},
     'music.labyrinth.tense': {'sounds': [{'name': 'stormreach:music/labyrinth_tense', 'stream': True}]},
     'music.labyrinth.chase': {'sounds': [{'name': 'stormreach:music/labyrinth_chase', 'stream': True}]},
@@ -223,7 +223,9 @@ sounds = {
 import sys as _sys; _sys.path.insert(0, f'{ROOT}/tools')
 from sfx_list import SFX
 for _sid, (_sub, _old, _att) in SFX.items():   # 5.1: every effect is the mod's own (tools/sfx51.py)
-    sounds[_sid] = {'sounds': [{'name': f'stormreach:sfx/{_sid.replace(".", "_")}', 'attenuation_distance': _att}], 'subtitle': f'subtitles.stormreach.{_sid}'}
+    _base = _sid.replace(".", "_")   # 6.0: variants (_2, _3) where sfx51 made them, so repeats don't sound identical
+    _files = [_base] + [f'{_base}_{v}' for v in (2, 3) if os.path.exists(f'{A}/sounds/sfx/{_base}_{v}.ogg')]
+    sounds[_sid] = {'sounds': [{'name': f'stormreach:sfx/{f}', 'attenuation_distance': _att} for f in _files], 'subtitle': f'subtitles.stormreach.{_sid}'}
 for k in VOICE: sounds[f'voice.cyrrus.{k}'] = {'sounds': [{'name': f'stormreach:voice/cyrrus/{k}', 'stream': True, 'attenuation_distance': 64}]}
 w(f'{A}/sounds.json', sounds)
 for k, v in {'block.tornado_siren': 'Tornado siren wails', 'entity.tornado.roar': 'Tornado roars', 'ambient.heartbeat': 'Heart pounds',

@@ -491,3 +491,12 @@ boot the headless test server in GitHub Actions as before.
 - Crops: flattened (lose growth) from 65 mph, torn out from 90 mph, once per tornado (config tornadoCropDamage).
 - Waterspout satellites no longer follow a parent ashore (landfall still dissipates them deliberately).
 - Fire whirl (`FireWhirlEntity`, Nether only, rare natural spawn near lava/soul ground, config fireWhirls).
+
+### Resume point (overhaul in progress)
+Done: stages 1-4 (crash, visuals, weather, tornadoes), CI green at 58 GameTests / 64 unit tests.
+Stage 5 in progress: locker doors repainted (solid lower door, louvres only in the upper half, textures60.py).
+Next: locker seat entity + smooth camera transitions (LockerSeat, HidingTracker, CameraMixin, LockerClient), then
+backpack slot/B key, barometer + wind vane GUIs, units everywhere, creative Wind Generator, Stormheart spread on
+power. Then stage 6 (mobs/gear/Dispel Weather/saplings/creative dimension item), 7 (maze/vault, shrine arena +
+sigil crash, spire chests/stairs + Eye reward, cinematic), 8 (sound redesign, guidebooks, perf), 9 (tests, docs,
+final check, jar). No jar is delivered until everything is done and checked.

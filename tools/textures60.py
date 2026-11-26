@@ -223,4 +223,43 @@ def puddle_icon():
 
 puddle_icon()
 
+
+def locker_doors():
+    """Rusted locker front: the lower half is a solid door (riveted, dented, with the latch); only the upper half has
+    louvred slats, at the hiding player's eye level, so you see out without being seen from below."""
+    import random
+    r = random.Random(64)
+    rust, rust_d, rust_l, metal = (150, 82, 44), (92, 48, 26), (196, 120, 70), (176, 182, 188)
+    def base():
+        img = Image.new('RGBA', (64, 64))
+        for y in range(64):
+            for x in range(64):
+                c = tuple(max(0, min(255, v + r.randint(-14, 14))) for v in rust)
+                if r.random() < 0.08: c = tuple(max(0, min(255, v + r.randint(-10, 10))) for v in rust_l)
+                if x < 4 or x > 59: c = rust_d
+                img.putpixel((x, y), c + (255,))
+        return img
+    low = base()
+    for y in (6, 57):
+        for x in range(4, 60): low.putpixel((x, y), rust_d + (255,))
+    for (x, y) in ((8, 10), (55, 10), (8, 52), (55, 52), (31, 10), (31, 52)):
+        for dx in range(2):
+            for dy in range(2): low.putpixel((x + dx, y + dy), (rust_l if dx + dy == 0 else rust_d) + (255,))
+    for y in range(24, 34):                                   # latch
+        for x in range(46, 50): low.putpixel((x, y), metal + (255,) if x < 48 else (120, 126, 132, 255))
+    for y in range(14, 46):                                   # a long dent catching the light
+        low.putpixel((20 + (y % 3 == 0), y), tuple(min(255, v + 22) for v in rust) + (255,))
+    save(low, 'block/rusted_locker_grate_lower.png')
+    up = base()
+    for y in range(12, 48, 6):                                # louvres across the middle of the upper door
+        for x in range(8, 56):
+            for k in range(3): up.putpixel((x, y + k), (0, 0, 0, 0))
+            up.putpixel((x, y + 3), rust_d + (255,))
+            up.putpixel((x, y - 1), tuple(min(255, v + 25) for v in rust) + (255,))
+    for x in range(4, 60): up.putpixel((x, 4), rust_d + (255,)); up.putpixel((x, 58), rust_d + (255,))
+    save(up, 'block/rusted_locker_grate_upper.png')
+
+
+locker_doors()
+
 print('textures60: done')

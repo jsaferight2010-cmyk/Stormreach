@@ -660,6 +660,27 @@ boot the headless test server in GitHub Actions as before.
 - Stubs: ServerLifecycleEvents.SERVER_STOPPED, brigadier `getRoot`/`getChild`/`canUse` added to libstubs.
 - CI run 45815517876: 70/70 GameTests, 74 unit tests.
 
+### Stage 10 (part 1): signs of the storm
+- New package `signs/` (SignsRegistry registers by hand; validate.py lists `weatherglass` and `glaze` explicitly).
+  Pure rules in `sim/StormSigns` (unit test StormSignsTest, 4 tests).
+- **Weatherglass** (id `weatherglass`; the name "Stormglass" was already taken by the 1.x glass block): a Fitzroy storm
+  glass. READING 0-15 from the server's WeatherData timers (rainTime/thunderTime/clearWeatherTime), so it shows rain
+  up to 20 minutes before it starts; 4 models (clear, a few crystals, cloudy, full). Comparator output = reading.
+  Use gives the reading as words. Only the Overworld has weather to feel. Recipe: copper / glass pane, salt, glass
+  pane / copper. In the meteorology tab.
+- **Freezing rain** (config `freezingRain`): rain where the biome's base temperature is 0.15-0.35 (vanilla snows below
+  0.15), at night or in a Thunderhead. Three random loaded columns per player every 10 ticks get **Glaze** (1 px
+  translucent ice skin, friction 0.98, no item, no drops, needs a sturdy face below). Glaze melts on random tick by day
+  once the freezing rain stops, at once in a warm biome or beside block light > 11. Players who can freeze get a mild
+  frost vignette (ticksFrozen held at 70, never the 140 that hurts).
+- **St. Elmo's fire** (config `elmosFire`, `elmosFireStrikes`): in a Thunderhead, out in the open above y 90 holding an
+  item tagged `stormreach:conducts_lightning` (iron/gold/copper/netherite tools and spears, trident, mace, lightning
+  rods, Voltite tools). Charge +20 a second, bleeds 60 a second otherwise; sparks and soul-fire at the tip and a new
+  corona hiss (`ambient.elmos_fire`, sfx51 `elmos_fire`); warning at 10 s, a real bolt at 30 s (a visual one for
+  Creative). A lightning rod within 16 blocks (POI search) takes the charge. Charges reset with the world.
+- Field guide: new "Signs of the storm" chapter, Weatherglass under Reading the weather, commands line updated.
+- GameTests weatherglassFollowsTheWeather, glazeAndElmosFireRules. CI run 45817365246: 72/72, unit tests 78.
+
 ### Resume point (overhaul in progress)
 Done: stages 1-9 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords

@@ -765,29 +765,102 @@ def build_nbt(name, size, b, chests):
     os.makedirs(f'{D}/structure', exist_ok=True)
     nbtlib.File(root, root_name='').save(f'{D}/structure/{name}.nbt', gzipped=True)
 def S(bid, **p): return (bid if ':' in bid else 'stormreach:' + bid, p)
-rnd = random.Random(8001); b = {}; chests = {}; W = 17; H = 9; c = 8
+# 6.0: the Hollow Shrine, rebuilt. A floating skyshale island (an inverted cone with ion veins and hanging spurs)
+# carries a patterned plaza ringed by a storm-broken colonnade. Four tempest-brick causeways climb a three-tier dais
+# to the Hollow Altar; the four relic pedestals stand on the dais diagonals, and the four storm conduits crown short
+# obelisks at the ends of the causeways (open to the sky, so they can be struck: no lightning rods, which would draw
+# natural strikes and reset the order puzzle). The reliquary chest sits on the dais beside the altar. Everything the
+# ritual needs stays inside ShrineBlocks' search box (24 blocks out, 6 up or down from the altar).
+rnd = random.Random(8001); b = {}; chests = {}; W = 35; H = 26; c = 17; PL = 10
 for x in range(W):
     for z in range(W):
         for y in range(H): b[(x, y, z)] = S('minecraft:air')
+def stair(bid, facing, half='bottom'): return S(bid, facing=facing, half=half, shape='straight', waterlogged='false')
+# the island
 for x in range(W):
     for z in range(W):
         r = math.hypot(x - c, z - c)
-        if r <= 8.4: b[(x, 2, z)] = S('skyshale_bricks') if rnd.random() > 0.12 else S('cobbled_skyshale')
-        if r <= 7.0: b[(x, 1, z)] = S('skyshale')
-        if r <= 4.5: b[(x, 0, z)] = S('skyshale') if rnd.random() > 0.15 else S('ion_ore')
-        if r <= 2.2: b[(x, 2, z)] = S('chiseled_tempest_bricks')
-for k in range(-6, 7):  # a cross of tempest bricks
-    b[(c + k, 2, c)] = S('tempest_bricks'); b[(c, 2, c + k)] = S('tempest_bricks')
-b[(c, 3, c)] = S('hollow_altar')
-for i, (x, z) in enumerate(((c - 4, c - 4), (c + 4, c - 4), (c + 4, c + 4), (c - 4, c + 4))):
-    b[(x, 3, z)] = S('relic_pedestal', relic=str(i + 1), lit='false')
-for (x, z), order in (((c, c - 7), 1), ((c + 7, c), 3), ((c, c + 7), 2), ((c - 7, c), 4)):  # strike order is not clockwise: read the notches
-    b[(x, 3, z)] = S('storm_conduit', order=str(order), struck='false')
-for a in range(8):  # ring of broken pillars
-    ang = a * math.pi / 4 + math.pi / 8; x = int(round(c + math.cos(ang) * 6.5)); z = int(round(c + math.sin(ang) * 6.5))
-    for y in range(3, 3 + rnd.randint(1, 4)): b[(x, y, z)] = S('chiseled_skyshale') if y == 3 else S('skyshale_bricks')
-b[(c + 1, 3, c + 2)] = S('minecraft:chest', facing='south', type='single', waterlogged='false'); chests[(c + 1, 3, c + 2)] = 'stormreach:chests/hollow_shrine'
-for (x, z) in ((c - 2, c - 2), (c + 2, c + 2), (c - 2, c + 2), (c + 2, c - 2)): b[(x, 3, z)] = S('minecraft:soul_lantern', hanging='false', waterlogged='false')
+        if r > 15.5: continue
+        depth = int((1 - (r / 16) ** 1.6) * 9) + 1 + (rnd.random() < 0.15)
+        for y in range(PL - depth, PL):
+            deep = PL - y
+            if rnd.random() < 0.05 and deep > 2: b[(x, y, z)] = S('ion_ore')
+            else: b[(x, y, z)] = S('cobbled_skyshale') if deep == depth or rnd.random() < 0.18 else S('skyshale')
+        if r < 9 and rnd.random() < 0.06:   # hanging spurs under the island
+            for k in range(1, rnd.randint(2, 5)): b[(x, PL - depth - k, z)] = S('cobbled_skyshale')
+# the plaza: a chiseled rim, worn brick, a ring of tempest brick at radius 9
+for x in range(W):
+    for z in range(W):
+        r = math.hypot(x - c, z - c)
+        if r > 15.5: continue
+        if r > 14.2: blk = S('chiseled_skyshale')
+        elif 8.5 <= r <= 9.5: blk = S('tempest_bricks')
+        else: blk = S('cobbled_skyshale') if rnd.random() < 0.1 else S('skyshale_bricks')
+        b[(x, PL, z)] = blk
+AXES = {'north': (0, -1), 'south': (0, 1), 'west': (-1, 0), 'east': (1, 0)}
+UP = {'north': 'south', 'south': 'north', 'west': 'east', 'east': 'west'}   # a stair on the north side climbs toward the south
+for name, (dx, dz) in AXES.items():        # causeways
+    for k in range(5, 15):
+        for wd in (-1, 0, 1):
+            b[(c + dx * k + dz * wd, PL, c + dz * k + dx * wd)] = S('tempest_bricks')
+# the dais: three tiers, with stairs up each causeway
+DAIS = ((6.2, PL + 1, 'skyshale_bricks'), (4.5, PL + 2, 'tempest_bricks'), (2.6, PL + 3, 'chiseled_tempest_bricks'))
+for x in range(W):
+    for z in range(W):
+        r = math.hypot(x - c, z - c)
+        for rad, y, blk in DAIS:
+            if r <= rad: b[(x, y, z)] = S(blk)
+for name, (dx, dz) in AXES.items():
+    for rad, y, _ in DAIS:
+        k = int(rad) + 1
+        for wd in (-1, 0, 1):
+            b[(c + dx * k + dz * wd, y, c + dz * k + dx * wd)] = stair('tempest_brick_stairs', UP[name])
+# the altar, the pedestals on the diagonals, and the conduits on obelisks at the causeway ends
+b[(c, PL + 4, c)] = S('hollow_altar')
+for i, (x, z) in enumerate(((c - 3, c - 3), (c + 3, c - 3), (c + 3, c + 3), (c - 3, c + 3))):
+    b[(x, PL + 3, z)] = S('relic_pedestal', relic=str(i + 1), lit='false')
+for name, order in (('north', 1), ('east', 3), ('south', 2), ('west', 4)):   # strike order is not clockwise: read the notches
+    dx, dz = AXES[name]
+    ox, oz = c + dx * 13, c + dz * 13
+    for a in (-1, 0, 1):
+        for bb in (-1, 0, 1): b[(ox + a, PL + 1, oz + bb)] = S('tempest_bricks') if (a, bb) != (0, 0) else S('chiseled_skyshale')
+    b[(ox, PL + 2, oz)] = S('chiseled_skyshale')
+    b[(ox, PL + 3, oz)] = S('storm_conduit', order=str(order), struck='false')
+    for a, bb in ((-1, -1), (1, -1), (1, 1), (-1, 1)): b[(ox + a, PL + 2, oz + bb)] = S('skyshale_brick_slab', type='bottom', waterlogged='false')
+# the reliquary: the chest on the dais beside the altar, a chiseled backing with a lantern on it
+b[(c + 2, PL + 3, c + 3)] = S('minecraft:chest', facing='north', type='single', waterlogged='false'); chests[(c + 2, PL + 3, c + 3)] = 'stormreach:chests/hollow_shrine'
+b[(c + 2, PL + 3, c + 4)] = S('chiseled_skyshale')
+b[(c + 2, PL + 4, c + 4)] = S('minecraft:soul_lantern', hanging='false', waterlogged='false')
+# soul braziers on the radius-9 ring between the causeways, on plinths
+for a in range(4):
+    ang = a * math.pi / 2 + math.pi / 4; x = int(round(c + math.cos(ang) * 9)); z = int(round(c + math.sin(ang) * 9))
+    b[(x, PL + 1, z)] = S('chiseled_skyshale')
+    b[(x, PL + 2, z)] = S('minecraft:soul_campfire', facing='north', lit='true', signal_fire='false', waterlogged='false')
+# the colonnade: sixteen pillars round the rim, storm-broken to different heights; the tall ones carry a stub with a
+# soul lantern hanging over the plaza, and broken pieces lie where the short ones fell
+for a in range(16):
+    ang = a * math.pi / 8 + math.pi / 16
+    x = int(round(c + math.cos(ang) * 14.5)); z = int(round(c + math.sin(ang) * 14.5))
+    h = rnd.choice((2, 3, 4, 8, 8, 9))
+    for y in range(PL + 1, PL + 1 + h): b[(x, y, z)] = S('chiseled_skyshale') if y in (PL + 1, PL + h) else S('skyshale_bricks')
+    if h >= 8:
+        ix, iz = int(round(c + math.cos(ang) * 13.5)), int(round(c + math.sin(ang) * 13.5))
+        inward = min(AXES, key=lambda n: (AXES[n][0] - (ix - x)) ** 2 + (AXES[n][1] - (iz - z)) ** 2)
+        b[(ix, PL + h, iz)] = stair('skyshale_brick_stairs', UP[inward], 'top')
+        b[(ix, PL + h - 1, iz)] = S('minecraft:chain', axis='y', waterlogged='false')
+        b[(ix, PL + h - 2, iz)] = S('minecraft:soul_lantern', hanging='true', waterlogged='false')
+    else:
+        for _ in range(rnd.randint(1, 3)):
+            rx = x + rnd.randint(-2, 2); rz = z + rnd.randint(-2, 2)
+            if math.hypot(rx - c, rz - c) < 14 and b.get((rx, PL + 1, rz)) == S('minecraft:air') and b.get((rx, PL, rz)) not in (None, S('minecraft:air')):
+                b[(rx, PL + 1, rz)] = rnd.choice((S('cobbled_skyshale'), S('skyshale_brick_slab', type='bottom', waterlogged='false')))
+# loose rubble drifting off the island's corners
+for (dx, dz) in ((1, 1), (-1, 1), (1, -1), (-1, -1)):
+    bx, bz, by = c + dx * 14, c + dz * 14, PL + rnd.randint(-2, 5)
+    for ox in range(-1, 2):
+        for oz in range(-1, 2):
+            for oy in range(-1, 1):
+                if rnd.random() < 0.6 and 0 <= bx + ox < W and 0 <= bz + oz < W: b[(bx + ox, by + oy, bz + oz)] = rnd.choice((S('skyshale'), S('cobbled_skyshale')))
 build_nbt('hollow_shrine', (W, H, W), b, chests)
 w(f'{WG}/template_pool/hollow_shrine.json', {'elements': [{'element': {'element_type': 'minecraft:single_pool_element', 'location': 'stormreach:hollow_shrine',
     'processors': {'processors': []}, 'projection': 'rigid'}, 'weight': 1}], 'fallback': 'minecraft:empty'})

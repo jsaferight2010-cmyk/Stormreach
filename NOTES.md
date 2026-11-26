@@ -588,18 +588,20 @@ boot the headless test server in GitHub Actions as before.
   original score; unchanged here.
 - Tests: GameTests for the Eye (exactly once), the arena lifecycle and skipping the intro.
 
+### Stage 7 part 2: the Hollow Shrine rebuilt
+- gendata8.py `hollow_shrine` (35 x 26 x 35, was 17 x 9 x 17): a floating skyshale island (inverted cone, ion veins,
+  hanging spurs), a patterned plaza (chiseled rim, worn brick, a tempest-brick ring), four tempest-brick causeways with
+  stairs up a three-tier dais to the Hollow Altar, relic pedestals on the dais diagonals, storm conduits on obelisks at
+  the causeway ends (open to the sky, no lightning rods so natural strikes can't spoil the order), soul braziers, a
+  colonnade of sixteen storm-broken pillars (tall ones hang soul lanterns, short ones leave rubble), a reliquary chest
+  beside the altar, rubble drifting off the corners. Checked offline: every ritual block in ShrineBlocks' search box,
+  conduits open to the sky, altar, pedestals and chest all reachable on foot. The fight itself moves to the sky arena.
+
 ### Resume point (overhaul in progress)
-Done: stages 1-6 and stage 7 part 1 (Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash).
+Done: stages 1-7 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
 break blocks in Creative (vanilla says no)?
 Next, in order:
-1. Stage 7 part 2: a more elaborate Hollow Shrine (tools/gendata8.py, build_nbt('hollow_shrine')). Plan: ~33 x 33
-   floating skyshale island with an inverted-cone underside and ion veins; a patterned plaza; four causeway stairs up
-   to a raised dais with the Hollow Altar in the centre; the four relic pedestals on plinths on the dais diagonals;
-   the four storm conduits on short obelisks at the cardinal edges (open to the sky, NO lightning rods: natural
-   strikes would hit them out of order and reset the puzzle; keep pedestals and conduits within the 24-block search
-   box of ShrineBlocks); a broken colonnade with arches and hanging soul lanterns; the chest in a reliquary niche
-   behind the altar; a few floating rubble chunks. Keep strike order notches as they are.
 2. Stage 8: original sound redesign pass, guidebooks (beginner guide without rarity; crafting book only accuracy
    fixes, same look), placement previews (section 21), performance pass.
 3. Multiplayer pass, then "even more" storm content.

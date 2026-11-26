@@ -57,6 +57,19 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.units.PlayerUnits.init();
         com.stormreach.wind.WindRegistry.init();
         com.stormreach.blight.HeartRegistry.init();
+        // 6.0: no per-world state survives into the next world (a single-player session can open several)
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPING.register(com.stormreach.realm.SovereignArena::endAllForShutdown);
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            com.stormreach.tornado.TornadoManager.resetForNewWorld();
+            com.stormreach.labyrinth.LabyrinthTracker.resetForNewWorld();
+            com.stormreach.labyrinth.HidingTracker.resetForNewWorld();
+            com.stormreach.sky.WeatherRadio.resetForNewWorld();
+            com.stormreach.weather.precip.RainAccumulation.resetForNewWorld();
+            com.stormreach.story.Cinematics.resetForNewWorld();
+            com.stormreach.weather.StormWeather.resetForNewWorld();
+            com.stormreach.wind.WindSources.resetForNewWorld();
+            com.stormreach.realm.SovereignArena.resetForNewWorld();
+        });
         com.stormreach.labyrinth.LabyrinthRegistry.init();
         com.stormreach.forest.ForestRegistry.init();
         com.stormreach.wild.WildRegistry.init();

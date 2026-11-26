@@ -26,6 +26,12 @@ import java.util.Random;
 
 /** Natural tornadogenesis, the live-tornado registry and scheduled weather events. */
 public final class TornadoManager {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        LIVE.clear();
+        EVENTS.clear();
+    }
+
     private static final List<TornadoEntity> LIVE = new ArrayList<>();
     private static final List<WeatherEvents.ActiveEvent> EVENTS = new ArrayList<>();
 

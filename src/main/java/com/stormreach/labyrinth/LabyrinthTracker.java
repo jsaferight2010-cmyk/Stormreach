@@ -24,6 +24,12 @@ import java.util.UUID;
  * from them) and removed when everyone has been gone for a minute, so it can never be met or seen outside.
  */
 public final class LabyrinthTracker {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        GUARDIANS.clear();
+        LAST_OCCUPIED.clear();
+    }
+
     private static final Map<Long, UUID> GUARDIANS = new HashMap<>();
     private static final Map<Long, Long> LAST_OCCUPIED = new HashMap<>();
 

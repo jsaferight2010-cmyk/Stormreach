@@ -18,6 +18,12 @@ import java.util.Random;
  * setting, and with nothing synced per stone. Stone sizes follow the same distribution as the server's impacts.
  */
 public final class HailClient {
+    /** 6.0: forget the last session (called when the connection changes). */
+    public static void resetSession() {
+        field = null;
+        fieldUntil = 0;
+    }
+
     private HailClient() {}
 
     private static HailSim.FieldPayload field;

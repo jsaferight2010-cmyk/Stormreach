@@ -5,6 +5,12 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 
 /** The latest local-weather reading from the server (once a second), for the HUD and for animating instruments. */
 public final class ClientWeather {
+    /** 6.0: forget the last session (called when the connection changes). */
+    public static void resetSession() {
+        last = null;
+        receivedAt = 0;
+    }
+
     private ClientWeather() {}
 
     private static WeatherHud.Payload last;

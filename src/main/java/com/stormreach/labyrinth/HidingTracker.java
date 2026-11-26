@@ -21,6 +21,11 @@ import java.util.UUID;
 
 /** Who is hiding in which locker, and whether they've given themselves away. Server-side only. */
 public final class HidingTracker {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        HIDING.clear();
+    }
+
     public record Hide(BlockPos locker, Direction facing, Vec3 spot, long sinceTick, boolean[] moved, LockerSeat seat) {}
 
     private static final Map<UUID, Hide> HIDING = new HashMap<>();

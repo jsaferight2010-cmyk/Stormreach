@@ -74,6 +74,11 @@ public class StormreachConfigScreen extends Screen {
         }
 
         int bottom = this.height - 28;
+        // 6.0: on a server, the server's own stormreach.properties runs the world; only the visual settings here apply
+        if (this.minecraft.getConnection() != null && !this.minecraft.hasSingleplayerServer()) {
+            net.minecraft.network.chat.Component note = Component.translatable("config.stormreach.server_note").withStyle(net.minecraft.ChatFormatting.GRAY);
+            addRenderableWidget(new net.minecraft.client.gui.components.StringWidget(this.width / 2 - 160, bottom - 16, 320, 12, note, this.font));
+        }
         addRenderableWidget(Button.builder(Component.translatable("config.stormreach.reset"), b -> {
                     StormreachConfig.resetToDefaults();
                     switchPage(page);

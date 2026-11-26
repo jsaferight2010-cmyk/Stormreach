@@ -28,6 +28,11 @@ import java.util.UUID;
  * wildlife advisory when a Thunderbird is about.
  */
 public final class WeatherRadio {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        STATE.clear();
+    }
+
     private static final Map<UUID, State> STATE = new HashMap<>();
 
     private WeatherRadio() {}

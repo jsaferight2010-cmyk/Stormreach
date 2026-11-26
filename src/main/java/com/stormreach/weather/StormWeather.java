@@ -53,6 +53,12 @@ import java.util.UUID;
  * Lightning reshapes the land: Stormstone grows crystals, sand fuses into Fulgurite.
  */
 public final class StormWeather {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        warned.clear();
+        nextGust = 60;
+    }
+
     public static final ResourceKey<DamageType> HAIL = ResourceKey.create(Registries.DAMAGE_TYPE,
             net.minecraft.resources.Identifier.fromNamespaceAndPath("stormreach", "hail"));
 

@@ -21,12 +21,12 @@ public final class StormreachCommand {
 
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(Commands.literal("stormreach")
-                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
-                .then(Commands.literal("thunderhead")
+                // 6.0: status and forecast are for everyone on a server; changing the weather or reloading stays op-only
+                .then(Commands.literal("thunderhead").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS))
                         .executes(ctx -> thunderhead(ctx.getSource(), StormreachConfig.hornStormMinutes))
                         .then(Commands.argument("minutes", IntegerArgumentType.integer(1, 120))
                                 .executes(ctx -> thunderhead(ctx.getSource(), IntegerArgumentType.getInteger(ctx, "minutes")))))
-                .then(Commands.literal("calm").executes(ctx -> {
+                .then(Commands.literal("calm").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(ctx -> {
                     ctx.getSource().getServer().setWeatherParameters(6000, 0, false, false);
                     ctx.getSource().sendSuccess(() -> Component.translatable("command.stormreach.calm"), true);
                     return 1;
@@ -45,7 +45,7 @@ public final class StormreachCommand {
                     ctx.getSource().sendSuccess(() -> StormWeather.forecast(ctx.getSource().getLevel()), false);
                     return 1;
                 }))
-                .then(Commands.literal("reload").executes(ctx -> {
+                .then(Commands.literal("reload").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(ctx -> {
                     StormreachConfig.load();
                     ctx.getSource().sendSuccess(() -> Component.translatable("command.stormreach.reloaded"), true);
                     return 1;

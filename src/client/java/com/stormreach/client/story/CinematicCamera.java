@@ -28,6 +28,12 @@ import net.minecraft.world.phys.Vec3;
  * fight starts early only when everyone watching has skipped. The camera is client-only; the story runs on the server.
  */
 public final class CinematicCamera {
+    /** 6.0: forget the last session (called when the connection changes). */
+    public static void resetSession() {
+        active = false;
+        endingTick = -1;
+    }
+
     private CinematicCamera() {}
 
     private static boolean active;

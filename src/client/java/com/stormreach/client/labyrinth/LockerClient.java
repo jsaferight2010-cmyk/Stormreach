@@ -14,6 +14,13 @@ import net.minecraft.world.phys.Vec3;
  * the camera sits just behind the grate looking out (see CameraMixin), attacking is blocked, and Use steps out.
  */
 public final class LockerClient {
+    /** 6.0: forget the last session (called when the connection changes). */
+    public static void resetSession() {
+        locker = null;
+        transitionAt = 0;
+        com.stormreach.labyrinth.LockerBlock.clientHiddenAt = null;
+    }
+
     private static BlockPos locker;
     private static Direction facing = Direction.NORTH;
     /** 6.0: smooth transitions. The camera glides between where it was and the locker's eye point over ~0.35 s. */

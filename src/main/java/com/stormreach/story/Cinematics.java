@@ -21,6 +21,11 @@ import java.util.List;
  * Scripts, subtitles and audio are separate files; nothing here is specific to one recording.
  */
 public final class Cinematics {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        DETACHED.clear();
+    }
+
     public static final double HEARING_RANGE = 96;
 
     private record Playing(ServerLevel level, Vec3 at, DialogueScript script, int[] tick, int[] next) {}

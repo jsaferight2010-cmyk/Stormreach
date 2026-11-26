@@ -1214,6 +1214,21 @@ public class StormreachGameTests {
         h.succeed();
     }
 
+    /** 6.0 multiplayer: any player can ask for the storm status and forecast; only ops can change the weather. */
+    @GameTest
+    public void stormCommandsRespectPermissions(GameTestHelper h) {
+        var server = h.getLevel().getServer();
+        var dispatcher = server.getCommands().getDispatcher();
+        var player = server.createCommandSourceStack().withPermission(net.minecraft.server.permissions.PermissionSet.NO_PERMISSIONS).withSuppressedOutput();
+        var root = dispatcher.getRoot().getChild("stormreach");
+        Check.isTrue(h, root != null && root.canUse(player), "a normal player can't use /stormreach at all");
+        for (String ok : new String[]{"status", "forecast"})
+            Check.isTrue(h, root.getChild(ok) != null && root.getChild(ok).canUse(player), "a normal player can't run /stormreach " + ok);
+        for (String op : new String[]{"calm", "thunderhead", "reload"})
+            Check.isTrue(h, root.getChild(op) != null && !root.getChild(op).canUse(player), "a normal player could run /stormreach " + op);
+        h.succeed();
+    }
+
     /** 6.0: grows a sapling at {@code at} on dirt with bone meal (or, if {@code natural}, by its normal growth step). */
     private static boolean growSapling(GameTestHelper h, net.minecraft.world.level.block.Block sapling, BlockPos at, boolean natural) {
         h.setBlock(at.below(), Blocks.DIRT);

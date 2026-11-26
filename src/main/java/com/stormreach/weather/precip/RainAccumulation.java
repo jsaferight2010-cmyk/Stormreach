@@ -22,6 +22,11 @@ import java.util.Map;
  * raining. Hollows (ground lower than its neighbours) fill first. When the rain stops the puddles dry up on their own.
  */
 public final class RainAccumulation {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        RAIN_TICKS.clear();
+    }
+
     private static final Map<ResourceKey<Level>, Long> RAIN_TICKS = new HashMap<>();
 
     private RainAccumulation() {}

@@ -96,6 +96,22 @@ public final class SovereignArena {
         }
     }
 
+    /**
+     * 6.0: the server is stopping mid-fight. Bring everyone in an arena back down, take the platforms away and send the
+     * bosses home (a Sovereign or Cyrrus left floating over open sky would only fall). The ritual can be done again.
+     */
+    public static void endAllForShutdown(MinecraftServer server) {
+        for (Fight f : new java.util.ArrayList<>(FIGHTS)) {
+            for (ServerPlayer p : server.getPlayerList().getPlayers()) if (f.centre().equals(IN_ARENA.get(p.getUUID()))) sendBack(server, p);
+            if (f.level().getEntity(f.boss()) instanceof net.minecraft.world.entity.Entity boss) boss.discard();
+            demolish(f.level(), f.centre(), f.style());
+        }
+        FIGHTS.clear(); ENDED_AT.clear();
+    }
+
+    /** 6.0: forget everything from the world that just closed. */
+    public static void resetForNewWorld() { FIGHTS.clear(); ENDED_AT.clear(); RETURNS.clear(); IN_ARENA.clear(); }
+
     /** Takes the platform down again (the same shape {@link #build} made), leaving open sky. */
     public static void demolish(ServerLevel level, BlockPos c) { demolish(level, c, Style.SOVEREIGN); }
 

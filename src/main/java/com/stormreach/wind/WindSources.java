@@ -16,6 +16,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * off or unloaded) is dropped the next time anyone reads the field, so nothing has to clean up after a generator.
  */
 public final class WindSources {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        LEVELS.clear();
+    }
+
     private WindSources() {}
 
     /** One fan: blows toward (dirX, dirZ) from {@code origin}, out to {@code radius} blocks, at {@code mph} at the mouth. */

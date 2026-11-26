@@ -280,6 +280,7 @@ L('tooltip.stormreach.storm_surge', 'Storm Surge: in rain +8% damage and +15% mi
 
 # ---------------------------------------------------------------- structures: cinematic, Tempest Eye reward (stage 7)
 L('cinematic.stormreach.skip', 'Press %s to skip')
+L('config.stormreach.server_note', 'On a server, its own stormreach.properties decides everything but the visual settings.')
 L('entity.stormreach.tempest_eye_reward', 'Tempest Eye')
 L('entity.stormreach.tempest_eye_reward.taken', 'You take the Tempest Eye. The storm\'s gaze is yours.')
 L('block.stormreach.sovereign_altar.eye_waits', 'The Tempest Eye hangs over the Sovereign Altar. Use it to take it.')

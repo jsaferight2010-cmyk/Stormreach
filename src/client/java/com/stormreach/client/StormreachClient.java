@@ -11,6 +11,7 @@ public final class StormreachClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientUnits.init();
+        SessionReset.register();
         com.stormreach.client.wind.WindGeneratorScreen.register();
         com.stormreach.client.story.CinematicCamera.register();
         EntityRendererRegistry.register(ModEntities.CLIFF_CRAB, StormreachRenderers.CliffCrabRenderer::new);

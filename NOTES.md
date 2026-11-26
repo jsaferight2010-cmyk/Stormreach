@@ -681,6 +681,14 @@ boot the headless test server in GitHub Actions as before.
 - Field guide: new "Signs of the storm" chapter, Weatherglass under Reading the weather, commands line updated.
 - GameTests weatherglassFollowsTheWeather, glazeAndElmosFireRules. CI run 45817365246: 72/72, unit tests 78.
 
+### Stage 10 (part 2): storms feed the fields
+- `signs/StormCrops`: while it rains, 48 random loaded columns within 24 blocks of each player get a crop random tick
+  every second when the crop (BlockTags.CROPS + BonemealableBlock) is open to the rain: about double the vanilla
+  rate (config `rainFedCrops`). Lightning (hooked in StormWeather.onLightning) gives crops within 4 blocks a bone-meal
+  burst with chance 1.0 at the strike falling to 0.25 at 4 blocks (config `lightningFertilizes`).
+- 26.3: BonemealableBlock methods take a `BonemealSource` (INTERACTION or MOB).
+- Unit test lightningFeedsNearbyCropsMost; GameTest lightningFeedsCrops. CI run 45817999270: 73/73, unit tests 79.
+
 ### Resume point (overhaul in progress)
 Done: stages 1-9 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords

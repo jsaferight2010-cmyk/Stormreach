@@ -597,13 +597,20 @@ boot the headless test server in GitHub Actions as before.
   beside the altar, rubble drifting off the corners. Checked offline: every ritual block in ShrineBlocks' search box,
   conduits open to the sky, altar, pedestals and chest all reachable on foot. The fight itself moves to the sky arena.
 
+### Stage 8 (part 1): guidebooks
+- Field Guide (beginner book): its own source `tools/field_guide.md` (12 short chapters for new players: the coast,
+  first storm, gear, instruments, tornadoes, power, backpacks, Stormblight, the realm, the Labyrinth, the story,
+  settings). `guidebooks.py` refuses to build it if any line names a rarity class or a chance. GUIDE.md keeps the
+  full tables. The contents page now runs over several pages (it overflowed one) and numbers the chapters.
+- Storm Crafter's Handbook: look unchanged. The 12 brewing recipes were missing: they now appear on the same kind
+  of page (ingredient over the bottle, the result potion with its real name).
+
 ### Resume point (overhaul in progress)
 Done: stages 1-7 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
 break blocks in Creative (vanilla says no)?
 Next, in order:
-2. Stage 8: original sound redesign pass, guidebooks (beginner guide without rarity; crafting book only accuracy
-   fixes, same look), placement previews (section 21), performance pass.
+2. Stage 8: original sound redesign pass, performance pass (guidebooks done; placement previews done in stage 2).
 3. Multiplayer pass, then "even more" storm content.
 4. Tests, CHANGELOG/NOTES/CLAUDE.md, final double-check.
 5. Last of all: branding (name, icon and description for Mod Menu, GitHub, the .zip and the .jar). No jar is

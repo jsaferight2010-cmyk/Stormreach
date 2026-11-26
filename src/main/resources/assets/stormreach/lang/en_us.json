@@ -2588,6 +2588,7 @@
   "jei.stormreach.power.wind_generator": "Creative only: blows wind at a set speed. Turbines in its wind make power from it like any other wind.",
   "death.attack.stormreach.shock": "%1$s was electrocuted",
   "death.attack.stormreach.shock.player": "%1$s was electrocuted by %2$s",
+  "gui.stormreach.guide.kind.brewing": "Brewing Stand",
   "tooltip.stormreach.storm_surge": "Storm Surge: in rain +8% damage and +15% mining speed; in a thunderstorm +15% and +30%.",
   "cinematic.stormreach.skip": "Press %s to skip",
   "entity.stormreach.tempest_eye_reward": "Tempest Eye",

@@ -76,8 +76,13 @@ public class GuidebookScreen extends Screen {
         // contents page
         List<FormattedCharSequence> contents = new ArrayList<>();
         contents.addAll(font.split(Component.translatable("item.stormreach.stormreach_field_guide").withStyle(s -> s.withBold(true)), PAGE_W));
-        for (JsonElement c : chapters) contents.addAll(font.split(Component.literal(c.getAsJsonObject().get("title").getAsString()), PAGE_W));
-        textPages.add(contents);
+        contents.add(FormattedCharSequence.EMPTY);
+        int n = 1;
+        for (JsonElement c : chapters)
+            contents.addAll(font.split(Component.literal((n++) + ". " + c.getAsJsonObject().get("title").getAsString()), PAGE_W));
+        // 6.0: the contents run on over as many pages as they need (they used to overflow the bottom of one page)
+        for (int i = 0; i < contents.size(); i += linesPerPage)
+            textPages.add(new ArrayList<>(contents.subList(i, Math.min(contents.size(), i + linesPerPage))));
         for (JsonElement ce : chapters) {
             JsonObject ch = ce.getAsJsonObject();
             List<FormattedCharSequence> lines = new ArrayList<>(font.split(Component.literal(ch.get("title").getAsString()).withStyle(s -> s.withBold(true).withColor(0x3A2A10)), PAGE_W));
@@ -146,20 +151,32 @@ public class GuidebookScreen extends Screen {
         return new ItemStack(it);
     }
 
+    /** 6.0: a potion bottle carrying {@code potion} (for the brewing pages). */
+    private static ItemStack potion(ItemStack bottle, String potion) {
+        if (potion == null || potion.isEmpty()) return bottle;
+        BuiltInRegistries.POTION.get(Identifier.parse(potion)).ifPresent(h ->
+                bottle.set(net.minecraft.core.component.DataComponents.POTION_CONTENTS, new net.minecraft.world.item.alchemy.PotionContents(h)));
+        return bottle;
+    }
+
     private void recipe(GuiGraphicsExtractor g, JsonObject r, int x, int y, int mx, int my) {
         String kindName = r.get("kind").getAsString();
         ItemStack result = stack(r.get("result").getAsString());
+        if (r.has("potion")) result = potion(result, r.get("potion").getAsString());
         result.setCount(Math.max(1, r.get("count").getAsInt()));
         g.text(font, Component.empty().append(result.getHoverName()), x, y, 0xFF3A2A10, false);
         g.text(font, Component.translatable("gui.stormreach.guide.kind." + kindName), x, y + 10, 0xFF8A7050, false);
         JsonArray grid = r.getAsJsonArray("grid");
         int gx = x, gy = y + 22;
-        boolean single = !kindName.equals("shaped") && !kindName.equals("shapeless");
-        for (int i = 0; i < (single ? 1 : 9); i++) {
+        boolean brewing = kindName.equals("brewing");
+        boolean single = !kindName.equals("shaped") && !kindName.equals("shapeless") && !brewing;
+        for (int i = 0; i < (single ? 1 : brewing ? 2 : 9); i++) {
             int sx = gx + (i % 3) * 18, sy = gy + (i / 3) * 18;
             if (single) { sx = gx + 18; sy = gy + 18; }
+            if (brewing) { sx = gx + 18; sy = gy + i * 18; }   // the ingredient over the bottle, as in a brewing stand
             slot(g, sx, sy);
             ItemStack s = stack(grid.get(i).getAsString());
+            if (brewing && i == 1 && r.has("input_potion")) s = potion(s, r.get("input_potion").getAsString());
             if (!s.isEmpty()) {
                 g.item(s, sx + 1, sy + 1);
                 if (mx >= sx && mx < sx + 18 && my >= sy && my < sy + 18) g.setTooltipForNextFrame(font, s.getHoverName(), mx, my);

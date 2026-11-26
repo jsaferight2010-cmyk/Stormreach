@@ -1,5 +1,6 @@
 """Builds the two in-game guidebooks' content from the project's own files:
-- assets/stormreach/guide/guide.json: the Stormreach Field Guide, from GUIDE.md (chapters, paragraphs, bullets, tables)
+- assets/stormreach/guide/guide.json: the Stormreach Field Guide (the beginner's book), from tools/field_guide.md
+  (6.0: its own text for new players, with no rarity classes or drop chances; GUIDE.md keeps the full tables)
 - assets/stormreach/guide/crafting.json: the Storm Crafter's Handbook, every Stormreach recipe, read from data/stormreach/recipe
 The client draws the crafting pages with real item icons. Re-run after changing GUIDE.md or recipes (run_all.py does)."""
 import glob, json, os, pathlib, re
@@ -16,8 +17,12 @@ def clean(t):
     return t.strip()
 
 chapters, cur = [], None
-guide = (ROOT / 'GUIDE.md').read_text(encoding='utf-8') if (ROOT / 'GUIDE.md').exists() else ''
+guide = (ROOT / 'tools' / 'field_guide.md').read_text(encoding='utf-8')
+guide = re.sub(r'<!--.*?-->', '', guide, flags=re.S)
+RARITY = re.compile(r'\b(common|uncommon|rare|very rare|epic|legendary)\b|\d+(\.\d+)?\s*%', re.I)
 for raw in guide.splitlines():
+    if RARITY.search(raw) and not raw.lstrip().startswith('#'):
+        raise SystemExit(f'field_guide.md: the beginner guide must not classify rarity or give chances: {raw.strip()}')
     line = raw.rstrip()
     if line.startswith('## '):
         cur = {'title': clean(line[3:]), 'lines': []}
@@ -30,6 +35,8 @@ for raw in guide.splitlines():
         cells = [clean(c) for c in s.strip('|').split('|')]
         if all(set(c) <= set('-: ') for c in cells): continue
         cur['lines'].append({'s': 'table', 't': '  |  '.join(cells)})
+    elif re.match(r'^\d+\. ', s):
+        cur['lines'].append({'s': 'bullet', 'd': 0, 't': clean(s)})
     elif re.match(r'^\s*[-*] ', line):
         depth = (len(line) - len(line.lstrip())) // 2
         cur['lines'].append({'s': 'bullet', 'd': depth, 't': clean(re.sub(r'^[-*] ', '', s))})
@@ -49,7 +56,13 @@ for f in sorted(glob.glob(str(RES / 'data' / 'stormreach' / 'recipe' / '**' / '*
     t = d['type'].split(':')[1]
     res = d.get('result') or d.get('output') or {}
     rid, count = (res.get('id'), res.get('count', 1)) if isinstance(res, dict) else (res, 1)
-    if not rid or t == 'brewing': continue
+    if t == 'brewing':   # 6.0: brewing recipes were missing from the handbook
+        out = d['output']; pc = out.get('components', {}).get('minecraft:potion_contents', {})
+        recipes.append({'result': out['id'], 'count': 1, 'category': 'brewing', 'kind': 'brewing', 'potion': pc.get('potion', ''),
+                        'input_potion': d['input'].get('potion_contents', {}).get('potions', ''),
+                        'grid': [ing(d['reagent']), d['input']['item']] + [''] * 7})
+        continue
+    if not rid: continue
     r = {'result': rid, 'count': count, 'category': d.get('category', 'misc')}
     if t == 'crafting_shaped':
         pat = d['pattern']; key = d['key']
@@ -67,7 +80,7 @@ for f in sorted(glob.glob(str(RES / 'data' / 'stormreach' / 'recipe' / '**' / '*
         r.update(kind=t, grid=[ing(d['ingredient'])] + [''] * 8)
     else: continue
     recipes.append(r)
-order = {'building': 0, 'equipment': 1, 'redstone': 2, 'food': 3, 'blocks': 4, 'misc': 5}
-recipes.sort(key=lambda r: (order.get(r['category'], 9), r['result']))
+order = {'building': 0, 'equipment': 1, 'redstone': 2, 'food': 3, 'blocks': 4, 'misc': 5, 'brewing': 6}
+recipes.sort(key=lambda r: (order.get(r['category'], 9), r['result'], r.get('potion', '')))
 json.dump({'recipes': recipes}, open(OUT / 'crafting.json', 'w'), indent=1)
 print(f'guidebooks: {len(chapters)} chapters, {len(recipes)} recipes')

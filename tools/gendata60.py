@@ -275,6 +275,7 @@ L('death.attack.stormreach.shock', '%1$s was electrocuted')
 L('death.attack.stormreach.shock.player', '%1$s was electrocuted by %2$s')
 
 # ---------------------------------------------------------------- gear (stage 6)
+L('gui.stormreach.guide.kind.brewing', 'Brewing Stand')
 L('tooltip.stormreach.storm_surge', 'Storm Surge: in rain +8% damage and +15% mining speed; in a thunderstorm +15% and +30%.')
 
 # ---------------------------------------------------------------- structures: cinematic, Tempest Eye reward (stage 7)

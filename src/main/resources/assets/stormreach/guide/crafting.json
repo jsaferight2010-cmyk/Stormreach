@@ -4368,6 +4368,234 @@
     "",
     "minecraft:copper_ingot"
    ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:grounded",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_grounded",
+   "input_potion": "stormreach:grounded",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_static_charge",
+   "input_potion": "stormreach:static_charge",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:static_charge",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:storm_shard",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:grounded",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_grounded",
+   "input_potion": "stormreach:grounded",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_static_charge",
+   "input_potion": "stormreach:static_charge",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:static_charge",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:storm_shard",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:grounded",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_grounded",
+   "input_potion": "stormreach:grounded",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_static_charge",
+   "input_potion": "stormreach:static_charge",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:static_charge",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:storm_shard",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
   }
  ]
 }

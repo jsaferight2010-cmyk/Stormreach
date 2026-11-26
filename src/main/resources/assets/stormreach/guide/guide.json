@@ -1,2874 +1,364 @@
 {
  "chapters": [
   {
-   "title": "1. Tornadoes and severe weather",
+   "title": "Welcome to the storm",
    "lines": [
     {
      "s": "p",
-     "t": "Tornadoes in Stormreach are modelled on real ones."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Where they come from. Most tornadoes come out of supercell thunderstorms. When an Overworld thunderstorm is going, every 10 seconds there is a small chance (0.6% per player) that one forms near you, usually 150\u2013260 blocks away."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Some storms first show a rotating wall cloud (a lowered, turning cloud base) before a tornado touches down."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Landspouts are weak, short-lived and slow. They form from rising air under ordinary rain (no thunder) in warm biomes."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Waterspouts form over oceans and rivers, mostly in rain. They are also weak."
-    },
-    {
-     "s": "h",
-     "t": "How strong is it? (the EF scale)"
+     "t": "Stormreach is a storm-swept coast where everything is connected. Storms grow crystals, crystals become gear, and gear calls more storms. The further you go, the bigger the weather gets: tornadoes, hail, a spreading Stormblight, a whole sky dimension and an old story waiting at the end of it."
     },
     {
      "s": "p",
-     "t": "The rating is the Enhanced Fujita (EF) scale, which rates a tornado by the damage it does, not by how it looks. Each rating covers a range of 3-second gust speeds:"
-    },
-    {
-     "s": "table",
-     "t": "Rating  |  Gust (mph)  |  Gust (km/h)  |  What it can do in Stormreach"
-    },
-    {
-     "s": "table",
-     "t": "EF0  |  65\u201385  |  105\u2013137  |  Strips leaves and crops, breaks glass and wool, scours loose sand and gravel"
-    },
-    {
-     "s": "table",
-     "t": "EF1  |  86\u2013110  |  138\u2013177  |  Tears off planks, fences and doors; light wooden builds start to fail"
-    },
-    {
-     "s": "table",
-     "t": "EF2  |  111\u2013135  |  178\u2013217  |  Logs and heavy timber give way; exposed bricks loosen"
-    },
-    {
-     "s": "table",
-     "t": "EF3  |  136\u2013165  |  218\u2013266  |  Masonry and brick walls fail; exposed stone starts to break"
-    },
-    {
-     "s": "table",
-     "t": "EF4  |  166\u2013200  |  267\u2013322  |  Well-built stone gives way; packed earth is scoured from the ground"
-    },
-    {
-     "s": "table",
-     "t": "EF5  |  over 200  |  over 322  |  Even metal blocks are torn out"
-    },
-    {
-     "s": "p",
-     "t": "No two tornadoes are the same. Each one gets a peak wind somewhere inside its rating's range, not a fixed value per rating. It also has a life cycle: it forms, strengthens, reaches its peak, shrinks and ropes out."
-    },
-    {
-     "s": "p",
-     "t": "When a tornado lifts, everyone within 768 blocks gets a damage survey message. It gives:"
+     "t": "This book explains how it all works. For recipes, open the Storm Crafter's Handbook. Every item also explains itself: hover over it, and hold Shift for the details."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "the final rating, worked out from the strongest damage the tornado actually caused"
+     "t": "Start on the Stormreach Coast, a grey, windswept shore that replaces some cool, wet beaches."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "the path length and maximum width"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "the number of blocks damaged"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "its appearance"
-    },
-    {
-     "s": "p",
-     "t": "Like a real survey, a powerful tornado that only crossed empty fields can come out rated EF0. If nothing was damaged, the rating is \"EF-U\" (unknown)."
-    },
-    {
-     "s": "h",
-     "t": "What it looks like (morphology)"
-    },
-    {
-     "s": "p",
-     "t": "A tornado's shape is a separate thing from its strength. The guide tables (section 17) list how often each shape appears at each rating."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Rope: a thin, twisting tube. This is often how a tornado looks at the end of its life."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Needle: a thin, straight, tapering funnel."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Drill-bit: a wide top narrowing to a thin tip."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Cone: the classic shape."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Stovepipe: a tall, straight-sided column."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Wedge: wider than it is tall."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Large wedge: a huge, dark wall of cloud and debris."
-    },
-    {
-     "s": "p",
-     "t": "Some extra features have to do with how the vortex is built, not its outline:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Multiple-vortex: smaller suction vortices orbit inside the main one. They cause the worst damage, in narrow streaks."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Satellite tornado: a smaller tornado that orbits a large, violent one."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Companion tornado: a second, independent tornado from the same storm."
-    },
-    {
-     "s": "h",
-     "t": "How a tornado moves and does damage"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Wind field. The wind is calm at the very centre. It peaks at the edge of the core and drops off with distance."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Air also flows inward and upward, and subvortices add sharp local peaks."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "The side where the spin and the tornado's forward motion add up has the strongest winds."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Supercell tornadoes almost always spin counter-clockwise (seen from above)."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Movement. Supercell tornadoes travel at about 13 m/s (30 mph) on average, usually toward the east or northeast. They wobble along the way, and often turn left as they weaken."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Blocks. Each block holds up to a different wind speed. Blocks that are exposed, unsupported or thin give way sooner."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Loose, light blocks get picked up as debris and thrown. Heavier ones just break."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Blocks deep inside a solid structure are protected by their neighbours. A basement really is the safest place."
-    },
-    {
-     "s": "table",
-     "t": "Material class  |  Fails at about  |  Examples"
-    },
-    {
-     "s": "table",
-     "t": "Foliage  |  45 mph  |  leaves, crops, flowers"
-    },
-    {
-     "s": "table",
-     "t": "Glass  |  75 mph  |  glass, panes, ice"
-    },
-    {
-     "s": "table",
-     "t": "Fabric  |  85 mph  |  wool, carpet, beds"
-    },
-    {
-     "s": "table",
-     "t": "Light wood  |  105 mph  |  planks, fences, doors, signs"
-    },
-    {
-     "s": "table",
-     "t": "Heavy wood  |  125 mph  |  logs"
-    },
-    {
-     "s": "table",
-     "t": "Masonry  |  150 mph  |  bricks, cobblestone, terracotta"
-    },
-    {
-     "s": "table",
-     "t": "Stone  |  170 mph  |  stone, deepslate, concrete"
-    },
-    {
-     "s": "table",
-     "t": "Loose earth  |  185 mph  |  dirt, sand, gravel (scoured from the surface)"
-    },
-    {
-     "s": "table",
-     "t": "Metal  |  205 mph  |  iron, copper and other metal blocks"
-    },
-    {
-     "s": "table",
-     "t": "Unbreakable  |  never  |  bedrock, obsidian, portals, the mod's sealed blocks"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Entities. Mobs and players get pulled in, lifted and thrown. Above about 110 mph they also take damage."
-    },
-    {
-     "s": "h",
-     "t": "Other severe weather"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Downbursts: a sudden blast of wind straight down that spreads out in all directions. It flattens crops and leaves and knocks things over."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Hail: hurts anyone outside without a helmet."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Ball lightning: drifting orbs of charge."
+     "t": "Wait for rain. Everything in the mod grows from the weather."
     }
    ]
   },
   {
-   "title": "2. Meteorology: weather instruments",
+   "title": "Your first storm",
    "lines": [
     {
      "s": "p",
-     "t": "Right-click any instrument to read it. Several also give off a redstone signal, so you can build automatic warning systems."
+     "t": "When it rains, the coast turns into a Gale. Gusts push you around outside, so sneak to brace yourself. When it thunders, it becomes a Thunderhead, with stronger wind, lightning close by and hostile Squalls forming in the clouds."
     },
     {
-     "s": "table",
-     "t": "Instrument  |  What it reads  |  Redstone output  |  Recipe (key items)"
+     "s": "bullet",
+     "d": 0,
+     "t": "Lightning on Stormstone can turn it into Storm Crystal Ore. That's how crystals come back, so the coast never runs out."
     },
     {
-     "s": "table",
-     "t": "Anemometer  |  Sustained wind and gusts (mph and km/h), Beaufort force  |  Gust speed \u00f7 10 (0\u201315)  |  Copper and iron ingots"
+     "s": "bullet",
+     "d": 0,
+     "t": "Squalls ram you and knock you back, and they drop Storm Shards. They blow apart when the storm ends."
     },
     {
-     "s": "table",
-     "t": "Wind Vane  |  Wind direction  |  \u2014  |  (from earlier versions)"
+     "s": "bullet",
+     "d": 0,
+     "t": "A Storm Barometer gives a redstone signal for the weather (0 clear, 7 rain, 15 thunder). Use it to open its dial and watch the pressure and trend."
     },
     {
-     "s": "table",
-     "t": "Storm Barometer  |  Pressure in hPa and inHg (drops sharply near a tornado)  |  \u2014  |  (from earlier versions)"
-    },
-    {
-     "s": "table",
-     "t": "Thermometer  |  Temperature in \u00b0C and \u00b0F, dew point, humidity  |  \u2014  |  Glass pane, redstone, iron nugget"
-    },
-    {
-     "s": "table",
-     "t": "Weather Station  |  Everything above, plus a forecast  |  \u2014  |  Anemometer, Barometer, Thermometer, comparator, redstone block"
-    },
-    {
-     "s": "table",
-     "t": "Storm Detector  |  Rain, thunderstorms, and tornadoes within 512 blocks  |  4 in rain, 15 in a thunderstorm or with a tornado nearby  |  Glass, Storm Shard, iron, redstone"
-    },
-    {
-     "s": "table",
-     "t": "Doppler Radar  |  Rotation within 1024 blocks: bearing, distance, shear, motion, estimated rating, width and shape  |  Stronger the closer the tornado (up to 256 blocks)  |  Glimmer Antler, daylight detector, Storm Cells, Storm Detector, iron blocks, observer"
-    },
-    {
-     "s": "table",
-     "t": "Tornado Siren  |  Wails while it gets a redstone signal (wire it to a Radar or Detector)  |  \u2014  |  Gold, note block, redstone block, iron"
-    },
-    {
-     "s": "table",
-     "t": "Weather Monitor  |  A Weather Station readout plus the severe-weather outlook (none, general thunder, marginal, slight, enhanced, moderate, high) and full radar, once a Weather Station and a Doppler Radar are within 8 blocks  |  \u2014  |  Glass panes, Eye of Ender, iron, redstone"
-    },
-    {
-     "s": "table",
-     "t": "Handheld Storm Radar  |  A short-range radar sweep (512 blocks), plus tornado warnings while you carry it  |  \u2014  |  Iron, compass, Storm Detector, redstone"
-    },
-    {
-     "s": "table",
-     "t": "Weather Radio  |  The forecast and outlook, plus tornado warnings while you carry it  |  \u2014  |  Iron, note blocks, Storm Shard, redstone"
-    },
-    {
-     "s": "p",
-     "t": "Radar shows rotation, not ratings. A real Doppler radar can't see an EF rating. It sees the wind moving toward and away from it on each side of the vortex: the \"gate-to-gate shear\". The estimated rating on the radar is a guess. The real rating comes from the damage survey."
-    },
-    {
-     "s": "p",
-     "t": "Tornado warnings: carrying a Weather Radio, a Handheld Storm Radar or the Chaser's Badge, or wearing the Storm Chaser's Cap, warns you whenever a tornado touches down within 400 blocks. The warning tells you which direction it is and how far away."
+     "s": "bullet",
+     "d": 0,
+     "t": "Look for Cliff Crabs (breed them with Stormberries) and Storm Gulls (breed them with fish) along the shore."
     }
    ]
   },
   {
-   "title": "3. The Weather Events creative tab",
+   "title": "Storm gear",
    "lines": [
     {
      "s": "p",
-     "t": "The Stormreach: Weather Events creative tab holds every weather event, for building, testing or showing off."
-    },
-    {
-     "s": "h",
-     "t": "Tornado spawners"
+     "t": "Storm Shards and Storm Crystals become your first real equipment."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "There is one spawner for each shape: Natural, Rope, Needle, Drill-bit, Cone, Stovepipe, Wedge, Large Wedge, Multiple-Vortex, With Satellite, With Companion, Landspout and Waterspout."
+     "t": "Stormshard tools and armour are a clear step past iron. A full set of the armour makes you immune to lightning."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Use it while looking at the ground: the tornado forms where you're looking (up to 96 blocks away), or 40 blocks ahead if you're looking at the sky."
+     "t": "Storm Surge: Stormreach weapons and tools work harder in bad weather. You get more damage and faster mining in rain, and even more in a thunderstorm."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Sneak + use to change the intensity:"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "climatology (random, with real-world odds) or EF0 through EF5"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "landspouts go up to EF2 and waterspouts up to EF1, as in reality"
+     "t": "The Stormshard sword can call lightning down on what you hit during a thunderstorm."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "The Max Tornadoes setting still applies."
-    },
-    {
-     "s": "h",
-     "t": "Events"
+     "t": "The Tempest (Lightning) Staff strikes lightning where you aim. Its bolts never set anything on fire, and while you hold it no lightning can set you alight."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Supercell: a rotating storm with a wall cloud that may produce a tornado after 20\u201340 seconds."
+     "t": "The Thunderhead Horn summons a thunderstorm when you need one."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Downburst, Hailstorm and Ball Lightning Swarm."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Dispel Weather Events: removes every tornado and event in the world."
-    },
-    {
-     "s": "p",
-     "t": "The Stormreach: Meteorology tab has all the instruments. The mod's other items are sorted into Building, Nature, Tools & Combat, Food, Materials and Spawn Eggs tabs. The Storm Blocks and Storm Mobs tabs from 3.0 are unchanged."
+     "t": "Later tiers come from the Tempest Realm: Voltite (as good as diamond), Aurorite (a little past netherite) and finally Maelstrom gear."
     }
    ]
   },
   {
-   "title": "4. Backpacks",
+   "title": "Reading the weather",
    "lines": [
     {
-     "s": "h",
-     "t": "Getting a backpack"
-    },
-    {
      "s": "p",
-     "t": "Backpacks come in seven tiers. You craft a Diamond Backpack, then upgrade it one tier at a time. To upgrade, craft an Upgrade Kit and combine it with your current backpack in a crafting grid."
-    },
-    {
-     "s": "p",
-     "t": "Upgrading keeps everything: contents, enchantments and name all carry over."
-    },
-    {
-     "s": "table",
-     "t": "Tier  |  Slots  |  Upgrade kit needs (besides the previous backpack)"
-    },
-    {
-     "s": "table",
-     "t": "Diamond  |  27  |  Crafted: 4 diamonds, 2 leather, 2 Storm Shards, a chest"
-    },
-    {
-     "s": "table",
-     "t": "Obsidian  |  36  |  4 obsidian, 2 Fulgurite, 2 Charged Stormstone, a Storm Cell"
-    },
-    {
-     "s": "table",
-     "t": "Netherite  |  54  |  4 Blocks of Storm Crystal, 2 blaze rods, 2 Storm Cells, a netherite ingot"
-    },
-    {
-     "s": "table",
-     "t": "Storm Crystal  |  72  |  4 Blocks of Storm Crystal, 2 Storm Cells, 2 Charged Stormstone, a Tempest Core"
-    },
-    {
-     "s": "table",
-     "t": "Voltite  |  90  |  4 Blocks of Voltite, 2 Ion Shards, 2 Stormhawk Feathers, a Storm Cell"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite  |  108  |  4 Blocks of Aurorite, 2 Gilded Stormfruit, 2 Ion Lamps, a Tempest Eye"
-    },
-    {
-     "s": "table",
-     "t": "Maelstrom  |  135  |  4 netherite ingots, 2 Blocks of Aurorite, 2 Tempest Eyes, a Maelstrom Core"
-    },
-    {
-     "s": "p",
-     "t": "The Storm Chaser's Pack (45 slots, built-in Magnetism) can't be crafted. It's an achievement reward."
-    },
-    {
-     "s": "h",
-     "t": "Using a backpack"
+     "t": "Weather instruments tell you what's coming. Use any of them to open its screen."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Use it, or press B (rebindable), to open it."
+     "t": "Barometer: a dial with a needle, a brass \"set\" hand and a trend. Falling pressure means worse weather."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Packs bigger than 54 slots have pages: use the \u25c0 \u25b6 buttons."
+     "t": "Wind Vane: a vane that swings to point into the wind."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Sort stacks and orders the contents."
+     "t": "Anemometer and Thermometer: wind speed and gusts, temperature, humidity and dew point."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "You can't put a backpack inside a backpack."
+     "t": "Weather Station and Doppler Radar: the full picture, including rain and rotation on the radar. The radar and other tall machines show a see-through preview of the whole structure before you place them."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "The backpack you have open is locked in your hotbar, so it can't be swapped, dropped or moved while open. That blocks the usual duplication tricks."
+     "t": "Weather Radio: broadcasts warnings, including when a tornado is on the ground near you."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "The contents are stored on the item itself. They survive the backpack being dropped, stored, traded or carried across dimensions. On a server, every check happens on the server."
+     "t": "Storm Chaser goggles show the weather on your screen."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "If a backpack item is destroyed (lava, cactus, void), its contents spill out instead of vanishing."
-    },
-    {
-     "s": "h",
-     "t": "Backpack enchantments"
-    },
-    {
-     "s": "p",
-     "t": "These only go on backpacks. The table says where each one can be found."
-    },
-    {
-     "s": "table",
-     "t": "Enchantment  |  Max level  |  Effect  |  Where"
-    },
-    {
-     "s": "table",
-     "t": "Capacity  |  III  |  +9 slots per level  |  Enchanting table, librarians, loot"
-    },
-    {
-     "s": "table",
-     "t": "Magnetism  |  I  |  Pulls nearby dropped items into the pack (radius 4.5 blocks)  |  Enchanting table, librarians, loot"
-    },
-    {
-     "s": "table",
-     "t": "Organization  |  I  |  Sorts the pack automatically every time you close it  |  Enchanting table, librarians, loot"
-    },
-    {
-     "s": "table",
-     "t": "Resilience  |  I  |  A dropped pack can't be destroyed by fire, lava, explosions or cactus, and floats back up out of the void  |  Enchanting table, librarians, loot"
-    },
-    {
-     "s": "table",
-     "t": "Soulbound  |  I  |  You keep the pack when you die  |  Treasure only: librarians and loot, never the enchanting table"
+     "t": "Units: imperial by default, metric in the settings. On a server, everyone sees their own units."
     }
    ]
   },
   {
-   "title": "5. The Hollow Labyrinth",
+   "title": "Tornadoes",
    "lines": [
     {
      "s": "p",
-     "t": "Where to find it:"
+     "t": "Most tornadoes come out of supercell thunderstorms. They range from weak, thin ropes to huge wedges wrapped in rain, rated on the EF scale (EF0 to EF5) by the damage they do."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "A huge maze buried deep under the Overworld: 150 \u00d7 150 blocks, about 38 blocks below the surface."
+     "t": "Stay safe: listen for warnings, get underground or behind thick walls, and use a Storm Shelter Hatch. Debris is dangerous, so don't stand in the open."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "At most one in any 1024 \u00d7 1024 area, so they're very rare."
+     "t": "Storms also bring hail and downbursts. Hail is blocked by any roof."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "The only way in is a ruined stone arch over a ladder shaft."
+     "t": "Chasing: drive the Tornado Intercept Vehicle (press Z to drop its anchor spikes), place Tornado Probes in a tornado's path, launch Weather Balloons, and record it all in the Storm Chaser's Logbook."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "/locate structure stormreach:hollow_labyrinth finds one."
-    },
-    {
-     "s": "p",
-     "t": "Inside:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Sections. The maze has four sections, each built from different stone, and dead ends everywhere. Loot is sparse:"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "side rooms hold scraps"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "one rare page of an old journal turns up in them"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Three Labyrinth Keys. The keys sit in vaults in three of the maze's corners, one guaranteed key per vault. Bring all three to the Labyrinth Keyhole next to the sealed treasure chamber in the centre."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "The chamber's Labyrinth Seals can't be broken, so the keys are the only way in."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "The Heart of the Labyrinth and a journal page wait inside."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "The Hollow Keeper is the maze's guardian. It is tall, fast and armoured, and it never leaves the maze. It also takes half damage from arrows and other projectiles."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "It hunts by sight and by sound: if it sees you it runs you down, and if it doesn't it moves toward where it last heard you."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Leave the maze for a minute and it goes dormant."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Hide in a Rusted Locker."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Use one to step inside. You get the Hidden effect and hear your own heartbeat when the Keeper is close."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Sneak to step out."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "The Keeper searches lockers near where it last saw you:"
-    },
-    {
-     "s": "bullet",
-     "d": 2,
-     "t": "If it saw you get in, it has about a 35% chance per second of finding you when it's right outside."
-    },
-    {
-     "s": "bullet",
-     "d": 2,
-     "t": "If it didn't, the chance is only 3%."
-    },
-    {
-     "s": "bullet",
-     "d": 2,
-     "t": "If you move while hiding, it finds you for sure."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Being found throws you out of the locker."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Adaptive music. Three original music layers play together while you're in the maze: calm, tense and chase. They blend into each other as the Keeper gets closer, and the chase layer takes over the moment it spots you. Normal music pauses until you leave."
+     "t": "Dispel Weather (Creative) ends the storms and weather events around you."
     }
    ]
   },
   {
-   "title": "6. Elderstorm Grove (Tempest Realm)",
+   "title": "Storm power",
    "lines": [
     {
      "s": "p",
-     "t": "A fairly common forest biome in the Tempest Realm, full of glowing life."
+     "t": "Storms make power, measured in SU."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Elderstorm trees: two kinds grow here."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Branching trees with crowns of glowing teal leaves."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Giant 2\u00d72-trunk trees, up to about 30 blocks tall. Plant four saplings in a square to grow one."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Their purple wood comes in a full set: logs, stripped logs, planks, stairs, slabs, fences, gates, doors, trapdoors, buttons and pressure plates."
+     "t": "The Wind Turbine is a tall three-bladed machine (it needs a clear column 16 blocks high) that turns into the wind."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Stormfruit hangs glowing under the leaves and ripens in three stages."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Right-click a ripe one to pick 1\u20132. It regrows."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Leaves sometimes drop it too."
-    },
-    {
-     "s": "table",
-     "t": "Food  |  Hunger  |  Effects"
-    },
-    {
-     "s": "table",
-     "t": "Stormfruit  |  5 (2.5 shanks)  |  Speed (20 s), Static Charge (10 s)"
-    },
-    {
-     "s": "table",
-     "t": "Gilded Stormfruit (8 gold ingots + Stormfruit)  |  8  |  Regeneration II (10 s), Absorption II (2 min), Grounded (2 min); always edible"
-    },
-    {
-     "s": "table",
-     "t": "Stormfruit Preserve (2 Stormfruit, sugar, bottle)  |  6  |  Speed II (90 s)"
-    },
-    {
-     "s": "p",
-     "t": "Gilded Stormfruit is also needed for the Aurorite Backpack upgrade and the Hollow Shrine."
-    },
-    {
-     "s": "p",
-     "t": "Plants:"
+     "t": "Storm Capacitors store lightning, Copper Cable carries power, and a Multimeter shows what's flowing."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Thunderbloom: a yellow flower that gives Haste when made into suspicious stew."
+     "t": "Power runs Arc Lamps, Shock Plates, Electric Pumps, Sprinklers and Tesla Coils."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Sparkfern: tall grass. Shear it to collect it; breaking it sometimes drops Thistle Down."
-    },
-    {
-     "s": "p",
-     "t": "Creatures:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Glimmerstag: a skittish deer with glowing antlers. It bolts from sprinting players."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Breed them with Stormfruit."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "They drop leather, and sometimes a Glimmer Antler, which the Doppler Radar recipe needs."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Thistlehop: a hopping puffball critter. It sheds Thistle Down every few minutes (3 make a string)."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Breed them with Sparkfern."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "They never take fall damage."
+     "t": "Rain Barrels and Cisterns collect water from the sky."
     }
    ]
   },
   {
-   "title": "7. Stormwild: new creatures",
+   "title": "Backpacks",
    "lines": [
     {
      "s": "p",
-     "t": "On the coast (Stormreach Coast, Squallwind Bluffs, Brinewater Marsh, Static Fields):"
+     "t": "Craft a Diamond Backpack, then upgrade it a tier at a time with Upgrade Kits. Upgrading keeps the contents, enchantments and name."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Sparkskink: a small lizard that soaks up storm charge."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Out in the rain, or if lightning strikes it, it charges: its crest glows and it crackles with sparks."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "While charged it sheds a Charged Scale every few minutes."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Breed with Glow Berries."
+     "t": "Wear it in its own slot in your inventory, or carry it."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Tidewrack Hermit: a hermit crab in a pearly spiral shell."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Walk up to one and it pulls into its shell, taking far less damage. Sneak, or hold Kelp, and it stays out."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Drops Pearlescent Shells. Breed with Kelp."
+     "t": "Press B (rebindable) to open it, even with your inventory open."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Shock Eel: lives in coastal and marsh water and leaves you alone, unless it's thundering and you're in its water, or you hit it."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Its bite shocks you (Static Charge)."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Drops Voltaic Eel: cook it for a filling meal that gives Haste."
-    },
-    {
-     "s": "p",
-     "t": "In the Tempest Realm:"
+     "t": "Bigger packs have pages. Sort tidies them."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Cloud Whale (Cloudsea Expanse): a gentle giant that drifts high above the ground, singing, with a little rain always falling from its belly."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Every five to ten minutes it leaves a lump of Cloud Ambergris."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Storm Jelly (Cloudsea Expanse, Aurora Spires): a glowing jellyfish that swims through the air. Touching one stings (Static Charge). Drops Glowgel."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Gale Sprite (Galewood Highlands, Aurora Spires, Elderstorm Grove): a tiny wind spirit."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Give it Thistle Down and it gives you a Gale Essence, then keeps you company for three minutes."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "While it's with you, it catches you on the wind when you fall."
-    },
-    {
-     "s": "p",
-     "t": "In thunderstorms:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Thunderbird: a huge storm raptor that sometimes arrives over a player out under a thunderstorm."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "It circles high, dives to strike with its talons, and calls lightning down on you."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "It has 120 health and a boss bar, and leaves when the storm passes."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Drops Thunderbird Plumes and Charged Scales."
-    },
-    {
-     "s": "p",
-     "t": "What they give you:"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Made from  |  What it does"
-    },
-    {
-     "s": "table",
-     "t": "Stormkite  |  3 Thunderbird Plumes, 2 string, a Charged Scale, a stick  |  Hold it while falling to glide the way you're looking. No fall damage while gliding."
-    },
-    {
-     "s": "table",
-     "t": "Tide Conch  |  3 Pearlescent Shells, a gold ingot, a prismarine shard  |  Blow it: Water Breathing (60 s) and Dolphin's Grace (30 s) for everyone within 8 blocks, and Shock Eels nearby calm down. 1-minute cooldown."
-    },
-    {
-     "s": "table",
-     "t": "Bottled Gale  |  Gale Essence + glass bottle  |  Drink: Jump Boost III and Slow Falling (45 s)."
-    },
-    {
-     "s": "table",
-     "t": "Skylight Lantern  |  Cloud Ambergris, 2 Glowgel, 2 iron nuggets (makes 2)  |  The brightest lantern (light 15)."
-    },
-    {
-     "s": "table",
-     "t": "Glowgel Block  |  9 Glowgel  |  Bouncy like slime, and it glows."
-    },
-    {
-     "s": "table",
-     "t": "Nacre Block / Nacre Bricks  |  4 Pearlescent Shells / 4 Nacre Blocks  |  Iridescent mother-of-pearl building blocks."
+     "t": "Backpack enchantments (Capacity, Magnetism, Organization, Resilience, Soulbound) only go on backpacks."
     }
    ]
   },
   {
-   "title": "8. Storm chasing",
+   "title": "The Stormblight",
    "lines": [
     {
-     "s": "bullet",
-     "d": 0,
-     "t": "Tornado Intercept Vehicle (TIV): an armoured chase truck. Craft it from iron, glass, an Anemometer and coal blocks, then right-click the ground to set it down."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "To drive: right-click to get in, W/S for throttle and brake, A/D to steer, sneak to get out."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "To pick it up: sneak + right-click from outside."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Dashboard: the action bar tracks the nearest tornado: its rating, distance and bearing, which way and how fast it's moving, its peak wind, and the wind where you are."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Anchors: stop for two seconds and its hydraulic anchors drop. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you."
+     "s": "p",
+     "t": "A Stormheart spreads the storm. Wake it with a Storm Cell, lightning or redstone, and it turns the land and mobs around it into storm versions, out to a set radius."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Weather Balloon: use it to launch a radiosonde. It climbs with the wind, bursts at the storm tops, and radios back a sounding:"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "temperature and dew point"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "cloud base and freezing level"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "instability (CAPE) and wind shear"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "the severe-weather risk"
+     "t": "Water becomes Stormwater and lava becomes Stormlava."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Rain Gauge: fills with rain (faster in thunderstorms) and slowly dries out."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Right-click to read it in millimetres. Sneak + right-click to empty it."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "A comparator reads its level."
+     "t": "Salt calms a Stormheart."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Tornado Probe: a weighted instrument barrel that no tornado can move. Put it in a tornado's path."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "When the tornado passes over, the probe records the peak wind and its light turns red."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Right-click to read it. A comparator reads its peak wind too."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Storm Chaser's Logbook: carry one and every tornado you see (with a clear line of sight, within 600 blocks) is logged: how many, the strongest, and the closest you've been. Your TIV intercepts, probe readings and balloon launches are logged too. Right-click to read it."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "New achievements: Chaser, Too Close for Comfort, Violent, Veteran Chaser, Intercept, Data in the Core, Turtle in the Vortex and Upper Air."
+     "t": "Overcharge: once a heart is fully grown, feed it storm power (a Storm Capacitor or cable touching it) and it keeps spreading with no limit. Cut the power and it stops where it is."
     }
    ]
   },
   {
-   "title": "9. Skyward: storm creatures, gear and gadgets",
+   "title": "The Tempest Realm",
    "lines": [
     {
-     "s": "h",
-     "t": "Creatures"
+     "s": "p",
+     "t": "A sky dimension of floating islands, clouds you can fall into, Galewood forests and storm creatures. To get there:"
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Squall Serpent (Tempest Realm: Cloudsea Expanse, Aurora Spires, Galewood Highlands; rare, never more than one nearby): a horned sky-dragon three blocks long that swims through the air."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "160 health, 8 armour, with a purple boss bar."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "It circles its prey, lunges to bite, and rears back to spit three balls of lightning."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "When hurt it sometimes lashes the air into a gust that throws everything back."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Drops 3\u20136 Serpent Scales and its Squall Heart."
+     "t": "1. Find a Tempest Spire in the Stormreach biomes and climb the spiral stair inside to the Sovereign Altar on its crown."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Hailstone Golem (Overworld thunderstorms): a two-and-a-half-block giant of packed hail around a glowing core."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Forms out under the open sky during a thunderstorm (5% a minute for each player outside, at most two nearby)."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "50 health, 10 armour. It smashes what it reaches and hurls fistfuls of hailstones at what it can't."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Out of the storm it melts: sunshine and warm biomes wear it down, and fire hurts it twice as much."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Drops a Glacial Core (half the time), Packed Ice and Snowballs."
+     "t": "2. Wake the Tempest Sovereign, either in a thunderstorm or by using a Tempest Sigil on the altar. The fight takes place in a sky arena that's built only for the fight."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Aurora Moth (Elderstorm Grove, Galewood Highlands, Aurora Spires, the coasts; at night): a violet moth with sheer aurora wings that flutters round lanterns and torches. It sheds Aurora Dust every few minutes."
+     "t": "3. When it falls you're brought back down, and its Tempest Eye floats over the altar. Use the Eye to take it. You need four."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Stormfly: a firefly whose tail glows with stored lightning. Swarms appear in the minutes before a storm and while it lasts, then fade away. Use a glass bottle on one to catch it."
+     "t": "4. Build a flat 5\u00d75 ring of 16 Stormgate Frames around a 3\u00d73 pool of Stormwater, and set the Eyes in the frames."
     },
     {
-     "s": "h",
-     "t": "Gear and gadgets"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Recipe  |  What it does"
-    },
-    {
-     "s": "table",
-     "t": "Gale Blade  |  Serpent Scale, Squall Heart, Breeze Rod  |  A sword: every hit throws the target into the air. Use it to ride an updraft yourself (5 s cooldown). Repaired with Serpent Scales."
-    },
-    {
-     "s": "table",
-     "t": "Stormchaser Goggles  |  Leather, light-blue glass panes, copper  |  A heads-up readout of the nearest tornado (or wind and pressure when there isn't one)."
-    },
-    {
-     "s": "table",
-     "t": "Stormchaser Jacket  |  Leather, orange dye, glow ink sac  |  Braced against the wind: tornadoes and downbursts push you about a third as hard."
-    },
-    {
-     "s": "table",
-     "t": "Stormchaser Trousers and Boots  |  Leather, orange dye / slime balls  |  Speed I while it rains on you."
-    },
-    {
-     "s": "table",
-     "t": "Full Stormchaser suit  |  \u2014  |  Lightning can't hurt you."
-    },
-    {
-     "s": "table",
-     "t": "Bottled Lightning  |  Hold an empty bottle within 8 blocks of a lightning strike  |  Throw it and the bolt comes down where it lands."
-    },
-    {
-     "s": "table",
-     "t": "Cloud Seeder  |  Firework rocket, Bottled Rain, snowball (makes 2)  |  Fire it under open sky to bring five minutes of rain."
-    },
-    {
-     "s": "table",
-     "t": "Supercell Seeder  |  Cloud Seeder, Bottled Lightning, gunpowder  |  Fire it under open sky to start a thunderstorm (with everything that comes with one)."
-    },
-    {
-     "s": "table",
-     "t": "Wind Turbine  |  White wool, Anemometer, iron ingot, redstone  |  Turns in the wind and gives a redstone signal for how hard it blows (about 1 per 4 mph, 15 in a gale). Needs open sky. Right-click to read the wind."
-    },
-    {
-     "s": "table",
-     "t": "Storm Shelter Hatch  |  Iron ingots, orange dye (makes 2)  |  A heavy steel trapdoor for a storm cellar, as blast-proof as obsidian."
-    },
-    {
-     "s": "table",
-     "t": "Stormfly Jar  |  Copper ingot, glass panes, Bottled Stormfly  |  A soft lamp (light 12) that stands or hangs."
-    },
-    {
-     "s": "table",
-     "t": "Glacial Lamp  |  Packed Ice, Glacial Core (makes 4)  |  Light 15."
-    },
-    {
-     "s": "table",
-     "t": "Aurora Glass  |  Glass, Aurora Dust (makes 8)  |  Glass with the aurora drifting across it (light 7)."
-    },
-    {
-     "s": "table",
-     "t": "Serpentscale Block  |  4 Serpent Scales  |  A gleaming building block."
-    },
-    {
-     "s": "table",
-     "t": "Chaser's Coffee  |  2 cocoa beans, sugar, glass bottle  |  Speed, Haste and Night Vision for two minutes."
-    },
-    {
-     "s": "table",
-     "t": "Snow Cone  |  2 snowballs, sugar, sweet berries, paper (makes 2)  |  Fire Resistance for 30 seconds."
+     "s": "bullet",
+     "d": 0,
+     "t": "5. Strike the pool with lightning and step through the Stormgate."
     },
     {
      "s": "p",
-     "t": "Weather Radio, upgraded: carried, it now sounds an alert tone and broadcasts a Tornado Emergency when a tornado comes within 150 blocks, a Severe Thunderstorm Warning when thunder starts, a statement when rain moves in, the all-clear, and a wildlife advisory when a Thunderbird is about."
-    },
-    {
-     "s": "p",
-     "t": "New achievements: This Is Not a Test, Rainmaker, Playing God, Suited Up, Lightning in a Bottle, Jar of Sparks, Thaw, Serpent of the Squall and Riding the Gale."
-    },
-    {
-     "s": "h",
-     "t": "Tooltips"
-    },
-    {
-     "s": "p",
-     "t": "Every Stormreach item now has a short description under its name. Hold Shift to see how to use it and its exact effects."
+     "t": "In Creative, the Creative Realm Pass takes you there and back instantly."
     }
    ]
   },
   {
-   "title": "10. Thunderfront: signs of the storm",
+   "title": "The Hollow Labyrinth",
    "lines": [
     {
-     "s": "h",
-     "t": "Creatures"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Rainfrog (Brinewater Marsh, the Stormreach Coast, Elderstorm Grove): a blue-green frog with golden eyes."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "In the minutes before rain the whole marsh starts croaking, throats puffing, louder and faster the closer the rain. Once it's raining they come out and hop about."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "A Rainfrog chorus is a forecast you can hear. Breed them with Slimeballs."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Storm Petrel (over oceans and beaches, while rain is due or falling): a small sooty seabird with a white rump that flutters low over the waves."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Flocks of 3\u20135 gather ahead of a storm and leave once it has passed."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Drops feathers and, a quarter of the time, an Omen Feather."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Dust Devil (deserts, badlands and savannas, on clear days): a whirling column of sand that skitters around for a minute or so."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "It lifts sand and loose items and spins anyone it crosses, but does no harm. Hit it and it scatters; rain or water breaks it up."
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "Use a glass bottle on one to catch it."
-    },
-    {
-     "s": "h",
-     "t": "Gear and gadgets"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Recipe  |  What it does"
-    },
-    {
-     "s": "table",
-     "t": "Umbrella  |  3 wool, 2 sticks  |  Held in either hand: hailstones hit it, not you, and you float down from a height with no fall damage. In a thunderstorm it can draw lightning onto you."
-    },
-    {
-     "s": "table",
-     "t": "Omen Feather  |  Storm Petrels (25%)  |  Use it to read the sky: when rain comes or stops, and whether thunder is due."
-    },
-    {
-     "s": "table",
-     "t": "Bottled Dust Devil  |  Use a glass bottle on a Dust Devil  |  Throw it: a dust devil stays where it lands for 10 seconds and sweeps every dropped item within 8 blocks to the middle."
-    },
-    {
-     "s": "table",
-     "t": "Tesla Coil  |  Lightning rod, 2 copper ingots, Storm Shard, 3 iron ingots  |  Stores lightning: half a charge from each strike within 24 blocks or each Storm Cell, and a trickle in thunderstorms. While charged it zaps the nearest hostile mob in sight within 10 blocks (6 damage) once a second. A redstone signal holds its fire. Comparators read the charge."
-    },
-    {
-     "s": "table",
-     "t": "Wind Chimes  |  String, 3 wooden slabs, 2 copper ingots  |  Hang them under a block, fence, chain or leaves. They ring more the harder the wind blows, and barely at all indoors."
-    },
-    {
      "s": "p",
-     "t": "New achievements: Red Sky at Night, Whirlwind in a Bottle, It's Alive and Under the Weather."
+     "t": "A huge maze buried deep in the deepslate. There's no way down from the surface: you have to find it."
     },
     {
-     "s": "p",
-     "t": "Every Stormreach enchantment now has a description too, for mods that show enchantment descriptions."
+     "s": "bullet",
+     "d": 0,
+     "t": "Three Labyrinth Keys wait in vaults in its corners. Bring them to the Keyhole to open the sealed treasure chamber in the centre."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "The Hollow Keeper guards the maze. It hunts by sight and by sound."
+    },
+    {
+     "s": "bullet",
+     "d": 0,
+     "t": "Hide in a Rusted Locker to escape it. Don't move while you're inside."
     }
    ]
   },
   {
-   "title": "11. Live Wire: storm power and captured water",
+   "title": "The story (spoilers)",
    "lines": [
     {
-     "s": "h",
-     "t": "Power"
-    },
-    {
      "s": "p",
-     "t": "Electricity is measured in Storm Units (SU). Generators make it and Copper Cable carries it (it joins on all six sides). Generators send power to machines first, then to Storm Capacitors, and capacitors feed machines. Use a Multimeter on anything for a reading."
-    },
-    {
-     "s": "table",
-     "t": "Block  |  Recipe  |  Makes, stores or uses"
-    },
-    {
-     "s": "table",
-     "t": "Wind Turbine  |  (see Skyward)  |  Makes 2 SU a tick per level of wind, up to 30 in a gale. Open sky only."
-    },
-    {
-     "s": "table",
-     "t": "Water Wheel  |  Planks, sticks, iron ingot  |  Makes 4 SU a tick per side (or bottom) with moving water against it, up to 16; moving Stormwater doubles it."
-    },
-    {
-     "s": "table",
-     "t": "Storm Capacitor  |  Iron, copper, glass, a Storm Cell  |  Stores 100,000 SU. Lightning within 24 blocks adds 50,000 at once."
-    },
-    {
-     "s": "table",
-     "t": "Copper Cable  |  6 dried kelp, 3 copper ingots (makes 8)  |  Carries power."
-    },
-    {
-     "s": "table",
-     "t": "Arc Lamp  |  Iron nuggets, glowstone, cable (makes 2)  |  Uses 1 SU a tick for light level 15."
-    },
-    {
-     "s": "table",
-     "t": "Shock Plate  |  2 copper ingots, cable  |  Uses 100 SU per shock: 4 damage to a hostile mob on it, up to twice a second. Players and animals are safe."
-    },
-    {
-     "s": "table",
-     "t": "Electric Pump  |  Iron, cable, pistons, bucket  |  Uses 80 SU to lift 250 mB a second from the water under it into a tank beside or above it. Ponds, rivers and the sea never run dry."
-    },
-    {
-     "s": "table",
-     "t": "Sprinkler  |  Iron nuggets, iron ingot, cable  |  Every 2 seconds uses 80 SU and 50 mB from a tank it sits on or beside to water a 9x9 area."
-    },
-    {
-     "s": "table",
-     "t": "Tesla Coil  |  (see Thunderfront)  |  Now also charges from a power network (20 SU per point of charge)."
-    },
-    {
-     "s": "h",
-     "t": "Water"
-    },
-    {
-     "s": "table",
-     "t": "Block  |  Recipe  |  What it does"
-    },
-    {
-     "s": "table",
-     "t": "Rain Barrel  |  Planks, a wooden slab  |  Holds 4 buckets. Under open sky it catches 25 mB of rain a second, or 60 mB of Stormwater in a thunderstorm. It drains into a tank below it."
-    },
-    {
-     "s": "table",
-     "t": "Cistern  |  Stone bricks, a bucket  |  Holds 32 buckets."
-    },
-    {
-     "s": "p",
-     "t": "On either tank: use a bucket for a bucket of water (or Stormwater), a glass bottle for a water bottle, or pour a bucket in. Comparators read how full they are."
-    },
-    {
-     "s": "h",
-     "t": "JEI"
-    },
-    {
-     "s": "p",
-     "t": "With Just Enough Items installed (or EMI or REI, which load JEI plugins), every Stormreach crafting, smelting and brewing recipe shows up. Stormreach also adds four pages:"
+     "t": "Someone is following you. You may notice a figure at the edge of your vision that looks like you, and it's gone when you look straight at it. Torn journal pages are hidden around the world. Gather them, along with a Hollow Remnant left where the figure stood, to rebind the Weathered Journal."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Storm Power: what makes, stores, carries and uses SU, and how much."
+     "t": "The Hollow Shrine floats high in the Tempest Realm sky. Its ritual has three stages:"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "place a relic on each of the four pedestals (right-click them for the riddles)"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "strike the four Storm Conduits with lightning in the order of their notches"
+    },
+    {
+     "s": "bullet",
+     "d": 1,
+     "t": "lay the journal on the Hollow Altar"
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Water Capture: where captured water comes from and goes."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Catching and Gathering: bottling Stormflies, lightning and Dust Devils; Storm Cells from a collector; what creatures give you."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Creature Drops: every Stormreach mob's drops with counts and chances."
-    },
-    {
-     "s": "p",
-     "t": "Every Stormreach item also has an information page with its description and how to use it."
-    },
-    {
-     "s": "p",
-     "t": "New achievements: Live Wire, Every Drop Counts and Green Thumb."
+     "t": "What answers is told in a short cinematic. Press Jump to skip it. The fight then moves to a sky arena over the shrine."
     }
    ]
   },
   {
-   "title": "12. The Stranger (spoilers)",
-   "lines": [
-    {
-     "s": "p",
-     "t": "You are not alone."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "After a while you may notice someone standing at the edge of your vision, 28\u201348 blocks away. It looks like you: your own skin, drained and storm-worn, with hollow eyes. Look straight at it, or walk toward it, and it's gone."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "It turns up more often in forests, in rain, at night and in the dark. It never attacks."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Signs that something is following you:"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "footsteps behind you"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "a whisper"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "smoke with no fire"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "a campfire suddenly put out"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "a small mossy cairn topped with a soul torch"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "After your third sighting it starts leaving Hollow Remnants where it stood. You'll need one later."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Torn journal pages are hidden around the world. The table shows where each one is found."
-    },
-    {
-     "s": "table",
-     "t": "Page  |  Where"
-    },
-    {
-     "s": "table",
-     "t": "I  |  Sky Vault chests (12%)"
-    },
-    {
-     "s": "table",
-     "t": "II  |  Tempest Spire chests (15%)"
-    },
-    {
-     "s": "table",
-     "t": "III  |  Hollow Labyrinth side-room chests (8%)"
-    },
-    {
-     "s": "table",
-     "t": "IV  |  The Labyrinth's treasure chamber (always)"
-    },
-    {
-     "s": "table",
-     "t": "V  |  The Hollow Shrine's chest (always)"
-    },
-    {
-     "s": "p",
-     "t": "Craft all five pages with a book and a Hollow Remnant to rebind the Weathered Journal."
-    }
-   ]
-  },
-  {
-   "title": "13. The Hollow Shrine (spoilers)",
-   "lines": [
-    {
-     "s": "p",
-     "t": "Finding it:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "A ring of broken pillars on a floating island in the Tempest Realm sky, between y 130 and y 175."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "At most one in any 1920 \u00d7 1920 area, so it's legendary rare."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "/locate structure stormreach:hollow_shrine finds it."
-    },
-    {
-     "s": "p",
-     "t": "The ritual has three stages. Every step is clued in the world: right-click the pedestals, conduits and altar for hints."
-    },
-    {
-     "s": "h",
-     "t": "Stage 1: four Relic Pedestals"
-    },
-    {
-     "s": "p",
-     "t": "Each pedestal shows a riddle and takes one relic:"
-    },
-    {
-     "s": "table",
-     "t": "Riddle  |  Relic  |  From"
-    },
-    {
-     "s": "table",
-     "t": "\"What I left in the deepest room, bring it back.\"  |  Heart of the Labyrinth  |  The Labyrinth's treasure chamber"
-    },
-    {
-     "s": "table",
-     "t": "\"The crowned thing's eye, which never closes.\"  |  Tempest Eye  |  The Tempest Sovereign"
-    },
-    {
-     "s": "table",
-     "t": "\"Fruit of the old grove, dressed in gold.\"  |  Gilded Stormfruit  |  Crafted from Stormfruit"
-    },
-    {
-     "s": "table",
-     "t": "\"What I leave behind when you look at me.\"  |  Hollow Remnant  |  Where the Stranger stood"
-    },
-    {
-     "s": "h",
-     "t": "Stage 2: four Storm Conduits"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "When every pedestal glows, call lightning onto the four Storm Conduits around the shrine (a Tempest Staff works well, or wait for a storm)."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Strike them in the order of their notches: 1, 2, 3, 4. Count the marks on each conduit or right-click it."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "The order does not go around the ring."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Strike out of order and every conduit goes dark again."
-    },
-    {
-     "s": "h",
-     "t": "Stage 3: the Hollow Altar"
-    },
-    {
-     "s": "p",
-     "t": "Lay the Weathered Journal on the Hollow Altar."
-    }
-   ]
-  },
-  {
-   "title": "14. Cyrrus, the Hollow Storm (spoilers)",
-   "lines": [
-    {
-     "s": "h",
-     "t": "The intro"
-    },
-    {
-     "s": "p",
-     "t": "The fight opens with a fully voiced cinematic, about 45 seconds long:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "The sky goes dark and thunder rolls."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "A figure rises out of the ground below the altar. It's the Stranger."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "He tells you who he was, and grows larger with each line as the storm fills him. Lightning rings the shrine."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "He corrupts into his true form and the fight begins."
-    },
-    {
-     "s": "p",
-     "t": "During the intro you are slowed and protected, and Cyrrus can't be hurt. Each line appears in chat and above your hotbar, and plays aloud. In multiplayer everyone within 96 blocks sees and hears it in sync."
-    },
-    {
-     "s": "p",
-     "t": "Stats: 600 health (adjustable) and heavy armour. He grows to four times a player's size."
-    },
-    {
-     "s": "h",
-     "t": "The five phases"
-    },
-    {
-     "s": "p",
-     "t": "Every dangerous attack is telegraphed first: sparks on the ground, a charging sound, or gathering hail."
-    },
-    {
-     "s": "table",
-     "t": "Phase  |  Health  |  Theme  |  What happens"
-    },
-    {
-     "s": "table",
-     "t": "1  |  100\u201380%  |  Lightning  |  Strikes on every player (sparks mark the spot about a second early), and rings of lightning spreading outward"
-    },
-    {
-     "s": "table",
-     "t": "2  |  80\u201360%  |  Rain and visibility  |  Downpours bring Darkness and Slowness, hail falls on anyone not under a roof (worse without a helmet), and he blinks through the gloom"
-    },
-    {
-     "s": "table",
-     "t": "3  |  60\u201340%  |  Wind  |  Gale blasts throw you back, and crosswinds blow arrows and tridents off course. He can spawn a small tornado on you"
-    },
-    {
-     "s": "table",
-     "t": "4  |  40\u201320%  |  Summons  |  Squalls, Static Wisps, Stormhawks and Brine Wraiths join the fight"
-    },
-    {
-     "s": "table",
-     "t": "5  |  below 20%  |  The whole storm  |  A maelstrom drags everything to the centre, lightning cages close around you, and tornadoes, blinks and crosswinds all return"
-    },
-    {
-     "s": "p",
-     "t": "He speaks a voiced line as he enters each phase."
-    },
-    {
-     "s": "h",
-     "t": "When he falls"
-    },
-    {
-     "s": "p",
-     "t": "He has three last lines, and the storm clears."
-    },
-    {
-     "s": "p",
-     "t": "Drops:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "2 Maelstrom Cores"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "the Stormcrown"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "the Weathervane Scepter"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "a nether star"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "2\u20134 Tempest Cores"
-    },
-    {
-     "s": "p",
-     "t": "Endgame rewards:"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  What it does"
-    },
-    {
-     "s": "table",
-     "t": "Stormcrown  |  Helmet (4 armour, 3.5 toughness); immune to lightning"
-    },
-    {
-     "s": "table",
-     "t": "Weathervane Scepter  |  Use: cycle the Overworld weather (clear \u2192 rain \u2192 thunder \u2192 clear). Sneak + use: a downburst 16 blocks ahead. 60-second cooldown"
-    },
-    {
-     "s": "table",
-     "t": "Weatherbreaker (Maelstrom Core + Tempest Eye + netherite sword)  |  Maelstrom-tier sword (2600 durability): every hit hurls the target with wind, and 1 in 4 calls lightning"
-    },
-    {
-     "s": "table",
-     "t": "Maelstrom Core  |  Needed for the Maelstrom Backpack and the Weatherbreaker"
-    }
-   ]
-  },
-  {
-   "title": "15. Achievements",
-   "lines": [
-    {
-     "s": "p",
-     "t": "5.0 adds 49 achievements, with three new tabs and new branches on the main tab."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Chains: they come in tiers (Forecaster I\u2013V, the backpack tiers, Funnel Cloud \u2192 Damage Survey \u2192 Violent \u2192 Incredible)."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Hidden ones: some stay invisible until you earn them."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Item rewards: some give an item that can't be got any other way, and no item is given by more than one achievement."
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Vanilla: some cover vanilla play (surviving a lightning strike, Channeling, lightning rods)."
-    },
-    {
-     "s": "p",
-     "t": "Tabs:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Stormreach (main tab): backpacks, lightning, Elderstorm Grove"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Meteorology: instruments and tornadoes"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "The Hollow Labyrinth"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "Chronicle: the story. This tab only appears once you've seen the Stranger."
-    },
-    {
-     "s": "p",
-     "t": "The full reward list is in the tables below."
-    }
-   ]
-  },
-  {
-   "title": "16. Settings",
-   "lines": [
-    {
-     "s": "p",
-     "t": "Mod Menu (Stormreach \u2192 Configure) now holds performance settings only:"
-    },
-    {
-     "s": "table",
-     "t": "Page  |  Setting  |  Default"
-    },
-    {
-     "s": "table",
-     "t": "Tornadoes  |  Tornado Simulation Distance  |  256 blocks"
-    },
-    {
-     "s": "table",
-     "t": "Tornadoes  |  Max Tornadoes at Once  |  2"
-    },
-    {
-     "s": "table",
-     "t": "Tornadoes  |  Block Checks per Tick  |  96"
-    },
-    {
-     "s": "table",
-     "t": "Tornadoes  |  Airborne Debris Limit  |  48"
-    },
-    {
-     "s": "table",
-     "t": "Tornadoes  |  Tornado Block Damage  |  On"
-    },
-    {
-     "s": "table",
-     "t": "Tornadoes  |  Tornado Size  |  35% of real scale"
-    },
-    {
-     "s": "table",
-     "t": "Effects & Load  |  Particle Density  |  100%"
-    },
-    {
-     "s": "table",
-     "t": "Effects & Load  |  Storm Particles  |  On"
-    },
-    {
-     "s": "table",
-     "t": "Effects & Load  |  Max Squalls per Player  |  4"
-    },
-    {
-     "s": "table",
-     "t": "Effects & Load  |  Stormblight Heart Radius  |  32 blocks"
-    },
-    {
-     "s": "table",
-     "t": "Effects & Load  |  Stormblight Spread Speed  |  5"
-    },
-    {
-     "s": "table",
-     "t": "Effects & Load  |  Backpack Magnet Interval  |  10 ticks"
-    },
-    {
-     "s": "p",
-     "t": "Gameplay options are still available for server owners in config/stormreach.properties:"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "naturalTornadoes, tornadoFrequency, tornadoIntensityBias, tornadoDurationPercent"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "landspouts, downbursts"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "shadowAppearanceRate, shadowSigns"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "labyrinthGeneration"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "wildlifeSpawning (the 5.2 and 5.3 creatures), thunderbirdChance (percent chance per minute, per player out in a thunderstorm; default 6), hailGolemChance (the same for Hailstone Golems; default 5)"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "bossDifficulty, guardianDifficulty"
-    },
-    {
-     "s": "bullet",
-     "d": 0,
-     "t": "every setting from earlier versions"
-    }
-   ]
-  },
-  {
-   "title": "17. Rarity and drop-rate tables",
-   "lines": [
-    {
-     "s": "p",
-     "t": "All numbers below are calculated directly from the mod's loot tables, worldgen files and code (by tools/guide_tables.py), so they match the game."
-    },
-    {
-     "s": "h",
-     "t": "Item rarity (name colour)"
-    },
-    {
-     "s": "p",
-     "t": "Minecraft colours item names by rarity: white = Common, yellow = Uncommon, aqua = Rare, magenta = Epic. Everything not listed is Common. (Tornado spawners and weather events are Epic and creative-only.)"
-    },
-    {
-     "s": "table",
-     "t": "Rarity  |  Items"
-    },
-    {
-     "s": "table",
-     "t": "Epic (magenta)  |  Chaser's Badge, Gale Blade, Heart of the Labyrinth, Maelstrom Core, Squall Heart, Storm Chaser's Pack, Stormcrown, Tornado Director, Weatherbreaker, Weathered Journal, Weathervane Scepter"
-    },
-    {
-     "s": "table",
-     "t": "Rare (aqua)  |  Bottled Lightning, Gale Key, Gilded Stormfruit, Hollow Key, Hollow Remnant, Labyrinth Key, Lightning Charm, Storm Chaser's Cap, Stormkite, Supercell Seeder, Thunder Key, Thunderbird Plume, Tornado Intercept Vehicle"
-    },
-    {
-     "s": "table",
-     "t": "Uncommon (yellow)  |  Cloud Ambergris, Gale Essence, Glacial Core, Glimmer Antler, Handheld Storm Radar, Omen Feather, Serpent Scale, Tide Conch, Torn Journal Page (I), Torn Journal Page (II), Torn Journal Page (III), Torn Journal Page (IV), Torn Journal Page (V)"
-    },
-    {
-     "s": "h",
-     "t": "Mob drops"
-    },
-    {
-     "s": "p",
-     "t": "Chance is per kill without Looting (Looting adds up to +1 per level to most counts). \"Drop-rate rarity\" uses the same bands everywhere in this guide: Guaranteed 100%, Common \u226550%, Uncommon 15\u201350%, Rare 5\u201315%, Very rare 1\u20135%, Legendary <1%."
-    },
-    {
-     "s": "table",
-     "t": "Mob  |  Drop  |  Count  |  Chance per kill  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Cyrrus, the Hollow Storm  |  Maelstrom Core  |  2  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Cyrrus, the Hollow Storm  |  Stormcrown  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Cyrrus, the Hollow Storm  |  Weathervane Scepter  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Cyrrus, the Hollow Storm  |  Nether Star  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Cyrrus, the Hollow Storm  |  Tempest Core  |  2\u20134  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Sovereign  |  Tempest Eye  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "The Stormwarden  |  Tempest Core  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "The Stormwarden  |  Block of Storm Crystal  |  2\u20134  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "The Stormwarden  |  Storm Cell  |  1\u20133  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Hollow Keeper  |  Echo Shard  |  2  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Hollow Keeper  |  Iron Ingot  |  2\u20136  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Hollow Keeper  |  Copper Ingot  |  4\u201310  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Glimmerstag  |  Leather  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Glimmerstag  |  Glimmer Antler  |  1  |  25.0%  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Thistlehop  |  Thistle Down  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Skyray  |  Raw Skyray  |  1\u20133  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Puffling  |  Nimbus Cloud  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Static Wisp  |  Ion Shard  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Static Wisp  |  Storm Shard  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Cyclone  |  Gale Cloud  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Stormhawk  |  Stormhawk Feather  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Thunder Crab  |  Crab Claw  |  1\u20133  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Thunder Crab  |  Storm Shard  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Cliff Crab  |  Crab Claw  |  1\u20132  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Brine Wraith  |  Salt  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Brine Wraith  |  Rotten Flesh  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Brine Wraith  |  Storm Shard  |  1  |  8.0%  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Squall  |  Storm Shard  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Ball Lightning  |  Storm Shard  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Storm Gull  |  Gull Feather  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Thunderbird  |  Thunderbird Plume  |  2\u20134  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Thunderbird  |  Charged Scale  |  1\u20133  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Cloud Whale  |  Cloud Ambergris  |  1\u20132  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Cloud Whale  |  Glowgel  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Shock Eel  |  Voltaic Eel  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Shock Eel  |  Charged Scale  |  1  |  20.0%  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Sparkskink  |  Charged Scale  |  1  |  15.0%  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Jelly  |  Glowgel  |  1\u20133  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Gale Sprite  |  Gale Essence  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Tidewrack Hermit  |  Pearlescent Shell  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Tidewrack Hermit  |  Kelp  |  0\u20131  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Squall Serpent  |  Serpent Scale  |  3\u20136  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Squall Serpent  |  Squall Heart  |  1  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Hailstone Golem  |  Packed Ice  |  1\u20133  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Hailstone Golem  |  Snowball  |  2\u20135  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Hailstone Golem  |  Glacial Core  |  1  |  50.0%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Aurora Moth  |  Aurora Dust  |  1\u20132  |  100.0%  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Storm Petrel  |  Feather  |  0\u20132  |  66.7%  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Storm Petrel  |  Omen Feather  |  1  |  25.0%  |  Uncommon"
-    },
-    {
-     "s": "p",
-     "t": "The Stranger and tornadoes drop nothing. Stranger: after you have seen it 3+ times, each time it vanishes there is a 25% chance it leaves a Hollow Remnant where it stood (Uncommon, but only after the third sighting)."
-    },
-    {
-     "s": "p",
-     "t": "Every Storm-variant vanilla mob drops what its vanilla counterpart drops."
-    },
-    {
-     "s": "h",
-     "t": "Chest loot (chance per chest)"
-    },
-    {
-     "s": "p",
-     "t": "Hollow Labyrinth: treasure chamber"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Heart of the Labyrinth  |  1  |  100.0%  |  1.00  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Torn Journal Page (IV)  |  1  |  100.0%  |  1.00  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Diamond  |  2\u20135  |  65.0%  |  3.29  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Bottle o' Enchanting  |  3\u20138  |  57.6%  |  4.31  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Block of Storm Crystal  |  1\u20132  |  49.0%  |  0.94  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Core  |  1  |  39.1%  |  0.47  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Diamond Chestplate  |  1  |  27.7%  |  0.31  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Netherite Scrap  |  1\u20132  |  27.7%  |  0.47  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Totem of Undying  |  1  |  21.4%  |  0.24  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Enchanted Golden Apple  |  1  |  14.7%  |  0.16  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Music Disc (Otherside)  |  1  |  14.7%  |  0.16  |  Rare"
-    },
-    {
-     "s": "p",
-     "t": "Hollow Labyrinth: corner key vault (\u00d73)"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Labyrinth Key  |  1  |  100.0%  |  1.00  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Gold Ingot  |  2\u20136  |  47.9%  |  2.40  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Charged Stormstone  |  2\u20136  |  36.5%  |  1.71  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Emerald  |  2\u20135  |  36.5%  |  1.50  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Book  |  1  |  30.2%  |  0.34  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Cell  |  1\u20132  |  30.2%  |  0.51  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Diamond  |  1\u20133  |  23.4%  |  0.51  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Golden Apple  |  1  |  19.8%  |  0.21  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Iron Sword  |  1  |  19.8%  |  0.21  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Name Tag  |  1  |  16.1%  |  0.17  |  Uncommon"
-    },
-    {
-     "s": "p",
-     "t": "Hollow Labyrinth: side rooms"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Bone  |  1\u20134  |  44.8%  |  1.38  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Rotten Flesh  |  1\u20133  |  35.4%  |  0.83  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "String  |  1\u20133  |  35.4%  |  0.83  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Iron Nugget  |  2\u20138  |  33.4%  |  1.93  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Copper Ingot  |  1\u20134  |  24.8%  |  0.69  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Torch  |  2\u20136  |  24.8%  |  1.10  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Bread  |  1\u20132  |  20.3%  |  0.33  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Candle  |  1\u20132  |  15.5%  |  0.25  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Shard  |  1\u20133  |  15.5%  |  0.33  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Iron Ingot  |  1\u20132  |  10.6%  |  0.17  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Torn Journal Page (III)  |  1  |  8.0%  |  0.08  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Echo Shard  |  1  |  2.7%  |  0.03  |  Very rare"
-    },
-    {
-     "s": "p",
-     "t": "Hollow Shrine"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Torn Journal Page (V)  |  1  |  100.0%  |  1.00  |  Guaranteed"
-    },
-    {
-     "s": "table",
-     "t": "Ion Shard  |  2\u20136  |  58.1%  |  3.11  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Stormfruit  |  2\u20134  |  58.1%  |  2.33  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Voltite Ingot  |  1\u20134  |  45.1%  |  1.39  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Bottle o' Enchanting  |  2\u20135  |  37.7%  |  1.56  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite  |  1\u20132  |  25.0%  |  0.42  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Gilded Stormfruit  |  1  |  15.7%  |  0.17  |  Uncommon"
-    },
-    {
-     "s": "p",
-     "t": "Sky Vault"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Voltite Ingot  |  2\u20136  |  67.7%  |  4.25  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Ion Shard  |  2\u20136  |  63.6%  |  3.82  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Cloudberry Tart  |  1\u20133  |  48.4%  |  1.27  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Stormhawk Feather  |  2\u20135  |  48.4%  |  2.23  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Galewood Sapling  |  1\u20133  |  42.2%  |  1.06  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Nectar  |  1\u20132  |  42.2%  |  0.80  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite  |  1\u20133  |  35.3%  |  0.85  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Saddle  |  1  |  35.3%  |  0.42  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Tonic  |  1\u20132  |  27.7%  |  0.48  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Voltite Sword  |  1  |  19.3%  |  0.21  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Cloudstep Boots  |  1  |  14.8%  |  0.16  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Torn Journal Page (I)  |  1  |  12.0%  |  0.12  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite Pickaxe  |  1  |  10.1%  |  0.11  |  Rare"
-    },
-    {
-     "s": "p",
-     "t": "Tempest Spire"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Storm Shard  |  3\u20138  |  68.2%  |  5.82  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Bricks  |  4\u201312  |  48.6%  |  5.08  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Charged Stormstone  |  2\u20136  |  42.3%  |  2.12  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Emerald  |  2\u20135  |  42.3%  |  1.85  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Cell  |  1\u20133  |  42.3%  |  1.06  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Fulgurite  |  2\u20136  |  35.4%  |  1.69  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Tonic  |  1\u20132  |  35.4%  |  0.63  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Block of Storm Crystal  |  1\u20132  |  27.7%  |  0.48  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Bottled Thunder  |  1\u20132  |  27.7%  |  0.48  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Diamond  |  1\u20133  |  27.7%  |  0.63  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Golden Apple  |  1  |  19.3%  |  0.21  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Thunderhead Horn  |  1  |  19.3%  |  0.21  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Torn Journal Page (II)  |  1  |  15.0%  |  0.15  |  Uncommon"
-    },
-    {
-     "s": "p",
-     "t": "Storm Shrine"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Storm Shard  |  3\u20138  |  83.2%  |  8.64  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Fulgurite Shard  |  2\u20135  |  63.7%  |  3.30  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Storm Cell  |  1\u20132  |  56.5%  |  1.18  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Bottled Rain  |  1\u20132  |  48.2%  |  0.94  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Bottled Sunshine  |  1\u20132  |  48.2%  |  0.94  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Tonic  |  1\u20132  |  38.6%  |  0.71  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Bottled Thunder  |  1  |  27.5%  |  0.31  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Thunderhead Horn  |  1  |  14.7%  |  0.16  |  Rare"
-    },
-    {
-     "s": "p",
-     "t": "Lighthouse"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Storm Shard  |  2\u20136  |  71.3%  |  4.66  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Gull Feather  |  2\u20135  |  60.1%  |  3.06  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Salted Cod  |  2\u20135  |  60.1%  |  3.06  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Candle  |  2\u20136  |  45.2%  |  2.33  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Emerald  |  1\u20134  |  45.2%  |  1.46  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Squall in a Bottle  |  1\u20133  |  45.2%  |  1.17  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Empty Map  |  1  |  38.0%  |  0.47  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Cell  |  1\u20132  |  30.0%  |  0.52  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Compass  |  1  |  25.6%  |  0.29  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Tempest Staff  |  1  |  16.2%  |  0.17  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Thunderhead Horn  |  1  |  5.7%  |  0.06  |  Rare"
-    },
-    {
-     "s": "p",
-     "t": "Wrecked Skiff"
-    },
-    {
-     "s": "table",
-     "t": "Item  |  Stack  |  Chance per chest  |  Avg. per chest  |  Drop-rate rarity"
-    },
-    {
-     "s": "table",
-     "t": "Driftwood Planks  |  3\u20138  |  66.4%  |  5.50  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Salt  |  2\u20136  |  55.1%  |  3.00  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Salted Cod  |  1\u20134  |  55.1%  |  1.88  |  Common"
-    },
-    {
-     "s": "table",
-     "t": "Iron Nugget  |  2\u20138  |  40.6%  |  2.50  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "String  |  1\u20135  |  40.6%  |  1.50  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Rock Candy  |  1\u20133  |  33.9%  |  0.80  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Storm Shard  |  1\u20133  |  33.9%  |  0.80  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "Gold Ingot  |  1\u20132  |  18.4%  |  0.30  |  Uncommon"
-    },
-    {
-     "s": "h",
-     "t": "Structure rarity"
-    },
-    {
-     "s": "p",
-     "t": "Structures are placed on a grid: the world is cut into regions of spacing \u00d7 spacing chunks and each region gets at most one attempt, at least separation chunks from the region edge. \"One per\" is the region size in blocks; the structure appears there only if the biome fits. Every structure here works with /locate structure."
-    },
-    {
-     "s": "table",
-     "t": "Structure  |  Where  |  Spacing (chunks)  |  Separation  |  At most one per  |  Rarity"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:hollow_shrine  |  Tempest Realm, floating (any realm biome)  |  120  |  40  |  1920\u00d71920 blocks  |  Legendary"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:hollow_labyrinth  |  Overworld, underground (any biome)  |  64  |  24  |  1024\u00d71024 blocks  |  Very rare"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:tempest_spire  |  Overworld, Stormreach biomes  |  48  |  16  |  768\u00d7768 blocks  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:lighthouse  |  Stormreach Coast  |  40  |  12  |  640\u00d7640 blocks  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:storm_shrine  |  Stormreach biomes  |  32  |  10  |  512\u00d7512 blocks  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:sky_vault  |  Tempest Realm sky  |  24  |  8  |  384\u00d7384 blocks  |  Uncommon"
-    },
-    {
-     "s": "table",
-     "t": "stormreach:wrecked_skiff  |  Stormreach beaches and shores  |  20  |  6  |  320\u00d7320 blocks  |  Common"
-    },
-    {
-     "s": "h",
-     "t": "Ores and clouds"
-    },
-    {
-     "s": "table",
-     "t": "Block  |  Dimension  |  Frequency  |  Vein size  |  Height  |  Skipped when touching air"
-    },
-    {
-     "s": "table",
-     "t": "Gale Cloud  |  Tempest Realm  |  1 vein per 5 chunks  |  up to 44 blocks  |  y 40 to 220  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Nimbus Cloud  |  Tempest Realm  |  1 vein per 2 chunks  |  up to 48 blocks  |  y 20 to 200  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Thundercloud  |  Tempest Realm  |  1 vein per 4 chunks  |  up to 40 blocks  |  y 10 to 160  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite Ore  |  Tempest Realm  |  3 veins per chunk  |  up to 4 blocks  |  y 0 to 120  |  50%"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite Ore  |  Tempest Realm  |  6 veins per chunk  |  up to 5 blocks  |  y 0 to 200  |  30%"
-    },
-    {
-     "s": "table",
-     "t": "Ion Ore  |  Tempest Realm  |  8 veins per chunk  |  up to 7 blocks  |  y 0 to 220  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Storm Crystal Ore  |  Overworld (Stormreach biomes)  |  8 veins per chunk  |  up to 6 blocks  |  y 0 to 112  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Storm Crystal Ore  |  Overworld (Stormreach biomes)  |  16 veins per chunk  |  up to 6 blocks  |  y 40 to 200  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Stormstone  |  Overworld (Stormreach biomes)  |  10 veins per chunk  |  up to 48 blocks  |  y 30 to 128  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "Voltite Ore  |  Tempest Realm  |  14 veins per chunk  |  up to 9 blocks  |  y 0 to 200  |  \u2014"
-    },
-    {
-     "s": "p",
-     "t": "Aurorite is the rarest realm ore (3 small veins per chunk below y 120, half of them discarded if exposed to air; richer in Aurora Spires)."
-    },
-    {
-     "s": "h",
-     "t": "Tornado ratings: how often each EF rating happens"
-    },
-    {
-     "s": "p",
-     "t": "Ratings follow the U.S. climatology (most tornadoes are weak; violent ones are rare). The rating is given after the tornado lifts, from the strongest damage it actually caused, just like a real damage survey: a violent tornado that only crosses open fields can be rated low. The Intensity Bias setting in the config file shifts these odds."
-    },
-    {
-     "s": "table",
-     "t": "Rating  |  3-second gust  |  Supercell tornadoes  |  Rarity  |  Landspouts  |  Waterspouts  |  Multiple-vortex chance"
-    },
-    {
-     "s": "table",
-     "t": "EF0  |  65\u201385 mph  |  55.0%  |  Common  |  80%  |  90%  |  2%"
-    },
-    {
-     "s": "table",
-     "t": "EF1  |  86\u2013110 mph  |  32.0%  |  Uncommon  |  18%  |  10%  |  5%"
-    },
-    {
-     "s": "table",
-     "t": "EF2  |  111\u2013135 mph  |  9.5%  |  Rare  |  2%  |  \u2014  |  15%"
-    },
-    {
-     "s": "table",
-     "t": "EF3  |  136\u2013165 mph  |  2.6%  |  Very rare  |  \u2014  |  \u2014  |  30%"
-    },
-    {
-     "s": "table",
-     "t": "EF4  |  166\u2013200 mph  |  0.8%  |  Legendary  |  \u2014  |  \u2014  |  50%"
-    },
-    {
-     "s": "table",
-     "t": "EF5  |  over 200 mph  |  0.1%  |  Legendary  |  \u2014  |  \u2014  |  60%"
-    },
-    {
-     "s": "p",
-     "t": "What they look like, by rating (supercell tornadoes)"
-    },
-    {
-     "s": "table",
-     "t": "Rating  |  Rope  |  Needle  |  Drill-bit  |  Cone  |  Stovepipe  |  Wedge  |  Large wedge"
-    },
-    {
-     "s": "table",
-     "t": "EF0  |  30%  |  15%  |  15%  |  35%  |  5%  |  \u2014  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "EF1  |  20%  |  8%  |  15%  |  45%  |  12%  |  \u2014  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "EF2  |  10%  |  \u2014  |  8%  |  45%  |  25%  |  12%  |  \u2014"
-    },
-    {
-     "s": "table",
-     "t": "EF3  |  5%  |  \u2014  |  \u2014  |  35%  |  30%  |  28%  |  2%"
-    },
-    {
-     "s": "table",
-     "t": "EF4  |  \u2014  |  \u2014  |  \u2014  |  20%  |  25%  |  45%  |  10%"
-    },
-    {
-     "s": "table",
-     "t": "EF5  |  \u2014  |  \u2014  |  \u2014  |  10%  |  25%  |  50%  |  15%"
-    },
-    {
-     "s": "p",
-     "t": "Appearance is not intensity: a rope can still be strong, and wedges can be weak. Satellite tornadoes (8%) only form beside EF3+ tornadoes at least 200 m wide; a separate companion tornado forms 5% of the time."
-    },
-    {
-     "s": "h",
-     "t": "Natural events"
-    },
-    {
-     "s": "table",
-     "t": "Event  |  Chance  |  When and where  |  Rarity"
-    },
-    {
-     "s": "table",
-     "t": "Supercell tornado  |  0.6% per player every 10 s  |  Overworld thunderstorm, any non-frozen biome (about one per 2\u20134 thunderstorms near you)  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "Landspout  |  0.15% per player every 10 s  |  Rain without thunder, warm biomes (temperature > 0.6), not over water  |  Very rare"
-    },
-    {
-     "s": "table",
-     "t": "Waterspout  |  0.4% every 10 s (0.1% in clear weather)  |  Over oceans and rivers  |  Very rare"
-    },
-    {
-     "s": "table",
-     "t": "The Stranger appears  |  2% every 30 s, \u00d71.8 in forests, \u00d71.5 in rain, \u00d71.4 at night, \u00d71.3 in darkness (max 25%)  |  Overworld, anywhere; grows a little bolder with every sighting  |  Rare"
-    },
-    {
-     "s": "table",
-     "t": "A sign of the Stranger  |  3% every 30 s  |  Footsteps, whispers, smoke, a snuffed campfire, a cairn with a soul torch  |  Rare"
-    },
-    {
-     "s": "h",
-     "t": "Backpack tiers"
-    },
-    {
-     "s": "table",
-     "t": "Backpack  |  Slots  |  Slots with Capacity III  |  Pages (max)  |  How to get"
-    },
-    {
-     "s": "table",
-     "t": "Diamond Backpack  |  27  |  54  |  1  |  crafted"
-    },
-    {
-     "s": "table",
-     "t": "Obsidian Backpack  |  36  |  63  |  2  |  Diamond Backpack + Obsidian Upgrade Kit"
-    },
-    {
-     "s": "table",
-     "t": "Netherite Backpack  |  54  |  81  |  2  |  Obsidian Backpack + Netherite Upgrade Kit"
-    },
-    {
-     "s": "table",
-     "t": "Storm Crystal Backpack  |  72  |  99  |  2  |  Netherite Backpack + Storm Crystal Upgrade Kit"
-    },
-    {
-     "s": "table",
-     "t": "Voltite Backpack  |  90  |  117  |  3  |  Storm Crystal Backpack + Voltite Upgrade Kit"
-    },
-    {
-     "s": "table",
-     "t": "Aurorite Backpack  |  108  |  135  |  3  |  Voltite Backpack + Aurorite Upgrade Kit"
-    },
-    {
-     "s": "table",
-     "t": "Maelstrom Backpack  |  135  |  162  |  3  |  Aurorite Backpack + Maelstrom Upgrade Kit"
-    },
-    {
-     "s": "table",
-     "t": "Storm Chaser's Pack  |  45  |  72  |  2  |  achievement reward only; built-in Magnetism"
-    },
-    {
-     "s": "h",
-     "t": "Achievements with rewards"
-    },
-    {
-     "s": "p",
-     "t": "Each reward item comes from exactly one achievement. The Sovereign Trophy is the reward for the existing Regicide achievement (defeat the Tempest Sovereign, +200 XP)."
-    },
-    {
-     "s": "table",
-     "t": "Achievement  |  How  |  Item reward  |  XP  |  Hidden"
-    },
-    {
-     "s": "table",
-     "t": "Fireproof Freight  |  Upgrade to a Netherite Backpack  |  \u2014  |  100  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Bottled Lightning, Packed Neatly  |  Upgrade to a Storm Crystal Backpack  |  Storm Chaser's Pack  |  150  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Northern Satchel  |  Upgrade to an Aurorite Backpack  |  \u2014  |  250  |  No"
-    },
-    {
-     "s": "table",
-     "t": "The Eye of the Bag  |  Upgrade to a Maelstrom Backpack  |  \u2014  |  750  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Lightning Rod  |  Be struck by lightning and live  |  Lightning Charm  |  \u2014  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Forecaster IV: Hook Echo  |  Build a Doppler Radar  |  \u2014  |  100  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Forecaster V: The Whole Picture  |  Build a Weather Monitor  |  \u2014  |  150  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Violent  |  Witness a tornado rated EF4 or stronger  |  Tornado Trophy  |  250  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Incredible  |  Witness a tornado rated EF5  |  Chaser's Badge  |  500  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Into the Bear's Cage  |  Get caught inside a tornado's wind field and survive  |  Storm Chaser's Cap  |  \u2014  |  Yes"
-    },
-    {
-     "s": "table",
-     "t": "Holding My Breath  |  Stay hidden while the Hollow Keeper searches right outside your locker  |  \u2014  |  100  |  Yes"
-    },
-    {
-     "s": "table",
-     "t": "A Heart Left Behind  |  Take the Heart of the Labyrinth from the treasure chamber  |  \u2014  |  200  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Keeper of Nothing  |  Defeat the Hollow Keeper  |  Keeper Trophy  |  300  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Let the Sky Decide  |  Defeat Cyrrus, the Hollow Storm  |  Cyrrus Trophy  |  1000  |  No"
-    },
-    {
-     "s": "table",
-     "t": "Eye of the Hollow Storm  |  Defeat the Sovereign, the Keeper and Cyrrus, and carry a Maelstrom Backpack  |  \u2014  |  2000  |  Yes"
-    }
-   ]
-  },
-  {
-   "title": "18. Credits and licences",
+   "title": "Settings",
    "lines": [
     {
      "s": "bullet",
      "d": 0,
-     "t": "Cyrrus's voice:"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "spoken by the Piper text-to-speech engine with the \"Ryan (high)\" voice model"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "processed into his corrupted voice for this mod"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "the voice model's training data is licensed CC BY-NC-SA 4.0, so these recordings are for non-commercial use, with attribution, under the same licence"
-    },
-    {
-     "s": "bullet",
-     "d": 1,
-     "t": "you can re-record or replace any line: see data/stormreach/cinematic/*.txt and tools/audio5.py"
+     "t": "Mod Menu holds the performance settings (tornadoes, effects and load), each with a tooltip."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Music and sounds (Labyrinth layers, Cyrrus's theme, siren, tornado roar, heartbeat, whisper, screech): synthesised from scratch for Stormreach. No outside samples."
+     "t": "Gameplay options are in config/stormreach.properties."
     },
     {
      "s": "bullet",
      "d": 0,
-     "t": "Code and textures: MIT, like the rest of Stormreach."
+     "t": "Operator commands: /stormreach thunderhead, /stormreach calm, /stormreach forecast, /stormreach status and /stormreach reload."
     }
    ]
   }

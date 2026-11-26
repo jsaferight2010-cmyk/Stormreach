@@ -589,8 +589,20 @@ boot the headless test server in GitHub Actions as before.
 - Tests: GameTests for the Eye (exactly once), the arena lifecycle and skipping the intro.
 
 ### Resume point (overhaul in progress)
-Done: stages 1-6 (crash, visuals, weather, tornadoes, gameplay, mobs/gear).
-Next: 7 (maze/vault, shrine arena + sigil crash,
-spire chests/stairs + Eye reward, cinematic), 8 (sound redesign, guidebooks, perf), then the multiplayer pass and
-"even more" storm content, 9 (tests, docs, final check). Last of all: branding (name, icon and description for Mod
-Menu, GitHub, the .zip and the .jar). No jar is delivered until everything is done and checked.
+Done: stages 1-6 and stage 7 part 1 (Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash).
+CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
+break blocks in Creative (vanilla says no)?
+Next, in order:
+1. Stage 7 part 2: a more elaborate Hollow Shrine (tools/gendata8.py, build_nbt('hollow_shrine')). Plan: ~33 x 33
+   floating skyshale island with an inverted-cone underside and ion veins; a patterned plaza; four causeway stairs up
+   to a raised dais with the Hollow Altar in the centre; the four relic pedestals on plinths on the dais diagonals;
+   the four storm conduits on short obelisks at the cardinal edges (open to the sky, NO lightning rods: natural
+   strikes would hit them out of order and reset the puzzle; keep pedestals and conduits within the 24-block search
+   box of ShrineBlocks); a broken colonnade with arches and hanging soul lanterns; the chest in a reliquary niche
+   behind the altar; a few floating rubble chunks. Keep strike order notches as they are.
+2. Stage 8: original sound redesign pass, guidebooks (beginner guide without rarity; crafting book only accuracy
+   fixes, same look), placement previews (section 21), performance pass.
+3. Multiplayer pass, then "even more" storm content.
+4. Tests, CHANGELOG/NOTES/CLAUDE.md, final double-check.
+5. Last of all: branding (name, icon and description for Mod Menu, GitHub, the .zip and the .jar). No jar is
+   delivered until everything is done and checked.

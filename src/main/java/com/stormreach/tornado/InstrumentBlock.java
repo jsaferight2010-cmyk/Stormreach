@@ -110,7 +110,7 @@ public class InstrumentBlock extends Block implements com.stormreach.structure.M
             default -> 0;
         };
         if (state.getValue(POWER) != power) level.setBlock(pos, state.setValue(POWER, power), Block.UPDATE_ALL);
-        if (kind == Kind.TORNADO_SIREN && power > 0 && level.getGameTime() % 60 < 20) {
+        if (kind == Kind.TORNADO_SIREN && power > 0 && level.getGameTime() % 120 < 20) {   // 6.0: one 6 s wail per cycle, no overlap
             level.playSound(null, pos.above(5), WeatherSounds.SIREN, SoundSource.BLOCKS, 8.0f, 1.0f);   // from the siren head atop the pole
         }
         level.scheduleTick(pos, this, kind == Kind.TORNADO_SIREN ? 20 : 40);

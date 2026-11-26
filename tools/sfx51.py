@@ -559,6 +559,40 @@ for _d in (NEW52, NEW53, NEW54, NEW55):
     for _k, _f in list(_d.items()):
         if getattr(_f, '__name__', '') in _REDONE: _d[_k] = globals()[_f.__name__]
 
+# ---- 6.0: the two biggest sounds, rebuilt (they were made by audio5.py; now they come from here)
+def _seamless(x, fade):
+    """Folds the end of x onto its start over `fade` seconds so it loops without a seam."""
+    n = int(fade * SR); body = x[:-n].copy(); w = np.linspace(0, 1, n)
+    body[:n] = body[:n] * w + x[-n:] * (1 - w); return body
+def tornado_roar():
+    sec = 6.5; t = t_(sec)
+    rumble = lp(noise(sec), 110) * (0.75 + 0.25 * np.sin(2 * np.pi * 0.31 * t)) * 2.2                         # the ground-shaking low end
+    centre = 260 + 120 * np.sin(2 * np.pi * 0.17 * t) + 60 * np.sin(2 * np.pi * 0.43 * t + 1)
+    train = np.zeros(len(t))
+    for lo in (0.7, 1.0, 1.4):                                                                                 # the "freight train": a churning mid roar
+        train += bp(noise(sec), 90 * lo, 1100 * lo)
+    train *= (0.65 + 0.35 * np.abs(np.sin(2 * np.pi * 6.5 * t + 2 * np.sin(2 * np.pi * 0.6 * t))))
+    train = lp(train, 900) * (0.6 + 0.4 * (centre / 380))
+    hiss = bp(noise(sec), 1200, 4200) * 0.18 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.23 * t))                   # air tearing through debris
+    debris = np.zeros(len(t))
+    for _ in range(26): place(debris, modal(STONE if rng.random() < 0.5 else ((150, 1, 40), (330, 0.6, 50)), 0.18, 1800) * rng.uniform(0.1, 0.35), rng.uniform(0, sec - 0.2))
+    out = mix(rumble, train, hiss, debris)
+    return _seamless(reverb(out, 1.6, 0.25, 900)[:len(t)], 1.0)
+def tornado_siren():
+    """A mechanical rotor siren: winds up, holds with a wobble, winds down. One 6 s cycle."""
+    sec = 6.0; t = t_(sec)
+    up, hold = 2.2, 1.3
+    f = np.where(t < up, 160 + 580 * (1 - (1 - t / up) ** 2.2),
+         np.where(t < up + hold, 740 + 10 * np.sin(2 * np.pi * 3.1 * t), 150 + 590 * (1 - np.clip((t - up - hold) / (sec - up - hold), 0, 1)) ** 1.8))
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    rotor = np.tanh(3 * np.sin(ph)) + 0.35 * np.tanh(3 * np.sin(2 * ph + 0.4)) + 0.2 * np.sin(3 * ph)          # chopped air: square-ish, odd-rich
+    horn = bp(rotor, 300, 2600) + 0.4 * bp(rotor, 2600, 5200)                                                  # the horn's throat
+    motor = lp(noise(sec), 70) * 0.5 + np.sin(2 * np.pi * 48 * t) * 0.15                                       # the motor under it
+    level = np.clip(t / 0.3, 0, 1) * np.clip((sec - t) / 0.6, 0, 1)
+    dry = (horn + motor * 0.6) * level
+    echo = np.zeros(len(dry)); place(echo, dry * 0.28, 0.42)                                                   # slapback off distant buildings
+    return reverb(mix(dry, echo)[:len(t)], 2.2, 0.3, 3500)
+
 # sounds that get three variants (files _2 and _3 next to the first)
 VARIANTS = set(MAT_SYNTH) | {'block.stone_tap', 'creature.small_ambient', 'creature.skink_chirp', 'creature.petrel_call'}
 
@@ -636,6 +670,8 @@ if __name__ == '__main__':
             x = fn()
             x = x * 0.9 / (np.max(np.abs(x)) or 1)
             ogg(SND / 'sfx' / (sid.replace('.', '_') + ('' if v == 0 else f'_{v + 1}') + '.ogg'), x)
+    ogg(SND / 'entity' / 'tornado_roar.ogg', tornado_roar() * 0.9)
+    ogg(SND / 'block' / 'tornado_siren.ogg', tornado_siren() * 0.9)
     missing = [s for s in SFX if s not in SYNTH]
     if missing: sys.exit(f'no synth for {missing}')
     calm, tense, chase = score_calm(), score_tense(), score_chase()

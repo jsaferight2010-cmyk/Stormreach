@@ -617,9 +617,13 @@ boot the headless test server in GitHub Actions as before.
   hail and stone taps, equip (metal), and the small creature voices (small ambient/hurt/death, skink, sprite, petrel,
   thunderbird hurt, hermit click; skink/petrel/small ambient also get variants). sounds.json lists variants.
 - Ranges: tornado roar 160 blocks, siren 192, fire whirl 80 (thunder and serpent already 128).
+- Tornado roar and siren now come from sfx51 (they were audio5's): the roar is a seamless 5.5 s loop of a sub rumble,
+  a churning "freight train" mid band, tearing air and scattered debris knocks; the siren is a mechanical rotor siren
+  (wind-up 2.2 s, wobbling hold, wind-down) with a horn throat, motor and slapback echo, played once per 6 s cycle
+  (InstrumentBlock: it used to start an 8 s clip every 3 s, smearing three copies together).
 - Still the 5.x designs (birdie fix applied, not redesigned yet): titan voices, glide calls, whale, jellyfish bells,
   frog, moth, stormfly, golem, serpent, eel zap, radio tones, machine hum and capacitor, chimes, horn, doors, splash,
-  radar ping, the tornado roar and siren (audio5), and the Labyrinth and Cyrrus scores. Candidates for the next sound
+  radar ping, and the Labyrinth and Cyrrus scores. Candidates for the next sound
   pass; tell the user honestly which remain.
 
 ### Resume point (overhaul in progress)

@@ -1,5 +1,8 @@
 # Stormreach patch notes
 
+## 6.0.1
+- **Stormreach swords now break blocks in Creative:** the Stormshard Sword, Voltite Sword, Aurorite Sword, Gale Blade, Weatherbreaker and the Stormbreaker. Vanilla swords can't. In Survival they mine like any sword: cobwebs fast, bamboo instantly, everything else at hand speed, and stone and ores drop nothing.
+
 ## 6.0.0 (the Overhaul)
 A rebuild of almost everything players see and hear, a crash fix, real multiplayer support, and new storm signs.
 **Not yet played in a real client:** every item below compiles against 26.3 and passes the automated checks (73 in-game GameTests on a test server, 79 unit tests), but visuals and sounds have only been checked offline.

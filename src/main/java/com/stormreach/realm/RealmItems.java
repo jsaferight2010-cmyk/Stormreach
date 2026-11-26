@@ -115,7 +115,7 @@ public final class RealmItems {
             .food(new FoodProperties.Builder().nutrition(6).saturationModifier(0.7f).build()));
 
     // ---------- Voltite gear ----------
-    public static final Item VOLTITE_SWORD = register("voltite_sword", p -> new VoltiteSwordItem(p, 3.0f), new Item.Properties().sword(VOLTITE, 3.0f, -2.4f));
+    public static final Item VOLTITE_SWORD = register("voltite_sword", p -> new VoltiteSwordItem(p, 3.0f), com.stormreach.item.StormSwords.sword(new Item.Properties(), VOLTITE, 3.0f, -2.4f));
     public static final Item VOLTITE_PICKAXE = register("voltite_pickaxe", Item::new, new Item.Properties().pickaxe(VOLTITE, 1.0f, -2.8f));
     public static final Item VOLTITE_AXE = register("voltite_axe", Item::new, new Item.Properties().axe(VOLTITE, 6.0f, -3.1f));
     public static final Item VOLTITE_SHOVEL = register("voltite_shovel", Item::new, new Item.Properties().shovel(VOLTITE, 1.5f, -3.0f));
@@ -126,7 +126,7 @@ public final class RealmItems {
     public static final Item VOLTITE_BOOTS = register("voltite_boots", Item::new, new Item.Properties().humanoidArmor(VOLTITE_ARMOR, ArmorType.BOOTS));
 
     // ---------- Aurorite gear ----------
-    public static final Item AURORITE_SWORD = register("aurorite_sword", p -> new VoltiteSwordItem(p, 6.0f), new Item.Properties().sword(AURORITE, 3.0f, -2.4f).fireResistant());
+    public static final Item AURORITE_SWORD = register("aurorite_sword", p -> new VoltiteSwordItem(p, 6.0f), com.stormreach.item.StormSwords.sword(new Item.Properties(), AURORITE, 3.0f, -2.4f).fireResistant());
     public static final Item AURORITE_PICKAXE = register("aurorite_pickaxe", Item::new, new Item.Properties().pickaxe(AURORITE, 1.0f, -2.8f).fireResistant());
     public static final Item AURORITE_AXE = register("aurorite_axe", Item::new, new Item.Properties().axe(AURORITE, 5.0f, -3.0f).fireResistant());
     public static final Item AURORITE_SHOVEL = register("aurorite_shovel", Item::new, new Item.Properties().shovel(AURORITE, 1.5f, -3.0f).fireResistant());

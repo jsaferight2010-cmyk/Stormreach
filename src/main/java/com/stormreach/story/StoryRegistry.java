@@ -76,7 +76,7 @@ public final class StoryRegistry {
     public static final Item MAELSTROM_CORE = item("maelstrom_core", p -> new RewardItems.Lore(p, 1), new Item.Properties().stacksTo(16).rarity(Rarity.EPIC).fireResistant(), ITEMS);
     public static final Item STORMCROWN = item("stormcrown", p -> new RewardItems.Lore(p, 1), new Item.Properties().humanoidArmor(STORMCROWN_ARMOR, ArmorType.HELMET).rarity(Rarity.EPIC).fireResistant(), ITEMS);
     public static final Item WEATHERVANE_SCEPTER = item("weathervane_scepter", RewardItems.Scepter::new, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).useCooldown(60f).fireResistant(), ITEMS);
-    public static final Item WEATHERBREAKER = item("weatherbreaker", RewardItems.Weatherbreaker::new, new Item.Properties().sword(MAELSTROM, 4f, -2.4f).rarity(Rarity.EPIC).fireResistant(), ITEMS);
+    public static final Item WEATHERBREAKER = item("weatherbreaker", RewardItems.Weatherbreaker::new, com.stormreach.item.StormSwords.sword(new Item.Properties(), MAELSTROM, 4f, -2.4f).rarity(Rarity.EPIC).fireResistant(), ITEMS);
     public static final Item STRANGER_SPAWN_EGG = item("stranger_spawn_egg", SpawnEggItem::new, new Item.Properties().spawnEgg(STRANGER), ITEMS);
     public static final Item CYRRUS_SPAWN_EGG = item("cyrrus_spawn_egg", SpawnEggItem::new, new Item.Properties().spawnEgg(CYRRUS), ITEMS);
 

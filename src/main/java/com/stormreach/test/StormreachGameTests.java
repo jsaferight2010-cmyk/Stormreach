@@ -1279,6 +1279,21 @@ public class StormreachGameTests {
         h.succeed();
     }
 
+    /** 6.0.1: every Stormreach sword can break blocks in Creative and mines like a vanilla sword. */
+    @GameTest
+    public void stormSwordsBreakBlocksInCreative(GameTestHelper h) {
+        net.minecraft.world.item.Item[] swords = {com.stormreach.registry.ModItems.STORMSHARD_SWORD, com.stormreach.realm.RealmItems.VOLTITE_SWORD,
+                com.stormreach.realm.RealmItems.AURORITE_SWORD, com.stormreach.sky.SkyRegistry.GALE_BLADE, com.stormreach.story.StoryRegistry.WEATHERBREAKER, com.stormreach.registry.ModItems.STORMBREAKER};
+        for (var sword : swords) {
+            var stack = new net.minecraft.world.item.ItemStack(sword);
+            var tool = stack.get(net.minecraft.core.component.DataComponents.TOOL);
+            Check.isTrue(h, tool != null && tool.canDestroyBlocksInCreative(), sword + " can't break blocks in Creative");
+            Check.isTrue(h, tool.getMiningSpeed(Blocks.COBWEB.defaultBlockState()) == 15.0f, sword + " doesn't cut cobwebs like a sword");
+            Check.isTrue(h, tool.getMiningSpeed(Blocks.DIRT.defaultBlockState()) == 1.0f, sword + " should dig dirt at hand speed");
+        }
+        h.succeed();
+    }
+
     /** 6.0: grows a sapling at {@code at} on dirt with bone meal (or, if {@code natural}, by its normal growth step). */
     private static boolean growSapling(GameTestHelper h, net.minecraft.world.level.block.Block sapling, BlockPos at, boolean natural) {
         h.setBlock(at.below(), Blocks.DIRT);

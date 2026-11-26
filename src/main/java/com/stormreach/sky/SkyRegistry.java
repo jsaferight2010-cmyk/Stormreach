@@ -90,7 +90,7 @@ public final class SkyRegistry {
     public static final Item BOTTLED_LIGHTNING = item("bottled_lightning", BottledLightningItem::new, new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
     public static final Item CLOUD_SEEDER = item("cloud_seeder", p -> new CloudSeederItem(p, false), new Item.Properties().stacksTo(16));
     public static final Item SUPERCELL_SEEDER = item("supercell_seeder", p -> new CloudSeederItem(p, true), new Item.Properties().stacksTo(16).rarity(Rarity.RARE));
-    public static final Item GALE_BLADE = item("gale_blade", GaleBladeItem::new, new Item.Properties().sword(GALE_MATERIAL, 3.0f, -2.2f).rarity(Rarity.EPIC));
+    public static final Item GALE_BLADE = item("gale_blade", GaleBladeItem::new, com.stormreach.item.StormSwords.sword(new Item.Properties(), GALE_MATERIAL, 3.0f, -2.2f).rarity(Rarity.EPIC));
     public static final Item CHASERS_COFFEE = item("chasers_coffee", Item::new, new Item.Properties().stacksTo(16).usingConvertsTo(Items.GLASS_BOTTLE)
             .food(new FoodProperties.Builder().nutrition(2).saturationModifier(0.2f).alwaysEdible().build(),
                     Consumables.defaultDrink().onConsume(new ApplyStatusEffectsConsumeEffect(List.of(

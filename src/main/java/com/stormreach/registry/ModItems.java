@@ -137,7 +137,7 @@ public final class ModItems {
     public static final Item THUNDERHEAD_HORN = register("thunderhead_horn", ThunderheadHornItem::new,
             new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
     public static final Item STORMSHARD_SWORD = register("stormshard_sword", StormbladeItem::new,
-            new Item.Properties().sword(STORM_SHARD_MATERIAL, 3.0f, -2.4f));
+            com.stormreach.item.StormSwords.sword(new Item.Properties(), STORM_SHARD_MATERIAL, 3.0f, -2.4f));
     public static final Item STORMSHARD_PICKAXE = register("stormshard_pickaxe", Item::new,
             new Item.Properties().pickaxe(STORM_SHARD_MATERIAL, 1.0f, -2.8f));
     public static final Item STORMSHARD_AXE = register("stormshard_axe", Item::new,
@@ -169,8 +169,7 @@ public final class ModItems {
             p -> new com.stormreach.item.WeatherBottleItem(com.stormreach.item.WeatherBottleItem.Weather.THUNDER, p),
             new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
     public static final Item STORMBREAKER = register("stormbreaker", StormbreakerItem::new,
-            new Item.Properties().durability(900).rarity(Rarity.EPIC).fireResistant()
-                    .sword(STORM_SHARD_MATERIAL, 7.0f, -3.2f).repairable(TEMPEST_CORE));
+            com.stormreach.item.StormSwords.sword(new Item.Properties().durability(900).rarity(Rarity.EPIC).fireResistant(), STORM_SHARD_MATERIAL, 7.0f, -3.2f).repairable(TEMPEST_CORE));
 
     // Spawn eggs
     public static final Item CLIFF_CRAB_SPAWN_EGG = register("cliff_crab_spawn_egg", SpawnEggItem::new,

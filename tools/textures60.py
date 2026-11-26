@@ -316,3 +316,100 @@ def wind_generator():
 
 
 wind_generator()
+
+
+# ---------------------------------------------------------------- stage 10: signs of the storm
+def weatherglass():
+    """A storm glass: a clear tube on a brass foot with a brass cap, and the liquid inside in four states, from clear to
+    full of feathery crystals (the 'storm' look of a real Fitzroy glass)."""
+    import math, random
+    r = random.Random(1010)
+    S = 64
+    tube = Image.new('RGBA', (S, S))
+    px = tube.load()
+    for y in range(S):
+        for x in range(S):
+            edge = min(x, S - 1 - x)
+            a = 70 if edge > 6 else 120 + (6 - edge) * 12
+            hl = 1 if 14 <= x <= 18 else 0                                  # a bright vertical highlight
+            c = (200 + hl * 50, 235 + hl * 20, 245, min(255, a + hl * 90))
+            px[x, y] = c
+    save(tube, 'block/weatherglass_tube.png')
+
+    cap = Image.new('RGBA', (S, S))
+    px = cap.load()
+    for y in range(S):
+        for x in range(S):
+            band = (y // 8) % 2
+            n = r.randint(-8, 8)
+            base = (182 + band * 18 + n, 140 + band * 14 + n, 62 + n, 255)       # brass, banded like turned metal
+            if y in (0, S - 1) or x in (0, S - 1): base = (110, 82, 36, 255)
+            px[x, y] = base
+    save(cap, 'block/weatherglass_cap.png')
+
+    def fern(px, cx, cy, length, angle, depth, col):
+        """A feathery crystal: a spine with smaller spines off it."""
+        for i in range(int(length)):
+            x = int(cx + math.cos(angle) * i); y = int(cy - math.sin(angle) * i)
+            if 0 <= x < S and 0 <= y < S: px[x, y] = col
+            if depth > 0 and i > 2 and i % 4 == 0:
+                for side in (-1, 1): fern(px, x, y, length * 0.35, angle + side * 0.9, depth - 1, col)
+
+    for state in range(4):
+        img = Image.new('RGBA', (S, S))
+        px = img.load()
+        cloud = (0, 0, 10, 26)[state]
+        for y in range(S):
+            for x in range(S):
+                k = r.randint(0, 6)
+                px[x, y] = (205 - cloud, 228 - cloud, 238, 46 + cloud * 2 + k)   # the liquid, hazier as the storm nears
+        col = (246, 250, 255, 235)
+        if state >= 1:                                                       # a few crystals settle at the bottom
+            for _ in range(3 + state * 2): fern(px, r.randint(8, 56), S - 2, r.randint(6, 10) + state * 3, math.pi / 2 + r.uniform(-0.6, 0.6), 1, col)
+        if state >= 2:                                                       # feathers grow up the glass
+            for _ in range(4 + state * 3): fern(px, r.randint(6, 58), r.randint(S // 2, S - 4), r.randint(8, 14) + state * 2, math.pi / 2 + r.uniform(-0.8, 0.8), 2, col)
+        if state == 3:                                                       # storm: crystals all through, and a few hanging from the top
+            for _ in range(10): fern(px, r.randint(6, 58), r.randint(2, 6), r.randint(10, 18), -math.pi / 2 + r.uniform(-0.6, 0.6), 2, col)
+            for _ in range(30): px[r.randint(2, 61), r.randint(2, 61)] = (255, 255, 255, 255)
+        save(img, f'block/weatherglass_fluid_{state}.png')
+
+    # the item icon: the glass upright, cap and foot, liquid with a few crystals
+    icon = Image.new('RGBA', (16, 16))
+    p = icon.load()
+    for y in range(16):
+        for x in range(5, 11):
+            if y >= 14 or y <= 1: p[x, y] = (196, 150, 66, 255) if y not in (0, 15) else (120, 88, 38, 255)
+            elif x in (5, 10): p[x, y] = (190, 230, 245, 200)
+            else: p[x, y] = (205, 228, 238, 120)
+    for x, y in ((7, 12), (8, 11), (7, 10), (8, 9), (6, 12), (9, 12), (8, 7)): p[x, y] = (250, 252, 255, 255)
+    for y in range(14, 16):
+        for x in (4, 11): p[x, y] = (120, 88, 38, 255)
+    save(icon, 'item/weatherglass.png')
+
+
+weatherglass()
+
+
+def glaze():
+    """Clear ice skin: mostly see-through, with frozen drip streaks and a few trapped bubbles."""
+    import random
+    r = random.Random(1011)
+    S = 64
+    img = Image.new('RGBA', (S, S))
+    px = img.load()
+    for y in range(S):
+        for x in range(S):
+            n = r.randint(-6, 6)
+            px[x, y] = (196 + n, 226 + n, 250, 92 + r.randint(0, 10))
+    for _ in range(26):                                                      # frozen streaks
+        x0, y0, ln = r.randint(0, S - 1), r.randint(0, S - 1), r.randint(6, 18)
+        for i in range(ln):
+            x, y = (x0 + i // 3) % S, (y0 + i) % S
+            px[x, y] = (236, 248, 255, 150)
+    for _ in range(14):
+        x, y = r.randint(1, S - 2), r.randint(1, S - 2)
+        px[x, y] = (255, 255, 255, 190)
+    save(img, 'block/glaze.png')
+
+
+glaze()

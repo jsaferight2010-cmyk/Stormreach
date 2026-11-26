@@ -287,5 +287,35 @@ L('block.stormreach.sovereign_altar.eye_waits', 'The Tempest Eye hangs over the 
 # the Eye is no longer the Sovereign's drop (it appears over the altar instead, so it can't be left in the sky arena)
 w(f'{D}/loot_table/entities/tempest_sovereign.json', {'type': 'minecraft:entity', 'pools': [], 'random_sequence': 'stormreach:entities/tempest_sovereign'})
 
-with open(f'{A}/lang/en_us.json', 'w') as f: json.dump(lang, f, indent=2, ensure_ascii=False); f.write('\n')
 print('gendata60: overhaul data written')
+
+# ---------------------------------------------------------------- stage 10: signs of the storm
+from gendata8 import self_drop
+WG = {'particle': B + 'weatherglass_tube', 'cap': B + 'weatherglass_cap', 'tube': {'force_translucent': True, 'sprite': B + 'weatherglass_tube'}}
+for n in range(4):
+    bmodel(f'weatherglass_{n}', {'parent': 'minecraft:block/block', 'ambientocclusion': False,
+        'textures': {**WG, 'fluid': {'force_translucent': True, 'sprite': B + f'weatherglass_fluid_{n}'}},
+        'elements': [el([4.5, 0, 4.5], [11.5, 2, 11.5], '#cap'), el([5, 12, 5], [11, 14, 11], '#cap'),
+                     el([5.5, 2, 5.5], [10.5, 12, 10.5], '#fluid'), el([5, 2, 5], [11, 12, 11], '#tube', 'nsew')]})
+w(f'{A}/blockstates/weatherglass.json', {'variants': {f'reading={r}': {'model': B + f'weatherglass_{3 if r >= 15 else 2 if r >= 5 else 1 if r >= 1 else 0}'} for r in range(16)}})
+gen_item('weatherglass')
+self_drop('weatherglass')
+shaped('weatherglass', [' C ', 'GSG', ' C '], {'C': 'minecraft:copper_ingot', 'G': 'minecraft:glass_pane', 'S': 'salt'}, 'weatherglass')
+L('block.stormreach.weatherglass', 'Weatherglass')
+for k, v in {'settled': 'The glass is clear: settled weather.', 'rain_coming': 'A few crystals: rain is on its way.',
+             'rain_soon': 'Crystals climb the glass: rain within minutes.', 'raining': 'Cloudy crystals: rain.',
+             'thunder_near': 'Feathers fill the glass: thunder is close.', 'thunderstorm': 'The glass is full of crystals: a thunderstorm.'}.items():
+    L(f'block.stormreach.weatherglass.{k}', v)
+
+bmodel('glaze', {'parent': 'minecraft:block/thin_block', 'textures': {'particle': B + 'glaze', 'all': {'force_translucent': True, 'sprite': B + 'glaze'}},
+                 'elements': [el([0, 0, 0], [16, 1, 16], '#all', 'nsewud')]})
+w(f'{A}/blockstates/glaze.json', {'variants': {'': {'model': B + 'glaze'}}})
+L('block.stormreach.glaze', 'Glaze')
+L('message.stormreach.elmos_fire.warn', "Your %s glows with St. Elmo's fire! Get under cover, get lower or put it away.")
+
+METAL = ['minecraft:' + m + '_' + t for m in ('iron', 'golden', 'copper', 'netherite') for t in ('sword', 'spear', 'axe', 'pickaxe', 'shovel', 'hoe')]
+METAL += ['minecraft:trident', 'minecraft:mace'] + ['minecraft:' + w + 'lightning_rod' for w in ('', 'exposed_', 'weathered_', 'oxidized_', 'waxed_', 'waxed_exposed_', 'waxed_weathered_', 'waxed_oxidized_')]
+METAL += [f'stormreach:voltite_{t}' for t in ('sword', 'axe', 'pickaxe', 'shovel', 'hoe')]
+tag_add(f'{D}/tags/item/conducts_lightning.json', METAL)
+
+with open(f'{A}/lang/en_us.json', 'w') as f: json.dump(lang, f, indent=2, ensure_ascii=False); f.write('\n')

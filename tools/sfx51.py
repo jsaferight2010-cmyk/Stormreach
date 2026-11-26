@@ -444,7 +444,15 @@ def brine_spit():
     spray = bp(noise(sec), 900, 7000) * np.clip(t / 0.25 - 0.9, 0, 1) * np.exp(-np.clip(t - 0.4, 0, None) * 5) * 0.9
     out = mix(spray, _bubbles(sec, 20, 600, 1600)); place(out, retch, 0)
     return reverb(out, 0.7, 0.2, 3500)
-NEW60 = {'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes, 'creature.eel_discharge': eel_discharge,
+def elmos_fire():
+    # 6.0 stage 10: corona discharge off a metal point: a thin frying hiss with a faint mains-like buzz and the odd snap
+    sec = 1.6
+    t = t_(sec)
+    hiss = bp(noise(sec), 3000, 9000) * (0.55 + 0.25 * np.sin(2 * np.pi * 7 * t))
+    buzz = bp(np.sign(np.sin(2 * np.pi * 100 * t)) * 0.3, 200, 2500) * 0.25
+    out = mix(hiss * 0.5, buzz, crackle(sec, 25) * 0.4)
+    return out * np.minimum(1, np.minimum(t / 0.15, (sec - t) / 0.3))
+NEW60 = {'ambient.elmos_fire': elmos_fire, 'entity.fire_whirl.roar': fire_whirl_roar, 'vehicle.tiv.spikes': tiv_spikes, 'creature.eel_discharge': eel_discharge,
          'creature.brine_ambient': brine_ambient, 'creature.brine_hurt': brine_hurt, 'creature.brine_death': brine_death,
          'creature.brine_step': brine_step, 'creature.brine_spit': brine_spit}
 

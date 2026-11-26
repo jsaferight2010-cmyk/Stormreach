@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "reading=0": {
+      "model": "stormreach:block/weatherglass_0"
+    },
+    "reading=1": {
+      "model": "stormreach:block/weatherglass_1"
+    },
+    "reading=2": {
+      "model": "stormreach:block/weatherglass_1"
+    },
+    "reading=3": {
+      "model": "stormreach:block/weatherglass_1"
+    },
+    "reading=4": {
+      "model": "stormreach:block/weatherglass_1"
+    },
+    "reading=5": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=6": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=7": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=8": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=9": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=10": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=11": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=12": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=13": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=14": {
+      "model": "stormreach:block/weatherglass_2"
+    },
+    "reading=15": {
+      "model": "stormreach:block/weatherglass_3"
+    }
+  }
+}

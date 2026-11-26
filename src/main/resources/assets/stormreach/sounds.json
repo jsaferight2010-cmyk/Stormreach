@@ -704,6 +704,15 @@
     ],
     "subtitle": "subtitles.stormreach.creature.eel_discharge"
   },
+  "ambient.elmos_fire": {
+    "sounds": [
+      {
+        "name": "stormreach:sfx/ambient_elmos_fire",
+        "attenuation_distance": 12
+      }
+    ],
+    "subtitle": "subtitles.stormreach.ambient.elmos_fire"
+  },
   "creature.brine_ambient": {
     "sounds": [
       {

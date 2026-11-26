@@ -57,6 +57,7 @@ public final class Stormreach implements ModInitializer {
         com.stormreach.units.PlayerUnits.init();
         com.stormreach.wind.WindRegistry.init();
         com.stormreach.blight.HeartRegistry.init();
+        com.stormreach.signs.SignsRegistry.init();   // 6.0 stage 10
         // 6.0: no per-world state survives into the next world (a single-player session can open several)
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPING.register(com.stormreach.realm.SovereignArena::endAllForShutdown);
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {

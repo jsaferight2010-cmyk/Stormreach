@@ -1229,6 +1229,44 @@ public class StormreachGameTests {
         h.succeed();
     }
 
+    /** 6.0 stage 10: the Weatherglass shows the server's weather timers and a comparator reads it. */
+    @GameTest
+    public void weatherglassFollowsTheWeather(GameTestHelper h) {
+        BlockPos at = new BlockPos(1, 2, 1);
+        h.setBlock(at.below(), Blocks.STONE);
+        h.setBlock(at, com.stormreach.signs.SignsRegistry.WEATHERGLASS);
+        h.runAfterDelay(5, () -> {
+            var state = h.getBlockState(at);
+            int expected = com.stormreach.signs.WeatherglassBlock.read(h.getLevel());
+            int shown = state.getValue(com.stormreach.signs.WeatherglassBlock.READING);
+            Check.isTrue(h, Math.abs(shown - expected) <= 1, "glass shows " + shown + ", weather says " + expected);
+            Check.isTrue(h, state.getAnalogOutputSignal(h.getLevel(), h.absolutePos(at), net.minecraft.core.Direction.NORTH) == shown, "comparator disagrees with the glass");
+            h.succeed();
+        });
+    }
+
+    /** 6.0 stage 10: glaze needs solid ground and melts in a warm biome; a lightning rod is found for St. Elmo's fire. */
+    @GameTest
+    public void glazeAndElmosFireRules(GameTestHelper h) {
+        var level = h.getLevel();
+        BlockPos ground = new BlockPos(1, 1, 1), top = ground.above();
+        h.setBlock(ground, Blocks.STONE);
+        h.setBlock(top, com.stormreach.signs.SignsRegistry.GLAZE);
+        Check.isTrue(h, h.getBlockState(top).is(com.stormreach.signs.SignsRegistry.GLAZE), "glaze would not sit on stone");
+        Check.isFalse(h, com.stormreach.signs.SignsRegistry.GLAZE.defaultBlockState().canSurvive(level, h.absolutePos(new BlockPos(3, 3, 3))), "glaze floats in the air");
+        if (level.getBiome(h.absolutePos(top)).value().getBaseTemperature() >= 0.35f) {
+            h.getBlockState(top).randomTick(level, h.absolutePos(top), level.getRandom());
+            Check.isTrue(h, h.getBlockState(top).isAir(), "glaze did not melt in a warm biome");
+        }
+        Check.isTrue(h, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_SWORD).is(com.stormreach.signs.ElmosFire.CONDUCTS), "an iron sword should conduct");
+        Check.isFalse(h, new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WOODEN_SWORD).is(com.stormreach.signs.ElmosFire.CONDUCTS), "a wooden sword should not");
+        h.setBlock(new BlockPos(4, 1, 4), net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.withDefaultNamespace("lightning_rod")));
+        h.runAfterDelay(2, () -> {
+            Check.isTrue(h, com.stormreach.signs.ElmosFire.rodNearby(level, h.absolutePos(new BlockPos(1, 2, 1))), "a lightning rod 4 blocks away was not found");
+            h.succeed();
+        });
+    }
+
     /** 6.0: grows a sapling at {@code at} on dirt with bone meal (or, if {@code natural}, by its normal growth step). */
     private static boolean growSapling(GameTestHelper h, net.minecraft.world.level.block.Block sapling, BlockPos at, boolean natural) {
         h.setBlock(at.below(), Blocks.DIRT);

@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "stormreach:item/tornado_radar"
+    "model": "stormreach:block/tornado_radar_item"
   }
 }

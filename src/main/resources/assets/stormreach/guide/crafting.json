@@ -4353,6 +4353,23 @@
    ]
   },
   {
+   "result": "stormreach:weatherglass",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:glass_pane",
+    "stormreach:salt",
+    "minecraft:glass_pane",
+    "",
+    "minecraft:copper_ingot",
+    ""
+   ]
+  },
+  {
    "result": "stormreach:wind_chimes",
    "count": 1,
    "category": "misc",

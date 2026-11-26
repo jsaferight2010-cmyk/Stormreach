@@ -74,6 +74,7 @@ SFX = {
     'creature.eel_crackle': ('Shock Eel crackles', [], 16),
     'creature.eel_zap': ('Shock Eel zaps', [], 16),
     'creature.eel_discharge': ('Shock Eel discharges', [], 24),
+    'ambient.elmos_fire': ("St. Elmo's fire hisses", [], 12),
     'creature.brine_ambient': ('Brine Wraith gurgles', [], 16),
     'creature.brine_hurt': ('Brine Wraith chokes', [], 16),
     'creature.brine_death': ('Brine Wraith drains away', [], 16),

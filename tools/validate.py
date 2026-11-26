@@ -67,6 +67,7 @@ eggs=[n.split('/')[-1][:-len('_spawn_egg.json')] for n in names if re.match(r'as
 fluids=['stormwater','flowing_stormwater','stormlava','flowing_stormlava','stormwater_bucket','stormlava_bucket']
 ours|={f'stormreach:storm_{x}' for x in gen_blocks+vanilla_ents}|{f'stormreach:storm_{x}_spawn_egg' for x in eggs}|{f'stormreach:{x}' for x in fluids}
 ours|={'stormreach:storm_wastes','stormreach:storm_void'}
+ours|={'stormreach:weatherglass','stormreach:glaze'}   # 6.0 stage 10 (signs/SignsRegistry.java)
 def models_in(o):
     if isinstance(o,dict):
         for k,v in o.items():
@@ -112,7 +113,7 @@ for rel in ('tornado/WeatherItems.java', 'labyrinth/LabyrinthRegistry.java', 'st
 # 5.1: hail and puddles, and the Doppler radar (its block and item are registered by hand, not through block())
 src51 = jsrc('weather/precip/PrecipContent.java')
 nb += re.findall(r'\bblock\("([a-z_0-9]+)"', src51); ni += re.findall(r'\bitem\("([a-z_0-9]+)"', src51)
-nb += ['tornado_radar', 'radar_part']; ni += ['tornado_radar', 'stormreach_field_guide', 'storm_crafters_handbook']
+nb += ['tornado_radar', 'radar_part', 'weatherglass', 'glaze']; ni += ['tornado_radar', 'stormreach_field_guide', 'storm_crafters_handbook']
 ni = [i for i in ni if not i.endswith('_')]
 ni += [f'{m}_spawn_egg' for m in re.findall(r'\begg\("([a-z_0-9]+)"', jsrc('wild/WildRegistry.java') + jsrc('sky/SkyRegistry.java') + jsrc('front/FrontRegistry.java'))]
 ni += ['tornado_spawner_' + k.strip().lower() for k in re.findall(r'enum SpawnerKind \{([^}]*)\}', jsrc('tornado/WeatherItems.java'))[0].replace(';', '').split(',') if k.strip()]
@@ -121,7 +122,7 @@ ni += ['weather_event_' + k.strip().lower() for k in re.findall(r'enum EventKind
 tiers = re.findall(r'[A-Z_]+\("([a-z_]+)", \d+\)', jsrc('sim/BackpackTier.java'))
 ni += [f'{t}_backpack' for t in tiers] + [f'{t}_backpack_upgrade' for t in tiers[1:]]
 ne += ['tornado']
-noitem5 = {'stormfruit_pod', 'puddle', 'radar_part'}
+noitem5 = {'stormfruit_pod', 'puddle', 'radar_part', 'glaze'}
 for b in nb:
     bs = f'{A}/blockstates/{b}.json'
     if not os.path.exists(bs): problems.append(f'no blockstate {b}'); continue
@@ -129,6 +130,7 @@ for b in nb:
     if f'block.stormreach.{b}' not in lang: problems.append(f'no lang block {b}')
     blk_src = ''.join(jsrc(r) for r in ('labyrinth/LabyrinthRegistry.java', 'story/StoryRegistry.java', 'weather/precip/PrecipContent.java', 'tornado/radar/RadarContent.java'))
     noloot = re.search(r'"' + b + r'"[^;]*noLootTable', blk_src)
+    if b == 'glaze': noloot = True   # melts to nothing (noLootTable in SignsRegistry)
     if not noloot and not os.path.exists(f'{D}/stormreach/loot_table/blocks/{b}.json'): problems.append(f'no loot {b}')
 for i in ni + [b for b in nb if b not in noitem5]:
     d = f'{A}/items/{i}.json'

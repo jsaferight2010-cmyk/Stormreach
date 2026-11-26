@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "stormreach:item/tornado_siren"
+    "model": "stormreach:block/tornado_siren"
   }
 }

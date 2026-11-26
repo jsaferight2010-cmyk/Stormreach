@@ -44,6 +44,12 @@ Weather instruments tell you what's coming. Use any of them to open its screen.
 - **Weather Radio:** broadcasts warnings, including when a tornado is on the ground near you.
 - **Storm Chaser goggles** show the weather on your screen.
 - **Units:** imperial by default, metric in the settings. On a server, everyone sees their own units.
+- **Weatherglass:** a storm glass that grows crystals as rain approaches, up to 20 minutes before it arrives. Clear means settled; a few crystals, rain on the way; cloudy, rain; full, a thunderstorm. A comparator reads it from 0 to 15.
+
+## Signs of the storm
+
+- **Freezing rain:** where it is only just above freezing (taiga, stony shores, windswept hills), rain freezes as it lands at night and in Thunderheads. It leaves **Glaze**, a skin of clear ice as slippery as ice, and you feel the cold. Glaze melts by day, or at once near a torch.
+- **St. Elmo's fire:** in a Thunderhead, holding a metal tool or weapon out in the open above y 90 makes it glow and hiss. After 10 seconds you are warned; after 30, it draws lightning down on you. Get under cover, get lower, put it away, or stand within 16 blocks of a lightning rod, which takes the charge.
 
 ## Tornadoes
 
@@ -114,4 +120,5 @@ Someone is following you. You may notice a figure at the edge of your vision tha
 
 - **Mod Menu** holds the performance settings (tornadoes, effects and load), each with a tooltip.
 - **Gameplay options** are in `config/stormreach.properties`.
-- Operator commands: `/stormreach thunderhead`, `/stormreach calm`, `/stormreach forecast`, `/stormreach status` and `/stormreach reload`.
+- Commands: anyone can use `/stormreach forecast` and `/stormreach status`; operators also have `/stormreach thunderhead`, `/stormreach calm` and `/stormreach reload`.
+- On a server, the server's own `stormreach.properties` decides everything but the visual settings.

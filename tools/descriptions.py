@@ -158,6 +158,7 @@ d('intercept_vehicle', 'An armoured chase truck with a tornado dashboard. Park i
 d('chasers_logbook', 'A chaser\'s log. It records every tornado you witness: rating, distance, and your records.')
 d('wind_turbine', 'A tall three-bladed wind turbine: the rotor turns into the wind and makes storm power for how hard it blows.')
 d('wind_generator', 'A creative-only fan that blows wind of any strength, from a breeze to EF5, for testing turbines, instruments and storm gear.')
+d('weatherglass', 'A storm glass of camphor and brine. Crystals grow in it as weather approaches, before the barometer can tell.')
 d('stormreach_field_guide', 'The complete guide to Stormreach: weather, tornadoes, the Labyrinth, the realm and drop rates.')
 d('storm_crafters_handbook', 'Every Stormreach recipe, with the real items.')
 
@@ -300,6 +301,8 @@ DETAILS = {
     'item.stormreach.gale_wings': ['Wear in the chest slot and jump while falling to glide.', 'Repair with Gull Feathers.'],
     'item.stormreach.anemometer': ['Use: read the wind.', 'Redstone: gust speed ÷ 10 (0–15).'],
     'item.stormreach.thermometer': ['Use: read temperature, dew point and humidity.'],
+    'block.stormreach.weatherglass': ['Feels rain up to 20 minutes before it arrives; clear, a few crystals, cloudy, then full in a thunderstorm.',
+                                      'Comparator: 0 settled, 1-9 rain coming (higher = sooner), 10-14 raining, 15 thunderstorm.', 'Use: read it.'],
     'block.stormreach.storm_barometer': ['Redstone: 0 clear, 7 rain, 15 thunder.'],
     'block.stormreach.storm_detector': ['Redstone: 4 in rain, 15 in a thunderstorm or with a tornado nearby.'],
     'block.stormreach.storm_collector': ['Charges slowly in rain and quickly in a thunderstorm.', 'Full: use with an empty hand to take a Storm Cell.', 'Comparators read the charge.'],

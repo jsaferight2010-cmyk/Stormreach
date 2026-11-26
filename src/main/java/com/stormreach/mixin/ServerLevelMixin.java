@@ -21,6 +21,7 @@ public abstract class ServerLevelMixin {
             com.stormreach.realm.TempestRealm.tick(self);
             com.stormreach.tornado.TornadoManager.tick(self);
             com.stormreach.weather.precip.RainAccumulation.tick(self);
+            com.stormreach.signs.SignsRegistry.tick(self);   // 6.0 stage 10: freezing rain, St. Elmo's fire
             com.stormreach.weather.cloud.StormCells.tick(self);
             com.stormreach.realm.SovereignArena.tick(self);
             com.stormreach.labyrinth.LabyrinthTracker.tick(self);

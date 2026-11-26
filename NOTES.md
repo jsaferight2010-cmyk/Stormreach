@@ -640,13 +640,34 @@ boot the headless test server in GitHub Actions as before.
   (HailSim), wind-generator push capped at 96 entities, heart frontier only on loaded chunks, arena chunks loaded
   once on purpose. Cleanup: locker seats, boss orbs, arenas, hail fields, wind sources, Strangers all clean up.
 
+### Stage 9: multiplayer pass
+- Shared code has no client references (checked: no `net.minecraft.client`, blaze3d or Fabric client imports
+  outside `src/client`). No `players().get(0)`-style single-player assumptions; every per-player map is keyed by
+  UUID and cleaned on leave (locker hiding on DISCONNECT, units, radio state when the radio is put away, arena
+  RETURNS sending a returning player home, backpack soulbound on respawn).
+- Per-world reset: a single-player session can open several worlds, and static server state used to carry over
+  (stale `ServerLevel` references, tornado lists, guardians). `SERVER_STOPPED` now calls `resetForNewWorld()` on
+  TornadoManager, LabyrinthTracker, HidingTracker, WeatherRadio, RainAccumulation, Cinematics, StormWeather
+  (warned set, gust timer), WindSources and SovereignArena. Backpacks keep their own drop-on-stop.
+- `SERVER_STOPPING` runs `SovereignArena.endAllForShutdown`: players in a sky arena are put back where they came
+  from, the platform is taken down and the boss discarded, so nobody logs back in standing on air.
+- Client: `SessionReset` watches the connection object and, on any change (join, other world, disconnect), drops
+  the weather HUD reading, the locker camera, the hail field and any running cinematic.
+- Commands: `/stormreach status` and `/stormreach forecast` are open to every player; `thunderhead`, `calm` and
+  `reload` stay op-only (GameTest `stormCommandsRespectPermissions`).
+- Mod Menu: on a remote server the screen notes that the server's own stormreach.properties decides everything but
+  the visual settings.
+- Stubs: ServerLifecycleEvents.SERVER_STOPPED, brigadier `getRoot`/`getChild`/`canUse` added to libstubs.
+- CI run 45815517876: 70/70 GameTests, 74 unit tests.
+
 ### Resume point (overhaul in progress)
-Done: stages 1-7 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
+Done: stages 1-9 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
 break blocks in Creative (vanilla says no)?
+Stage 8 is done except optional further sound work (the 5.x designs listed under stage 8 part 2). Stage 9
+(multiplayer) is done.
 Next, in order:
-2. Stage 8 is done except optional further sound work (the 5.x designs still listed under stage 8 part 2).
-3. Multiplayer pass, then "even more" storm content.
+3. "Even more" storm content (stage 10).
 4. Tests, CHANGELOG/NOTES/CLAUDE.md, final double-check.
 5. Last of all: branding (name, icon and description for Mod Menu, GitHub, the .zip and the .jar). No jar is
    delivered until everything is done and checked.

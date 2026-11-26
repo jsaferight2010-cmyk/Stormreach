@@ -1,5 +1,97 @@
 # Stormreach patch notes
 
+## 6.0.0 (the Overhaul)
+A rebuild of almost everything players see and hear, a crash fix, real multiplayer support, and new storm signs.
+**Not yet played in a real client:** every item below compiles against 26.3 and passes the automated checks (73 in-game GameTests on a test server, 79 unit tests), but visuals and sounds have only been checked offline.
+
+### Fixes
+- **World-creation crash** in Thunderspire Highlands and Brinewater Marsh. 1 in 20 tree placements picked a feature with a biome check inside it.
+- **Weather "from" direction** was backwards on every instrument.
+- **Likely cause of the Hollow Shrine crash:** Cyrrus or the Stranger copying your skin uploaded it to the graphics card mid-frame. That now happens between frames. Not confirmed without the crash log.
+- **Tempest Spire:**
+  - The bottom chest hung over air.
+  - The spiral stair could not be climbed past y 35.
+- The **Tempest Eye** no longer gets left behind in the sky arena.
+- **Saplings:** Galewood and Stormpine saplings now grow.
+- **Gale Cloud** throws you the way you entered it, not always the same way.
+- **Shock Eel:** its bite used to give *you* a protective buff. It now shocks.
+
+### Visuals
+- **Armour:** every set is repainted piece by piece: helmet with an eye slit, real pauldrons, boots only on the feet.
+- **Machines:** the Doppler radar, wind turbine, tornado siren and weather station are full 3D machines.
+  - Placing a tall machine shows a see-through preview, red where it is blocked.
+- **Radar:** shows real reflectivity and velocity scans.
+- **HUD:** a weather panel appears while wearing Storm Chaser goggles or driving the TIV.
+- **Storm clouds:** solid towers with a flat dark base and a rain shaft.
+- **Hail:** falls as particles. It is much cheaper, lands where it should, and leaves crust on the ground.
+- **TIV:** new armoured truck with a cockpit view. The anchor key (Z) drops the spikes at once.
+- **Brine Wraith:** a new model (a drowned sailor).
+- **Models:** salt crystals, cistern, umbrella and Stormkite.
+
+### Weather and tornadoes
+- **Tornadoes:**
+  - Each type has its own shape.
+  - The funnel reaches the real cloud base.
+  - Tornadoes move slower (configurable).
+  - Caught mobs and players ride the vortex properly.
+- **Damage:** trees break by rating, crops get flattened or torn out, and stalled tornadoes keep eroding the ground.
+- **Downbursts** know when the ground is wet.
+- **Puddles** dry out on their own.
+- **Fire whirls** in the Nether, near lava.
+- **Units:** imperial by default, or metric. On a server each player sees their own.
+
+### Gameplay
+- **Barometer and Wind Vane** open their own dial screens.
+- **Creative Wind Generator:** blows any wind from a breeze to EF5, for testing.
+- **Stormheart:** on a power network, a grown Stormheart keeps spreading past its normal radius.
+- **Rusted Locker** hiding reworked.
+- **Backpack:** the worn slot shows in the inventory, including the Creative tab.
+- **Gear tiers rebalanced:** Stormshard, then Voltite (diamond tier), then Aurorite (netherite tier). Wearing storm gear gives a Storm Surge bonus.
+- **Mobs:**
+  - **Stormwarden:** fights on the ground, takes off, then slams down.
+  - **Thunderbird:** circles and dives.
+  - **Rainfrog:** hops.
+  - **Dust Devil:** can be fought.
+  - **Stranger** eggs work.
+  - **Boss orbs:** only last 8 seconds.
+  - **Storm bosses:** natural lightning heals them only a little.
+
+### Structures and story
+- **Hollow Shrine:** rebuilt as a floating island.
+- **Sky arenas:** only exist during the fight.
+- **Cyrrus:** his arrival is a camera cinematic. Press jump to skip it.
+
+### Guidebooks and sound
+- **Field Guide:** rewritten for new players.
+- **Storm Crafter's Handbook:** now includes the brewing recipes.
+- **Sound redesign:**
+  - Most sounds rebuilt with less hiss and squeak.
+  - Variants so repeated sounds don't sound identical.
+  - The tornado roar is heard from 160 blocks and the siren from 192.
+
+### Performance
+- Weather code no longer loads or generates chunks just to look at the ground.
+
+### Multiplayer
+- **Opening another world** in the same session no longer carries over the last world's tornadoes, fights or weather state.
+- **Stopping the server mid-boss-fight** puts players back where they came from.
+- **Switching servers** clears the client's weather HUD, locker camera, hail and cinematics.
+- **Commands:** anyone can use `/stormreach status` and `/stormreach forecast`.
+- **Mod Menu:** on a server, the screen says the server's own config decides gameplay.
+
+### New: signs of the storm
+- **Weatherglass:** a storm glass that grows crystals up to 20 minutes before rain arrives. Comparator output is 0 to 15.
+- **Freezing rain and Glaze:**
+  - In biomes just above freezing, rain at night or in a Thunderhead leaves slippery ice.
+  - The ice melts by day or near a torch.
+- **St. Elmo's fire:** metal held high in a Thunderhead sparks and hisses.
+  - After 10 seconds you get a warning. At 30 seconds it draws lightning.
+  - A lightning rod within 16 blocks takes the charge.
+- **Storms feed the fields:**
+  - Crops in the rain grow about twice as fast.
+  - Lightning gives nearby crops a burst of growth.
+- **New settings** in `stormreach.properties`: `freezingRain`, `elmosFire`, `elmosFireStrikes`, `rainFedCrops`, `lightningFertilizes`, `heartPoweredSpread`, `heartPowerDraw`, `heartPoweredMaxRadius`.
+
 ## 5.5.0 (Live Wire)
 Storm electricity and captured water, with JEI support for everything.
 

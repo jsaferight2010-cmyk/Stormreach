@@ -1,6 +1,6 @@
-# Stormreach 5.0 Player Guide
+# Stormreach 6.0 Player Guide
 
-Everything added in Stormreach 5.0 (the *Hollow Storm* update): how to find it, how it works, and how rare it is. Minecraft Java 26.3, Fabric.
+Everything added since Stormreach 5.0 (the *Hollow Storm* update) up to 6.0 (*the Overhaul*): how to find it, how it works, and how rare it is. The beginner's version is the Stormreach Field Guide book in game. Minecraft Java 26.3, Fabric.
 
 > **Spoilers.** The sections on the Stranger, the Hollow Shrine and Cyrrus give away the story. They are marked, so you can skip them.
 
@@ -17,13 +17,14 @@ Everything added in Stormreach 5.0 (the *Hollow Storm* update): how to find it, 
 9. Skyward: storm creatures, gear and gadgets
 10. Thunderfront: signs of the storm
 11. Live Wire: storm power and captured water
-12. The Stranger *(spoilers)*
-13. The Hollow Shrine *(spoilers)*
-14. Cyrrus, the Hollow Storm *(spoilers)*
-15. Achievements
-16. Settings
-17. Rarity and drop-rate tables
-18. Credits and licences
+12. The Overhaul (6.0): storm signs, multiplayer and what changed
+13. The Stranger *(spoilers)*
+14. The Hollow Shrine *(spoilers)*
+15. Cyrrus, the Hollow Storm *(spoilers)*
+16. Achievements
+17. Settings
+18. Rarity and drop-rate tables
+19. Credits and licences
 
 ---
 
@@ -62,7 +63,7 @@ Like a real survey, a powerful tornado that only crossed empty fields can come o
 
 ### What it looks like (morphology)
 
-A tornado's shape is a separate thing from its strength. The guide tables (section 17) list how often each shape appears at each rating.
+A tornado's shape is a separate thing from its strength. The guide tables (section 18) list how often each shape appears at each rating.
 
 - **Rope:** a thin, twisting tube. This is often how a tornado looks at the end of its life.
 - **Needle:** a thin, straight, tapering funnel.
@@ -321,7 +322,7 @@ Gilded Stormfruit is also needed for the Aurorite Backpack upgrade and the Hollo
   - **To drive:** right-click to get in, W/S for throttle and brake, A/D to steer, sneak to get out.
   - **To pick it up:** sneak + right-click from outside.
   - **Dashboard:** the action bar tracks the nearest tornado: its rating, distance and bearing, which way and how fast it's moving, its peak wind, and the wind where you are.
-  - **Anchors:** stop for two seconds and its hydraulic anchors drop. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you.
+  - **Anchors:** press the anchor key (default **Z**, change it under Controls) and four hydraulic spikes slam down from the armour skirts at once. An anchored TIV can't be moved by any tornado, so you can wait for one to pass right over you. Press the key again to raise them before you drive off.
 - **Weather Balloon:** use it to launch a radiosonde. It climbs with the wind, bursts at the storm tops, and radios back a **sounding**:
   - temperature and dew point
   - cloud base and freezing level
@@ -449,7 +450,35 @@ New achievements: Live Wire, Every Drop Counts and Green Thumb.
 
 ---
 
-## 12. The Stranger *(spoilers)*
+## 12. The Overhaul (6.0): storm signs, multiplayer and what changed
+
+### Signs of the storm
+
+| Sign | Where and when | What it does |
+|---|---|---|
+| **Weatherglass** (crafted: copper ingot / glass pane, salt, glass pane / copper ingot) | Anywhere in the Overworld | Crystals grow as rain approaches, up to 20 minutes ahead. Comparator: 0 settled, 1-9 rain coming (higher = sooner), 10-14 raining, 15 thunderstorm. Use it to read it. |
+| **Freezing rain and Glaze** | Biomes just above freezing (base temperature 0.15-0.35: taiga, stony shores, windswept hills), at night or in a Thunderhead | Leaves Glaze, a 1-pixel skin of clear ice as slippery as ice. You feel the cold, but it never hurts. Glaze melts by day once it stops, beside a torch, or in a warm biome. It drops nothing. |
+| **St. Elmo's fire** | A Thunderhead, out in the open above y 90, holding a metal tool, spear, trident, mace, lightning rod or Voltite tool | Sparks and a hiss. Warning after 10 seconds, a lightning bolt after 30. Cover, lower ground, putting it away, or a lightning rod within 16 blocks bleeds the charge off. |
+| **Rain-fed crops** | Crops open to the rain, within 24 blocks of a player | Grow about twice as fast while it rains. |
+| **Lightning fixes nitrogen** | Crops within 4 blocks of any strike | A bone-meal burst of growth: certain at the strike, 25% at 4 blocks. |
+
+### Multiplayer
+- Install Stormreach on the server and on every client. The server's `config/stormreach.properties` decides gameplay; each player's Mod Menu changes only their own visuals. Each player picks imperial or metric units.
+- Anyone can use `/stormreach forecast` and `/stormreach status`. `thunderhead`, `calm` and `reload` are for operators.
+- If the server stops during a sky-arena boss fight, everyone in the arena is put back where they came from.
+
+### What changed in 6.0
+The full list is in CHANGELOG.md. In short:
+- **Armour, machines, radar, clouds, hail and the TIV** were all redrawn.
+- **Tornadoes** have a shape per type and reach the real cloud base. They move slower and damage trees and crops by rating.
+- **Barometer and Wind Vane** have dial screens.
+- **Gear tiers** were rebalanced: Stormshard, then Voltite (diamond tier), then Aurorite (netherite tier).
+- **Several mobs** were reworked: Stormwarden, Thunderbird, Rainfrog, Dust Devil, Shock Eel and Brine Wraith.
+- **The Hollow Shrine and Tempest Spire** were rebuilt. Sky arenas only exist during the fight. Cyrrus's arrival is a skippable cinematic.
+
+---
+
+## 13. The Stranger *(spoilers)*
 
 You are not alone.
 
@@ -476,7 +505,7 @@ Craft all five pages with a book and a Hollow Remnant to rebind the **Weathered 
 
 ---
 
-## 13. The Hollow Shrine *(spoilers)*
+## 14. The Hollow Shrine *(spoilers)*
 
 **Finding it:**
 
@@ -510,7 +539,7 @@ Lay the **Weathered Journal** on the **Hollow Altar**.
 
 ---
 
-## 14. Cyrrus, the Hollow Storm *(spoilers)*
+## 15. Cyrrus, the Hollow Storm *(spoilers)*
 
 ### The intro
 
@@ -562,7 +591,7 @@ He has three last lines, and the storm clears.
 
 ---
 
-## 15. Achievements
+## 16. Achievements
 
 5.0 adds **49 achievements**, with three new tabs and new branches on the main tab.
 
@@ -582,7 +611,7 @@ The full reward list is in the tables below.
 
 ---
 
-## 16. Settings
+## 17. Settings
 
 **Mod Menu** (Stormreach → Configure) now holds **performance settings only**:
 
@@ -591,7 +620,7 @@ The full reward list is in the tables below.
 | Tornadoes | Tornado Simulation Distance | 256 blocks |
 | Tornadoes | Max Tornadoes at Once | 2 |
 | Tornadoes | Block Checks per Tick | 96 |
-| Tornadoes | Airborne Debris Limit | 48 |
+| Tornadoes | Airborne Debris Limit | 80 |
 | Tornadoes | Tornado Block Damage | On |
 | Tornadoes | Tornado Size | 35% of real scale |
 | Effects & Load | Particle Density | 100% |
@@ -609,11 +638,12 @@ Gameplay options are still available for server owners in `config/stormreach.pro
 - `labyrinthGeneration`
 - `wildlifeSpawning` (the 5.2 and 5.3 creatures), `thunderbirdChance` (percent chance per minute, per player out in a thunderstorm; default 6), `hailGolemChance` (the same for Hailstone Golems; default 5)
 - `bossDifficulty`, `guardianDifficulty`
+- 6.0: `tornadoSpeedPercent` (40), `tornadoCropDamage`, `tornadoTreeDamage`, `fireWhirls`, `heartPoweredSpread`, `heartPowerDraw` (400 SU a second), `heartPoweredMaxRadius` (0 = no limit), `freezingRain`, `elmosFire`, `elmosFireStrikes`, `rainFedCrops`, `lightningFertilizes`, `units` (imperial or metric)
 - every setting from earlier versions
 
 ---
 
-## 17. Rarity and drop-rate tables
+## 18. Rarity and drop-rate tables
 
 All numbers below are calculated directly from the mod's loot tables, worldgen files and code (by `tools/guide_tables.py`), so they match the game.
 
@@ -641,7 +671,6 @@ Chance is per kill without Looting (Looting adds up to +1 per level to most coun
 | Cyrrus, the Hollow Storm | Weathervane Scepter | 1 | 100.0% | Guaranteed |
 | Cyrrus, the Hollow Storm | Nether Star | 1 | 100.0% | Guaranteed |
 | Cyrrus, the Hollow Storm | Tempest Core | 2–4 | 100.0% | Guaranteed |
-| Tempest Sovereign | Tempest Eye | 1 | 100.0% | Guaranteed |
 | The Stormwarden | Tempest Core | 1 | 100.0% | Guaranteed |
 | The Stormwarden | Block of Storm Crystal | 2–4 | 100.0% | Guaranteed |
 | The Stormwarden | Storm Cell | 1–3 | 100.0% | Guaranteed |
@@ -961,7 +990,7 @@ Each reward item comes from exactly one achievement. The Sovereign Trophy is the
 
 ---
 
-## 18. Credits and licences
+## 19. Credits and licences
 
 - **Cyrrus's voice:**
   - spoken by the **Piper** text-to-speech engine with the "Ryan (high)" voice model

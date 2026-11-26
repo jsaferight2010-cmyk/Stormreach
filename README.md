@@ -1,10 +1,10 @@
-# Stormreach 5.0 (Fabric, Minecraft 26.3)
+# Stormreach 6.0 (Fabric, Minecraft 26.3)
 
 A storm-swept coast where everything is connected: storms grow crystals, crystals become gear, gear calls storms.
 
 ## What's in it
 
-The full list of everything added in 2.0–5.0 is in **CHANGELOG.md**, and **GUIDE.md** is the player guide for 5.0 (tornadoes, instruments, backpacks, the Hollow Labyrinth, Elderstorm Grove, the story and Cyrrus), with rarity and drop-rate tables. That includes the spreading Stormblight, Storm versions of every block and mob (bosses included), Stormwater, Stormlava, the Nether and End storm biomes, and in 4.0 a whole sky dimension, the **Tempest Realm**. You reach it by beating the Tempest Sovereign for its Eyes and opening a Stormgate with lightning. The original 1.0 content is described below.
+The full list of everything added in 2.0–6.0 is in **CHANGELOG.md**, and **GUIDE.md** is the player guide for 6.0 (tornadoes, instruments, backpacks, the Hollow Labyrinth, Elderstorm Grove, the story and Cyrrus), with rarity and drop-rate tables. That includes the spreading Stormblight, Storm versions of every block and mob (bosses included), Stormwater, Stormlava, the Nether and End storm biomes, and in 4.0 a whole sky dimension, the **Tempest Realm**. You reach it by beating the Tempest Sovereign for its Eyes and opening a Stormgate with lightning. The original 1.0 content is described below.
 
 
 **Biome: Stormreach Coast.** A grey-skied, windswept shore that replaces part of the cool, wet beaches in new chunks. It has stormstone cliffs and boulders, fallen driftwood, sea thrift flowers, stormberry shrubs and storm crystal ore. It counts as a beach for other mods and for buried treasure.
@@ -27,14 +27,20 @@ The full list of everything added in 2.0–5.0 is in **CHANGELOG.md**, and **GUI
 There are also advancements in their own Stormreach tab, and every recipe unlocks in the recipe book.
 
 ## Settings (Mod Menu)
-With [Mod Menu](https://modrinth.com/mod/modmenu) installed, go to **Mods → Stormreach → Configure**. Since 5.0 it only holds **performance** settings (Tornadoes; Effects & Load), each with a tooltip. Gameplay options are in `config/stormreach.properties`, which you can edit by hand (see GUIDE.md, section 11).
+With [Mod Menu](https://modrinth.com/mod/modmenu) installed, go to **Mods → Stormreach → Configure**. Since 5.0 it only holds **performance** settings (Tornadoes; Effects & Load), each with a tooltip. Gameplay options are in `config/stormreach.properties`, which you can edit by hand (see GUIDE.md, section 17).
 
-## Commands (operators)
-- `/stormreach thunderhead [minutes]`: start a Thunderhead
-- `/stormreach calm`: clear the weather
+## Commands
+Anyone:
 - `/stormreach forecast`: show the weather and which way the wind is blowing
 - `/stormreach status`: show the current weather and whether you're in a storm zone
+
+Operators only:
+- `/stormreach thunderhead [minutes]`: start a Thunderhead
+- `/stormreach calm`: clear the weather
 - `/stormreach reload`: re-read the config file
+
+## Multiplayer
+Install Stormreach on the server and on every player's client. The server's own `config/stormreach.properties` decides gameplay; each player's Mod Menu settings only change their own visuals, and each player picks their own units.
 
 ## The Tempest Realm (4.0)
 1. Find a **Tempest Spire** (`/locate structure stormreach:tempest_spire`) in the Stormreach biomes.

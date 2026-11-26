@@ -689,14 +689,27 @@ boot the headless test server in GitHub Actions as before.
 - 26.3: BonemealableBlock methods take a `BonemealSource` (INTERACTION or MOB).
 - Unit test lightningFeedsNearbyCropsMost; GameTest lightningFeedsCrops. CI run 45817999270: 73/73, unit tests 79.
 
-### Resume point (overhaul in progress)
-Done: stages 1-9 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
-CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
-break blocks in Creative (vanilla says no)?
-Stage 8 is done except optional further sound work (the 5.x designs listed under stage 8 part 2). Stage 9
-(multiplayer) is done.
-Next, in order:
-3. "Even more" storm content (stage 10).
-4. Tests, CHANGELOG/NOTES/CLAUDE.md, final double-check.
-5. Last of all: branding (name, icon and description for Mod Menu, GitHub, the .zip and the .jar). No jar is
-   delivered until everything is done and checked.
+### Stage 11: docs and final check
+- CHANGELOG 6.0.0 entry, README (6.0, commands split by permission, a Multiplayer section), GUIDE.md template (6.0
+  title, new section 12 "The Overhaul", sections 13-19 renumbered, settings table debris default 80, 6.0 options),
+  CLAUDE.md status line. Version 6.0.0 in gradle.properties.
+- Full chain: run_all, validate (0 problems), featorder, 79 unit tests, main + client compile, CI run 45818644267
+  73/73 GameTests and the jar built.
+
+### Stage 12: branding
+- `tools/branding/make_branding.py` (runs in run_all after armor60): original procedural art of the storm coast
+  (supercell with anvil, funnel on a cliff, lightning, sea). Writes the 512 px mod icon (Mod Menu, jar) and
+  tools/branding/out banners; copies in docs/ (banner.png, icon.png, social_preview.png) for the README.
+- fabric.mod.json: tagline description, author (the GitHub account), contact homepage/sources/issues.
+- Jar: Gradle `archives_base_name=Stormreach`, archiveVersion `<ver>+mc<mc>`, README/CHANGELOG in META-INF/stormreach.
+  CI artifact (the zip) is named `Stormreach-<ver>-mc<mc>` and holds the jar, README, CHANGELOG, GUIDE and the icon.
+- The repo description, topics and social preview could not be set from here ("repository settings writes are not
+  permitted"); the user sets them by hand (text in the final message). PR #1 retitled "Stormreach 6.0.0 (the
+  Overhaul)"; merging it puts the README on the front page (main is still the initial commit).
+- Local hand-built jar: `~/tools/makejar60.sh` (artifact downloads from Actions are blocked by the proxy here). Checked:
+  only com/stormreach classes, every entrypoint and mixin class present, icon present, version 6.0.0.
+
+### Resume point
+6.0.0 delivered (Stormreach-6.0.0-mc26.3.zip). Waiting on the user's in-game test. Open questions: Stormreach swords
+breaking blocks in Creative (vanilla says no); the Hollow Shrine crash log. Optional: further sound redesign of the
+5.x sounds listed under stage 8 part 2; more "even more" content (ideas: sea fog, rainbows after storms, storm surge).

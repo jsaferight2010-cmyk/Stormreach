@@ -1,6 +1,15 @@
+<p align="center"><img src="docs/banner.png" alt="Stormreach" width="100%"></p>
+
 # Stormreach 6.0 (Fabric, Minecraft 26.3)
 
-A storm-swept coast where everything is connected: storms grow crystals, crystals become gear, gear calls storms.
+<img src="docs/icon.png" alt="Stormreach icon" width="96" align="right">
+
+**Storms, tornadoes and a sky realm on a storm-swept coast.** A storm-swept coast where everything is connected: storms grow crystals, crystals become gear, gear calls storms.
+
+Real tornadoes rated EF0 to EF5, supercells, hail, downbursts and freezing rain; weather instruments, Doppler radar and storm chasing; storm power from wind and lightning; the spreading Stormblight; the Tempest Realm in the sky; the Hollow Labyrinth; and the story of Cyrrus, the Hollow Storm.
+
+- **Download:** the newest build is attached to each GitHub Actions run (a zip with the jar, this readme, the patch notes and the player guide).
+- **Needs:** Minecraft Java 26.3, Fabric Loader 0.19.3+, Fabric API, Java 25. Optional: Mod Menu (performance settings), JEI (recipes and drops).
 
 ## What's in it
 

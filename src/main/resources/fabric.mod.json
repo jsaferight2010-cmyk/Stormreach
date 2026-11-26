@@ -3,9 +3,9 @@
   "id": "stormreach",
   "version": "${version}",
   "name": "Stormreach",
-  "description": "A storm-swept coast for Minecraft: the Stormreach Coast biome, Thunderhead and Gale weather, Cliff Crabs, Storm Gulls and Squalls, stormstone and driftwood blocks, storm crystal gear and seaside food. Fully configurable through Mod Menu.",
+  "description": "Storms, tornadoes and a sky realm on a storm-swept coast. Real tornadoes rated EF0-EF5, supercells, hail, downbursts and freezing rain; weather instruments, Doppler radar and storm chasing; storm power from wind and lightning; the spreading Stormblight; the Tempest Realm in the sky; the Hollow Labyrinth; and the story of Cyrrus, the Hollow Storm.",
   "authors": [
-    "Stormreach contributors"
+    "jsaferight2010-cmyk"
   ],
   "license": "MIT",
   "icon": "assets/stormreach/icon.png",
@@ -43,5 +43,10 @@
   "suggests": {
     "modmenu": "*",
     "jei": "*"
+  },
+  "contact": {
+    "homepage": "https://github.com/jsaferight2010-cmyk/stormreach",
+    "sources": "https://github.com/jsaferight2010-cmyk/stormreach",
+    "issues": "https://github.com/jsaferight2010-cmyk/stormreach/issues"
   }
 }

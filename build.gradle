@@ -70,5 +70,9 @@ java {
 }
 
 jar {
+    // 6.0 branding: Stormreach-<version>+mc<minecraft>.jar, with the readme and patch notes inside
+    archiveVersion = "${project.version}+mc${project.minecraft_version}"
     from('LICENSE') { rename { "${it}_${project.base.archivesName.get()}" } }
+    from('README.md') { into 'META-INF/stormreach' }
+    from('CHANGELOG.md') { into 'META-INF/stormreach' }
 }

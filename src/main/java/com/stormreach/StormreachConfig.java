@@ -81,6 +81,9 @@ public final class StormreachConfig {
     /** 6.0 stage 10: metal held high in a Thunderhead glows with St. Elmo's fire; {@code elmosFireStrikes} lets it draw a bolt. */
     public static boolean elmosFire = true;
     public static boolean elmosFireStrikes = true;
+    /** 6.0 stage 10: crops open to the rain grow about twice as fast; lightning gives crops near the strike a growth stage. */
+    public static boolean rainFedCrops = true;
+    public static boolean lightningFertilizes = true;
     public static int heartPowerDraw = 400;          // SU a second while overcharged (50-10000)
     public static int heartPoweredMaxRadius = 0;     // 0 = no limit (then only the world border stops it)
     public static boolean stormFront = true;
@@ -193,6 +196,8 @@ public final class StormreachConfig {
         freezingRain = bool(p, "freezingRain", freezingRain);
         elmosFire = bool(p, "elmosFire", elmosFire);
         elmosFireStrikes = bool(p, "elmosFireStrikes", elmosFireStrikes);
+        rainFedCrops = bool(p, "rainFedCrops", rainFedCrops);
+        lightningFertilizes = bool(p, "lightningFertilizes", lightningFertilizes);
         heartPowerDraw = num(p, "heartPowerDraw", heartPowerDraw, 50, 10000);
         heartPoweredMaxRadius = num(p, "heartPoweredMaxRadius", heartPoweredMaxRadius, 0, 30000000);
         heartActivatesOnPlace = bool(p, "heartActivatesOnPlace", heartActivatesOnPlace);
@@ -293,6 +298,8 @@ public final class StormreachConfig {
         p.setProperty("freezingRain", String.valueOf(freezingRain));
         p.setProperty("elmosFire", String.valueOf(elmosFire));
         p.setProperty("elmosFireStrikes", String.valueOf(elmosFireStrikes));
+        p.setProperty("rainFedCrops", String.valueOf(rainFedCrops));
+        p.setProperty("lightningFertilizes", String.valueOf(lightningFertilizes));
         p.setProperty("heartPowerDraw", String.valueOf(heartPowerDraw));
         p.setProperty("heartPoweredMaxRadius", String.valueOf(heartPoweredMaxRadius));
         p.setProperty("heartActivatesOnPlace", String.valueOf(heartActivatesOnPlace));
@@ -377,7 +384,7 @@ public final class StormreachConfig {
         wildlifeSpawning = true; thunderbirdChance = 6; hailGolemChance = 5;
         tempestStaffCooldown = 3; tempestStaffRange = 32; stormbladeLightningChance = 15; hornStormMinutes = 5;
         spreadMode = SpreadMode.CONTAINED; heartMaxRadius = 32; spreadSpeed = 5; convertMobs = true; blightBiome = true;
-        heartActivatesOnPlace = false; heartPoweredSpread = true; freezingRain = true; elmosFire = true; elmosFireStrikes = true; heartPowerDraw = 400; heartPoweredMaxRadius = 0; stormFront = true; stormFrontMinutes = 4;
+        heartActivatesOnPlace = false; heartPoweredSpread = true; freezingRain = true; elmosFire = true; elmosFireStrikes = true; rainFedCrops = true; lightningFertilizes = true; heartPowerDraw = 400; heartPoweredMaxRadius = 0; stormFront = true; stormFrontMinutes = 4;
         useGeneratedBlocks = true; useGeneratedMobs = true; stormMobPerks = true; stormwaterShocks = true; stormInOtherDimensions = true;
         sovereignNaturalSpawns = true; sovereignSpawnChance = 20; sigilRitualSeconds = 60; shrineArena = true; eyesRequired = 4; sovereignHealth = 400; realmFallToOverworld = true; realmLightning = true; skyraySpeed = 15; realmMobSpawning = true; cloudBlocks = true; returnGateBuilt = true;
         tornadoDestruction = true; tornadoSimulationDistance = 256; maxActiveTornadoes = 2; tornadoBlockChecksPerTick = 96; tornadoDebrisLimit = 80; tornadoSizePercent = 35; particleDensity = 100; backpackMagnetInterval = 10; naturalTornadoes = true; tornadoFrequency = 100; tornadoIntensityBias = 100; tornadoDurationPercent = 50; landspouts = true; downbursts = true; shadowAppearanceRate = 100; shadowSigns = true; labyrinthGeneration = true; bossDifficulty = 100; guardianDifficulty = 100;

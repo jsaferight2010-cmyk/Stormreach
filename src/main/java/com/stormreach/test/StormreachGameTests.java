@@ -1267,6 +1267,18 @@ public class StormreachGameTests {
         });
     }
 
+    /** 6.0 stage 10: lightning fixes nitrogen, so wheat next to a strike grows. */
+    @GameTest
+    public void lightningFeedsCrops(GameTestHelper h) {
+        BlockPos crop = new BlockPos(2, 2, 2);
+        h.setBlock(crop.below(), Blocks.FARMLAND);
+        h.setBlock(crop, Blocks.WHEAT);
+        for (int i = 0; i < 6; i++) com.stormreach.signs.StormCrops.onLightning(h.getLevel(), h.absolutePos(crop.east()));
+        int age = h.getBlockState(crop).getValue(net.minecraft.world.level.block.CropBlock.AGE);
+        Check.isTrue(h, age > 0, "wheat a block from the strike did not grow");
+        h.succeed();
+    }
+
     /** 6.0: grows a sapling at {@code at} on dirt with bone meal (or, if {@code natural}, by its normal growth step). */
     private static boolean growSapling(GameTestHelper h, net.minecraft.world.level.block.Block sapling, BlockPos at, boolean natural) {
         h.setBlock(at.below(), Blocks.DIRT);

@@ -253,6 +253,7 @@ public final class StormWeather {
         com.stormreach.sky.BottledLightningItem.onLightning(level, hitBlock);
         com.stormreach.front.TeslaCoilBlockEntity.onLightning(level, hitBlock);
         com.stormreach.power.StormCapacitorBlock.Entity.onLightning(level, hitBlock);
+        com.stormreach.signs.StormCrops.onLightning(level, hitBlock);   // 6.0 stage 10: lightning fixes nitrogen
         BlockState state = level.getBlockState(hitBlock);
         RandomSource random = level.getRandom();
         net.minecraft.world.level.material.FluidState fluid = level.getFluidState(hitBlock.above());

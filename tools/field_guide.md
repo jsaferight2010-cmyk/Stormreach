@@ -50,6 +50,7 @@ Weather instruments tell you what's coming. Use any of them to open its screen.
 
 - **Freezing rain:** where it is only just above freezing (taiga, stony shores, windswept hills), rain freezes as it lands at night and in Thunderheads. It leaves **Glaze**, a skin of clear ice as slippery as ice, and you feel the cold. Glaze melts by day, or at once near a torch.
 - **St. Elmo's fire:** in a Thunderhead, holding a metal tool or weapon out in the open above y 90 makes it glow and hiss. After 10 seconds you are warned; after 30, it draws lightning down on you. Get under cover, get lower, put it away, or stand within 16 blocks of a lightning rod, which takes the charge.
+- **Storms feed the fields:** crops open to the rain grow about twice as fast while it rains, and lightning fixes nitrogen: crops within 4 blocks of a strike get a burst of growth, as if bone-mealed.
 
 ## Tornadoes
 

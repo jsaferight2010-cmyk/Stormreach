@@ -61,4 +61,14 @@ public final class StormSigns {
         int next = builds ? charge + 20 : charge - 60;
         return Math.max(0, Math.min(ELMO_STRIKE, next));
     }
+
+    /** Lightning fixes nitrogen: the chance a crop {@code distance} blocks from a strike gets a burst of growth. */
+    public static double fertilizeChance(double distance) {
+        if (distance > LIGHTNING_FERTILE_RADIUS) return 0;
+        return 1.0 - 0.75 * (distance / LIGHTNING_FERTILE_RADIUS);
+    }
+    public static final int LIGHTNING_FERTILE_RADIUS = 4;
+
+    /** Rain-fed crops: columns sampled per player each second while it rains (about doubles growth under open sky). */
+    public static final int RAIN_SAMPLES = 48, RAIN_RANGE = 24;
 }

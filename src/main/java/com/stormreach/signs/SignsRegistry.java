@@ -42,5 +42,6 @@ public final class SignsRegistry {
     public static void tick(net.minecraft.server.level.ServerLevel level) {
         FreezingRain.tick(level);
         ElmosFire.tick(level);
+        StormCrops.tick(level);
     }
 }

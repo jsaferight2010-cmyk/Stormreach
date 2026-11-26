@@ -52,4 +52,12 @@ class StormSignsTest {
         int full = StormSigns.ELMO_STRIKE;
         assertEquals(full, StormSigns.elmoStep(full, true, true, true, 120, false), "capped");
     }
+
+    @Test
+    void lightningFeedsNearbyCropsMost() {
+        assertEquals(1.0, StormSigns.fertilizeChance(0), 1e-9);
+        assertTrue(StormSigns.fertilizeChance(2) > StormSigns.fertilizeChance(4));
+        assertEquals(0.25, StormSigns.fertilizeChance(4), 1e-9);
+        assertEquals(0.0, StormSigns.fertilizeChance(4.5), 1e-9);
+    }
 }

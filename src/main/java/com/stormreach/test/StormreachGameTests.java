@@ -1139,8 +1139,8 @@ public class StormreachGameTests {
         var level = h.getLevel();
         if (!(level.getBlockEntity(h.absolutePos(fan)) instanceof com.stormreach.wind.WindGeneratorBlockEntity be)) { h.fail("no generator block entity"); return; }
         be.configure(120, 8, 0f, true, false);
+        // (a no-AI mob ignores velocity altogether, so use an ordinary pig: the push easily beats its wandering)
         var pig = h.spawn(net.minecraft.world.entity.EntityTypes.PIG, new BlockPos(2, 2, 3));
-        pig.setNoAi(true);
         double x0 = pig.getX();
         h.runAfterDelay(40, () -> {
             BlockPos probe = h.absolutePos(new BlockPos(4, 2, 3));

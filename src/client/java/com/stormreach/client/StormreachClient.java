@@ -12,6 +12,7 @@ public final class StormreachClient implements ClientModInitializer {
     public void onInitializeClient() {
         ClientUnits.init();
         com.stormreach.client.wind.WindGeneratorScreen.register();
+        com.stormreach.client.story.CinematicCamera.register();
         EntityRendererRegistry.register(ModEntities.CLIFF_CRAB, StormreachRenderers.CliffCrabRenderer::new);
         EntityRendererRegistry.register(ModEntities.STORM_GULL, StormreachRenderers.StormGullRenderer::new);
         EntityRendererRegistry.register(ModEntities.SQUALL, StormreachRenderers.SquallRenderer::new);
@@ -24,6 +25,8 @@ public final class StormreachClient implements ClientModInitializer {
         EntityRendererRegistry.register(ModEntities.SQUALL_BOTTLE, ThrownItemRenderer::new);
         EntityRendererRegistry.register(ModEntities.STORM_FRONT, net.minecraft.client.renderer.entity.NoopRenderer::new);
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.TEMPEST_SOVEREIGN, com.stormreach.client.render.RealmRenderers.SovereignRenderer::new);
+        // 6.0: the Tempest Eye over the altar, drawn as the item itself, 2.5x and full-bright
+        EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.TEMPEST_EYE_REWARD, c -> new net.minecraft.client.renderer.entity.ThrownItemRenderer<>(c, 2.5f, true));
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.SKYRAY, com.stormreach.client.render.RealmRenderers.SkyrayRenderer::new);
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.PUFFLING, com.stormreach.client.render.RealmRenderers.PufflingRenderer::new);
         EntityRendererRegistry.register(com.stormreach.realm.RealmEntities.STATIC_WISP, com.stormreach.client.render.RealmRenderers.StaticWispRenderer::new);

@@ -277,5 +277,13 @@ L('death.attack.stormreach.shock.player', '%1$s was electrocuted by %2$s')
 # ---------------------------------------------------------------- gear (stage 6)
 L('tooltip.stormreach.storm_surge', 'Storm Surge: in rain +8% damage and +15% mining speed; in a thunderstorm +15% and +30%.')
 
+# ---------------------------------------------------------------- structures: cinematic, Tempest Eye reward (stage 7)
+L('cinematic.stormreach.skip', 'Press %s to skip')
+L('entity.stormreach.tempest_eye_reward', 'Tempest Eye')
+L('entity.stormreach.tempest_eye_reward.taken', 'You take the Tempest Eye. The storm\'s gaze is yours.')
+L('block.stormreach.sovereign_altar.eye_waits', 'The Tempest Eye hangs over the Sovereign Altar. Use it to take it.')
+# the Eye is no longer the Sovereign's drop (it appears over the altar instead, so it can't be left in the sky arena)
+w(f'{D}/loot_table/entities/tempest_sovereign.json', {'type': 'minecraft:entity', 'pools': [], 'random_sequence': 'stormreach:entities/tempest_sovereign'})
+
 with open(f'{A}/lang/en_us.json', 'w') as f: json.dump(lang, f, indent=2, ensure_ascii=False); f.write('\n')
 print('gendata60: overhaul data written')

@@ -24,7 +24,7 @@ noitem={'stormberry_shrub','stormgate'}
 isrc=open(JAVA+'/com/stormreach/registry/ModItems.java').read()
 items=re.findall(r'register\("([a-z_]+)"', isrc) + re.findall(r'(?:register|egg)\("([a-z_]+)"', open(JAVA+'/com/stormreach/realm/RealmItems.java').read()) + [b for b in blocks if b not in noitem]
 esrc=open(JAVA+'/com/stormreach/registry/ModEntities.java').read()
-ents=[e for e in re.findall(r'register\("([a-z_]+)"', esrc) + re.findall(r'register\("([a-z_]+)"', open(JAVA+'/com/stormreach/realm/RealmEntities.java').read()) if e not in ('squall_bottle','storm_front')]
+ents=[e for e in re.findall(r'register\("([a-z_]+)"', esrc) + re.findall(r'register\("([a-z_]+)"', open(JAVA+'/com/stormreach/realm/RealmEntities.java').read()) if e not in ('squall_bottle','storm_front','tempest_eye_reward')]   # 6.0: the Eye reward is drawn as the item
 lang=json.load(open(A+'/lang/en_us.json'))
 def model_chain(mid, depth=0):
     if depth>10: return

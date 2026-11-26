@@ -504,35 +504,65 @@ for y in range(base, top):
             edge = abs(x - C) == half or abs(z - C) == half
             corner = abs(x - C) == half and abs(z - C) == half
             if edge: b[(x, y, z)] = S('chiseled_tempest_bricks') if corner else brick()
-            elif (y - base) % 10 == 0 and y > base: b[(x, y, z)] = S('tempest_bricks')   # floors
+            elif (y - base) % 10 == 0: b[(x, y, z)] = S('tempest_bricks')   # floors (6.0: the ground floor too, so nothing sits on air)
     if (y - base) % 10 in (4, 5, 6):   # tall stormglass windows on every side
         for (x, z) in ((C, C - half), (C, C + half), (C - half, C), (C + half, C)): b[(x, y, z)] = S('minecraft:light_blue_stained_glass_pane', north='false', south='false', east='false', west='false', waterlogged='false')
 for y in (base, base + 1, base + 2): b[(C, y, C + 4)] = AIR          # the doorway (south)
 b[(C, base + 3, C + 4)] = S('tempest_brick_stairs', facing='north', half='top', shape='straight', waterlogged='false')
-# spiral stair inside: one step per block, round the walls, with openings cut through each floor
+# spiral stair inside: one step per block, round the walls of the 9 x 9 shaft, then (6.0) on a tighter ring through
+# the narrower 7 x 7 top section all the way up through the crown floor (it used to stop at y 35, nine blocks short)
 path = [(C - 3 + i, C - 3) for i in range(6)] + [(C + 3, C - 3 + i) for i in range(6)] + [(C + 3 - i, C + 3) for i in range(6)] + [(C - 3, C + 3 - i) for i in range(6)]
 dirs = ['east'] * 6 + ['south'] * 6 + ['west'] * 6 + ['north'] * 6
-for i in range(top - base - 9):
-    x, z = path[i % len(path)]
-    y = base + 1 + i
-    if y >= top - 8: break
-    b[(x, y, z)] = S('tempest_brick_stairs', facing=dirs[i % len(dirs)], half='bottom', shape='straight', waterlogged='false')
-    for k in (1, 2, 3):
-        if (x, y + k, z) in b and b[(x, y + k, z)] == S('tempest_bricks'): b[(x, y + k, z)] = AIR   # headroom through floors
-# chambers: chests and lanterns on each floor
-for n, fl in enumerate((base, base + 10, base + 20)):
-    b[(C + 2, fl + 1, C - 2)] = S('minecraft:chest', facing='west', type='single', waterlogged='false'); chests[(C + 2, fl + 1, C - 2)] = 'stormreach:chests/tempest_spire'
-    b[(C, fl + 6, C)] = S('minecraft:chain', axis='y', waterlogged='false')
-    b[(C, fl + 5, C)] = S('storm_lantern')
-# the crown: an open ring platform 11 x 11 over the spire, pillars with charged stone, the altar in the centre
+path2 = [(C - 2 + i, C - 2) for i in range(4)] + [(C + 2, C - 2 + i) for i in range(4)] + [(C + 2 - i, C + 2) for i in range(4)] + [(C - 2, C + 2 - i) for i in range(4)]
+dirs2 = ['east'] * 4 + ['south'] * 4 + ['west'] * 4 + ['north'] * 4
 cy = top - 1
+steps = []
+for y in range(base + 1, cy + 1):
+    i = y - base - 1
+    if y < base + 28:
+        steps.append((path[i % len(path)], dirs[i % len(dirs)], y))
+    else:   # step in to the tighter ring a little below where the shaft narrows (y = base + 30)
+        if steps and steps[-1][2] == base + 27:
+            last = steps[-1][0]
+            j0 = min(range(len(path2)), key=lambda k: abs(path2[k][0] - last[0]) + abs(path2[k][1] - last[1]))
+        k = (j0 + 1 + y - (base + 28)) % len(path2)
+        steps.append((path2[k], dirs2[k], y))
+# the change of ring is a flat landing, level with the last outer step, so it can be walked (no jump under the overhang)
+lx, lz = path2[j0]
+b[(lx, base + 27, lz)] = S('chiseled_tempest_bricks')
+for k in (1, 2, 3):   # headroom over the landing (the floor where the shaft narrows is just above it)
+    if b.get((lx, base + 27 + k, lz)) == S('tempest_bricks'): b[(lx, base + 27 + k, lz)] = AIR
+for k in range(1, 3): b[(lx, base + 27 - k, lz)] = S('polished_stormstone') if b[(lx, base + 27 - k, lz)] == AIR else b[(lx, base + 27 - k, lz)]
+for (x, z), d, y in steps:
+    b[(x, y, z)] = S('tempest_brick_stairs', facing=d, half='bottom', shape='straight', waterlogged='false')
+    for k in (1, 2, 3):   # headroom through the floors (never through the outer walls)
+        inside = max(abs(x - C), abs(z - C)) < (4 if y + k < base + 30 else 3)
+        if inside and (x, y + k, z) in b and b[(x, y + k, z)] == S('tempest_bricks'): b[(x, y + k, z)] = AIR
+    # 6.0: a solid stringer under every step, down to the step below it, so the stair is a built helix against the
+    # walls instead of single blocks hanging in the air
+    for k in range(1, 4):
+        if y - k <= base or (x, y - k, z) not in b or b[(x, y - k, z)] != AIR: break
+        b[(x, y - k, z)] = S('polished_stormstone') if k > 1 else S('tempest_bricks')
+# chambers (6.0): a newel pillar rises through the middle of every floor; the chest stands on the floor against it in
+# an alcove of chiseled bricks with an upside-down stair "shelf" over it, and a lantern hangs from the ceiling
+for n, fl in enumerate((base, base + 10, base + 20)):
+    for y in range(fl + 1, fl + 10): b[(C, y, C)] = S('chiseled_tempest_bricks') if (y - fl) % 3 == 0 else S('tempest_bricks')
+    cx, cz = C + 1, C - 1
+    b[(cx, fl + 1, cz)] = S('minecraft:chest', facing='east', type='single', waterlogged='false'); chests[(cx, fl + 1, cz)] = 'stormreach:chests/tempest_spire'
+    b[(cx, fl + 1, cz - 1)] = S('chiseled_tempest_bricks')
+    b[(cx, fl + 2, cz)] = S('tempest_brick_stairs', facing='west', half='top', shape='straight', waterlogged='false')
+    b[(cx, fl + 2, cz - 1)] = S('tempest_brick_slab', type='bottom', waterlogged='false')
+    b[(C - 1, fl + 1, C + 1)] = S('minecraft:barrel', facing='up', open='false')
+    b[(C - 2, fl + 8, C + 2)] = S('minecraft:chain', axis='y', waterlogged='false')
+    b[(C - 2, fl + 7, C + 2)] = S('storm_lantern')
+# the crown: an open ring platform 11 x 11 over the spire, pillars with charged stone, the altar in the centre
+crown_opening = {(x, z) for (x, z), d, y in steps if y >= cy - 3}   # the stairwell comes up through the crown floor here
 for x in range(C - 5, C + 6):
     for z in range(C - 5, C + 6):
         d = max(abs(x - C), abs(z - C))
+        if (x, z) in crown_opening: continue
         if d <= 5 and not (abs(x - C) == 5 and abs(z - C) == 5):
             b[(x, cy, z)] = S('tempest_bricks') if d < 5 else S('tempest_brick_slab', type='bottom', waterlogged='false')
-x, z = path[(cy - base - 2) % len(path)]
-for k in range(0, 3): b[(x, cy + k, z)] = AIR if k else S('tempest_brick_stairs', facing='east', half='bottom', shape='straight', waterlogged='false')
 for (x, z) in ((C - 4, C - 4), (C + 4, C - 4), (C - 4, C + 4), (C + 4, C + 4)):
     for y in range(cy + 1, cy + 6): b[(x, y, z)] = S('tempest_brick_wall', **WALLP)
     b[(x, cy + 6, z)] = S('charged_stormstone')

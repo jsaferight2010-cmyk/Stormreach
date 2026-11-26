@@ -67,6 +67,8 @@ public class CyrrusBoss extends Monster {
             BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_20);
     private final BossPlan plan = new BossPlan();
     private DialogueScript intro;
+    /** 6.0: players shown the intro camera, and those who chose to skip it. */
+    private final java.util.Set<java.util.UUID> watching = new java.util.HashSet<>(), skipped = new java.util.HashSet<>();
     private DialogueScript phaseLines;
     private double riseLeft;
     private int galeWindup, hailWindup;
@@ -185,12 +187,14 @@ public class CyrrusBoss extends Monster {
 
     // ---------------- cinematic ----------------
     private void runCinematic(ServerLevel level) {
-        if (intro == null) {
-            intro = ModSounds.loadScript("cyrrus_intro");
-            for (ServerPlayer p : players(level, 64)) {
-                p.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, intro.length() + 40, 3, false, false));
-                p.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, intro.length() + 40, 4, false, false));
-            }
+        if (intro == null) intro = ModSounds.loadScript("cyrrus_intro");
+        // everyone near (including anyone who walks up during the intro) gets the camera, in sync
+        for (ServerPlayer p : players(level, 64)) {
+            if (!watching.add(p.getUUID())) continue;
+            int left = Math.max(40, intro.length() + 40 - cinematicTick);
+            p.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, left, 3, false, false));
+            p.addEffect(new MobEffectInstance(MobEffects.RESISTANCE, left, 4, false, false));
+            CinematicSync.send(p, new CinematicSync.Start(getId(), altar == null ? blockPosition() : altar, cinematicTick, intro.length()));
         }
         cinematicTick++;
         if (riseLeft > 0) { // emerge slowly out of the ground below the altar
@@ -210,11 +214,33 @@ public class CyrrusBoss extends Monster {
         if (cueIndex >= intro.cues.size() && cinematicTick > intro.length() + 20) act(level, "fight");
     }
 
+    /** A watching player skipped: give them control back; once every watcher has skipped, jump to the fight. */
+    void skipRequested(ServerPlayer p) {
+        if (!inCinematic() || !watching.contains(p.getUUID()) || !(level() instanceof ServerLevel level)) return;
+        skipped.add(p.getUUID());
+        p.removeEffect(MobEffects.SLOWNESS);
+        for (ServerPlayer w : players(level, 96)) if (watching.contains(w.getUUID()) && !skipped.contains(w.getUUID())) return;
+        fastForward(level);
+    }
+
+    /** Runs every remaining intro action at once (no voices), so the fight starts exactly as it would have. */
+    private void fastForward(ServerLevel level) {
+        if (intro == null) intro = ModSounds.loadScript("cyrrus_intro");
+        while (cueIndex < intro.cues.size()) for (String action : intro.cues.get(cueIndex++).actions()) {
+            if (action.startsWith("rise:")) { setPos(getX(), getY() + riseLeft + Double.parseDouble(action.substring(5)), getZ()); riseLeft = 0; }
+            else if (!action.equals("darken")) act(level, action);
+        }
+        if (riseLeft > 0) { setPos(getX(), getY() + riseLeft, getZ()); riseLeft = 0; }
+        var scale = getAttribute(Attributes.SCALE);
+        if (scale != null) scale.setBaseValue(targetScale);
+        if (inCinematic()) act(level, "fight");
+    }
+
     private void act(ServerLevel level, String action) {
         String[] kv = action.split(":");
         switch (kv[0]) {
-            case "rise" -> riseLeft += Double.parseDouble(kv[1]);
-            case "grow" -> targetScale = Double.parseDouble(kv[1]);
+            case "rise" -> riseLeft += kv.length > 1 ? Double.parseDouble(kv[1]) : 0;
+            case "grow" -> targetScale = kv.length > 1 ? Double.parseDouble(kv[1]) : targetScale;
             case "thunder" -> {
                 if (level.dimension() == Level.OVERWORLD) level.getServer().setWeatherParameters(0, 12000, true, true);
                 level.playSound(null, blockPosition(), com.stormreach.registry.ModSfx.WEATHER_THUNDER, SoundSource.WEATHER, 6f, 0.5f);
@@ -237,11 +263,24 @@ public class CyrrusBoss extends Monster {
             case "music" -> level.playSound(null, blockPosition(), ModSounds.CYRRUS_THEME, SoundSource.RECORDS, 4f, 1f);
             case "fight" -> {
                 entityData.set(CINEMATIC, false);
+                for (ServerPlayer p : level.players()) if (watching.contains(p.getUUID())) {
+                    CinematicSync.send(p, new CinematicSync.End(getId()));
+                    p.removeEffect(MobEffects.SLOWNESS);
+                }
                 noPhysics = false;
                 setNoGravity(false);
                 if (form() == 0) entityData.set(FORM, 1);
                 targetScale = Math.max(targetScale, 4.0);
                 phaseLines = ModSounds.loadScript("cyrrus_phases");
+                // 6.0: a giant four players tall doesn't fit in the shrine: the fight moves to a storm-torn arena that is
+                // raised in the sky over the shrine now and taken down (everyone brought back) when the fight ends
+                if (com.stormreach.StormreachConfig.shrineArena && altar != null) {
+                    net.minecraft.world.phys.Vec3 spot = com.stormreach.realm.SovereignArena.begin(level, altar, com.stormreach.realm.SovereignArena.Style.SHRINE);
+                    if (spot != null) {
+                        teleportTo(spot.x, spot.y, spot.z);
+                        com.stormreach.realm.SovereignArena.track(level, BlockPos.containing(spot).below(4), getUUID(), com.stormreach.realm.SovereignArena.Style.SHRINE);
+                    }
+                }
             }
             default -> {}
         }

@@ -16,6 +16,8 @@ for p in sorted((D / 'loot_table/entities').glob('*.json')):
     rows = [{'item': i if ':' in i else f'minecraft:{i}', 'count': txt, 'chance': round(chance, 4)}
             for i, (chance, _exp, txt) in sorted(stats.items(), key=lambda kv: -kv[1][0])]
     if rows: out[f'stormreach:{p.stem}'] = rows
+# 6.0: the Sovereign's Tempest Eye appears over the altar (not as loot), but it's still what beating it gives
+out.setdefault('stormreach:tempest_sovereign', []).insert(0, {'item': 'stormreach:tempest_eye', 'count': '1', 'chance': 1.0})
 dst = R / 'assets/stormreach/jei/drops.tsv'
 dst.parent.mkdir(parents=True, exist_ok=True)
 old = R / 'assets/stormreach/jei/drops.json'

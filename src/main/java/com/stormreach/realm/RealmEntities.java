@@ -37,6 +37,10 @@ public final class RealmEntities {
     public static final EntityType<Stormhawk> STORMHAWK = register("stormhawk",
             EntityType.Builder.of(Stormhawk::new, MobCategory.MONSTER).sized(1.0f, 0.8f).eyeHeight(0.5f).clientTrackingRange(10));
 
+    /** 6.0: the Tempest Eye floating over the altar after the Sovereign falls (use it to take the Eye). */
+    public static final EntityType<TempestEyeReward> TEMPEST_EYE_REWARD = register("tempest_eye_reward",
+            EntityType.Builder.<TempestEyeReward>of(TempestEyeReward::new, MobCategory.MISC).sized(0.7f, 0.7f).clientTrackingRange(10).fireImmune());
+
     private RealmEntities() {}
 
     private static <T extends Entity> EntityType<T> register(String name, EntityType.Builder<T> builder) {

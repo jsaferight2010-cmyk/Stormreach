@@ -80,6 +80,11 @@ public class TempestSovereign extends Monster {
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
     }
 
+    /** 6.0: the Sovereign Altar that summoned it, where its Tempest Eye appears when it falls. */
+    private BlockPos altar;
+
+    public void setAltar(BlockPos pos) { this.altar = pos; }
+
     public void setHome(BlockPos pos) {
         this.home = pos;
     }
@@ -209,6 +214,10 @@ public class TempestSovereign extends Monster {
     public void die(DamageSource source) {
         super.die(source);
         if (level() instanceof ServerLevel server) {
+            // 6.0: the Eye isn't dropped up in the arena any more: it hangs over the altar, waiting to be taken
+            net.minecraft.world.phys.Vec3 over = altar != null && server.isLoaded(altar) ? net.minecraft.world.phys.Vec3.atBottomCenterOf(altar).add(0, 1, 0)
+                    : net.minecraft.world.phys.Vec3.atBottomCenterOf(StormWeather.surfaceOr(server, blockPosition(), 64)).add(0, 1, 0);
+            com.stormreach.realm.TempestEyeReward.spawn(server, over);
             for (int i = 0; i < 6; i++) {
                 StormWeather.strikeVisual(server, StormWeather.surfaceOr(server, blockPosition().offset(random.nextInt(13) - 6, 0, random.nextInt(13) - 6), 32));
             }
@@ -255,6 +264,7 @@ public class TempestSovereign extends Monster {
     protected void addAdditionalSaveData(ValueOutput out) {
         super.addAdditionalSaveData(out);
         out.putInt("Phase", phase);
+        if (altar != null) { out.putInt("AltarX", altar.getX()); out.putInt("AltarY", altar.getY()); out.putInt("AltarZ", altar.getZ()); }
         if (home != null) {
             out.putInt("HomeX", home.getX());
             out.putInt("HomeY", home.getY());
@@ -266,6 +276,8 @@ public class TempestSovereign extends Monster {
     protected void readAdditionalSaveData(ValueInput in) {
         super.readAdditionalSaveData(in);
         phase = in.getIntOr("Phase", 1);
+        int ay = in.getIntOr("AltarY", Integer.MIN_VALUE);
+        if (ay != Integer.MIN_VALUE) altar = new BlockPos(in.getIntOr("AltarX", 0), ay, in.getIntOr("AltarZ", 0));
         int hy = in.getIntOr("HomeY", Integer.MIN_VALUE);
         if (hy != Integer.MIN_VALUE) home = new BlockPos(in.getIntOr("HomeX", 0), hy, in.getIntOr("HomeZ", 0));
         if (hasCustomName()) bossBar.setName(getDisplayName());

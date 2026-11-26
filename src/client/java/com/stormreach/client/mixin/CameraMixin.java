@@ -24,6 +24,19 @@ public abstract class CameraMixin {
 
     @Inject(method = "alignWithEntity(F)V", at = @At("TAIL"))
     private void stormreach$lockerView(float partialTick, CallbackInfo ci) {
+        // 6.0: the Cyrrus intro camera takes over completely while it plays (third person, so you see yourself)
+        if (com.stormreach.client.story.CinematicCamera.active()) {
+            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+            Vec3 eye = mc.player == null ? ((net.minecraft.client.Camera) (Object) this).position() : mc.player.getEyePosition(partialTick);
+            double[] c = com.stormreach.client.story.CinematicCamera.pose(partialTick, eye,
+                    mc.player == null ? yRot() : mc.player.getViewYRot(partialTick), mc.player == null ? xRot() : mc.player.getViewXRot(partialTick));
+            if (c != null) {
+                setRotation((float) c[3], (float) c[4]);
+                setPosition(c[0], c[1], c[2]);
+                detached = true;
+                return;
+            }
+        }
         Vec3 out = LockerClient.exitingFrom();
         if (out != null) {   // stepping out: glide from the locker's eye point to the player's own view
             Vec3 now = ((net.minecraft.client.Camera) (Object) this).position();

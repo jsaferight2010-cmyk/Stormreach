@@ -20,6 +20,7 @@ import java.util.Map;
 public final class WeatheredSkins {
     private static final Map<String, Identifier[]> CACHE = new HashMap<>();
     private static final Map<String, Integer> FAILED_AT = new HashMap<>();
+    private static final java.util.Set<String> PENDING = new java.util.HashSet<>();
     /** Stages: 0 the Stranger (weathered); 1 and 2 Cyrrus's forms (storm-corrupted, with glowing veins). */
     public static final int STRANGER = 0, CORRUPTED = 1, FINAL = 2;
 
@@ -39,6 +40,7 @@ public final class WeatheredSkins {
         String key = src + "#" + stage;
         Identifier[] done = CACHE.get(key);
         if (done != null) return done;
+        if (PENDING.contains(key)) return new Identifier[] {src, null};   // being uploaded this frame
         Minecraft mc = Minecraft.getInstance();
         int now = mc.player == null ? 0 : mc.player.tickCount;
         Integer failed = FAILED_AT.get(key);
@@ -56,18 +58,29 @@ public final class WeatheredSkins {
             weather(px, w, h, src.hashCode(), stage, glow);
             for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) img.setPixel(x, y, px[y * w + x]);
             String tag = Integer.toHexString(src.hashCode() & 0x7fffffff) + "_" + stage;
-            Identifier id = Stormreach.id("weathered/" + tag);
-            mc.getTextureManager().register(id, new DynamicTexture(() -> "stormreach weathered skin", img));
-            Identifier glowId = null;
-            if (glow != null) {
-                NativeImage g = new NativeImage(w, h, true);
-                for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) g.setPixel(x, y, glow[y * w + x]);
-                glowId = Stormreach.id("weathered/" + tag + "_glow");
-                mc.getTextureManager().register(glowId, new DynamicTexture(() -> "stormreach storm veins", g));
-            }
-            Identifier[] out = {id, glowId};
-            CACHE.put(key, out);
-            return out;
+            // 6.0: the GPU upload (registering the textures) happens between frames, never in the middle of drawing
+            // an entity: uploading mid-frame could crash the client the moment Cyrrus or the Stranger first appeared.
+            PENDING.add(key);
+            mc.schedule(() -> {
+                try {
+                    Identifier id = Stormreach.id("weathered/" + tag);
+                    mc.getTextureManager().register(id, new DynamicTexture(() -> "stormreach weathered skin", img));
+                    Identifier glowId = null;
+                    if (glow != null) {
+                        NativeImage g = new NativeImage(w, h, true);
+                        for (int y = 0; y < h; y++) for (int x = 0; x < w; x++) g.setPixel(x, y, glow[y * w + x]);
+                        glowId = Stormreach.id("weathered/" + tag + "_glow");
+                        mc.getTextureManager().register(glowId, new DynamicTexture(() -> "stormreach storm veins", g));
+                    }
+                    CACHE.put(key, new Identifier[] {id, glowId});
+                } catch (RuntimeException e) {
+                    Stormreach.LOGGER.warn("Couldn't upload weathered skin {}", src, e);
+                    FAILED_AT.put(key, mc.player == null ? 0 : mc.player.tickCount);
+                } finally {
+                    PENDING.remove(key);
+                }
+            });
+            return new Identifier[] {src, null};
         } catch (RuntimeException e) {
             Stormreach.LOGGER.warn("Couldn't weather skin {}", src, e);
             img.close();

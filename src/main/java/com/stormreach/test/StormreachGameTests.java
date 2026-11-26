@@ -1284,5 +1284,61 @@ public class StormreachGameTests {
             });
         });
     }
+
+    /** 6.0: the Tempest Eye over the altar gives exactly one Eye, to the first player who takes it. */
+    @GameTest
+    public void tempestEyeIsTakenExactlyOnce(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer a) || !(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer b)) { h.succeed(); return; }
+        var eye = com.stormreach.realm.TempestEyeReward.spawn(h.getLevel(), Vec3.atBottomCenterOf(h.absolutePos(new BlockPos(2, 2, 2))));
+        eye.interact(a, net.minecraft.world.InteractionHand.MAIN_HAND, eye.position());
+        eye.interact(b, net.minecraft.world.InteractionHand.MAIN_HAND, eye.position());
+        int n = a.getInventory().countItem(com.stormreach.realm.RealmItems.TEMPEST_EYE) + b.getInventory().countItem(com.stormreach.realm.RealmItems.TEMPEST_EYE);
+        Check.isTrue(h, n == 1, "two clicks gave " + n + " Tempest Eyes (should be exactly one)");
+        Check.isTrue(h, a.getInventory().countItem(com.stormreach.realm.RealmItems.TEMPEST_EYE) == 1, "the first player to take it should get it");
+        Check.isTrue(h, eye.isRemoved(), "the Eye should be gone once taken");
+        h.succeed();
+    }
+
+    /** 6.0: a boss arena is built for the fight and taken down when the boss is gone. */
+    @GameTest(maxTicks = 200, environment = "stormreach:isolated")
+    public void bossArenaOnlyExistsDuringTheFight(GameTestHelper h) {
+        var level = h.getLevel();
+        BlockPos altar = h.absolutePos(new BlockPos(2, 2, 2));
+        BlockPos c = com.stormreach.realm.SovereignArena.centreFor(level, altar);
+        Check.isTrue(h, level.getBlockState(c).isAir(), "an arena existed before the fight");
+        var boss = h.spawn(net.minecraft.world.entity.EntityTypes.ARMOR_STAND, new BlockPos(2, 2, 2));
+        com.stormreach.realm.SovereignArena.begin(level, altar, com.stormreach.realm.SovereignArena.Style.SHRINE);
+        com.stormreach.realm.SovereignArena.track(level, c, boss.getUUID(), com.stormreach.realm.SovereignArena.Style.SHRINE);
+        Check.isFalse(h, level.getBlockState(c).isAir(), "the arena wasn't built when the fight began");
+        boss.discard();
+        h.runAfterDelay(120, () -> {
+            Check.isTrue(h, level.getBlockState(c).isAir() && level.getBlockState(c.below()).isAir(), "the arena was left standing after the fight");
+            Check.isFalse(h, com.stormreach.realm.SovereignArena.active(c), "the finished fight is still tracked");
+            h.succeed();
+        });
+    }
+
+    /** 6.0: when everyone watching skips the Cyrrus intro, the fight starts at once. */
+    @GameTest(maxTicks = 60, environment = "stormreach:isolated")
+    public void cyrrusIntroCanBeSkipped(GameTestHelper h) {
+        if (!(h.makeMockPlayer(GameType.SURVIVAL) instanceof ServerPlayer p)) { h.succeed(); return; }
+        boolean was = com.stormreach.StormreachConfig.shrineArena;
+        com.stormreach.StormreachConfig.shrineArena = false;   // keep this test on the ground
+        var level = h.getLevel();
+        var boss = com.stormreach.story.StoryRegistry.CYRRUS.create(level, net.minecraft.world.entity.EntitySpawnReason.EVENT);
+        BlockPos altar = h.absolutePos(new BlockPos(2, 2, 2));
+        boss.snapTo(altar.getX() + 0.5, altar.getY(), altar.getZ() + 0.5, 0, 0);
+        boss.beginCinematic(altar);
+        level.addFreshEntity(boss);
+        p.snapTo(altar.getX() + 3.5, altar.getY(), altar.getZ() + 0.5, 0, 0);
+        h.runAfterDelay(5, () -> {
+            Check.isTrue(h, boss.inCinematic(), "the intro should be playing");
+            com.stormreach.story.CinematicSync.skipForTest(boss, p);
+            Check.isFalse(h, boss.inCinematic(), "skipping with everyone watching should start the fight");
+            boss.discard();
+            com.stormreach.StormreachConfig.shrineArena = was;
+            h.succeed();
+        });
+    }
 }
 

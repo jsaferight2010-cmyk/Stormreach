@@ -112,6 +112,7 @@ public final class StoryRegistry {
     }
 
     public static void init() {
+        CinematicSync.init();
         FabricDefaultAttributeRegistry.register(STRANGER, Stranger.createAttributes());
         FabricDefaultAttributeRegistry.register(CYRRUS, CyrrusBoss.createAttributes());
         SpawnPlacements.register(STRANGER, SpawnPlacementTypes.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (t, l, r, p, rnd) -> false);

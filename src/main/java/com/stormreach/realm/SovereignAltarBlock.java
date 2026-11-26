@@ -120,6 +120,7 @@ public class SovereignAltarBlock extends Block {
             boss.snapTo(pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, random.nextFloat() * 360f, 0f);
             boss.setHome(pos);
         }
+        boss.setAltar(pos);
         level.addFreshEntity(boss);
         if (arena != null) SovereignArena.track(level, BlockPos.containing(arena).below(4), boss.getUUID());
         for (int i = 0; i < 4; i++) StormWeather.strikeVisual(level, pos.offset(random.nextInt(7) - 3, 1, random.nextInt(7) - 3));

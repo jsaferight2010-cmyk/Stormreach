@@ -186,7 +186,6 @@ stormreach:stormhawk	stormreach:stormhawk_feather	0–2	0.6667
 stormreach:stormwarden	stormreach:tempest_core	1	1.0
 stormreach:stormwarden	stormreach:storm_crystal_block	2–4	1.0
 stormreach:stormwarden	stormreach:storm_cell	1–3	1.0
-stormreach:tempest_sovereign	stormreach:tempest_eye	1	1.0
 stormreach:thistlehop	stormreach:thistle_down	0–2	0.6667
 stormreach:thunder_crab	stormreach:crab_claw	1–3	1.0
 stormreach:thunder_crab	stormreach:storm_shard	0–2	0.6667
@@ -194,3 +193,4 @@ stormreach:thunderbird	stormreach:thunderbird_plume	2–4	1.0
 stormreach:thunderbird	stormreach:charged_scale	1–3	1.0
 stormreach:tidewrack_hermit	stormreach:pearlescent_shell	0–1	0.5
 stormreach:tidewrack_hermit	minecraft:kelp	0–1	0.5
+stormreach:tempest_sovereign	stormreach:tempest_eye	1	1.0

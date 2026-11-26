@@ -1,15 +1,5 @@
 {
   "type": "minecraft:entity",
-  "pools": [
-    {
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "stormreach:tempest_eye"
-        }
-      ],
-      "rolls": 1
-    }
-  ],
+  "pools": [],
   "random_sequence": "stormreach:entities/tempest_sovereign"
 }

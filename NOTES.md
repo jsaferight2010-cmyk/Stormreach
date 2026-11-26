@@ -563,6 +563,31 @@ boot the headless test server in GitHub Actions as before.
 - Tests: MobFixesStage6Test (Gale launch); GameTests for the three saplings (bone meal and natural growth separately),
   boss orbs, realm travel, dispel + hail.
 
+### Stage 7: structures and the Cyrrus cinematic (part 1)
+- Shrine "sigil" crash: the Sovereign Altar's lightning crash was fixed in 5.0.1. The Hollow Shrine path (relic
+  pedestals, Weathered Journal on the altar, Cyrrus) is safe server-side; the likely client crash was Cyrrus/the
+  Stranger building a weathered copy of the player's skin and uploading it to the GPU mid-frame. `WeatheredSkins` now
+  does the pixel work at once but registers the textures between frames (`mc.schedule`), showing the plain skin
+  until then. Cinematic action parsing tolerates a missing number.
+- Cinematic (`story/CinematicSync` + `client/story/CinematicCamera`): five shots on the script's beats (establishing
+  crane, low angle as it rises, orbit, pull-back as it grows, push-in then back to the player), 1.5 s cross-blends,
+  framed on the live boss, letterbox bars, third person. Jump skips (hint for 5 s); the fight starts early when every
+  watcher has skipped (`fastForward` applies the remaining actions without voices). Late arrivals join in sync.
+- Tempest Spire: ground floor added (the bottom chest hung over air), every spiral step has a solid stringer under it,
+  the spiral now continues on a tighter ring through the narrow top section and the crown floor (before, it stopped
+  nine blocks short of the altar), with a flat landing at the ring change. Chests stand in alcoves against a newel
+  pillar on each floor. Checked offline: no floating chests or steps, no wall holes, walkable from the door to the altar.
+- Tempest Eye: no longer Sovereign loot (it was left in the sky arena when everyone was sent back down). On death a
+  `TempestEyeReward` floats over the Sovereign Altar (saved with the world, can't be hurt), gives exactly one Eye to
+  the first player who uses it. JEI still lists the Eye as the Sovereign's reward.
+- Arenas (`SovereignArena`, now with styles): built only when the fight starts, taken down after (loose items brought
+  down with the players, leftover orbs removed); 4 s pause after a win before the return; a boss knocked off is put
+  back. New SHRINE style (radius 26 skyshale ring, broken parapet, storm-broken pillars with soul lanterns): the Cyrrus
+  fight moves to it when the intro ends (`shrineArena` in the properties file).
+- Labyrinth: already at bedrock depth with no surface shaft (5.1), three keys, unbreakable vault, Hollow Keeper,
+  original score; unchanged here.
+- Tests: GameTests for the Eye (exactly once), the arena lifecycle and skipping the intro.
+
 ### Resume point (overhaul in progress)
 Done: stages 1-6 (crash, visuals, weather, tornadoes, gameplay, mobs/gear).
 Next: 7 (maze/vault, shrine arena + sigil crash,

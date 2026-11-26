@@ -91,6 +91,8 @@ public final class StormreachConfig {
     public static boolean sovereignNaturalSpawns = true;
     public static int sovereignSpawnChance = 20;
     public static int sigilRitualSeconds = 60;
+    /** 6.0: the Cyrrus fight moves to a temporary sky arena over the Hollow Shrine (built at the fight, removed after). */
+    public static boolean shrineArena = true;
     public static int eyesRequired = 4;
     public static int sovereignHealth = 400;
     public static boolean realmFallToOverworld = true;
@@ -196,6 +198,7 @@ public final class StormreachConfig {
         sovereignNaturalSpawns = bool(p, "sovereignNaturalSpawns", sovereignNaturalSpawns);
         sovereignSpawnChance = num(p, "sovereignSpawnChance", sovereignSpawnChance, 1, 100);
         sigilRitualSeconds = num(p, "sigilRitualSeconds", sigilRitualSeconds, 10, 180);
+        shrineArena = bool(p, "shrineArena", shrineArena);
         eyesRequired = num(p, "eyesRequired", eyesRequired, 4, 16);
         sovereignHealth = num(p, "sovereignHealth", sovereignHealth, 100, 2000);
         realmFallToOverworld = bool(p, "realmFallToOverworld", realmFallToOverworld);
@@ -292,6 +295,7 @@ public final class StormreachConfig {
         p.setProperty("sovereignNaturalSpawns", String.valueOf(sovereignNaturalSpawns));
         p.setProperty("sovereignSpawnChance", String.valueOf(sovereignSpawnChance));
         p.setProperty("sigilRitualSeconds", String.valueOf(sigilRitualSeconds));
+        p.setProperty("shrineArena", String.valueOf(shrineArena));
         p.setProperty("eyesRequired", String.valueOf(eyesRequired));
         p.setProperty("sovereignHealth", String.valueOf(sovereignHealth));
         p.setProperty("realmFallToOverworld", String.valueOf(realmFallToOverworld));
@@ -364,7 +368,7 @@ public final class StormreachConfig {
         spreadMode = SpreadMode.CONTAINED; heartMaxRadius = 32; spreadSpeed = 5; convertMobs = true; blightBiome = true;
         heartActivatesOnPlace = false; heartPoweredSpread = true; heartPowerDraw = 400; heartPoweredMaxRadius = 0; stormFront = true; stormFrontMinutes = 4;
         useGeneratedBlocks = true; useGeneratedMobs = true; stormMobPerks = true; stormwaterShocks = true; stormInOtherDimensions = true;
-        sovereignNaturalSpawns = true; sovereignSpawnChance = 20; sigilRitualSeconds = 60; eyesRequired = 4; sovereignHealth = 400; realmFallToOverworld = true; realmLightning = true; skyraySpeed = 15; realmMobSpawning = true; cloudBlocks = true; returnGateBuilt = true;
+        sovereignNaturalSpawns = true; sovereignSpawnChance = 20; sigilRitualSeconds = 60; shrineArena = true; eyesRequired = 4; sovereignHealth = 400; realmFallToOverworld = true; realmLightning = true; skyraySpeed = 15; realmMobSpawning = true; cloudBlocks = true; returnGateBuilt = true;
         tornadoDestruction = true; tornadoSimulationDistance = 256; maxActiveTornadoes = 2; tornadoBlockChecksPerTick = 96; tornadoDebrisLimit = 80; tornadoSizePercent = 35; particleDensity = 100; backpackMagnetInterval = 10; naturalTornadoes = true; tornadoFrequency = 100; tornadoIntensityBias = 100; tornadoDurationPercent = 50; landspouts = true; downbursts = true; shadowAppearanceRate = 100; shadowSigns = true; labyrinthGeneration = true; bossDifficulty = 100; guardianDifficulty = 100;
         bluffsEnabled = true; highlandsEnabled = true; marshEnabled = true; fulguriteFromLightning = true; hail = true; ballLightning = true; waterspouts = true; sealSpawning = true; wraithSpawning = true; crabConversion = true; bossSummoning = true; armorSetBonus = true; galeWingsBoost = true; stormfinFishing = true;
     }

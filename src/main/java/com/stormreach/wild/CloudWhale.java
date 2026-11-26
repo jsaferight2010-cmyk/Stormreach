@@ -118,7 +118,7 @@ public class CloudWhale extends Animal {
             double d = 20 + whale.random.nextDouble() * 20;
             double x = whale.getX() + Math.cos(a) * d, z = whale.getZ() + Math.sin(a) * d;
             Level l = whale.level();
-            int ground = l.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, BlockPos.containing(x, 0, z)).getY();
+            int ground = l.isLoaded(BlockPos.containing(x, 0, z)) ? l.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, BlockPos.containing(x, 0, z)).getY() : l.getMinY();   // 6.0
             double y = ground <= l.getMinY() + 1 ? whale.getY() + (whale.random.nextDouble() - 0.5) * 8 : ground + 14 + whale.random.nextDouble() * 18;
             y = Mth.clamp(y, l.getMinY() + 24, l.getMaxY() - 12);
             whale.getMoveControl().setWantedPosition(x, y, z, 1.0);

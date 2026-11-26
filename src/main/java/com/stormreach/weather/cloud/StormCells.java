@@ -47,7 +47,8 @@ public final class StormCells {
     public static StormCellEntity spawnNear(ServerLevel level, Vec3 around, RandomSource r, boolean severe, boolean here) {
         double a = r.nextDouble() * Math.PI * 2, d = here ? 0 : 150 + r.nextDouble() * 200;
         double x = around.x + Math.cos(a) * d, z = around.z + Math.sin(a) * d;
-        int ground = Math.max(level.getSeaLevel(), level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(x), (int) Math.floor(z)));
+        int fx = (int) Math.floor(x), fz = (int) Math.floor(z);   // 6.0: 150-350 blocks out is often unloaded: don't load it to look
+        int ground = Math.max(level.getSeaLevel(), level.hasChunk(fx >> 4, fz >> 4) ? level.getHeight(Heightmap.Types.MOTION_BLOCKING, fx, fz) : level.getSeaLevel());
         double base = cloudBase(level, ground, r);
         float depth = (float) Math.min(level.getMaxY() - 6 - base, (severe ? 150 : 90) + r.nextDouble() * 60);
         if (depth < 30) return null;

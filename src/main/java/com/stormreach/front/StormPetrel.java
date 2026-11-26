@@ -80,6 +80,7 @@ public class StormPetrel extends PathfinderMob {
             for (int i = 0; i < 6; i++) {
                 double a = random.nextDouble() * Math.PI * 2, r = 6 + random.nextDouble() * 12;
                 BlockPos col = BlockPos.containing(getX() + Math.cos(a) * r, 0, getZ() + Math.sin(a) * r);
+                if (!level().isLoaded(col)) continue;   // 6.0
                 BlockPos top = level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, col);
                 double y = top.getY() + 0.6 + random.nextDouble() * 2.2;
                 if (getNavigation().moveTo(col.getX() + 0.5, y, col.getZ() + 0.5, 1.0)) return;

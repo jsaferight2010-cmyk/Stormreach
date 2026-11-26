@@ -57,9 +57,9 @@ public final class RainAccumulation {
     }
 
     static void tryPuddle(ServerLevel level, int x, int z, int max, RandomSource r) {
+        if (!level.hasChunk(x >> 4, z >> 4)) return;   // 6.0: before the heightmap read, which would load the chunk
         int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
         BlockPos pos = new BlockPos(x, y, z);
-        if (!level.isLoaded(pos)) return;
         BlockState here = level.getBlockState(pos);
         if (!(here.isAir() || here.is(PrecipContent.PUDDLE))) return;
         if (!level.isRainingAt(pos)) return; // snow, deserts, roofs
@@ -70,6 +70,7 @@ public final class RainAccumulation {
         // level or low ground holds water; on a slope it runs off
         int higher = 0, lower = 0;
         for (Direction d : Direction.Plane.HORIZONTAL) {
+            if (!level.hasChunk((x + d.getStepX()) >> 4, (z + d.getStepZ()) >> 4)) return;
             int ny = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x + d.getStepX(), z + d.getStepZ());
             if (ny > y) higher++;
             if (ny < y) lower++;

@@ -621,18 +621,31 @@ boot the headless test server in GitHub Actions as before.
   a churning "freight train" mid band, tearing air and scattered debris knocks; the siren is a mechanical rotor siren
   (wind-up 2.2 s, wobbling hold, wind-down) with a horn throat, motor and slapback echo, played once per 6 s cycle
   (InstrumentBlock: it used to start an 8 s clip every 3 s, smearing three copies together).
-- Still the 5.x designs (birdie fix applied, not redesigned yet): titan voices, glide calls, whale, jellyfish bells,
-  frog, moth, stormfly, golem, serpent, eel zap, radio tones, machine hum and capacitor, chimes, horn, doors, splash,
-  radar ping, and the Labyrinth and Cyrrus scores. Candidates for the next sound
+- Second pass: Hailstone Golem (ice modes, creak grains, chunks landing), eel hurt/death (gurgling voice, crackle),
+  capacitor (a buzz climbing in pitch, then a modal clunk), machine hum (transformer harmonics, fan, bearing ticks).
+- Kept on purpose: the weather-radio alert (it is the real 1050 Hz NOAA attention tone), bells and chimes (meant to
+  ring). Still the 5.x designs (encoder fix applied, not redesigned): titan voices, glide calls, whale, jellyfish,
+  frog, moth, stormfly, serpent, eel zap, horn, doors, splash, radar ping, and the Labyrinth and Cyrrus scores. Candidates for the next sound
   pass; tell the user honestly which remain.
+
+### Stage 8 (part 3): performance
+- Chunk loads: `getHeight(heightmap, x, z)` / `getHeightmapPos` load (even generate) a chunk that isn't loaded. Every
+  heightmap read on a path that can reach unloaded ground now checks `hasChunk`/`isLoaded` first: downbursts (ground
+  sample, gust samples, block damage, wet ground), tornado (overWater, groundY falls back to sea level, block lifting),
+  Storm Front (conversion columns, strikes), storm-cell spawning 150-350 blocks out, rain puddles (+ neighbours),
+  downburst spawning, squall/ball-lightning/waterspout spawn positions (`randomGroundNear` hands back the raw column
+  for an unloaded spot and every caller then gives up), cloud whale and petrel targets, Cyrrus strike surfaces,
+  fire-whirl fire placement. One RainAccumulation check used to test `isLoaded` only after the heightmap read.
+- Already bounded from earlier stages: debris count (config, 80), debris sync every 2 ticks, hail with no entities
+  (HailSim), wind-generator push capped at 96 entities, heart frontier only on loaded chunks, arena chunks loaded
+  once on purpose. Cleanup: locker seats, boss orbs, arenas, hail fields, wind sources, Strangers all clean up.
 
 ### Resume point (overhaul in progress)
 Done: stages 1-7 (stage 7: Spire, Tempest Eye, arenas, Cyrrus cinematic + skip, skin-upload crash, Hollow Shrine).
 CI green at 69 GameTests / 74 unit tests (commit after "stage 7"). Waiting on the user: should Stormreach swords
 break blocks in Creative (vanilla says no)?
 Next, in order:
-2. Stage 8: second sound pass (the 5.x designs listed under stage 8 part 2), performance pass (guidebooks, sound
-   pass 1 and placement previews done).
+2. Stage 8 is done except optional further sound work (the 5.x designs still listed under stage 8 part 2).
 3. Multiplayer pass, then "even more" storm content.
 4. Tests, CHANGELOG/NOTES/CLAUDE.md, final double-check.
 5. Last of all: branding (name, icon and description for Mod Menu, GitHub, the .zip and the .jar). No jar is

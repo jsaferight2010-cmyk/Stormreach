@@ -358,6 +358,7 @@ public class TornadoEntity extends Entity {
 
     /** True if the surface at x/z is water (a lake, river or ocean). */
     public static boolean overWater(ServerLevel level, double x, double z) {
+        if (!level.hasChunk(Mth.floor(x) >> 4, Mth.floor(z) >> 4)) return false;   // 6.0: never load a chunk to look
         BlockPos top = BlockPos.containing(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, Mth.floor(x), Mth.floor(z)) - 1, z);
         return level.isLoaded(top) && level.getFluidState(top).is(net.minecraft.tags.FluidTags.WATER);
     }
@@ -377,6 +378,7 @@ public class TornadoEntity extends Entity {
     }
 
     private static double groundY(ServerLevel level, double x, double z) {
+        if (!level.hasChunk(Mth.floor(x) >> 4, Mth.floor(z) >> 4)) return level.getSeaLevel();   // 6.0: a guess beats a chunk load
         int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(x), Mth.floor(z));
         return Math.max(level.getMinY() + 1, top);
     }
@@ -453,6 +455,7 @@ public class TornadoEntity extends Entity {
             double a = rnd.nextDouble() * Math.PI * 2;
             double r = Math.sqrt(rnd.nextDouble()) * radius;
             int x = Mth.floor(getX() + Math.cos(a) * r), z = Mth.floor(getZ() + Math.sin(a) * r);
+            if (!level.hasChunk(x >> 4, z >> 4)) continue;   // 6.0: wide tornadoes reach past loaded ground
             int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1;
             // the exposed top block first (roofs, treetops); violent winds also tear into the walls below it
             int y = top;

@@ -75,8 +75,10 @@ public final class WeatherEvents {
             this.radius = radius;
             this.peakMph = peakMph;
             this.wet = wet;
-            BlockPos g = BlockPos.containing(centre.x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(centre.x), Mth.floor(centre.z)) - 1, centre.z);
-            BlockState gs = level.getBlockState(g);
+            // 6.0 performance: never read a heightmap in an unloaded chunk (that loads, or even generates, it)
+            boolean loaded = level.hasChunk(Mth.floor(centre.x) >> 4, Mth.floor(centre.z) >> 4);
+            BlockPos g = loaded ? BlockPos.containing(centre.x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Mth.floor(centre.x), Mth.floor(centre.z)) - 1, centre.z) : null;
+            BlockState gs = g == null ? net.minecraft.world.level.block.Blocks.AIR.defaultBlockState() : level.getBlockState(g);
             this.ground = gs.isAir() ? net.minecraft.world.level.block.Blocks.DIRT.defaultBlockState() : gs;
         }
 
@@ -122,8 +124,8 @@ public final class WeatherEvents {
                 for (int i = 0; i < 6; i++) {
                     double a = rnd.nextDouble() * Math.PI * 2, d = Math.sqrt(rnd.nextDouble()) * Math.max(4, front);
                     int x = Mth.floor(centre.x + Math.cos(a) * d), z = Mth.floor(centre.z + Math.sin(a) * d);
+                    if (!level.hasChunk(x >> 4, z >> 4)) continue;   // check before the heightmap read, not after
                     BlockPos top = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z), z);
-                    if (!level.isLoaded(top)) continue;
                     BlockState above = level.getBlockState(top), below = level.getBlockState(top.below());
                     if (wet) {
                         if (above.is(net.minecraft.world.level.block.Blocks.FIRE)) level.removeBlock(top, false);
@@ -155,6 +157,7 @@ public final class WeatherEvents {
                 for (int i = 0; i < Math.min(48, StormreachConfig.tornadoBlockChecksPerTick / 2); i++) {
                     double a = rnd.nextDouble() * Math.PI * 2, d = Math.sqrt(rnd.nextDouble()) * front;
                     int x = Mth.floor(centre.x + Math.cos(a) * d), z = Mth.floor(centre.z + Math.sin(a) * d);
+                    if (!level.hasChunk(x >> 4, z >> 4)) continue;
                     BlockPos pos = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1, z);
                     BlockState s = level.getBlockState(pos);
                     MaterialClass m = BlockWind.classify(level, pos, s);
@@ -257,6 +260,7 @@ public final class WeatherEvents {
         int wet = 0;
         for (int dx = -4; dx <= 4; dx += 4) for (int dz = -4; dz <= 4; dz += 4) {
             int x = at.getX() + dx, z = at.getZ() + dz;
+            if (!level.hasChunk(x >> 4, z >> 4)) continue;
             BlockPos top = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z) - 1, z);
             BlockState s = level.getBlockState(top);
             if (!s.getFluidState().isEmpty() || s.is(net.minecraft.world.level.block.Blocks.MUD) || s.is(com.stormreach.weather.precip.PrecipContent.PUDDLE)

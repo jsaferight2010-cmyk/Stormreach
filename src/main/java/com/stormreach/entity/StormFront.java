@@ -94,6 +94,7 @@ public class StormFront extends PathfinderMob {
         int columns = 6 + StormreachConfig.spreadSpeed * 3;
         for (int i = 0; i < columns; i++) {
             BlockPos column = BlockPos.containing(getX() + random.nextInt(RADIUS * 2 + 1) - RADIUS, getY(), getZ() + random.nextInt(RADIUS * 2 + 1) - RADIUS);
+            if (!server.isLoaded(column)) continue;   // 6.0: check before reading the heightmap (which would load it)
             BlockPos top = server.dimensionType().hasCeiling() ? StormWeather.surfaceBelow(server, column, 40)
                     : server.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, column);
             if (top == null || !server.isLoaded(top)) continue;
@@ -103,9 +104,9 @@ public class StormFront extends PathfinderMob {
         if (tickCount % 20 == 0) {
             Stormblight.convertOneMob(server, new AABB(blockPosition()).inflate(RADIUS + 2, 16, RADIUS + 2), random);
         }
-        if (random.nextInt(60) == 0) {
-            BlockPos strike = server.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING,
-                    BlockPos.containing(getX() + random.nextInt(RADIUS * 2) - RADIUS, getY(), getZ() + random.nextInt(RADIUS * 2) - RADIUS));
+        BlockPos aim = BlockPos.containing(getX() + random.nextInt(RADIUS * 2) - RADIUS, getY(), getZ() + random.nextInt(RADIUS * 2) - RADIUS);
+        if (random.nextInt(60) == 0 && server.isLoaded(aim)) {
+            BlockPos strike = server.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, aim);
             if (StormreachConfig.lightningHarmful) StormWeather.strike(server, strike, null);
             else StormWeather.strikeVisual(server, strike);
         }

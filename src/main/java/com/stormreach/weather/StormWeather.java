@@ -156,6 +156,7 @@ public final class StormWeather {
                 if (odds > 0 && random.nextInt(odds) == 0 && !com.stormreach.tornado.WeatherEvents.downburstNear(level, player.position(), 150)) {
                     double a = random.nextDouble() * Math.PI * 2, d = 30 + random.nextDouble() * 60;
                     Vec3 at = player.position().add(Math.cos(a) * d, 0, Math.sin(a) * d);
+                    if (!level.hasChunk(Mth.floor(at.x) >> 4, Mth.floor(at.z) >> 4)) continue;   // 6.0: no chunk loads
                     at = new Vec3(at.x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) Math.floor(at.x), (int) Math.floor(at.z)), at.z);
                     com.stormreach.tornado.WeatherEvents.downburst(level, at, !dryClimate);
                 }
@@ -203,8 +204,9 @@ public final class StormWeather {
         double angle = random.nextDouble() * Math.PI * 2;
         double dist = 12 + random.nextDouble() * 28;
         BlockPos column = BlockPos.containing(player.getX() + Math.cos(angle) * dist, player.getY(), player.getZ() + Math.sin(angle) * dist);
+        if (!level.isLoaded(column)) return;   // 6.0: before the heightmap read
         BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, column);
-        if (!level.isLoaded(top) || !level.canSeeSky(top)) return;
+        if (!level.canSeeSky(top)) return;
         if (StormreachConfig.lightningHarmful) strike(level, top, null);
         else strikeVisual(level, top);
     }
@@ -281,7 +283,8 @@ public final class StormWeather {
         double angle = random.nextDouble() * Math.PI * 2;
         double dist = min + random.nextDouble() * extra;
         BlockPos column = BlockPos.containing(player.getX() + Math.cos(angle) * dist, player.getY(), player.getZ() + Math.sin(angle) * dist);
-        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, column);
+        // 6.0: an unloaded column comes back as-is; every caller checks isLoaded() and gives up, without loading it
+        return level.isLoaded(column) ? level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, column) : column;
     }
 
     private static void trySpawnSquall(ServerLevel level, ServerPlayer player, RandomSource random) {

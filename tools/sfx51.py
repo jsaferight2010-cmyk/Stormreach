@@ -552,9 +552,46 @@ def hermit_click():
     for k in range(4): place(out, modal(((1400, 1, 220), (2600, 0.4, 300)), 0.04, 5000) * 0.6, k * 0.06 + rng.uniform(0, 0.015))
     return out
 
+# ---- 6.0 second pass: ice, eels, machines
+ICE = ((640, 1.0, 45), (1490, 0.6, 60), (2380, 0.35, 80), (3310, 0.2, 110))
+def golem_crackle():   # ice settling: creaks (slow grain clouds) and the odd sharp tick
+    out = grains(18, 0.8, 300, 1800, grain=0.03) * 0.5
+    for _ in range(3): place(out, modal(ICE, 0.25, 5000) * rng.uniform(0.2, 0.45), rng.uniform(0.05, 0.6))
+    return out
+def golem_hurt(): return mix(modal(ICE, 0.5, 6000) * 0.6, grains(40, 0.3, 1200, 6000, grain=0.006, decay=1.8) * 0.6, thump(80, 0.25, 15) * 0.8)
+def golem_death():
+    out = mix(grains(120, 1.0, 900, 7000, grain=0.007, decay=1.6) * 0.8, thump(60, 0.6, 6) * 1.0, np.zeros(int(1.6 * SR)))
+    for _ in range(10): place(out, modal(ICE, 0.3, 7000) * rng.uniform(0.2, 0.5), rng.uniform(0, 0.9))
+    for _ in range(6): place(out, mix(thump(rng.uniform(70, 120), 0.2, 20), grains(10, 0.1, 400, 3000)) * 0.4, rng.uniform(0.3, 1.2))   # chunks landing
+    return reverb(out, 1.4, 0.3, 3000)
+def golem_throw(): return mix(bp(noise(0.5), 200, 1500) * np.sin(np.pi * t_(0.5) / 0.5) ** 2 * 0.8, grains(14, 0.2, 400, 2500, grain=0.02) * 0.5, thump(90, 0.15, 25) * 0.6)
+def eel_hurt(): return mix(voice(0.3, 380, 260, ((500, 1), (1300, 0.5)), 0.5, 0.06) * 0.6, crackle(0.3, 50) * 0.6, grains(10, 0.2, 400, 2500, grain=0.01) * 0.3)
+def eel_death():
+    t = t_(1.2)
+    return mix(voice(1.0, 320, 120, ((450, 1), (1100, 0.4)), 0.6, 0.05) * 0.6, crackle(1.2, 30) * np.linspace(1, 0, len(t)) * 0.7,
+               grains(30, 1.0, 300, 2000, grain=0.02) * 0.3)
+def capacitor_charge():
+    # a rising electric buzz (mains-like harmonics climbing in pitch), crackle, then the jars clunk full
+    sec = 1.6; t = t_(sec); f = 90 + 260 * (t / sec) ** 1.5
+    ph = np.cumsum(f) / SR; saw = 2 * (ph % 1) - 1
+    buzz = bp(saw, 150, 3200) * 0.5 * np.sin(np.pi * t / sec) ** 0.5
+    out = mix(buzz, crackle(sec, 50) * 0.5)
+    place(out, mix(modal(((180, 1, 30), (410, 0.5, 40)), 0.3, 2000), thump(70, 0.2, 18)) * 0.8, sec - 0.3)
+    return reverb(out, 0.9, 0.25, 3000)
+def machine_hum():
+    # a working machine: mains hum through a transformer resonance, a cooling fan, and the tick of a bearing
+    t = t_(1.5)
+    hum = sum(a * np.sin(2 * np.pi * f * t) for f, a in ((60, 0.5), (120, 0.4), (180, 0.2), (240, 0.12), (300, 0.06)))
+    hum = hum * (1 + 0.04 * np.sin(2 * np.pi * 0.7 * t))
+    fan = bp(noise(1.5), 250, 1800) * 0.18 * (1 + 0.25 * np.sin(2 * np.pi * 23 * t))
+    ticks = np.zeros(len(t))
+    for k in range(9): place(ticks, modal(((2100, 1, 250),), 0.02, 6000) * 0.05, k / 6 + rng.uniform(0, 0.01))
+    return (hum + fan + ticks) * adsr(len(t), 0.1, 0.1, 0.9, 0.3)
+
 # the per-release tables captured the old functions when they were built: point them at the redesigned ones
 _REDONE = {'small_ambient', 'small_hurt', 'small_death', 'skink_chirp', 'sprite_trill', 'petrel_call', 'thunderbird_hurt',
-           'hermit_click', 'stone_tap', 'hail', 'equip_metal'}
+           'hermit_click', 'stone_tap', 'hail', 'equip_metal', 'golem_crackle', 'golem_hurt', 'golem_death', 'golem_throw',
+           'eel_hurt', 'eel_death', 'capacitor_charge', 'machine_hum'}
 for _d in (NEW52, NEW53, NEW54, NEW55):
     for _k, _f in list(_d.items()):
         if getattr(_f, '__name__', '') in _REDONE: _d[_k] = globals()[_f.__name__]

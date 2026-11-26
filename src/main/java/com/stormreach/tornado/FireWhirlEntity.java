@@ -144,7 +144,7 @@ public class FireWhirlEntity extends Entity {
         if (age % 5 == 0) {
             double a = random.nextDouble() * Math.PI * 2, rr = random.nextDouble() * r;
             BlockPos p = BlockPos.containing(getX() + Math.cos(a) * rr, getY(), getZ() + Math.sin(a) * rr);
-            if (level.getBlockState(p).isAir() && BaseFireBlock.canBePlacedAt(level, p, net.minecraft.core.Direction.UP))
+            if (level.isLoaded(p) && level.getBlockState(p).isAir() && BaseFireBlock.canBePlacedAt(level, p, net.minecraft.core.Direction.UP))
                 level.setBlockAndUpdate(p, BaseFireBlock.getState(level, p));
         }
     }

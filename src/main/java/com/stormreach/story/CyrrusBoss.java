@@ -439,7 +439,8 @@ public class CyrrusBoss extends Monster {
     }
 
     private BlockPos surface(ServerLevel level, double x, double z) {
-        int top = level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(x), (int) Math.floor(z));
+        int top = level.hasChunk((int) Math.floor(x) >> 4, (int) Math.floor(z) >> 4)   // 6.0: never load a chunk for a strike
+                ? level.getHeight(Heightmap.Types.MOTION_BLOCKING, (int) Math.floor(x), (int) Math.floor(z)) : level.getMinY();
         return new BlockPos((int) Math.floor(x), top <= level.getMinY() ? (int) getY() : top, (int) Math.floor(z));
     }
 

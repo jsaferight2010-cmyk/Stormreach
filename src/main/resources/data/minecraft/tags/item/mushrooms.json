@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_brown_mushroom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_mushroom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_shelf_mushroom",
+   "required": false
+  }
+ ]
+}

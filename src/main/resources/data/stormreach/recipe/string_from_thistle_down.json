@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:thistle_down",
+    "stormreach:thistle_down",
+    "stormreach:thistle_down"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:string"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "eye=false": {
+      "model": "stormreach:block/stormgate_frame"
+    },
+    "eye=true": {
+      "model": "stormreach:block/stormgate_frame_eye"
+    }
+  }
+}

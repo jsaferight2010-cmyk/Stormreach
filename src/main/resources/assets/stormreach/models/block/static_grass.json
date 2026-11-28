@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "stormreach:block/static_grass_top",
+    "side": "stormreach:block/static_grass_side",
+    "bottom": "stormreach:block/skysoil"
+  }
+}

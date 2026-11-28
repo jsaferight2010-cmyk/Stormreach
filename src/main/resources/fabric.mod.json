@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "id": "stormreach",
+  "version": "${version}",
+  "name": "Stormreach",
+  "description": "Storms, tornadoes and a sky realm on a storm-swept coast. Real tornadoes rated EF0-EF5, supercells, hail, downbursts and freezing rain; weather instruments, Doppler radar and storm chasing; storm power from wind and lightning; the spreading Stormblight; the Tempest Realm in the sky; the Hollow Labyrinth; and the story of Cyrrus, the Hollow Storm.",
+  "authors": [
+    "jsaferight2010-cmyk"
+  ],
+  "license": "MIT",
+  "icon": "assets/stormreach/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.stormreach.Stormreach"
+    ],
+    "client": [
+      "com.stormreach.client.StormreachClient"
+    ],
+    "fabric-gametest": [
+      "com.stormreach.test.StormreachGameTests"
+    ],
+    "modmenu": [
+      "com.stormreach.client.compat.ModMenuIntegration"
+    ],
+    "jei_mod_plugin": [
+      "com.stormreach.client.compat.jei.StormreachJeiPlugin"
+    ]
+  },
+  "mixins": [
+    "stormreach.mixins.json",
+    {
+      "config": "stormreach.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.19.3",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*",
+    "jei": "*"
+  },
+  "contact": {
+    "homepage": "https://github.com/jsaferight2010-cmyk/stormreach",
+    "sources": "https://github.com/jsaferight2010-cmyk/stormreach",
+    "issues": "https://github.com/jsaferight2010-cmyk/stormreach/issues"
+  }
+}

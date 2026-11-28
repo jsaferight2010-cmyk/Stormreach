@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormreach:stormstone",
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormstone_bricks"
+  }
+}

@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_granite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_diorite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_andesite",
+   "required": false
+  }
+ ]
+}

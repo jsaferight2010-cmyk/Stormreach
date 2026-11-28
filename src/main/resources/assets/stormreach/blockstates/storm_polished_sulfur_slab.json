@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_polished_sulfur_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_polished_sulfur"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_polished_sulfur_slab_top"
+  }
+ }
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:cistern",
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:sprinkler"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.sprinkler.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.sprinkler.description"
+    },
+    "icon": {
+      "id": "stormreach:sprinkler"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

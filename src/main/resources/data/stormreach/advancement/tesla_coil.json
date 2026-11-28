@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "t": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:tesla_coil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "t"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tesla_coil.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tesla_coil.description"
+    },
+    "icon": {
+      "id": "stormreach:tesla_coil"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

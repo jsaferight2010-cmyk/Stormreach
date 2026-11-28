@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/template_glass_pane_side_alt",
+  "textures": {
+    "edge": {
+      "force_translucent": true,
+      "sprite": "stormreach:block/stormglass_pane_top"
+    },
+    "pane": {
+      "force_translucent": true,
+      "sprite": "stormreach:block/stormglass"
+    }
+  }
+}

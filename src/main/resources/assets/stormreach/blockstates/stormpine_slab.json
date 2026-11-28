@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormreach:block/stormpine_slab"
+    },
+    "type=double": {
+      "model": "stormreach:block/stormpine_planks"
+    },
+    "type=top": {
+      "model": "stormreach:block/stormpine_slab_top"
+    }
+  }
+}

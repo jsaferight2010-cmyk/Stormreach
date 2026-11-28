@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_obsidian",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crying_obsidian",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_end_stone",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_iron_bars",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_respawn_anchor",
+      "required": false
+    },
+    "stormreach:stormgate",
+    "stormreach:sovereign_altar",
+    "stormreach:stormgate_frame",
+    "stormreach:relic_pedestal",
+    "stormreach:storm_conduit",
+    "stormreach:hollow_altar",
+    "stormreach:labyrinth_seal",
+    "stormreach:labyrinth_keyhole"
+  ]
+}

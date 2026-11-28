@@ -1,0 +1,38 @@
+{
+  "criteria": {
+    "in_biome": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "biomes": "stormreach:stormreach_coast"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.root.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.root.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_crystal_block"
+    },
+    "frame": "task",
+    "background": "stormreach:gui/advancements/backgrounds/stormreach",
+    "show_toast": false,
+    "announce_to_chat": false
+  },
+  "requirements": [
+    [
+      "in_biome"
+    ]
+  ]
+}

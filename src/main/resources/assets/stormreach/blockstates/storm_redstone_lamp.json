@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "lit=false": {
+   "model": "stormreach:block/storm_redstone_lamp"
+  },
+  "lit=true": {
+   "model": "stormreach:block/storm_redstone_lamp_on"
+  }
+ }
+}

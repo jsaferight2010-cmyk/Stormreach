@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:salt",
+    "minecraft:sugar",
+    "minecraft:stick"
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:rock_candy"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:storm_crystal_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_storm_crystal.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_storm_crystal.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_crystal_backpack"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:backpack_netherite",
+  "rewards": {
+    "loot": [
+      "stormreach:ach/packrat"
+    ],
+    "experience": 150
+  }
+}

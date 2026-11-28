@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "#stormreach:elderstorm_logs"
+  ],
+  "result": {
+    "count": 4,
+    "id": "stormreach:elderstorm_planks"
+  }
+}

@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_acacia_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_acacia_wood",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_acacia_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_acacia_wood",
+   "required": false
+  }
+ ]
+}

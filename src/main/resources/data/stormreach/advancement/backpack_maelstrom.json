@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:maelstrom_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_maelstrom.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_maelstrom.description"
+    },
+    "icon": {
+      "id": "stormreach:maelstrom_backpack"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:backpack_aurorite",
+  "rewards": {
+    "experience": 750
+  }
+}

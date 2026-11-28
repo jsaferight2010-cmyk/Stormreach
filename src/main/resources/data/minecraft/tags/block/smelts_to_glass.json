@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_sand",
+   "required": false
+  }
+ ]
+}

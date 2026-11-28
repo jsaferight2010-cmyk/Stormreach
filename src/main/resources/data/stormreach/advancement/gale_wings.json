@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:storm_cell",
+  "criteria": {
+    "g": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:gale_wings"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.gale_wings.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.gale_wings.description"
+    },
+    "icon": {
+      "id": "stormreach:gale_wings"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "g"
+    ]
+  ]
+}

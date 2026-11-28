@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_warped_hyphae",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_warped_hyphae",
+   "required": false
+  }
+ ]
+}

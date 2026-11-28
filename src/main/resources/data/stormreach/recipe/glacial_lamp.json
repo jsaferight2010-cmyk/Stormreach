@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "I": "minecraft:packed_ice",
+    "C": "stormreach:glacial_core"
+  },
+  "pattern": [
+    " I ",
+    "ICI",
+    " I "
+  ],
+  "result": {
+    "count": 4,
+    "id": "stormreach:glacial_lamp"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "stormreach:block/nimbus_cloud"
+    }
+  }
+}

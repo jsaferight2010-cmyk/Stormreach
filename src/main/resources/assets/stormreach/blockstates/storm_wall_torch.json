@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=east": {
+   "model": "stormreach:block/storm_wall_torch"
+  },
+  "facing=north": {
+   "model": "stormreach:block/storm_wall_torch",
+   "y": 270
+  },
+  "facing=south": {
+   "model": "stormreach:block/storm_wall_torch",
+   "y": 90
+  },
+  "facing=west": {
+   "model": "stormreach:block/storm_wall_torch",
+   "y": 180
+  }
+ }
+}

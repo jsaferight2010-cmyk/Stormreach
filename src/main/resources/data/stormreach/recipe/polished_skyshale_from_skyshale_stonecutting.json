@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormreach:skyshale",
+  "result": {
+    "count": 1,
+    "id": "stormreach:polished_skyshale"
+  }
+}

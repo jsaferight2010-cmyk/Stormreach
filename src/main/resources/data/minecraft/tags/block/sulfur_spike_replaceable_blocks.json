@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_sulfur",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cinnabar",
+   "required": false
+  }
+ ]
+}

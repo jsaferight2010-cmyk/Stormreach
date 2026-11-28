@@ -1,0 +1,25 @@
+{
+ "values": [
+  "stormreach:stormscar_turf",
+  {
+   "id": "stormreach:storm_grass_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_snow",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_snow_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_coarse_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_podzol",
+   "required": false
+  }
+ ]
+}

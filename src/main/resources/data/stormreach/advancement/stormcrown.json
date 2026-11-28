@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "c": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormcrown"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormcrown.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormcrown.description"
+    },
+    "icon": {
+      "id": "stormreach:stormcrown"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ],
+  "parent": "stormreach:defeat_cyrrus"
+}

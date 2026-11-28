@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "stormreach:block/cobbled_skyshale",
+    "side": "stormreach:block/cobbled_skyshale",
+    "top": "stormreach:block/cobbled_skyshale"
+  }
+}

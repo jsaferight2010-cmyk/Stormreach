@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "stormreach:block/wind_turbine"
+    },
+    "facing=east": {
+      "model": "stormreach:block/wind_turbine",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "stormreach:block/wind_turbine",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "stormreach:block/wind_turbine",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_podzol",
+      "required": false
+    },
+    "stormreach:skysoil",
+    "stormreach:static_grass"
+  ]
+}

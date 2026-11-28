@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:cloud_seeder",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.supercell_seeder.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.supercell_seeder.description"
+    },
+    "icon": {
+      "id": "stormreach:supercell_seeder"
+    },
+    "frame": "goal",
+    "hidden": false
+  }
+}

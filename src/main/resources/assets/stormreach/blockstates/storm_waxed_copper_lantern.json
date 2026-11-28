@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "hanging=false": {
+   "model": "stormreach:block/storm_copper_lantern"
+  },
+  "hanging=true": {
+   "model": "stormreach:block/storm_copper_lantern_hanging"
+  }
+ }
+}

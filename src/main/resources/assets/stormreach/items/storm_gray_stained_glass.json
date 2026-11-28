@@ -1,0 +1,16 @@
+{
+ "model": {
+  "type": "minecraft:model",
+  "model": "stormreach:block/storm_gray_stained_glass",
+  "tints": [
+   {
+    "type": "minecraft:constant",
+    "value": -6310696
+   },
+   {
+    "type": "minecraft:constant",
+    "value": -6310696
+   }
+  ]
+ }
+}

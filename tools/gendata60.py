@@ -1,0 +1,321 @@
+"""Stormreach 6.0 (the Overhaul) data: language, models, item definitions, loot, recipes and tags for the overhaul.
+Runs after gendata12.py and before descriptions.py. Sections are added stage by stage (see NOTES.md)."""
+import json
+from gendata9 import (w, rj, ns, tag_add, item_def, gen_item, bmodel, el, shaped, adv, has, lang, L, A, D, MC)
+
+B = 'stormreach:block/'
+
+# ---------------------------------------------------------------- radar scope (stage 2)
+L('gui.stormreach.weather.inbound', 'Inbound')
+L('gui.stormreach.weather.outbound', 'Outbound')
+
+# ---------------------------------------------------------------- multiblock machines (stage 2)
+# the invisible cells of tall machines: one empty model for every state (the controller's renderer draws the machine)
+bmodel('machine_part', {'textures': {'particle': 'minecraft:block/iron_block'}, 'elements': []})
+w(f'{A}/blockstates/machine_part.json', {'variants': {'': {'model': B + 'machine_part'}}})
+L('block.stormreach.machine_part', 'Machine Part')
+L('block.stormreach.machine_part.desc', 'Part of a larger machine')
+
+# ---------------------------------------------------------------- HUD panel (goggles / TIV)
+L('hud.stormreach.goggles', 'Storm Chaser Goggles')
+L('hud.stormreach.tiv', 'TIV Dashboard')
+L('hud.stormreach.wind', 'Wind %s from %s %s')
+L('hud.stormreach.gust', 'Gusts %s')
+L('hud.stormreach.air', '%s  ·  %s')
+L('hud.stormreach.no_tornado', 'No tornado in range')
+L('hud.stormreach.tornado.at', '%s %s %s')
+L('hud.stormreach.tornado.moving', 'Moving %s at %s')
+L('hud.stormreach.tornado.peak', 'Peak winds %s')
+L('hud.stormreach.tornado.here', 'Wind here %s')
+L('hud.stormreach.tiv.speed', 'Speed %s')
+L('hud.stormreach.tiv.anchored', 'ANCHORED (spikes down)')
+L('key.stormreach.tiv_anchor', 'Drop/Raise TIV Anchors')
+L('entity.stormreach.fire_whirl', 'Fire Whirl')
+
+# ---------------------------------------------------------------- salt crystal cluster (stage 2)
+# Real halite: a cluster of cubes with stepped hopper faces on a salt crust, not crossed panes. The hitbox follows it.
+def salt_el(frm, to, tex='#f', rot=None):
+    e = el(frm, to, tex)
+    for f in e['faces'].values(): f['uv'] = [0, 0, 16, 16]
+    if rot: e['rotation'] = {'origin': [(frm[0] + to[0]) / 2, frm[1], (frm[2] + to[2]) / 2], 'axis': 'y', 'angle': rot}
+    return e
+salt_cluster = [
+    salt_el([1.5, 0, 1.5], [14.5, 1, 14.5], '#c'),
+    salt_el([3, 1, 4], [10, 8, 11], rot=22.5),
+    salt_el([8.5, 1, 1.5], [13.5, 6, 6.5], rot=-22.5),
+    salt_el([5, 1, 8], [9, 12, 12]),
+    salt_el([10.5, 1, 9], [14, 4.5, 12.5], rot=22.5),
+    salt_el([2, 1, 10.5], [5, 4, 13.5]),
+    salt_el([5, 8, 5.5], [8, 11, 8.5], rot=22.5),
+]
+bmodel('salt_crystal', {'parent': 'minecraft:block/block', 'ambientocclusion': False,
+                        'textures': {'particle': B + 'salt_crystal_facet', 'f': B + 'salt_crystal_facet', 'c': B + 'salt_crust'}, 'elements': salt_cluster})
+w(f'{A}/models/item/salt_crystal.json', {'parent': 'stormreach:block/salt_crystal'})
+
+# ---------------------------------------------------------------- cistern that shows its water (stage 2)
+# An open stone tank: thick walls, an iron grate over the top you can see through, the water surface at its real
+# level, and a sight-glass slot in each wall whose water column rises and falls with it.
+def uvbox(frm, to, tex, faces='nsewud'):
+    e = el(frm, to, tex, faces)
+    return e
+for lv in range(5):
+    for storm in (False, True):
+        els = [el([0, 0, 0], [16, 2, 16], '#wall')]                                            # floor
+        for (a, b, horiz) in ((0, 2, True), (14, 16, True)):                                     # north/south walls with a slot
+            z0, z1 = a, b
+            els += [el([0, 2, z0], [7, 16, z1], '#wall'), el([9, 2, z0], [16, 16, z1], '#wall'),
+                    el([7, 2, z0], [9, 3, z1], '#wall'), el([7, 15, z0], [9, 16, z1], '#wall')]
+            gz = z0 + 0.5 if a == 0 else z1 - 0.5
+            els.append(el([7, 3, min(gz, gz) - 0.01], [9, 15, max(gz, gz) + 0.01], '#glass', faces='ns'))
+            if lv: els.append(el([7.2, 3, z0 + 0.6], [8.8, 3 + lv * 3, z1 - 0.6], '#water', faces='nsu'))
+        for (a, b) in ((0, 2), (14, 16)):                                                        # east/west walls with a slot
+            els += [el([a, 2, 2], [b, 16, 7], '#wall'), el([a, 2, 9], [b, 16, 14], '#wall'),
+                    el([a, 2, 7], [b, 3, 9], '#wall'), el([a, 15, 7], [b, 16, 9], '#wall')]
+            gx = a + 0.5 if a == 0 else b - 0.5
+            els.append(el([gx - 0.01, 3, 7], [gx + 0.01, 15, 9], '#glass', faces='ew'))
+            if lv: els.append(el([a + 0.6, 3, 7.2], [b - 0.6, 3 + lv * 3, 8.8], '#water', faces='ewu'))
+        if lv: els.append(el([2, 2, 2], [14, 2 + lv * 3, 14], '#water', faces='u'))           # the water surface
+        for x in (4, 7.5, 11):                                                                   # iron grate bars
+            els.append(el([x, 15.3, 2], [x + 0.8, 16, 14], '#iron'))
+        els.append(el([2, 15.2, 7.5], [14, 15.8, 8.5], '#iron'))
+        bmodel(f"cistern_{lv}{'_storm' if storm else ''}", {'parent': 'minecraft:block/block',
+               'textures': {'particle': B + 'cistern', 'wall': B + 'cistern', 'glass': {'force_translucent': True, 'sprite': B + 'sight_glass'}, 'iron': B + 'iron_grate',
+                            'water': B + ('tank_stormwater' if storm else 'tank_water')}, 'elements': els})
+w(f'{A}/blockstates/cistern.json', {'variants': {f'level={lv},storm={s}': {'model': B + f"cistern_{lv}{'_storm' if s == 'true' else ''}"}
+                                                 for lv in range(5) for s in ('false', 'true')}})
+w(f'{A}/models/item/cistern.json', {'parent': 'stormreach:block/cistern_3'})
+
+# ---------------------------------------------------------------- 3D held items: umbrella and Stormkite (stage 2)
+def cell(i):
+    """uv of the centre of swatch i on a 16x16 parts palette (4x4 cells)."""
+    x0, y0 = (i % 4) * 4, (i // 4) * 4
+    return [x0 + 1, y0 + 1, x0 + 3, y0 + 3]
+def pel(frm, to, i, faces='nsewud', tex='#p'):
+    e = el(frm, to, tex, faces)
+    for f in e['faces'].values(): f['uv'] = cell(i)
+    return e
+
+# Umbrella, open: steel shaft, wooden J handle, an eight-gore canopy (stepped dome), black rib tips, a ferrule on top.
+um = [pel([7.5, -5, 7.5], [8.5, 27, 8.5], 2),                                   # shaft
+      pel([7.25, -9, 7.25], [8.75, -4.5, 8.75], 3), pel([7.25, -10.5, 7.25], [8.75, -9, 11.5], 3),   # J handle
+      pel([7.25, -9, 10], [8.75, -7.5, 11.5], 3)]
+for (lo, hi, inset) in ((21, 22.2, -5), (22.2, 23.6, -3), (23.6, 25, 0), (25, 26.2, 3), (26.2, 27, 5.5)):
+    e = el([inset, lo, inset], [16 - inset, hi, 16 - inset], '#c')
+    for k, f in e['faces'].items():
+        f['uv'] = [0, 0, 16, 16] if k in ('up', 'down') else [0, 6, 16, 10]
+    um.append(e)
+for (x, z) in ((-5, -5), (20.5, -5), (-5, 20.5), (20.5, 20.5), (7.5, -6), (7.5, 21), (-6, 7.5), (21, 7.5)):
+    um.append(pel([x, 20.4, z], [x + 0.6, 21, z + 0.6], 4))                        # rib tips
+um.append(pel([7.6, 27, 7.6], [8.4, 29, 8.4], 4))                                    # ferrule
+w(f'{A}/models/item/umbrella_open.json', {'textures': {'particle': 'stormreach:item/umbrella', 'p': 'stormreach:item/umbrella_parts', 'c': 'stormreach:item/umbrella_canopy'},
+    'elements': um, 'display': {
+        'thirdperson_righthand': {'rotation': [0, 0, 0], 'translation': [0, 12, 1], 'scale': [0.8, 0.8, 0.8]},
+        'thirdperson_lefthand': {'rotation': [0, 0, 0], 'translation': [0, 12, 1], 'scale': [0.8, 0.8, 0.8]},
+        'firstperson_righthand': {'rotation': [0, -90, 8], 'translation': [3, 4, 0], 'scale': [0.55, 0.55, 0.55]},
+        'firstperson_lefthand': {'rotation': [0, 90, -8], 'translation': [3, 4, 0], 'scale': [0.55, 0.55, 0.55]},
+        'head': {'rotation': [0, 0, 0], 'translation': [0, 12, 0], 'scale': [0.7, 0.7, 0.7]}}})
+
+# Stormkite: a diamond kite held upright by its spine, sail facing forward, tail of bows hanging below.
+kite = []
+y = 4.0
+while y < 28:
+    w_ = 18 * (28 - y) / 8 if y >= 20 else 18 * (y - 4) / 16
+    w_ = max(1.0, w_)
+    band = 1 if 16 <= y < 18 else (2 if 10 <= y < 12 else (0 if (int(y) // 2) % 2 == 0 else 7))
+    kite.append(pel([8 - w_ / 2, y, 7.75], [8 + w_ / 2, y + 2, 8.25], band))
+    y += 2
+kite += [pel([7.5, 3, 8.25], [8.5, 29, 8.75], 3), pel([-1.5, 19.5, 8.25], [17.5, 20.5, 8.75], 3)]     # spars
+for k in range(5):                                                                                     # tail bows
+    yy = 1.5 - k * 3; xx = 8 + (0.8 if k % 2 else -0.8)
+    kite += [pel([7.9, yy, 7.9], [8.1, yy + 3, 8.1], 6), pel([xx - 1.5, yy - 0.5, 7.7], [xx + 1.5, yy + 0.5, 8.3], 4 if k % 2 == 0 else 5)]
+w(f'{A}/models/item/stormkite_held.json', {'textures': {'particle': 'stormreach:item/stormkite', 'p': 'stormreach:item/stormkite_parts'},
+    'elements': kite, 'display': {
+        'thirdperson_righthand': {'rotation': [0, 90, 0], 'translation': [0, 9, 1], 'scale': [0.75, 0.75, 0.75]},
+        'thirdperson_lefthand': {'rotation': [0, -90, 0], 'translation': [0, 9, 1], 'scale': [0.75, 0.75, 0.75]},
+        'firstperson_righthand': {'rotation': [0, -75, 5], 'translation': [2, 5, 0], 'scale': [0.5, 0.5, 0.5]},
+        'firstperson_lefthand': {'rotation': [0, 75, -5], 'translation': [2, 5, 0], 'scale': [0.5, 0.5, 0.5]}}})
+
+def held_or_icon(name, held_model):
+    """Flat painted icon in the inventory, on the ground and in frames; the 3D model in hand."""
+    w(f'{A}/items/{name}.json', {'model': {'type': 'minecraft:select', 'property': 'minecraft:display_context',
+        'cases': [{'when': ['gui', 'ground', 'fixed', 'on_shelf'], 'model': {'type': 'minecraft:model', 'model': f'stormreach:item/{name}'}}],
+        'fallback': {'type': 'minecraft:model', 'model': f'stormreach:item/{held_model}'}}})
+held_or_icon('umbrella', 'umbrella_open')
+held_or_icon('stormkite', 'stormkite_held')
+
+# machine items show an icon of the finished machine (rendered from its real model)
+for n in ('tornado_radar', 'wind_turbine', 'tornado_siren', 'weather_station'):
+    gen_item(n)
+
+# Portable Storm Radar in hand: a rugged field unit (rubber bumpers, live PPI screen that glows, keypad, antenna)
+pr = [pel([3, 0, 7], [13, 14, 9.5], 0), pel([2.5, -0.5, 6.6], [13.5, 1.5, 9.9], 1), pel([2.5, 12.5, 6.6], [13.5, 14.5, 9.9], 1),
+      pel([11, 14.5, 7.8], [12, 22, 8.8], 5), pel([10.8, 22, 7.6], [12.2, 23, 9.0], 6),
+      pel([4, 1.5, 6.9], [6, 3, 7.0], 4), pel([7, 1.5, 6.9], [9, 3, 7.0], 5), pel([10, 1.5, 6.9], [12, 3, 7.0], 5)]
+screen = el([4, 4, 6.8], [12, 12.5, 7.0], '#s', faces='n'); screen['faces']['north']['uv'] = [0, 0, 16, 16]; screen['light_emission'] = 12
+pr.append(screen)
+w(f'{A}/models/item/storm_radar_held.json', {'textures': {'particle': 'stormreach:item/storm_radar', 'p': 'stormreach:item/radar_parts', 's': 'stormreach:item/storm_radar_screen'},
+    'elements': pr, 'display': {
+        'thirdperson_righthand': {'rotation': [-30, 180, 0], 'translation': [0, 3, 2], 'scale': [0.55, 0.55, 0.55]},
+        'thirdperson_lefthand': {'rotation': [-30, 180, 0], 'translation': [0, 3, 2], 'scale': [0.55, 0.55, 0.55]},
+        'firstperson_righthand': {'rotation': [-25, 160, 0], 'translation': [-2, 3, -2], 'scale': [0.6, 0.6, 0.6]},
+        'firstperson_lefthand': {'rotation': [-25, 200, 0], 'translation': [-2, 3, -2], 'scale': [0.6, 0.6, 0.6]}}})
+held_or_icon('storm_radar', 'storm_radar_held')
+
+# ---------------------------------------------------------------- puddles and hail (stage 3)
+gen_item('puddle')
+for n in ('hail_small', 'hail_medium', 'hail_large'):
+    w(f'{A}/particles/{n}.json', {'textures': ['stormreach:hail_stone_0', 'stormreach:hail_stone_1', 'stormreach:hail_stone_2']})
+
+# Hail on the ground: a granular crust that thickens with each layer and a scatter of loose stones on top (bigger
+# lumps when golf-ball hail or larger fell), three random layouts per state so a field of hail never tiles.
+import random as _r
+def hail_model(layers, big, variant):
+    rnd = _r.Random(layers * 31 + big * 7 + variant * 101)
+    h = 2 * layers
+    els = [el([0, 0, 0], [16, max(0.6, h - 1.2), 16], '#c')]
+    for e in els:
+        for f in e['faces'].values(): f['uv'] = [0, 0, 16, 16]
+    n = 10 + layers * 4 if not big else 7 + layers * 3
+    for _ in range(n):
+        size = rnd.choice((1, 1, 1.5, 2)) if not big else rnd.choice((2, 2.5, 3, 3.5))
+        x, z = rnd.uniform(0.2, 15.8 - size), rnd.uniform(0.2, 15.8 - size)
+        y0 = max(0, h - 1.2 - size * 0.35)
+        e = el([round(x, 2), round(y0, 2), round(z, 2)], [round(x + size, 2), round(y0 + size * 0.85, 2), round(z + size, 2)], '#p')
+        for f in e['faces'].values(): f['uv'] = [0, 0, 16, 16]
+        if rnd.random() < 0.5: e['rotation'] = {'origin': [x + size / 2, y0, z + size / 2], 'axis': 'y', 'angle': rnd.choice((-22.5, 22.5))}
+        els.append(e)
+    name = f'hail_layer{"_big" if big else ""}_{layers}_v{variant}'
+    bmodel(name, {'parent': 'minecraft:block/block', 'ambientocclusion': False,
+                  'textures': {'particle': B + 'hail_crust', 'c': B + 'hail_crust', 'p': B + 'hail_pellet'}, 'elements': els})
+    return B + name
+variants = {}
+for b in (False, True):
+    for l in range(1, 9):
+        lv = min(l, 4)
+        variants[f'big={str(b).lower()},layers={l}'] = [{'model': hail_model(lv, b, v)} for v in range(3)]
+w(f'{A}/blockstates/hail_layer.json', {'variants': variants})
+
+# ---------------------------------------------------------------- units everywhere + barometer and wind vane dials (stage 5)
+# readings are formatted on the client in the player's units, so the strings carry no units of their own
+L('gui.stormreach.weather.wind_line', 'Wind: %s, gusting %s, from the %s')
+L('gui.stormreach.weather.air_line', 'Air: %s, humidity %s%%')
+L('gui.stormreach.weather.contact_short', '%s, %s, %s (estimated)')
+L('gui.stormreach.weather.wind_avg', 'Average wind: %s')
+L('gui.stormreach.weather.wind_gust', 'Gusts: %s')
+L('gui.stormreach.weather.temperature', 'Temperature: %s')
+L('gui.stormreach.weather.dew_point', 'Dew point: %s')
+L('gui.stormreach.weather.pressure', 'Pressure: %s')
+L('gui.stormreach.weather.range', 'Range %s')
+L('instrument.stormreach.anemometer', 'Wind: %s sustained, gusting %s — %s')
+L('instrument.stormreach.barometer', 'Pressure: %s')
+L('instrument.stormreach.thermometer', 'Temperature: %s — dew point %s, humidity %s%%')
+L('instrument.stormreach.station.wind', 'Wind: %s gusting %s, from the %s')
+L('instrument.stormreach.station.air', 'Air: %s, %s%% humidity, dew point %s, %s')
+L('instrument.stormreach.radar.contact', 'Rotation %s, %s away: gate-to-gate shear %s, moving %s toward the %s')
+L('instrument.stormreach.radar.detail', ' — estimated %s, about %s wide, %s %s')
+L('event.stormreach.tornado.warning', 'TORNADO WARNING: a tornado is on the ground %s of you, %s away. Take shelter!')
+L('event.stormreach.tornado.survey', 'Damage survey: rated %s. Highest wind supported by damage %s (peak gust %s). %s blocks damaged along a %s path, up to %s wide. Appearance: %s.')
+L('block.stormreach.rain_gauge.reading', 'Rain gauge: %s')
+L('block.stormreach.tornado_probe.reading', 'Probe reading: peak wind %s (%s), core passed within %s, on day %s')
+L('item.stormreach.chasers_logbook.field', 'Vehicle intercepts: %s · probe readings: %s (peak %s) · balloons launched: %s')
+L('chase.stormreach.dash.clear', 'TIV %s · no tornado on radar · wind %s from %s · %s')
+L('chase.stormreach.dash.tornado', '◉ %s tornado · %s %s · moving %s at %s · peak %s · wind here %s %s')
+L('chase.stormreach.sounding.surface', 'Surface: %s, dew point %s, humidity %s%%, %s')
+L('chase.stormreach.sounding.aloft', 'Burst at y=%s: %s · cloud base ~%s · freezing level ~%s')
+L('radio.stormreach.tornado.detail', 'A %s tornado is on the ground %s to the %s, moving %s at %s.')
+L('radio.stormreach.conditions', 'Wind %s gusting %s from the %s · %s · storm risk: %s')
+L('item.stormreach.stormchaser_goggles.clear', 'Wind %s from the %s · %s')
+L('item.stormreach.stormchaser_goggles.tornado', '◉ %s tornado · %s %s · peak %s')
+L('block.stormreach.wind_turbine.reading', 'Wind %s, gusting %s · output %s/15')
+L('gui.stormreach.weather.tab.barometer', 'Dial')
+L('gui.stormreach.weather.tab.vane', 'Vane')
+for k, v in {'stormy': 'Stormy', 'rain': 'Rain', 'change': 'Change', 'fair': 'Fair', 'very_dry': 'Very Dry'}.items():
+    L(f'gui.stormreach.weather.baro.{k}', v)
+L('gui.stormreach.weather.baro.trend.rising', 'Rising: weather improving')
+L('gui.stormreach.weather.baro.trend.falling', 'Falling: weather worsening')
+L('gui.stormreach.weather.baro.trend.steady', 'Steady')
+L('gui.stormreach.weather.baro.outlook.stormy', 'Low pressure. Storms likely; a fast fall means one is close.')
+L('gui.stormreach.weather.baro.outlook.rain', 'Below normal. Rain or showers are likely.')
+L('gui.stormreach.weather.baro.outlook.change', 'Near normal. The weather could go either way.')
+L('gui.stormreach.weather.baro.outlook.fair', 'Above normal. Settled, fair weather.')
+L('gui.stormreach.weather.baro.outlook.very_dry', 'High pressure. Clear and dry.')
+L('gui.stormreach.weather.baro.hint', 'Brass hand: reading when opened')
+L('gui.stormreach.weather.vane.hint', 'The arrow points into the wind')
+
+# ---------------------------------------------------------------- Creative Wind Generator (stage 5)
+bmodel('wind_generator', {'parent': 'minecraft:block/cube', 'textures': {
+    'north': B + 'wind_generator_front', 'south': B + 'wind_generator_back', 'east': B + 'wind_generator_side',
+    'west': B + 'wind_generator_side', 'up': B + 'wind_generator_top', 'down': B + 'wind_generator_top',
+    'particle': B + 'wind_generator_side'}})
+w(f'{A}/blockstates/wind_generator.json', {'variants': {f'facing={f}': ({'model': B + 'wind_generator', 'y': y} if y else {'model': B + 'wind_generator'})
+    for f, y in (('north', 0), ('east', 90), ('south', 180), ('west', 270))}})
+item_def('wind_generator', 'block/wind_generator')
+L('block.stormreach.wind_generator', 'Creative Wind Generator')
+L('block.stormreach.wind_generator.creative_only', 'Only a player in Creative can change this generator')
+L('gui.stormreach.wind_generator.speed', 'Wind: %s (%s)')
+L('gui.stormreach.wind_generator.breeze', 'breeze')
+L('gui.stormreach.wind_generator.gale', 'gale')
+L('gui.stormreach.wind_generator.reach', 'Reach: %s')
+L('gui.stormreach.wind_generator.gusts', 'Gustiness: %s%%')
+L('gui.stormreach.wind_generator.on', 'Running')
+L('gui.stormreach.wind_generator.off', 'Stopped')
+L('gui.stormreach.wind_generator.damage_on', 'Block damage: On')
+L('gui.stormreach.wind_generator.damage_off', 'Block damage: Off')
+
+# ---------------------------------------------------------------- overcharged Stormheart (stage 5)
+L('message.stormreach.heart_overcharged', 'Overcharged: the Stormblight has spread %s blocks out (%s unloaded chunks waiting)')
+L('message.stormreach.heart_unpowered', 'Starved of power at %s blocks out (%s unloaded chunks waiting). Feed it storm power to keep spreading.')
+L('jei.stormreach.power.stormheart', 'A fully grown, awake Stormheart touching a power network draws 400 SU a second and keeps spreading the Stormblight with no limit.')
+L('jei.stormreach.power.wind_generator', 'Creative only: blows wind at a set speed. Turbines in its wind make power from it like any other wind.')
+L('jei.stormreach.power.turbine', 'Makes 6 SU a tick per level of wind, up to 90 in a gale. Needs a clear column 16 blocks tall.')
+
+# ---------------------------------------------------------------- Shock Eel shock (stage 6)
+w(f'{D}/damage_type/shock.json', {'effects': 'hurt', 'exhaustion': 0.1, 'message_id': 'stormreach.shock', 'scaling': 'when_caused_by_living_non_player'})
+L('death.attack.stormreach.shock', '%1$s was electrocuted')
+L('death.attack.stormreach.shock.player', '%1$s was electrocuted by %2$s')
+
+# ---------------------------------------------------------------- gear (stage 6)
+L('gui.stormreach.guide.kind.brewing', 'Brewing Stand')
+L('tooltip.stormreach.storm_surge', 'Storm Surge: in rain +8% damage and +15% mining speed; in a thunderstorm +15% and +30%.')
+
+# ---------------------------------------------------------------- structures: cinematic, Tempest Eye reward (stage 7)
+L('cinematic.stormreach.skip', 'Press %s to skip')
+L('config.stormreach.server_note', 'On a server, its own stormreach.properties decides everything but the visual settings.')
+L('entity.stormreach.tempest_eye_reward', 'Tempest Eye')
+L('entity.stormreach.tempest_eye_reward.taken', 'You take the Tempest Eye. The storm\'s gaze is yours.')
+L('block.stormreach.sovereign_altar.eye_waits', 'The Tempest Eye hangs over the Sovereign Altar. Use it to take it.')
+# the Eye is no longer the Sovereign's drop (it appears over the altar instead, so it can't be left in the sky arena)
+w(f'{D}/loot_table/entities/tempest_sovereign.json', {'type': 'minecraft:entity', 'pools': [], 'random_sequence': 'stormreach:entities/tempest_sovereign'})
+
+print('gendata60: overhaul data written')
+
+# ---------------------------------------------------------------- stage 10: signs of the storm
+from gendata8 import self_drop
+WG = {'particle': B + 'weatherglass_tube', 'cap': B + 'weatherglass_cap', 'tube': {'force_translucent': True, 'sprite': B + 'weatherglass_tube'}}
+for n in range(4):
+    bmodel(f'weatherglass_{n}', {'parent': 'minecraft:block/block', 'ambientocclusion': False,
+        'textures': {**WG, 'fluid': {'force_translucent': True, 'sprite': B + f'weatherglass_fluid_{n}'}},
+        'elements': [el([4.5, 0, 4.5], [11.5, 2, 11.5], '#cap'), el([5, 12, 5], [11, 14, 11], '#cap'),
+                     el([5.5, 2, 5.5], [10.5, 12, 10.5], '#fluid'), el([5, 2, 5], [11, 12, 11], '#tube', 'nsew')]})
+w(f'{A}/blockstates/weatherglass.json', {'variants': {f'reading={r}': {'model': B + f'weatherglass_{3 if r >= 15 else 2 if r >= 5 else 1 if r >= 1 else 0}'} for r in range(16)}})
+gen_item('weatherglass')
+self_drop('weatherglass')
+shaped('weatherglass', [' C ', 'GSG', ' C '], {'C': 'minecraft:copper_ingot', 'G': 'minecraft:glass_pane', 'S': 'salt'}, 'weatherglass')
+L('block.stormreach.weatherglass', 'Weatherglass')
+for k, v in {'settled': 'The glass is clear: settled weather.', 'rain_coming': 'A few crystals: rain is on its way.',
+             'rain_soon': 'Crystals climb the glass: rain within minutes.', 'raining': 'Cloudy crystals: rain.',
+             'thunder_near': 'Feathers fill the glass: thunder is close.', 'thunderstorm': 'The glass is full of crystals: a thunderstorm.'}.items():
+    L(f'block.stormreach.weatherglass.{k}', v)
+
+bmodel('glaze', {'parent': 'minecraft:block/thin_block', 'textures': {'particle': B + 'glaze', 'all': {'force_translucent': True, 'sprite': B + 'glaze'}},
+                 'elements': [el([0, 0, 0], [16, 1, 16], '#all', 'nsewud')]})
+w(f'{A}/blockstates/glaze.json', {'variants': {'': {'model': B + 'glaze'}}})
+L('block.stormreach.glaze', 'Glaze')
+L('message.stormreach.elmos_fire.warn', "Your %s glows with St. Elmo's fire! Get under cover, get lower or put it away.")
+
+METAL = ['minecraft:' + m + '_' + t for m in ('iron', 'golden', 'copper', 'netherite') for t in ('sword', 'spear', 'axe', 'pickaxe', 'shovel', 'hoe')]
+METAL += ['minecraft:trident', 'minecraft:mace'] + ['minecraft:' + w + 'lightning_rod' for w in ('', 'exposed_', 'weathered_', 'oxidized_', 'waxed_', 'waxed_exposed_', 'waxed_weathered_', 'waxed_oxidized_')]
+METAL += [f'stormreach:voltite_{t}' for t in ('sword', 'axe', 'pickaxe', 'shovel', 'hoe')]
+tag_add(f'{D}/tags/item/conducts_lightning.json', METAL)
+
+with open(f'{A}/lang/en_us.json', 'w') as f: json.dump(lang, f, indent=2, ensure_ascii=False); f.write('\n')

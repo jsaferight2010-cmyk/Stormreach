@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_cinnabar_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_cinnabar"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_cinnabar_slab_top"
+  }
+ }
+}

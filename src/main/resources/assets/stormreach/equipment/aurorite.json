@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormreach:aurorite"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormreach:aurorite"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "stormreach:aurorite"
+      }
+    ]
+  }
+}

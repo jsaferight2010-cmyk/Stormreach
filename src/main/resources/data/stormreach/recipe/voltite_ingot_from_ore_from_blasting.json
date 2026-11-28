@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "ingredient": "stormreach:voltite_ore",
+  "result": {
+    "id": "stormreach:voltite_ingot"
+  }
+}

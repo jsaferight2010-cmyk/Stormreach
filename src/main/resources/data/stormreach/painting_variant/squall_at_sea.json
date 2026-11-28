@@ -1,0 +1,13 @@
+{
+  "asset_id": "stormreach:squall_at_sea",
+  "author": {
+    "color": "gray",
+    "translate": "painting.stormreach.squall_at_sea.author"
+  },
+  "height": 2,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.stormreach.squall_at_sea.title"
+  },
+  "width": 4
+}

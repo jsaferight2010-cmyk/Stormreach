@@ -1,0 +1,37 @@
+{
+  "criteria": {
+    "l": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "stormreach:hollow_shrine"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.hollow_shrine.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.hollow_shrine.description"
+    },
+    "icon": {
+      "id": "stormreach:hollow_altar"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "l"
+    ]
+  ],
+  "parent": "stormreach:stranger_seen"
+}

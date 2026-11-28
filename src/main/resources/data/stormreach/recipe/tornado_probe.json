@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": "stormreach:anemometer",
+    "O": "minecraft:orange_dye",
+    "R": "minecraft:redstone",
+    "B": "minecraft:iron_block"
+  },
+  "pattern": [
+    " A ",
+    "ORO",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tornado_probe"
+  }
+}

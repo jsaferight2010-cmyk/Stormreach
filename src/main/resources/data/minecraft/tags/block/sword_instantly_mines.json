@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_bamboo",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bamboo_sapling",
+   "required": false
+  }
+ ]
+}

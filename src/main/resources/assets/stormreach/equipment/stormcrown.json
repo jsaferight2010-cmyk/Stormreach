@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormreach:stormcrown"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormreach:stormcrown"
+      }
+    ]
+  }
+}

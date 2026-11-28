@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": "stormreach:stormglass",
+    "S": "stormreach:storm_shard"
+  },
+  "pattern": [
+    " G ",
+    "GSG",
+    " G "
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:storm_lantern"
+  }
+}

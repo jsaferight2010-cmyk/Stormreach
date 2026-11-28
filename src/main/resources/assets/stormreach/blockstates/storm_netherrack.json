@@ -1,0 +1,78 @@
+{
+ "variants": {
+  "": [
+   {
+    "model": "stormreach:block/storm_netherrack"
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 90
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 180
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 270
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "y": 90
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 90,
+    "y": 90
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 180,
+    "y": 90
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 270,
+    "y": 90
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 90,
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 180,
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 270,
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "y": 270
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 90,
+    "y": 270
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 180,
+    "y": 270
+   },
+   {
+    "model": "stormreach:block/storm_netherrack",
+    "x": 270,
+    "y": 270
+   }
+  ]
+ }
+}

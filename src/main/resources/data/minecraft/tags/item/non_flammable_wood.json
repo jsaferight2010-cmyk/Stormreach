@@ -1,0 +1,92 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_warped_hyphae",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_warped_hyphae",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_hyphae",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_crimson_hyphae",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_planks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_planks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_slab",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_slab",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_pressure_plate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_pressure_plate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_fence",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_fence",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_trapdoor",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_trapdoor",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_fence_gate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_fence_gate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_button",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_button",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_door",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_door",
+   "required": false
+  }
+ ]
+}

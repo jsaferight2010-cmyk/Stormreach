@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.hide_locker.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.hide_locker.description"
+    },
+    "icon": {
+      "id": "stormreach:rusted_locker"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:enter_labyrinth"
+}

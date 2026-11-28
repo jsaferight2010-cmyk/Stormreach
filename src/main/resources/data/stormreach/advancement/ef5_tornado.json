@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.ef5_tornado.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.ef5_tornado.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_spawner_large_wedge"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:violent_tornado",
+  "rewards": {
+    "loot": [
+      "stormreach:ach/ef5"
+    ],
+    "experience": 500
+  }
+}

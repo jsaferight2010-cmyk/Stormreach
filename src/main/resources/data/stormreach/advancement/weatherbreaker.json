@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "w": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:weatherbreaker"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.weatherbreaker.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.weatherbreaker.description"
+    },
+    "icon": {
+      "id": "stormreach:weatherbreaker"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "w"
+    ]
+  ],
+  "parent": "stormreach:defeat_cyrrus"
+}

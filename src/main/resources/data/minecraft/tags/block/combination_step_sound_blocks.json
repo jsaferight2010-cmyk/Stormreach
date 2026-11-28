@@ -1,0 +1,32 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_moss_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pale_moss_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_snow",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_sprouts",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_resin_clump",
+   "required": false
+  }
+ ]
+}

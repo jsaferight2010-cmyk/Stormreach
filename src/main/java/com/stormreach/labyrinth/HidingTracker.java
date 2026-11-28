@@ -1,0 +1,164 @@
+package com.stormreach.labyrinth;
+
+import com.stormreach.registry.ModEffects;
+import com.stormreach.registry.ModSounds;
+import com.stormreach.sim.HidingRules;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
+
+/** Who is hiding in which locker, and whether they've given themselves away. Server-side only. */
+public final class HidingTracker {
+    /** 6.0: forget everything from the world that just closed (a single-player session can open another). */
+    public static void resetForNewWorld() {
+        HIDING.clear();
+    }
+
+    public record Hide(BlockPos locker, Direction facing, Vec3 spot, long sinceTick, boolean[] moved, LockerSeat seat) {}
+
+    private static final Map<UUID, Hide> HIDING = new HashMap<>();
+    /** Last game tick a guardian could see each player. */
+    static final Map<UUID, Long> LAST_SEEN = new HashMap<>();
+
+    private HidingTracker() {}
+
+    public static boolean isHidden(ServerPlayer p) {
+        return HIDING.containsKey(p.getUUID());
+    }
+
+    public static Hide hide(ServerPlayer p) {
+        return HIDING.get(p.getUUID());
+    }
+
+    /** Someone else is already in this locker? */
+    public static boolean occupied(BlockPos lower) {
+        for (Hide h : HIDING.values()) if (h.locker().equals(lower)) return true;
+        return false;
+    }
+
+    public static void enter(ServerPlayer p, BlockPos lower, Direction facing) {
+        if (occupied(lower)) {
+            p.sendOverlayMessage(Component.translatable("block.stormreach.rusted_locker.occupied").withStyle(ChatFormatting.GRAY));
+            return;
+        }
+        // sit on an invisible seat in the middle of the locker, facing out through the grate: riding holds you still
+        // without teleporting you every tick, and the client glides the camera in (LockerClient/CameraMixin)
+        Vec3 spot = Vec3.atBottomCenterOf(lower);
+        if (p.isPassenger()) p.stopRiding();
+        LockerSeat seat = LabyrinthRegistry.LOCKER_SEAT.create(p.level(), net.minecraft.world.entity.EntitySpawnReason.TRIGGERED);
+        if (seat == null) return;
+        seat.setPos(spot.x, spot.y - 0.2, spot.z);   // the seat is 0.2 tall and carries you on its top: feet on the locker floor
+        seat.setYRot(facing.toYRot());
+        p.level().addFreshEntity(seat);
+        p.startRiding(seat, true, true);
+        seat.positionRider(p);
+        p.setYRot(facing.toYRot());
+        p.setYHeadRot(facing.toYRot());
+        p.setDeltaMovement(Vec3.ZERO);
+        p.setShiftKeyDown(false);
+        HIDING.put(p.getUUID(), new Hide(lower, facing, spot, p.level().getGameTime(), new boolean[]{false}, seat));
+        // Hidden: the Keeper can't see you. Invisible (no particles, no icon): other players don't see you standing in it.
+        p.addEffect(new MobEffectInstance(ModEffects.HIDDEN, 20 * 60 * 60, 0, true, false, true));
+        p.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 20 * 60 * 60, 0, true, false, false));
+        LockerNet.send(p, true, lower, facing.get2DDataValue());
+        p.level().playSound(null, lower, com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_CLOSE, SoundSource.BLOCKS, 0.6f, 0.7f);
+        p.sendOverlayMessage(Component.translatable("block.stormreach.rusted_locker.hidden").withStyle(ChatFormatting.DARK_AQUA));
+        com.stormreach.progress.StormAdvancements.award(p, "hide_locker");
+    }
+
+    /** Takes off only the effects the locker gave (so a real Invisibility potion is left alone). */
+    private static void clearEffects(ServerPlayer p) {
+        p.removeEffect(ModEffects.HIDDEN);
+        MobEffectInstance inv = p.getEffect(net.minecraft.world.effect.MobEffects.INVISIBILITY);
+        if (inv != null && inv.isAmbient() && !inv.isVisible() && !inv.showIcon()) p.removeEffect(net.minecraft.world.effect.MobEffects.INVISIBILITY);
+    }
+
+    public static void leave(ServerPlayer p, boolean stepOut) {
+        Hide h = HIDING.remove(p.getUUID());
+        clearEffects(p);
+        if (h != null) { if (p.getVehicle() == h.seat()) p.stopRiding(); h.seat().discard(); }
+        LockerNet.send(p, false, h == null ? p.blockPosition() : h.locker(), 0);
+        if (h != null && stepOut) {
+            Vec3 out = Vec3.atBottomCenterOf(h.locker().relative(h.facing()));
+            p.teleportTo(out.x, out.y, out.z);
+            p.level().playSound(null, h.locker(), com.stormreach.registry.ModSfx.BLOCK_METAL_DOOR_OPEN, SoundSource.BLOCKS, 0.6f, 0.7f);
+        }
+    }
+
+    /** Logging out while hiding: forget the hide and remove the seat, so nobody comes back stuck in a locker. */
+    public static void onDisconnect(ServerPlayer p) {
+        Hide h = HIDING.remove(p.getUUID());
+        if (h != null) { clearEffects(p); h.seat().discard(); }
+    }
+
+    /** A player who logged out while hiding comes back with the locker's effects still on: take them off. */
+    public static void onJoin(ServerPlayer p) {
+        if (!isHidden(p) && p.hasEffect(ModEffects.HIDDEN)) clearEffects(p);
+    }
+
+    public static void discovered(ServerPlayer p) {
+        leave(p, false);
+        p.sendSystemMessage(Component.translatable("block.stormreach.rusted_locker.found").withStyle(ChatFormatting.DARK_RED));
+    }
+
+    /** Called every tick for each level. */
+    public static void tick(ServerLevel level) {
+        for (Iterator<Map.Entry<UUID, Hide>> it = HIDING.entrySet().iterator(); it.hasNext(); ) {
+            Map.Entry<UUID, Hide> e = it.next();
+            if (!(level.getEntity(e.getKey()) instanceof ServerPlayer p)) continue;
+            Hide h = e.getValue();
+            if (!level.getBlockState(h.locker()).is(LabyrinthRegistry.LOCKER) || p.isDeadOrDying() || p.isSpectator()) {
+                it.remove();
+                clearEffects(p);
+                if (p.getVehicle() == h.seat()) p.stopRiding();
+                h.seat().discard();
+                LockerNet.send(p, false, h.locker(), 0);
+                continue;
+            }
+            hold(p, h);
+            if (level.getGameTime() % 20 == 0) {
+                HollowKeeper g = LabyrinthTracker.nearestGuardian(level, p.position(), 10);
+                if (g != null) p.connection.send(new net.minecraft.network.protocol.game.ClientboundSoundPacket(
+                        net.minecraft.core.registries.BuiltInRegistries.SOUND_EVENT.wrapAsHolder(ModSounds.HEARTBEAT), SoundSource.PLAYERS,
+                        p.getX(), p.getY(), p.getZ(), 1.0f, 1.0f, level.getRandom().nextLong()));
+            }
+        }
+    }
+
+    /** Locked in place: movement, jumping and sneaking can't take you out (the client also ignores those keys). */
+    public static void hold(ServerPlayer p) {
+        Hide h = hide(p);
+        if (h != null) hold(p, h);
+    }
+
+    private static void hold(ServerPlayer p, Hide h) {
+        // the seat does the holding; only if something knocked them off do we sit them back down
+        if (p.getVehicle() != h.seat() && !h.seat().isRemoved()) { p.startRiding(h.seat(), true, true); h.seat().positionRider(p); }
+        p.setShiftKeyDown(false);
+    }
+
+    /** One search check by a guardian standing near a locker. */
+    public static boolean searchCheck(ServerLevel level, HollowKeeper guardian, ServerPlayer p) {
+        Hide h = hide(p);
+        if (h == null) return true;
+        double d = guardian.position().distanceTo(Vec3.atCenterOf(h.locker()));
+        long seen = LAST_SEEN.getOrDefault(p.getUUID(), -10_000L);
+        int since = (int) Math.min(Integer.MAX_VALUE, h.sinceTick() - seen);
+        double chance = HidingRules.discoverChance(d, h.moved()[0], Math.max(0, since));
+        boolean found = level.getRandom().nextDouble() < chance;
+        if (!found && d < 4) com.stormreach.progress.StormAdvancements.award(p, "hide_survived");
+        return found;
+    }
+}

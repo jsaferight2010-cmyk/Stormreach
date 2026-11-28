@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "k": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:labyrinth_key"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.labyrinth_key.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.labyrinth_key.description"
+    },
+    "icon": {
+      "id": "stormreach:labyrinth_key"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "parent": "stormreach:enter_labyrinth"
+}

@@ -1,0 +1,60 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gravel",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_sand",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_soul_soil",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_calcite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_smooth_basalt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_clay",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dripstone_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_end_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sulfur",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cinnabar",
+   "required": false
+  }
+ ]
+}

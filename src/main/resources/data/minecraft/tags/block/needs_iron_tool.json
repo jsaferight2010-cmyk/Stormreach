@@ -1,0 +1,58 @@
+{
+  "values": [
+    "stormreach:storm_crystal_block",
+    "stormreach:stormheart",
+    {
+      "id": "stormreach:storm_diamond_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_diamond_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_deepslate_diamond_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_emerald_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_deepslate_emerald_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_emerald_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_gold_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_raw_gold_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_gold_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_deepslate_gold_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_redstone_ore",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_deepslate_redstone_ore",
+      "required": false
+    },
+    "stormreach:aurorite_ore",
+    "stormreach:aurorite_block",
+    "stormreach:stormgate_frame",
+    "stormreach:rusted_locker"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormreach:skyshale_bricks",
+  "result": {
+    "count": 1,
+    "id": "stormreach:skyshale_brick_stairs"
+  }
+}

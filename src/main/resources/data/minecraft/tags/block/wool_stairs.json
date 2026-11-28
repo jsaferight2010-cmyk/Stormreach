@@ -1,0 +1,68 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_white_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magenta_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_blue_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_yellow_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lime_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gray_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_gray_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cyan_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purple_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_green_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_wool_stairs",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_black_wool_stairs",
+   "required": false
+  }
+ ]
+}

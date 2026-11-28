@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "L": "minecraft:lightning_rod",
+    "C": "minecraft:copper_ingot",
+    "S": "stormreach:storm_shard",
+    "I": "minecraft:iron_ingot"
+  },
+  "pattern": [
+    " L ",
+    "CSC",
+    "III"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tesla_coil"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.umbrella_hail.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.umbrella_hail.description"
+    },
+    "icon": {
+      "id": "stormreach:umbrella"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

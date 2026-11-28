@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "k": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:labyrinth_key",
+            "count": {
+              "min": 3
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.three_keys.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.three_keys.description"
+    },
+    "icon": {
+      "id": "stormreach:labyrinth_key"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "parent": "stormreach:labyrinth_key"
+}

@@ -1,0 +1,32 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_powder_snow",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sculk_vein",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_glow_lichen",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lily_pad",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_petals",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wildflowers",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_leaf_litter",
+   "required": false
+  }
+ ]
+}

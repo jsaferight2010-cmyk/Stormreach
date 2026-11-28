@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.bottled_dust_devil.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.bottled_dust_devil.description"
+    },
+    "icon": {
+      "id": "stormreach:bottled_dust_devil"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

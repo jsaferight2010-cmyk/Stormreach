@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "r": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:tornado_radar"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.forecaster_4.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.forecaster_4.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_radar"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "r"
+    ]
+  ],
+  "parent": "stormreach:forecaster_3",
+  "rewards": {
+    "experience": 100
+  }
+}

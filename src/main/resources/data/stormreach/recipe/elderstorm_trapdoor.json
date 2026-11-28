@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": "stormreach:elderstorm_planks"
+  },
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:elderstorm_trapdoor"
+  },
+  "group": "wooden_trapdoor"
+}

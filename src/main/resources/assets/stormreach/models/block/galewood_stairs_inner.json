@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "stormreach:block/galewood_planks",
+    "side": "stormreach:block/galewood_planks",
+    "top": "stormreach:block/galewood_planks"
+  }
+}

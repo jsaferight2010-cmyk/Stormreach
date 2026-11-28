@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "F": "stormreach:stormhawk_feather",
+    "N": "stormreach:nimbus_cloud"
+  },
+  "pattern": [
+    "F F",
+    "N N"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:cloudstep_boots"
+  }
+}

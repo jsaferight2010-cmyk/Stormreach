@@ -1,0 +1,60 @@
+{
+  "values": [
+    "stormreach:driftwood_slab",
+    "stormreach:stormpine_slab",
+    {
+      "id": "stormreach:storm_oak_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_slab",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_slab",
+      "required": false
+    },
+    "stormreach:galewood_slab",
+    "stormreach:elderstorm_slab"
+  ]
+}

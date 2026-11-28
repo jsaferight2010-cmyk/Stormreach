@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "c": {
+      "trigger": "minecraft:channeled_lightning"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.channeler.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.channeler.description"
+    },
+    "icon": {
+      "id": "minecraft:trident"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ],
+  "parent": "stormreach:struck_by_lightning"
+}

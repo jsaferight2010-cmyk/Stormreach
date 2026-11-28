@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:slime_ball",
+    "minecraft:slime_ball",
+    "minecraft:string",
+    "stormreach:thermometer"
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:weather_balloon"
+  }
+}

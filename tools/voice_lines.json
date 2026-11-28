@@ -1,0 +1,65 @@
+{
+  "voice": "Piper en-us ryan-high (CC BY-NC-SA 4.0)",
+  "lines": {
+    "l01": {
+      "text": "So. You followed the signs.",
+      "seconds": 2.776
+    },
+    "l02": {
+      "text": "The footsteps behind you. The shape between the trees, gone the moment you looked.",
+      "seconds": 5.518
+    },
+    "l03": {
+      "text": "That was me. It has always been me.",
+      "seconds": 3.206
+    },
+    "l04": {
+      "text": "My name was Cyrrus. I was a traveller once, like you. I climbed to the Sovereign's crown, and asked the storm to answer me.",
+      "seconds": 8.146
+    },
+    "l05": {
+      "text": "It answered. It filled me, until there was nothing left but wind.",
+      "seconds": 5.058
+    },
+    "l06": {
+      "text": "You carried my heart out of the dark. You set my eyes in stone. You read my journal.",
+      "seconds": 5.917
+    },
+    "l07": {
+      "text": "Thank you. You have woken me completely.",
+      "seconds": 3.047
+    },
+    "l08": {
+      "text": "Now. Let the sky decide which of us walks home.",
+      "seconds": 3.891
+    },
+    "phase2": {
+      "text": "The rain will take your eyes. You won't need them.",
+      "seconds": 3.625
+    },
+    "phase3": {
+      "text": "You hold your ground. The wind will fix that.",
+      "seconds": 3.595
+    },
+    "phase4": {
+      "text": "Come, children of the squall. Feed on them.",
+      "seconds": 3.834
+    },
+    "phase5": {
+      "text": "No more voices. Only the storm.",
+      "seconds": 3.381
+    },
+    "d01": {
+      "text": "The rain is stopping.",
+      "seconds": 2.193
+    },
+    "d02": {
+      "text": "Strange. I can hear my own footsteps again.",
+      "seconds": 3.941
+    },
+    "d03": {
+      "text": "Keep the crown, traveller. Don't ask it for anything.",
+      "seconds": 4.137
+    }
+  }
+}

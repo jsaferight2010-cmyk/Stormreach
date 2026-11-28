@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "north": "stormreach:block/wind_generator_front",
+    "south": "stormreach:block/wind_generator_back",
+    "east": "stormreach:block/wind_generator_side",
+    "west": "stormreach:block/wind_generator_side",
+    "up": "stormreach:block/wind_generator_top",
+    "down": "stormreach:block/wind_generator_top",
+    "particle": "stormreach:block/wind_generator_side"
+  }
+}

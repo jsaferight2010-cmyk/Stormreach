@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.shrine_ritual.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.shrine_ritual.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_conduit"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:hollow_shrine"
+}

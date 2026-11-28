@@ -1,0 +1,36 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_exposed_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weathered_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_oxidized_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_exposed_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_weathered_lightning_rod",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_oxidized_lightning_rod",
+   "required": false
+  }
+ ]
+}

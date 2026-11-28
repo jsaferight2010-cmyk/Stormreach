@@ -1,0 +1,36 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_mud",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_muddy_mangrove_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mangrove_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mangrove_leaves",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mangrove_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mangrove_propagule",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_moss_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_vine",
+   "required": false
+  }
+ ]
+}

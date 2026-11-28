@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "stormreach:elderstorm_door",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "stormreach:elderstorm_door"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "stormreach:blocks/elderstorm_door"
+}

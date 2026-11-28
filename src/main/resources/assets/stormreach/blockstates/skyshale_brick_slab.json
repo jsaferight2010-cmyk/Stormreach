@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormreach:block/skyshale_brick_slab"
+    },
+    "type=double": {
+      "model": "stormreach:block/skyshale_bricks"
+    },
+    "type=top": {
+      "model": "stormreach:block/skyshale_brick_slab_top"
+    }
+  }
+}

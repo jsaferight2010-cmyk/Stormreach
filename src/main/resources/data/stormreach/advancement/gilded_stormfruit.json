@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "g": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:gilded_stormfruit"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.gilded_stormfruit.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.gilded_stormfruit.description"
+    },
+    "icon": {
+      "id": "stormreach:gilded_stormfruit"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "g"
+    ]
+  ],
+  "parent": "stormreach:pick_stormfruit"
+}

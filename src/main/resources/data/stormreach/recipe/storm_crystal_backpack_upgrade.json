@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": "stormreach:storm_crystal_block",
+    "S": "stormreach:storm_cell",
+    "H": "stormreach:charged_stormstone",
+    "T": "stormreach:tempest_core"
+  },
+  "pattern": [
+    "CSC",
+    "HTH",
+    "CSC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:storm_crystal_backpack_upgrade"
+  }
+}

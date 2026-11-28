@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_cherry_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cherry_wood",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_cherry_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_cherry_wood",
+   "required": false
+  }
+ ]
+}

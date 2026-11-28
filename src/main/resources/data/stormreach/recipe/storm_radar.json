@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "minecraft:compass",
+    "D": "stormreach:storm_detector",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "ICI",
+    "IDI",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:storm_radar"
+  }
+}

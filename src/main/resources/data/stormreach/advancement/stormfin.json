@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "f": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:stormfin"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormfin.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormfin.description"
+    },
+    "icon": {
+      "id": "stormreach:stormfin"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "f"
+    ]
+  ]
+}

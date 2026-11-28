@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "order=1,struck=false": {
+      "model": "stormreach:block/storm_conduit_1"
+    },
+    "order=1,struck=true": {
+      "model": "stormreach:block/storm_conduit_1_struck"
+    },
+    "order=2,struck=false": {
+      "model": "stormreach:block/storm_conduit_2"
+    },
+    "order=2,struck=true": {
+      "model": "stormreach:block/storm_conduit_2_struck"
+    },
+    "order=3,struck=false": {
+      "model": "stormreach:block/storm_conduit_3"
+    },
+    "order=3,struck=true": {
+      "model": "stormreach:block/storm_conduit_3_struck"
+    },
+    "order=4,struck=false": {
+      "model": "stormreach:block/storm_conduit_4"
+    },
+    "order=4,struck=true": {
+      "model": "stormreach:block/storm_conduit_4_struck"
+    }
+  }
+}

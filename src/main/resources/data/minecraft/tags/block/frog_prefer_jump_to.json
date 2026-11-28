@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_lily_pad",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_big_dripleaf",
+   "required": false
+  }
+ ]
+}

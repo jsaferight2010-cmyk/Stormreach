@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:bottled_stormfly"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormfly_jar.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormfly_jar.description"
+    },
+    "icon": {
+      "id": "stormreach:bottled_stormfly"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

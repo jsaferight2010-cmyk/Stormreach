@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "stormreach:driftwood_log"
+  ],
+  "result": {
+    "count": 4,
+    "id": "stormreach:driftwood_planks"
+  }
+}

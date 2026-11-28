@@ -1,0 +1,60 @@
+{
+  "values": [
+    "stormreach:driftwood_pressure_plate",
+    "stormreach:stormpine_pressure_plate",
+    {
+      "id": "stormreach:storm_oak_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_pressure_plate",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_pressure_plate",
+      "required": false
+    },
+    "stormreach:galewood_pressure_plate",
+    "stormreach:elderstorm_pressure_plate"
+  ]
+}

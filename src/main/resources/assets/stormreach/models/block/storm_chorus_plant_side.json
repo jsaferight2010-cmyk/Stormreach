@@ -1,0 +1,46 @@
+{
+ "parent": "minecraft:block/block",
+ "textures": {
+  "texture": "block/chorus_plant",
+  "inside": "block/chorus_plant",
+  "particle": "block/chorus_plant"
+ },
+ "elements": [
+  {
+   "from": [
+    4,
+    4,
+    0
+   ],
+   "to": [
+    12,
+    12,
+    4
+   ],
+   "faces": {
+    "down": {
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "up": {
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "north": {
+     "texture": "#texture",
+     "cullface": "north",
+     "tintindex": 0
+    },
+    "west": {
+     "texture": "#texture",
+     "tintindex": 0
+    },
+    "east": {
+     "texture": "#texture",
+     "tintindex": 0
+    }
+   }
+  }
+ ],
+ "ambientocclusion": false
+}

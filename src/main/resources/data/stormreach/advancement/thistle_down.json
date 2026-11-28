@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "t": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:thistle_down"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.thistle_down.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.thistle_down.description"
+    },
+    "icon": {
+      "id": "stormreach:thistle_down"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "t"
+    ]
+  ],
+  "parent": "stormreach:elderstorm_grove"
+}

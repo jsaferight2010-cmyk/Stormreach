@@ -1,0 +1,4618 @@
+{
+ "recipes": [
+  {
+   "result": "stormreach:aurora_glass",
+   "count": 8,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "stormreach:aurora_dust",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass"
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite"
+   ]
+  },
+  {
+   "result": "stormreach:chiseled_skyshale",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:skyshale_brick_slab",
+    "",
+    "",
+    "stormreach:skyshale_brick_slab",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chiseled_stormstone",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone_brick_slab",
+    "",
+    "",
+    "stormreach:stormstone_brick_slab",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chiseled_tempest_bricks",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:tempest_brick_slab",
+    "",
+    "",
+    "stormreach:tempest_brick_slab",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cobbled_skyshale_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cobbled_skyshale_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale"
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_planks",
+   "count": 4,
+   "category": "building",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:driftwood_log",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "",
+    "",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks"
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_planks",
+   "count": 4,
+   "category": "building",
+   "kind": "shapeless",
+   "grid": [
+    "#stormreach:elderstorm_logs",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "",
+    "",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks"
+   ]
+  },
+  {
+   "result": "stormreach:fulgurite",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "",
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_planks",
+   "count": 4,
+   "category": "building",
+   "kind": "shapeless",
+   "grid": [
+    "#stormreach:galewood_logs",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:galewood_planks",
+    "",
+    "",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks"
+   ]
+  },
+  {
+   "result": "stormreach:glacial_lamp",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:packed_ice",
+    "",
+    "minecraft:packed_ice",
+    "stormreach:glacial_core",
+    "minecraft:packed_ice",
+    "",
+    "minecraft:packed_ice",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:glowgel_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel",
+    "stormreach:glowgel"
+   ]
+  },
+  {
+   "result": "stormreach:ion_lamp",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:ion_shard",
+    "",
+    "stormreach:ion_shard",
+    "minecraft:glass",
+    "stormreach:ion_shard",
+    "",
+    "stormreach:ion_shard",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:nacre_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:pearlescent_shell",
+    "stormreach:pearlescent_shell",
+    "",
+    "stormreach:pearlescent_shell",
+    "stormreach:pearlescent_shell",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:nacre_bricks",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:nacre_block",
+    "stormreach:nacre_block",
+    "",
+    "stormreach:nacre_block",
+    "stormreach:nacre_block",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_skyshale",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:skyshale",
+    "stormreach:skyshale",
+    "",
+    "stormreach:skyshale",
+    "stormreach:skyshale",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone"
+   ]
+  },
+  {
+   "result": "stormreach:salt_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt",
+    "stormreach:salt"
+   ]
+  },
+  {
+   "result": "stormreach:serpentscale_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:serpent_scale",
+    "stormreach:serpent_scale",
+    "",
+    "stormreach:serpent_scale",
+    "stormreach:serpent_scale",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skylight_lantern",
+   "count": 2,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:iron_nugget",
+    "",
+    "stormreach:glowgel",
+    "stormreach:cloud_ambergris",
+    "stormreach:glowgel",
+    "",
+    "minecraft:iron_nugget",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_brick_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_brick_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:skyshale_bricks",
+    "",
+    "",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks"
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_bricks",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:polished_skyshale",
+    "stormreach:polished_skyshale",
+    "",
+    "stormreach:polished_skyshale",
+    "stormreach:polished_skyshale",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_crystal_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard"
+   ]
+  },
+  {
+   "result": "stormreach:storm_lantern",
+   "count": 2,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:stormglass",
+    "",
+    "stormreach:stormglass",
+    "stormreach:storm_shard",
+    "stormreach:stormglass",
+    "",
+    "stormreach:stormglass",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormfly_jar",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:glass_pane",
+    "stormreach:bottled_stormfly",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane"
+   ]
+  },
+  {
+   "result": "stormreach:stormgate_frame",
+   "count": 2,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:fulgurite",
+    "stormreach:charged_stormstone",
+    "stormreach:fulgurite",
+    "stormreach:charged_stormstone",
+    "stormreach:storm_crystal_block",
+    "stormreach:charged_stormstone",
+    "stormreach:fulgurite",
+    "stormreach:charged_stormstone",
+    "stormreach:fulgurite"
+   ]
+  },
+  {
+   "result": "stormreach:stormglass",
+   "count": 8,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "stormreach:storm_shard",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass",
+    "minecraft:glass"
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_planks",
+   "count": 4,
+   "category": "building",
+   "kind": "shapeless",
+   "grid": [
+    "#stormreach:stormpine_logs",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "",
+    "",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks"
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks"
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_bricks",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "stormreach:stormstone"
+   ]
+  },
+  {
+   "result": "stormreach:tempest_brick_slab",
+   "count": 6,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_brick_stairs",
+   "count": 4,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks"
+   ]
+  },
+  {
+   "result": "stormreach:tempest_bricks",
+   "count": 4,
+   "category": "building",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "minecraft:amethyst_shard",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_block",
+   "count": 1,
+   "category": "building",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_axe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:voltite_backpack",
+    "stormreach:aurorite_backpack_upgrade",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_backpack_upgrade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite_block",
+    "stormreach:gilded_stormfruit",
+    "stormreach:aurorite_block",
+    "stormreach:ion_lamp",
+    "stormreach:tempest_eye",
+    "stormreach:ion_lamp",
+    "stormreach:aurorite_block",
+    "stormreach:gilded_stormfruit",
+    "stormreach:aurorite_block"
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_boots",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_chestplate",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite"
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_helmet",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_hoe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_leggings",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "stormreach:aurorite"
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_pickaxe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "stormreach:aurorite",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_shovel",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite_sword",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:aurorite",
+    "",
+    "",
+    "stormreach:aurorite",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cloudstep_boots",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormhawk_feather",
+    "",
+    "stormreach:stormhawk_feather",
+    "stormreach:nimbus_cloud",
+    "",
+    "stormreach:nimbus_cloud",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:diamond_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:diamond",
+    "minecraft:leather",
+    "minecraft:diamond",
+    "stormreach:storm_shard",
+    "minecraft:chest",
+    "stormreach:storm_shard",
+    "minecraft:diamond",
+    "minecraft:leather",
+    "minecraft:diamond"
+   ]
+  },
+  {
+   "result": "stormreach:gale_blade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:serpent_scale",
+    "",
+    "",
+    "stormreach:squall_heart",
+    "",
+    "",
+    "minecraft:breeze_rod",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:gale_wings",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:gull_feather",
+    "stormreach:storm_cell",
+    "stormreach:gull_feather",
+    "stormreach:gull_feather",
+    "",
+    "stormreach:gull_feather",
+    "stormreach:gull_feather",
+    "",
+    "stormreach:gull_feather"
+   ]
+  },
+  {
+   "result": "stormreach:maelstrom_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:aurorite_backpack",
+    "stormreach:maelstrom_backpack_upgrade",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:maelstrom_backpack_upgrade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:netherite_ingot",
+    "stormreach:aurorite_block",
+    "minecraft:netherite_ingot",
+    "stormreach:tempest_eye",
+    "stormreach:maelstrom_core",
+    "stormreach:tempest_eye",
+    "minecraft:netherite_ingot",
+    "stormreach:aurorite_block",
+    "minecraft:netherite_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:multimeter",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:glass_pane",
+    "",
+    "minecraft:redstone",
+    "minecraft:copper_ingot",
+    "minecraft:redstone",
+    "",
+    "minecraft:iron_ingot",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:netherite_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:obsidian_backpack",
+    "stormreach:netherite_backpack_upgrade",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:netherite_backpack_upgrade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_crystal_block",
+    "minecraft:blaze_rod",
+    "stormreach:storm_crystal_block",
+    "stormreach:storm_cell",
+    "minecraft:netherite_ingot",
+    "stormreach:storm_cell",
+    "stormreach:storm_crystal_block",
+    "minecraft:blaze_rod",
+    "stormreach:storm_crystal_block"
+   ]
+  },
+  {
+   "result": "stormreach:obsidian_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:diamond_backpack",
+    "stormreach:obsidian_backpack_upgrade",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:obsidian_backpack_upgrade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:obsidian",
+    "stormreach:fulgurite",
+    "minecraft:obsidian",
+    "stormreach:charged_stormstone",
+    "stormreach:storm_cell",
+    "stormreach:charged_stormstone",
+    "minecraft:obsidian",
+    "stormreach:fulgurite",
+    "minecraft:obsidian"
+   ]
+  },
+  {
+   "result": "stormreach:storm_crystal_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:netherite_backpack",
+    "stormreach:storm_crystal_backpack_upgrade",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_crystal_backpack_upgrade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_crystal_block",
+    "stormreach:storm_cell",
+    "stormreach:storm_crystal_block",
+    "stormreach:charged_stormstone",
+    "stormreach:tempest_core",
+    "stormreach:charged_stormstone",
+    "stormreach:storm_crystal_block",
+    "stormreach:storm_cell",
+    "stormreach:storm_crystal_block"
+   ]
+  },
+  {
+   "result": "stormreach:storm_radar",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:compass",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "stormreach:storm_detector",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:redstone",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:stormbreaker",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_crystal_block",
+    "stormreach:tempest_core",
+    "stormreach:storm_crystal_block",
+    "",
+    "stormreach:stormpine_log",
+    "",
+    "",
+    "stormreach:stormpine_log",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_boots",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "",
+    "minecraft:leather",
+    "minecraft:slime_ball",
+    "",
+    "minecraft:slime_ball",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_goggles",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:light_blue_stained_glass_pane",
+    "minecraft:copper_ingot",
+    "minecraft:light_blue_stained_glass_pane",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_jacket",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "",
+    "minecraft:leather",
+    "minecraft:orange_dye",
+    "minecraft:glow_ink_sac",
+    "minecraft:orange_dye",
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:leather"
+   ]
+  },
+  {
+   "result": "stormreach:stormchaser_trousers",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:leather",
+    "minecraft:orange_dye",
+    "",
+    "minecraft:orange_dye",
+    "minecraft:leather",
+    "",
+    "minecraft:leather"
+   ]
+  },
+  {
+   "result": "stormreach:stormkite",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:thunderbird_plume",
+    "stormreach:thunderbird_plume",
+    "stormreach:thunderbird_plume",
+    "minecraft:string",
+    "stormreach:charged_scale",
+    "minecraft:string",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_axe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_boots",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_chestplate",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard"
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_helmet",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_leggings",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_shard"
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_pickaxe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "stormreach:storm_shard",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_shovel",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormshard_sword",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "",
+    "",
+    "stormreach:storm_shard",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_staff",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:driftwood_planks",
+    "stormreach:gull_feather",
+    "stormreach:driftwood_planks",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:thunderhead_horn",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:gull_feather",
+    "",
+    "stormreach:storm_shard",
+    "minecraft:goat_horn",
+    "stormreach:storm_shard",
+    "",
+    "stormreach:storm_crystal_block",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tide_conch",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:gold_ingot",
+    "",
+    "stormreach:pearlescent_shell",
+    "minecraft:prismarine_shard",
+    "stormreach:pearlescent_shell",
+    "",
+    "stormreach:pearlescent_shell",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:umbrella",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "#minecraft:wool",
+    "#minecraft:wool",
+    "#minecraft:wool",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_axe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_backpack",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:storm_crystal_backpack",
+    "stormreach:voltite_backpack_upgrade",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_backpack_upgrade",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_block",
+    "stormreach:ion_shard",
+    "stormreach:voltite_block",
+    "stormreach:stormhawk_feather",
+    "stormreach:storm_cell",
+    "stormreach:stormhawk_feather",
+    "stormreach:voltite_block",
+    "stormreach:ion_shard",
+    "stormreach:voltite_block"
+   ]
+  },
+  {
+   "result": "stormreach:voltite_boots",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_chestplate",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:voltite_helmet",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_hoe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_leggings",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "stormreach:voltite_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:voltite_pickaxe",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "stormreach:voltite_ingot",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_shovel",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_sword",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:voltite_ingot",
+    "",
+    "",
+    "stormreach:voltite_ingot",
+    "",
+    "",
+    "minecraft:stick",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:weather_radio",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:iron_ingot",
+    "",
+    "minecraft:note_block",
+    "stormreach:storm_shard",
+    "minecraft:note_block",
+    "minecraft:iron_ingot",
+    "minecraft:redstone",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:weatherbreaker",
+   "count": 1,
+   "category": "equipment",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:maelstrom_core",
+    "",
+    "",
+    "stormreach:tempest_eye",
+    "",
+    "",
+    "minecraft:netherite_sword",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:anemometer",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:iron_ingot",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:arc_lamp",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:iron_nugget",
+    "",
+    "minecraft:iron_nugget",
+    "minecraft:glowstone",
+    "minecraft:iron_nugget",
+    "",
+    "stormreach:copper_cable",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:copper_cable",
+   "count": 8,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp",
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp",
+    "minecraft:dried_kelp"
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_button",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_door",
+   "count": 3,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_fence_gate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:stick",
+    "stormreach:driftwood_planks",
+    "minecraft:stick",
+    "minecraft:stick",
+    "stormreach:driftwood_planks",
+    "minecraft:stick",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_pressure_plate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_trapdoor",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_button",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_door",
+   "count": 3,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_fence_gate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:stick",
+    "stormreach:elderstorm_planks",
+    "minecraft:stick",
+    "minecraft:stick",
+    "stormreach:elderstorm_planks",
+    "minecraft:stick",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_pressure_plate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_trapdoor",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:electric_pump",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "stormreach:copper_cable",
+    "minecraft:iron_ingot",
+    "minecraft:piston",
+    "minecraft:bucket",
+    "minecraft:piston",
+    "minecraft:iron_ingot",
+    "stormreach:copper_cable",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:galewood_button",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:galewood_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_door",
+   "count": 3,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_fence_gate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:stick",
+    "stormreach:galewood_planks",
+    "minecraft:stick",
+    "minecraft:stick",
+    "stormreach:galewood_planks",
+    "minecraft:stick",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_pressure_plate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_trapdoor",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:rain_gauge",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:glass_pane",
+    "",
+    "",
+    "minecraft:glass_pane",
+    "",
+    "",
+    "minecraft:iron_ingot",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:shock_plate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:copper_ingot",
+    "stormreach:copper_cable",
+    "minecraft:copper_ingot",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:sprinkler",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_nugget",
+    "minecraft:iron_ingot",
+    "minecraft:iron_nugget",
+    "",
+    "stormreach:copper_cable",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_barometer",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:storm_shard",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "minecraft:redstone",
+    "stormreach:polished_stormstone"
+   ]
+  },
+  {
+   "result": "stormreach:storm_capacitor",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:glass",
+    "stormreach:storm_cell",
+    "minecraft:glass",
+    "minecraft:iron_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:storm_collector",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormglass",
+    "stormreach:storm_crystal_block",
+    "stormreach:stormglass",
+    "minecraft:copper_ingot",
+    "minecraft:lightning_rod",
+    "minecraft:copper_ingot",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone"
+   ]
+  },
+  {
+   "result": "stormreach:storm_detector",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:glass",
+    "stormreach:storm_shard",
+    "minecraft:glass",
+    "minecraft:iron_ingot",
+    "minecraft:redstone",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:storm_shelter_hatch",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:orange_dye",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_button",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_door",
+   "count": 3,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_fence_gate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:stick",
+    "stormreach:stormpine_planks",
+    "minecraft:stick",
+    "minecraft:stick",
+    "stormreach:stormpine_planks",
+    "minecraft:stick",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_pressure_plate",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_trapdoor",
+   "count": 2,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tesla_coil",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:lightning_rod",
+    "",
+    "minecraft:copper_ingot",
+    "stormreach:storm_shard",
+    "minecraft:copper_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:thermometer",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:glass_pane",
+    "",
+    "",
+    "minecraft:redstone",
+    "",
+    "",
+    "minecraft:iron_nugget",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tornado_probe",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:anemometer",
+    "",
+    "minecraft:orange_dye",
+    "minecraft:redstone",
+    "minecraft:orange_dye",
+    "minecraft:iron_block",
+    "minecraft:iron_block",
+    "minecraft:iron_block"
+   ]
+  },
+  {
+   "result": "stormreach:tornado_radar",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:glimmer_antler",
+    "minecraft:daylight_detector",
+    "stormreach:glimmer_antler",
+    "stormreach:storm_cell",
+    "stormreach:storm_detector",
+    "stormreach:storm_cell",
+    "minecraft:iron_block",
+    "minecraft:observer",
+    "minecraft:iron_block"
+   ]
+  },
+  {
+   "result": "stormreach:tornado_siren",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:gold_ingot",
+    "minecraft:note_block",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:redstone_block",
+    "minecraft:gold_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:water_wheel",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "#minecraft:planks",
+    "minecraft:stick",
+    "#minecraft:planks",
+    "minecraft:stick",
+    "minecraft:iron_ingot",
+    "minecraft:stick",
+    "#minecraft:planks",
+    "minecraft:stick",
+    "#minecraft:planks"
+   ]
+  },
+  {
+   "result": "stormreach:weather_monitor",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:glass_pane",
+    "minecraft:ender_eye",
+    "minecraft:glass_pane",
+    "minecraft:iron_ingot",
+    "minecraft:redstone",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:weather_station",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:anemometer",
+    "stormreach:storm_barometer",
+    "stormreach:thermometer",
+    "minecraft:iron_ingot",
+    "minecraft:comparator",
+    "minecraft:iron_ingot",
+    "minecraft:iron_ingot",
+    "minecraft:redstone_block",
+    "minecraft:iron_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:wind_turbine",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:white_wool",
+    "stormreach:anemometer",
+    "minecraft:white_wool",
+    "",
+    "minecraft:iron_ingot",
+    "",
+    "",
+    "minecraft:redstone",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:wind_vane",
+   "count": 1,
+   "category": "redstone",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "stormreach:storm_shard",
+    "minecraft:iron_ingot",
+    "stormreach:storm_shard"
+   ]
+  },
+  {
+   "result": "stormreach:cooked_crab_claw",
+   "count": 1,
+   "category": "food",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:crab_claw",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_crab_claw",
+   "count": 1,
+   "category": "food",
+   "kind": "campfire_cooking",
+   "grid": [
+    "stormreach:crab_claw",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_crab_claw",
+   "count": 1,
+   "category": "food",
+   "kind": "smoking",
+   "grid": [
+    "stormreach:crab_claw",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_skyray",
+   "count": 1,
+   "category": "food",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:raw_skyray",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_skyray",
+   "count": 1,
+   "category": "food",
+   "kind": "campfire_cooking",
+   "grid": [
+    "stormreach:raw_skyray",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_skyray",
+   "count": 1,
+   "category": "food",
+   "kind": "smoking",
+   "grid": [
+    "stormreach:raw_skyray",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_stormfin",
+   "count": 1,
+   "category": "food",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:stormfin",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_stormfin",
+   "count": 1,
+   "category": "food",
+   "kind": "campfire_cooking",
+   "grid": [
+    "stormreach:stormfin",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_stormfin",
+   "count": 1,
+   "category": "food",
+   "kind": "smoking",
+   "grid": [
+    "stormreach:stormfin",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_voltaic_eel",
+   "count": 1,
+   "category": "food",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:voltaic_eel",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_voltaic_eel",
+   "count": 1,
+   "category": "food",
+   "kind": "campfire_cooking",
+   "grid": [
+    "stormreach:voltaic_eel",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cooked_voltaic_eel",
+   "count": 1,
+   "category": "food",
+   "kind": "smoking",
+   "grid": [
+    "stormreach:voltaic_eel",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:fried_gull_egg",
+   "count": 1,
+   "category": "food",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:gull_egg",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:fried_gull_egg",
+   "count": 1,
+   "category": "food",
+   "kind": "campfire_cooking",
+   "grid": [
+    "stormreach:gull_egg",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:fried_gull_egg",
+   "count": 1,
+   "category": "food",
+   "kind": "smoking",
+   "grid": [
+    "stormreach:gull_egg",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cracked_stormstone_bricks",
+   "count": 1,
+   "category": "blocks",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:light_blue_dye",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:skybloom",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:pink_dye",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:sea_thrift",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:purple_dye",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:sea_rocket",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:purple_dye",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormcap",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:string",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:thistle_down",
+    "stormreach:thistle_down",
+    "stormreach:thistle_down",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:yellow_dye",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:thunderbloom",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite",
+   "count": 9,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:aurorite_block",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite",
+   "count": 1,
+   "category": "misc",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:aurorite_ore",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:aurorite",
+   "count": 1,
+   "category": "misc",
+   "kind": "blasting",
+   "grid": [
+    "stormreach:aurorite_ore",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:bottled_gale",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:gale_essence",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:bottled_rain",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:glass_bottle",
+    "minecraft:kelp",
+    "stormreach:storm_shard",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:bottled_sunshine",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:glass_bottle",
+    "minecraft:sunflower",
+    "stormreach:salt",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:bottled_thunder",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:bottled_rain",
+    "stormreach:storm_cell",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chasers_coffee",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:cocoa_beans",
+    "minecraft:cocoa_beans",
+    "minecraft:sugar",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chasers_logbook",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:book",
+    "minecraft:feather",
+    "minecraft:ink_sac",
+    "minecraft:compass",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chiseled_skyshale",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chiseled_stormstone",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:chiseled_tempest_bricks",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cistern",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:stone_bricks",
+    "",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:bucket",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks",
+    "minecraft:stone_bricks"
+   ]
+  },
+  {
+   "result": "stormreach:cloud_seeder",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:firework_rocket",
+    "stormreach:bottled_rain",
+    "minecraft:snowball",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cloudberry_tart",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:cloudberries",
+    "stormreach:cloudberries",
+    "stormreach:cloudberries",
+    "minecraft:sugar",
+    "minecraft:egg",
+    "minecraft:wheat",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cobbled_skyshale_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cobbled_skyshale_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cobbled_skyshale_wall",
+   "count": 6,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cobbled_skyshale_wall",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:crab_cakes",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:cooked_crab_claw",
+    "minecraft:bread",
+    "stormreach:salt",
+    "stormreach:gull_egg",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:cracked_tempest_bricks",
+   "count": 1,
+   "category": "misc",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:driftwood_fence",
+   "count": 3,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:driftwood_planks",
+    "minecraft:stick",
+    "stormreach:driftwood_planks",
+    "stormreach:driftwood_planks",
+    "minecraft:stick",
+    "stormreach:driftwood_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:elderstorm_fence",
+   "count": 3,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:elderstorm_planks",
+    "minecraft:stick",
+    "stormreach:elderstorm_planks",
+    "stormreach:elderstorm_planks",
+    "minecraft:stick",
+    "stormreach:elderstorm_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:fulgurite_lantern",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "stormreach:storm_shard",
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard",
+    "stormreach:fulgurite_shard"
+   ]
+  },
+  {
+   "result": "stormreach:gale_bread",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:gale_grass",
+    "stormreach:gale_grass",
+    "stormreach:gale_grass",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:galewood_fence",
+   "count": 3,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:galewood_planks",
+    "minecraft:stick",
+    "stormreach:galewood_planks",
+    "stormreach:galewood_planks",
+    "minecraft:stick",
+    "stormreach:galewood_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:gilded_stormfruit",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "stormreach:stormfruit",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot"
+   ]
+  },
+  {
+   "result": "stormreach:glowgel",
+   "count": 9,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:glowgel_block",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:intercept_vehicle",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "minecraft:iron_ingot",
+    "minecraft:glass_pane",
+    "minecraft:iron_ingot",
+    "minecraft:iron_block",
+    "stormreach:anemometer",
+    "minecraft:iron_block",
+    "minecraft:coal_block",
+    "",
+    "minecraft:coal_block"
+   ]
+  },
+  {
+   "result": "stormreach:polished_skyshale",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone_wall",
+   "count": 6,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:polished_stormstone_wall",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:polished_stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:rain_barrel",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "#minecraft:planks",
+    "",
+    "#minecraft:planks",
+    "#minecraft:planks",
+    "",
+    "#minecraft:planks",
+    "#minecraft:planks",
+    "#minecraft:wooden_slabs",
+    "#minecraft:planks"
+   ]
+  },
+  {
+   "result": "stormreach:rock_candy",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:salt",
+    "minecraft:sugar",
+    "minecraft:stick",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:sailors_stew",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:salted_cod",
+    "minecraft:potato",
+    "minecraft:carrot",
+    "stormreach:stormberries",
+    "minecraft:bowl",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:salt",
+   "count": 9,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:salt_block",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:salted_cod",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:cod",
+    "stormreach:salt",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:seaweed_salad",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:kelp",
+    "minecraft:kelp",
+    "stormreach:sea_thrift",
+    "stormreach:salt",
+    "minecraft:bowl",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale",
+   "count": 1,
+   "category": "misc",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:cobbled_skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_brick_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:skyshale_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_brick_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:skyshale_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_brick_wall",
+   "count": 6,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "stormreach:skyshale_bricks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_brick_wall",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:skyshale_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:skyshale_bricks",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:skyshale",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:snow_cone",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:snowball",
+    "minecraft:snowball",
+    "minecraft:sugar",
+    "minecraft:sweet_berries",
+    "minecraft:paper",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:squall_in_a_bottle",
+   "count": 3,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "stormreach:gull_feather",
+    "",
+    "stormreach:storm_shard",
+    "minecraft:glass_bottle",
+    "stormreach:storm_shard",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_chowder",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:cooked_crab_claw",
+    "minecraft:baked_potato",
+    "minecraft:kelp",
+    "minecraft:bowl",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_crafters_handbook",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:book",
+    "minecraft:crafting_table",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_nectar",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:skybloom",
+    "stormreach:skybloom",
+    "minecraft:honey_bottle",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:storm_shard",
+   "count": 9,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:storm_crystal_block",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormberry_jam",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormberries",
+    "stormreach:stormberries",
+    "stormreach:stormberries",
+    "minecraft:sugar",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormberry_juice",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormberries",
+    "stormreach:stormberries",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormberry_pie",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormberries",
+    "stormreach:stormberries",
+    "minecraft:sugar",
+    "minecraft:egg",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormfruit_preserve",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:stormfruit",
+    "stormreach:stormfruit",
+    "minecraft:sugar",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormglass_pane",
+   "count": 16,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormglass",
+    "stormreach:stormglass",
+    "stormreach:stormglass",
+    "stormreach:stormglass",
+    "stormreach:stormglass",
+    "stormreach:stormglass",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormheart",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_shard",
+    "stormreach:storm_cell",
+    "stormreach:storm_shard",
+    "stormreach:storm_cell",
+    "stormreach:storm_crystal_block",
+    "stormreach:storm_cell",
+    "stormreach:storm_shard",
+    "stormreach:storm_cell",
+    "stormreach:storm_shard"
+   ]
+  },
+  {
+   "result": "stormreach:stormpine_fence",
+   "count": 3,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormpine_planks",
+    "minecraft:stick",
+    "stormreach:stormpine_planks",
+    "stormreach:stormpine_planks",
+    "minecraft:stick",
+    "stormreach:stormpine_planks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormreach_field_guide",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:book",
+    "stormreach:storm_shard",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_wall",
+   "count": 6,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_brick_wall",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_bricks",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_wall",
+   "count": 6,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "stormreach:stormstone",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:stormstone_wall",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:stormstone",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:supercell_seeder",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:cloud_seeder",
+    "stormreach:bottled_lightning",
+    "minecraft:gunpowder",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_brick_slab",
+   "count": 2,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_brick_stairs",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_brick_wall",
+   "count": 6,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_brick_wall",
+   "count": 1,
+   "category": "misc",
+   "kind": "stonecutting",
+   "grid": [
+    "stormreach:tempest_bricks",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:tempest_sigil",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "stormreach:storm_cell",
+    "stormreach:storm_crystal_block",
+    "stormreach:storm_cell",
+    "stormreach:thunderhead_horn",
+    "stormreach:tempest_core",
+    "stormreach:stormheart",
+    "stormreach:storm_cell",
+    "stormreach:storm_crystal_block",
+    "stormreach:storm_cell"
+   ]
+  },
+  {
+   "result": "stormreach:tempest_tonic",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:storm_cell",
+    "minecraft:honey_bottle",
+    "stormreach:stormberries",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:thrift_tea",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:sea_thrift",
+    "stormreach:sea_thrift",
+    "minecraft:sugar",
+    "minecraft:glass_bottle",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_ingot",
+   "count": 1,
+   "category": "misc",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:raw_voltite",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_ingot",
+   "count": 1,
+   "category": "misc",
+   "kind": "blasting",
+   "grid": [
+    "stormreach:raw_voltite",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_ingot",
+   "count": 9,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:voltite_block",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_ingot",
+   "count": 1,
+   "category": "misc",
+   "kind": "smelting",
+   "grid": [
+    "stormreach:voltite_ore",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:voltite_ingot",
+   "count": 1,
+   "category": "misc",
+   "kind": "blasting",
+   "grid": [
+    "stormreach:voltite_ore",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:weather_balloon",
+   "count": 2,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "minecraft:slime_ball",
+    "minecraft:slime_ball",
+    "minecraft:string",
+    "stormreach:thermometer",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:weathered_journal",
+   "count": 1,
+   "category": "misc",
+   "kind": "shapeless",
+   "grid": [
+    "stormreach:journal_page_1",
+    "stormreach:journal_page_2",
+    "stormreach:journal_page_3",
+    "stormreach:journal_page_4",
+    "stormreach:journal_page_5",
+    "minecraft:book",
+    "stormreach:hollow_remnant",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:weatherglass",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:glass_pane",
+    "stormreach:salt",
+    "minecraft:glass_pane",
+    "",
+    "minecraft:copper_ingot",
+    ""
+   ]
+  },
+  {
+   "result": "stormreach:wind_chimes",
+   "count": 1,
+   "category": "misc",
+   "kind": "shaped",
+   "grid": [
+    "",
+    "minecraft:string",
+    "",
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_slabs",
+    "#minecraft:wooden_slabs",
+    "minecraft:copper_ingot",
+    "",
+    "minecraft:copper_ingot"
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:grounded",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_grounded",
+   "input_potion": "stormreach:grounded",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_static_charge",
+   "input_potion": "stormreach:static_charge",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:lingering_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:static_charge",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:storm_shard",
+    "minecraft:lingering_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:grounded",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_grounded",
+   "input_potion": "stormreach:grounded",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_static_charge",
+   "input_potion": "stormreach:static_charge",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:static_charge",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:storm_shard",
+    "minecraft:potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:grounded",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:fulgurite_shard",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_grounded",
+   "input_potion": "stormreach:grounded",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:long_static_charge",
+   "input_potion": "stormreach:static_charge",
+   "grid": [
+    "minecraft:redstone",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  },
+  {
+   "result": "minecraft:splash_potion",
+   "count": 1,
+   "category": "brewing",
+   "kind": "brewing",
+   "potion": "stormreach:static_charge",
+   "input_potion": "minecraft:awkward",
+   "grid": [
+    "stormreach:storm_shard",
+    "minecraft:splash_potion",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
+   ]
+  }
+ ]
+}

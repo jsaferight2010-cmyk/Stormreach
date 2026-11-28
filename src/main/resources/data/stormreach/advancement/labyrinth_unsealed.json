@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.labyrinth_unsealed.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.labyrinth_unsealed.description"
+    },
+    "icon": {
+      "id": "stormreach:labyrinth_keyhole"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:three_keys"
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "side": "stormreach:block/electric_pump",
+    "top": "stormreach:block/electric_pump_top",
+    "bottom": "stormreach:block/electric_pump_top"
+  }
+}

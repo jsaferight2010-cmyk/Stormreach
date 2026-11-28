@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "stormreach:block/stormstone",
+    "side": "stormreach:block/stormstone",
+    "top": "stormreach:block/stormstone"
+  }
+}

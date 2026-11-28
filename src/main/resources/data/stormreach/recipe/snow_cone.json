@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:snowball",
+    "minecraft:snowball",
+    "minecraft:sugar",
+    "minecraft:sweet_berries",
+    "minecraft:paper"
+  ],
+  "result": {
+    "count": 2,
+    "id": "stormreach:snow_cone"
+  }
+}

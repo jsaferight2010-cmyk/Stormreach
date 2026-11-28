@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:voltite",
+  "criteria": {
+    "a": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:aurorite"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.aurorite.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.aurorite.description"
+    },
+    "icon": {
+      "id": "stormreach:aurorite"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "a"
+    ]
+  ]
+}

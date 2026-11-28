@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stranger_five.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stranger_five.description"
+    },
+    "icon": {
+      "id": "stormreach:hollow_remnant"
+    },
+    "frame": "task",
+    "hidden": true
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:stranger_seen"
+}

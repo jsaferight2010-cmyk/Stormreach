@@ -1,0 +1,31 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.inside_tornado.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.inside_tornado.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_chaser_cap"
+    },
+    "frame": "goal",
+    "hidden": true
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:witness_tornado",
+  "rewards": {
+    "loot": [
+      "stormreach:ach/into_the_cage"
+    ]
+  }
+}

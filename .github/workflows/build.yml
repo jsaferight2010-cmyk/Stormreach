@@ -1,0 +1,72 @@
+name: Build Stormreach
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build the mod and run the unit tests
+        run: |
+          chmod +x ./gradlew
+          ./gradlew build --stacktrace
+
+      - name: List Fabric API particle classes (for development)
+        run: |
+          for j in $(find ~/.gradle -name 'fabric-particles*.jar' | grep -v sources | head -2); do unzip -l "$j" | grep -oE 'net/fabricmc/fabric/api/[a-z/]*particle[a-zA-Z/0-9$]*\.class' | sed 's/^/FABRICAPI: /'; done || true
+
+      # Boots a headless Minecraft server with the mod, loads every datapack file and runs the in-game tests.
+      - name: Run the in-game GameTests
+        run: ./gradlew runGametest --stacktrace
+
+      - name: Show failed GameTests
+        if: failure()
+        run: |
+          python3 - <<'PY' || true
+          import xml.etree.ElementTree as ET
+          t = ET.parse('build/gametest/junit.xml')
+          for c in t.iter('testcase'):
+              for f in list(c.iter('failure')) + list(c.iter('error')):
+                  print('FAILED TEST:', c.get('name'), '|', (f.get('message') or f.text or '').strip()[:400])
+          PY
+
+      - name: Upload test reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Stormreach-test-reports
+          path: |
+            build/reports/tests/
+            build/gametest/junit.xml
+            build/gametest/logs/
+          if-no-files-found: ignore
+
+      - name: Pack the jar into a zip
+        run: |
+          mkdir -p dist
+          cp build/libs/Stormreach-*.jar dist/
+          rm -f dist/*-sources.jar
+          cp README.md CHANGELOG.md GUIDE.md dist/ 2>/dev/null || true
+          cp src/main/resources/assets/stormreach/icon.png dist/Stormreach-icon.png
+          echo "ZIPNAME=Stormreach-$(grep '^mod_version=' gradle.properties | cut -d= -f2)-mc$(grep '^minecraft_version=' gradle.properties | cut -d= -f2)" >> "$GITHUB_ENV"
+
+      # GitHub wraps uploaded files in a .zip, so the download is a zip with the jar inside.
+      - name: Upload Stormreach zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ZIPNAME }}
+          path: dist/

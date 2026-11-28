@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": "stormreach:storm_shard",
+    "D": "stormreach:driftwood_planks",
+    "F": "stormreach:gull_feather"
+  },
+  "pattern": [
+    "  S",
+    " DF",
+    "D  "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tempest_staff"
+  }
+}

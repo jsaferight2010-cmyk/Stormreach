@@ -1,0 +1,16 @@
+{
+ "model": {
+  "type": "minecraft:model",
+  "model": "stormreach:block/storm_oxidized_cut_copper_slab",
+  "tints": [
+   {
+    "type": "minecraft:constant",
+    "value": -6310696
+   },
+   {
+    "type": "minecraft:constant",
+    "value": -6310696
+   }
+  ]
+ }
+}

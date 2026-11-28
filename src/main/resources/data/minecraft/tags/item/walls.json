@@ -1,0 +1,138 @@
+{
+  "values": [
+    "stormreach:stormstone_wall",
+    "stormreach:polished_stormstone_wall",
+    "stormreach:stormstone_brick_wall",
+    {
+      "id": "stormreach:storm_cobblestone_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mossy_cobblestone_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_prismarine_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_red_sandstone_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mossy_stone_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_granite_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_stone_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_nether_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_andesite_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_red_nether_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sandstone_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_end_stone_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_diorite_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_blackstone_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_polished_blackstone_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_polished_blackstone_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cobbled_deepslate_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_polished_deepslate_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_deepslate_tile_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_deepslate_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mud_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_tuff_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_polished_tuff_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_tuff_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_resin_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cinnabar_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_polished_cinnabar_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cinnabar_brick_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sulfur_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_polished_sulfur_wall",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sulfur_brick_wall",
+      "required": false
+    },
+    "stormreach:tempest_brick_wall",
+    "stormreach:cobbled_skyshale_wall",
+    "stormreach:skyshale_brick_wall"
+  ]
+}

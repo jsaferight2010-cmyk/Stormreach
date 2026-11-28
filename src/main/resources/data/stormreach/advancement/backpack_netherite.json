@@ -1,0 +1,36 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:netherite_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_netherite.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_netherite.description"
+    },
+    "icon": {
+      "id": "stormreach:netherite_backpack"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:backpack_obsidian",
+  "rewards": {
+    "experience": 100
+  }
+}

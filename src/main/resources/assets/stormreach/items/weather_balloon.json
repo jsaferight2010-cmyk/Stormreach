@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "stormreach:item/weather_balloon"
+  }
+}

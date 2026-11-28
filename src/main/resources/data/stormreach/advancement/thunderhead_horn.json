@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "horn": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:thunderhead_horn"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.thunderhead_horn.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.thunderhead_horn.description"
+    },
+    "icon": {
+      "id": "stormreach:thunderhead_horn"
+    },
+    "frame": "goal"
+  },
+  "requirements": [
+    [
+      "horn"
+    ]
+  ],
+  "parent": "stormreach:tempest_staff"
+}

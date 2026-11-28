@@ -1,0 +1,135 @@
+{
+  "attributes": {
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "creature": [
+            {
+              "type": "stormreach:skyray",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 4
+            },
+            {
+              "type": "stormreach:storm_jelly",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 2
+              },
+              "weight": 6
+            },
+            {
+              "type": "stormreach:gale_sprite",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 6
+            }
+          ],
+          "monster": [
+            {
+              "type": "stormreach:static_wisp",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 4,
+                "min_inclusive": 2
+              },
+              "weight": 80
+            },
+            {
+              "type": "stormreach:stormhawk",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 20
+            },
+            {
+              "type": "stormreach:cyclone",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 10
+            },
+            {
+              "type": "stormreach:squall_serpent",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 1,
+                "min_inclusive": 1
+              },
+              "weight": 2
+            }
+          ],
+          "ambient": [
+            {
+              "type": "stormreach:aurora_moth",
+              "count": {
+                "type": "minecraft:uniform",
+                "max_inclusive": 3,
+                "min_inclusive": 1
+              },
+              "weight": 10
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
+    },
+    "minecraft:visual/sky_color": "#3a2f6b",
+    "minecraft:visual/fog_color": "#4b3f80",
+    "minecraft:visual/water_fog_color": "#2a3f66",
+    "minecraft:visual/ambient_particles": {
+      "argument": [
+        {
+          "particle": {
+            "type": "minecraft:electric_spark"
+          },
+          "probability": 0.012
+        }
+      ],
+      "modifier": "append"
+    }
+  },
+  "carvers": [],
+  "downfall": 0.6,
+  "effects": {
+    "water_color": "#5b8fd8",
+    "grass_color": "#4fb8c4",
+    "foliage_color": "#7fc8d8"
+  },
+  "features": [
+    [],
+    [],
+    [
+      "stormreach:cloud_thunder"
+    ],
+    [],
+    [],
+    [],
+    [
+      "stormreach:ore_voltite",
+      "stormreach:ore_aurorite_rich",
+      "stormreach:ore_ion"
+    ],
+    [],
+    [],
+    [
+      "stormreach:ion_spire",
+      "stormreach:patch_stormcap"
+    ],
+    []
+  ],
+  "has_precipitation": false,
+  "temperature": 0.5
+}

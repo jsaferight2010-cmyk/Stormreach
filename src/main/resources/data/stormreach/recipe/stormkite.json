@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "P": "stormreach:thunderbird_plume",
+    "S": "minecraft:string",
+    "C": "stormreach:charged_scale",
+    "K": "minecraft:stick"
+  },
+  "pattern": [
+    "PPP",
+    "SCS",
+    " K "
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormkite"
+  }
+}

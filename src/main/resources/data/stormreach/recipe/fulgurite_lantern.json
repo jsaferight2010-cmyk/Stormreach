@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "F": "stormreach:fulgurite_shard",
+    "S": "stormreach:storm_shard"
+  },
+  "pattern": [
+    "FFF",
+    "FSF",
+    "FFF"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:fulgurite_lantern"
+  }
+}

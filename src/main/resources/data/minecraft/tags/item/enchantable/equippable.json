@@ -1,0 +1,9 @@
+{
+ "values": [
+  "stormreach:gale_wings",
+  {
+   "id": "stormreach:storm_carved_pumpkin",
+   "required": false
+  }
+ ]
+}

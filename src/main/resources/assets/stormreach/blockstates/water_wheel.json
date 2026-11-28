@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "stormreach:block/water_wheel"
+    },
+    "axis=z": {
+      "model": "stormreach:block/water_wheel",
+      "y": 90
+    }
+  }
+}

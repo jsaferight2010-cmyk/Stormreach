@@ -1,0 +1,34 @@
+{
+  "criteria": {
+    "killed": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:squall"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.kill_squall.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.kill_squall.description"
+    },
+    "icon": {
+      "id": "stormreach:squall_spawn_egg"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "killed"
+    ]
+  ],
+  "parent": "stormreach:storm_shard"
+}

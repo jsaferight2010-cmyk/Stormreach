@@ -1,0 +1,29 @@
+{
+ "values": [
+  "stormreach:stormstone",
+  {
+   "id": "stormreach:storm_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_granite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_diorite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_andesite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tuff",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate",
+   "required": false
+  }
+ ]
+}

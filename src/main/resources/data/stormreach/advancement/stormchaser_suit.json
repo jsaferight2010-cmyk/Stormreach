@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormchaser_suit.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormchaser_suit.description"
+    },
+    "icon": {
+      "id": "stormreach:stormchaser_jacket"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

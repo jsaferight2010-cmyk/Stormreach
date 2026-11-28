@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "part=base": {
+      "model": "stormreach:block/radar_part_base"
+    },
+    "part=mast": {
+      "model": "stormreach:block/radar_part_mast"
+    },
+    "part=dish": {
+      "model": "stormreach:block/radar_part_dish"
+    }
+  }
+}

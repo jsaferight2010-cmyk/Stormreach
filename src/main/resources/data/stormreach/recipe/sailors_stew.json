@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:salted_cod",
+    "minecraft:potato",
+    "minecraft:carrot",
+    "stormreach:stormberries",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:sailors_stew"
+  }
+}

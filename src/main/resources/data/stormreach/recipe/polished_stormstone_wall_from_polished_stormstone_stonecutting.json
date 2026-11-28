@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "stormreach:polished_stormstone",
+  "result": {
+    "count": 1,
+    "id": "stormreach:polished_stormstone_wall"
+  }
+}

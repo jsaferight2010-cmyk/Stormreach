@@ -1,0 +1,17 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_cobblestone",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_blackstone",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cobbled_deepslate",
+      "required": false
+    },
+    "stormreach:cobbled_skyshale"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_terracotta",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_white_terracotta",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_yellow_terracotta",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_terracotta",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_terracotta",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_terracotta",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_gray_terracotta",
+   "required": false
+  }
+ ]
+}

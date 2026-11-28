@@ -1,0 +1,92 @@
+{
+  "anvil_cost": 4,
+  "description": {
+    "translate": "enchantment.stormreach.conductive"
+  },
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "affected": "victim",
+        "enchanted": "attacker",
+        "effect": {
+          "type": "minecraft:all_of",
+          "effects": [
+            {
+              "type": "minecraft:damage_entity",
+              "damage_type": "minecraft:lightning_bolt",
+              "min_damage": {
+                "type": "minecraft:linear",
+                "base": 2.0,
+                "per_level_above_first": 1.5
+              },
+              "max_damage": {
+                "type": "minecraft:linear",
+                "base": 4.0,
+                "per_level_above_first": 2.0
+              }
+            },
+            {
+              "type": "minecraft:spawn_particles",
+              "horizontal_position": {
+                "type": "in_bounding_box"
+              },
+              "horizontal_velocity": {
+                "base": 0.0
+              },
+              "particle": {
+                "type": "minecraft:electric_spark"
+              },
+              "speed": 1.0,
+              "vertical_position": {
+                "type": "in_bounding_box"
+              },
+              "vertical_velocity": {
+                "base": 0.2
+              }
+            },
+            {
+              "type": "minecraft:play_sound",
+              "pitch": 1.6,
+              "sound": "minecraft:entity.lightning_bolt.impact",
+              "volume": 0.6
+            }
+          ]
+        },
+        "requirements": {
+          "type": "minecraft:any_of",
+          "terms": [
+            {
+              "type": "minecraft:weather_check",
+              "raining": true
+            },
+            {
+              "type": "minecraft:random_chance",
+              "chance": {
+                "type": "minecraft:enchantment_level",
+                "amount": {
+                  "type": "minecraft:linear",
+                  "base": 0.2,
+                  "per_level_above_first": 0.1
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "max_cost": {
+    "base": 50,
+    "per_level_above_first": 10
+  },
+  "max_level": 3,
+  "min_cost": {
+    "base": 15,
+    "per_level_above_first": 10
+  },
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#minecraft:enchantable/sharp_weapon",
+  "weight": 2
+}

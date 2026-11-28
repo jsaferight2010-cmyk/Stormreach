@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_bamboo_mosaic_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_bamboo_mosaic"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_bamboo_mosaic_slab_top"
+  }
+ }
+}

@@ -1,0 +1,19 @@
+{
+  "required": true,
+  "package": "com.stormreach.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "AbstractContainerScreenAccessor",
+    "AvatarRenderStateMixin",
+    "AvatarRendererMixin",
+    "CameraMixin",
+    "CreativeInventoryBackpackMixin",
+    "EntityRenderersAccessor",
+    "InventoryScreenBackpackMixin",
+    "KeyboardInputMixin",
+    "LivingEntityRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

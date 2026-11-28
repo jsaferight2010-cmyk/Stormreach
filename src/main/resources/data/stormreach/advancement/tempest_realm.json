@@ -1,0 +1,29 @@
+{
+  "parent": "stormreach:four_eyes",
+  "criteria": {
+    "d": {
+      "conditions": {
+        "to": "stormreach:tempest_realm"
+      },
+      "trigger": "minecraft:changed_dimension"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tempest_realm.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tempest_realm.description"
+    },
+    "icon": {
+      "id": "stormreach:stormgate_frame"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "d"
+    ]
+  ]
+}

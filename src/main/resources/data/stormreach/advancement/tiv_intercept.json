@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tiv_intercept.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tiv_intercept.description"
+    },
+    "icon": {
+      "id": "stormreach:intercept_vehicle"
+    },
+    "frame": "goal",
+    "hidden": false
+  }
+}

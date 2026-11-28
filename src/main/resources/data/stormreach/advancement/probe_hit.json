@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.probe_hit.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.probe_hit.description"
+    },
+    "icon": {
+      "id": "stormreach:tornado_probe"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

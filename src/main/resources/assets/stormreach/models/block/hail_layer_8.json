@@ -1,0 +1,42 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "particle": "stormreach:block/hail_layer",
+    "texture": "stormreach:block/hail_layer",
+    "all": "stormreach:block/hail_layer"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#texture"
+        },
+        "south": {
+          "texture": "#texture"
+        },
+        "east": {
+          "texture": "#texture"
+        },
+        "west": {
+          "texture": "#texture"
+        },
+        "up": {
+          "texture": "#texture"
+        },
+        "down": {
+          "texture": "#texture"
+        }
+      }
+    }
+  ]
+}

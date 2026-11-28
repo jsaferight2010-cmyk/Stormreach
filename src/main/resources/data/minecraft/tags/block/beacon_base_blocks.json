@@ -1,0 +1,26 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_netherite_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_emerald_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_diamond_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_gold_block",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_iron_block",
+      "required": false
+    },
+    "stormreach:voltite_block",
+    "stormreach:aurorite_block"
+  ]
+}

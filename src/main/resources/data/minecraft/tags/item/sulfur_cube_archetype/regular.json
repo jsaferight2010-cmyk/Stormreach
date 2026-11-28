@@ -1,0 +1,48 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_mud",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_muddy_mangrove_roots",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_packed_mud",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_coal_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_coarse_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_rooted_dirt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_podzol",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_grass_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_clay",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bone_block",
+   "required": false
+  }
+ ]
+}

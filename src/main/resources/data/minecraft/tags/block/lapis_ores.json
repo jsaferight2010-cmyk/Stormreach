@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_lapis_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_lapis_ore",
+   "required": false
+  }
+ ]
+}

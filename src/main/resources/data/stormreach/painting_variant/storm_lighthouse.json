@@ -1,0 +1,13 @@
+{
+  "asset_id": "stormreach:storm_lighthouse",
+  "author": {
+    "color": "gray",
+    "translate": "painting.stormreach.storm_lighthouse.author"
+  },
+  "height": 3,
+  "title": {
+    "color": "yellow",
+    "translate": "painting.stormreach.storm_lighthouse.title"
+  },
+  "width": 2
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": "stormreach:storm_shard",
+    "T": "minecraft:stick"
+  },
+  "pattern": [
+    "S",
+    "T",
+    "T"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormshard_shovel"
+  }
+}

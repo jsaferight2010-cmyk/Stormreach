@@ -1,0 +1,29 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.hide_survived.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.hide_survived.description"
+    },
+    "icon": {
+      "id": "stormreach:rusted_locker"
+    },
+    "frame": "goal",
+    "hidden": true
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:hide_locker",
+  "rewards": {
+    "experience": 100
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "d": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:storm_detector"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.forecaster_3.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.forecaster_3.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_detector"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "d"
+    ]
+  ],
+  "parent": "stormreach:forecaster_2"
+}

@@ -1,0 +1,21 @@
+{
+ "variants": {
+  "": [
+   {
+    "model": "stormreach:block/storm_magenta_concrete_powder"
+   },
+   {
+    "model": "stormreach:block/storm_magenta_concrete_powder",
+    "y": 90
+   },
+   {
+    "model": "stormreach:block/storm_magenta_concrete_powder",
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_magenta_concrete_powder",
+    "y": 270
+   }
+  ]
+ }
+}

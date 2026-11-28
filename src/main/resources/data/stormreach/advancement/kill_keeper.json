@@ -1,0 +1,41 @@
+{
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:hollow_keeper"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.kill_keeper.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.kill_keeper.description"
+    },
+    "icon": {
+      "id": "stormreach:keeper_trophy"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "parent": "stormreach:enter_labyrinth",
+  "rewards": {
+    "loot": [
+      "stormreach:ach/keeper"
+    ],
+    "experience": 300
+  }
+}

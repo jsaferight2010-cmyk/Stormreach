@@ -1,0 +1,22 @@
+{
+ "variants": {
+  "age=0": {
+   "model": "stormreach:block/storm_chorus_flower"
+  },
+  "age=1": {
+   "model": "stormreach:block/storm_chorus_flower"
+  },
+  "age=2": {
+   "model": "stormreach:block/storm_chorus_flower"
+  },
+  "age=3": {
+   "model": "stormreach:block/storm_chorus_flower"
+  },
+  "age=4": {
+   "model": "stormreach:block/storm_chorus_flower"
+  },
+  "age=5": {
+   "model": "stormreach:block/storm_chorus_flower_dead"
+  }
+ }
+}

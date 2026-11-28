@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": "stormreach:gale_grass"
+  },
+  "pattern": [
+    "GGG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:gale_bread"
+  }
+}

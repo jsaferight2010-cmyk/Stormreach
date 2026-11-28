@@ -1,0 +1,106 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_pale_moss_carpet",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_short_grass",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_fern",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dead_bush",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_vine",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_glow_lichen",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_sunflower",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_lilac",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_rose_bush",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_peony",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_tall_grass",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_large_fern",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_hanging_roots",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pitcher_plant",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_seagrass",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_tall_seagrass",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bush",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_firefly_bush",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_roots",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_nether_sprouts",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_roots",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_leaf_litter",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_short_dry_grass",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_tall_dry_grass",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_shelf_mushroom",
+      "required": false
+    },
+    "stormreach:gale_grass",
+    "stormreach:sparkfern"
+  ]
+}

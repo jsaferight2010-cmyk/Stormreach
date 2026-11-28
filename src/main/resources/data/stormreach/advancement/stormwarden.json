@@ -1,0 +1,35 @@
+{
+  "parent": "stormreach:storm_cell",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:stormwarden"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.stormwarden.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.stormwarden.description"
+    },
+    "icon": {
+      "id": "stormreach:tempest_core"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ]
+}

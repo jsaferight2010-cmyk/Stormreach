@@ -1,0 +1,26 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.pick_stormfruit.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.pick_stormfruit.description"
+    },
+    "icon": {
+      "id": "stormreach:stormfruit"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "parent": "stormreach:elderstorm_grove"
+}

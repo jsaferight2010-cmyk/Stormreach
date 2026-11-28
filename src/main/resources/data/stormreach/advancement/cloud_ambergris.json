@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "a": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:cloud_ambergris"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "a"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.cloud_ambergris.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.cloud_ambergris.description"
+    },
+    "icon": {
+      "id": "stormreach:cloud_ambergris"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

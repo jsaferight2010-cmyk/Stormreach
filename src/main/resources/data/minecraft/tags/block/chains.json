@@ -1,0 +1,40 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_iron_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_exposed_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weathered_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_oxidized_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_exposed_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_weathered_copper_chain",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_waxed_oxidized_copper_chain",
+   "required": false
+  }
+ ]
+}

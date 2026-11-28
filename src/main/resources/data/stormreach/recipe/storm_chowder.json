@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:cooked_crab_claw",
+    "minecraft:baked_potato",
+    "minecraft:kelp",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:storm_chowder"
+  }
+}

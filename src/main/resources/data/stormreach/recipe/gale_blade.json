@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": "stormreach:serpent_scale",
+    "H": "stormreach:squall_heart",
+    "B": "minecraft:breeze_rod"
+  },
+  "pattern": [
+    "S",
+    "H",
+    "B"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:gale_blade"
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:shock_eel"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.shock_eel.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.shock_eel.description"
+    },
+    "icon": {
+      "id": "stormreach:voltaic_eel"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

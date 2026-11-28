@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "P": "minecraft:glass_pane",
+    "E": "minecraft:ender_eye",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
+  },
+  "pattern": [
+    "PPP",
+    "PEP",
+    "IRI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:weather_monitor"
+  }
+}

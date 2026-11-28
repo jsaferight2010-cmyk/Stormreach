@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:tempest_spire",
+  "criteria": {
+    "s": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:tempest_sigil"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tempest_sigil.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tempest_sigil.description"
+    },
+    "icon": {
+      "id": "stormreach:tempest_sigil"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "s"
+    ]
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "parent": "stormreach:tempest_sigil",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:tempest_sovereign"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tempest_sovereign.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tempest_sovereign.description"
+    },
+    "icon": {
+      "id": "stormreach:tempest_eye"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "stormreach:ach/sovereign"
+    ],
+    "experience": 200
+  }
+}

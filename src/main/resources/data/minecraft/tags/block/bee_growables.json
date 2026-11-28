@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_sweet_berry_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cave_vines",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cave_vines_plant",
+   "required": false
+  }
+ ]
+}

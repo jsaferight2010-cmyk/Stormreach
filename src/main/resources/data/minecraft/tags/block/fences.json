@@ -1,0 +1,10 @@
+{
+ "values": [
+  "stormreach:driftwood_fence",
+  "stormreach:stormpine_fence",
+  {
+   "id": "stormreach:storm_nether_brick_fence",
+   "required": false
+  }
+ ]
+}

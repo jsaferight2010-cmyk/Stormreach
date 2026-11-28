@@ -1,0 +1,94 @@
+{
+  "variants": {
+    "facing=north,filled=false,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale"
+    },
+    "facing=north,filled=true,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale_set"
+    },
+    "facing=north,filled=false,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder"
+    },
+    "facing=north,filled=true,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder_set"
+    },
+    "facing=north,filled=false,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow"
+    },
+    "facing=north,filled=true,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow_set"
+    },
+    "facing=east,filled=false,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale",
+      "y": 90
+    },
+    "facing=east,filled=true,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale_set",
+      "y": 90
+    },
+    "facing=east,filled=false,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder",
+      "y": 90
+    },
+    "facing=east,filled=true,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder_set",
+      "y": 90
+    },
+    "facing=east,filled=false,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow",
+      "y": 90
+    },
+    "facing=east,filled=true,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow_set",
+      "y": 90
+    },
+    "facing=south,filled=false,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale",
+      "y": 180
+    },
+    "facing=south,filled=true,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale_set",
+      "y": 180
+    },
+    "facing=south,filled=false,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder",
+      "y": 180
+    },
+    "facing=south,filled=true,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder_set",
+      "y": 180
+    },
+    "facing=south,filled=false,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow",
+      "y": 180
+    },
+    "facing=south,filled=true,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow_set",
+      "y": 180
+    },
+    "facing=west,filled=false,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale",
+      "y": 270
+    },
+    "facing=west,filled=true,kind=0": {
+      "model": "stormreach:block/labyrinth_keyhole_gale_set",
+      "y": 270
+    },
+    "facing=west,filled=false,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder",
+      "y": 270
+    },
+    "facing=west,filled=true,kind=1": {
+      "model": "stormreach:block/labyrinth_keyhole_thunder_set",
+      "y": 270
+    },
+    "facing=west,filled=false,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow",
+      "y": 270
+    },
+    "facing=west,filled=true,kind=2": {
+      "model": "stormreach:block/labyrinth_keyhole_hollow_set",
+      "y": 270
+    }
+  }
+}

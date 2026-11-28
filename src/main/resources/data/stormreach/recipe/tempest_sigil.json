@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": "stormreach:storm_cell",
+    "S": "stormreach:storm_crystal_block",
+    "T": "stormreach:tempest_core",
+    "H": "stormreach:thunderhead_horn",
+    "B": "stormreach:stormheart"
+  },
+  "pattern": [
+    "CSC",
+    "HTB",
+    "CSC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:tempest_sigil"
+  }
+}

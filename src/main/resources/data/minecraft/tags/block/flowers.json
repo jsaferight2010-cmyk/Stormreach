@@ -1,0 +1,60 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_sunflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lilac",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_peony",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_rose_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pitcher_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_flowering_azalea_leaves",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_flowering_azalea",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mangrove_propagule",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cherry_leaves",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_petals",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wildflowers",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chorus_flower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_spore_blossom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cactus_flower",
+   "required": false
+  }
+ ]
+}

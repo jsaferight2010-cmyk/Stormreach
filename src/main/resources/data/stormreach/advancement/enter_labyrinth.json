@@ -1,0 +1,28 @@
+{
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.enter_labyrinth.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.enter_labyrinth.description"
+    },
+    "icon": {
+      "id": "stormreach:rusted_locker"
+    },
+    "frame": "task",
+    "hidden": false,
+    "background": "stormreach:gui/advancements/backgrounds/labyrinth",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ]
+}

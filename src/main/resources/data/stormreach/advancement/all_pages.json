@@ -1,0 +1,85 @@
+{
+  "criteria": {
+    "p1": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:journal_page_1"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "p2": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:journal_page_2"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "p3": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:journal_page_3"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "p4": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:journal_page_4"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "p5": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:journal_page_5"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.all_pages.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.all_pages.description"
+    },
+    "icon": {
+      "id": "stormreach:journal_page_5"
+    },
+    "frame": "goal",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "p1"
+    ],
+    [
+      "p2"
+    ],
+    [
+      "p3"
+    ],
+    [
+      "p4"
+    ],
+    [
+      "p5"
+    ]
+  ],
+  "parent": "stormreach:journal_page"
+}

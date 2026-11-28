@@ -1,0 +1,37 @@
+{
+  "parent": "stormreach:stormwarden",
+  "criteria": {
+    "l": {
+      "conditions": {
+        "player": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:location": {
+              "structures": "stormreach:tempest_spire"
+            }
+          }
+        }
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.tempest_spire.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.tempest_spire.description"
+    },
+    "icon": {
+      "id": "stormreach:chiseled_tempest_bricks"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "l"
+    ]
+  ]
+}

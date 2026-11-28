@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "C": "stormreach:copper_cable",
+    "P": "minecraft:piston",
+    "B": "minecraft:bucket"
+  },
+  "pattern": [
+    "ICI",
+    "PBP",
+    "ICI"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:electric_pump"
+  }
+}

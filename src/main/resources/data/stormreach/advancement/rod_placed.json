@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "p": {
+      "conditions": {
+        "location": {
+          "type": "minecraft:match_block",
+          "blocks": "minecraft:lightning_rod"
+        }
+      },
+      "trigger": "minecraft:placed_block"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.rod_placed.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.rod_placed.description"
+    },
+    "icon": {
+      "id": "minecraft:lightning_rod"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "p"
+    ]
+  ],
+  "parent": "stormreach:struck_by_lightning"
+}

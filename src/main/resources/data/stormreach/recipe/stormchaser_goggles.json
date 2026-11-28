@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": "minecraft:leather",
+    "G": "minecraft:light_blue_stained_glass_pane",
+    "C": "minecraft:copper_ingot"
+  },
+  "pattern": [
+    "LLL",
+    "GCG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormchaser_goggles"
+  }
+}

@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_netherrack",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magma_block",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:bottled_rain",
+    "stormreach:storm_cell"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:bottled_thunder"
+  }
+}

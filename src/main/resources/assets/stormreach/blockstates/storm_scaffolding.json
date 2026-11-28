@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "bottom=false": {
+   "model": "stormreach:block/storm_scaffolding_stable"
+  },
+  "bottom=true": {
+   "model": "stormreach:block/storm_scaffolding_unstable"
+  }
+ }
+}

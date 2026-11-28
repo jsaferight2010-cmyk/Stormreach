@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_polished_blackstone_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_polished_blackstone"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_polished_blackstone_slab_top"
+  }
+ }
+}

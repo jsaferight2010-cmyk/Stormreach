@@ -1,0 +1,32 @@
+{
+  "criteria": {
+    "shard": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:storm_shard"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.storm_shard.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.storm_shard.description"
+    },
+    "icon": {
+      "id": "stormreach:storm_shard"
+    },
+    "frame": "task"
+  },
+  "requirements": [
+    [
+      "shard"
+    ]
+  ],
+  "parent": "stormreach:root"
+}

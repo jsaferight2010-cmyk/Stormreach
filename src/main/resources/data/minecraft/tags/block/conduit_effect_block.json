@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_prismarine",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_prismarine_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sea_lantern",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dark_prismarine",
+   "required": false
+  }
+ ]
+}

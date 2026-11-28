@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "size=1": {
+      "model": "stormreach:block/puddle_1"
+    },
+    "size=2": {
+      "model": "stormreach:block/puddle_2"
+    },
+    "size=3": {
+      "model": "stormreach:block/puddle_3"
+    }
+  }
+}

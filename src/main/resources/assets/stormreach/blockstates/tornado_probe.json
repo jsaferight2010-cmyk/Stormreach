@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,recorded=false": {
+      "model": "stormreach:block/tornado_probe"
+    },
+    "facing=north,recorded=true": {
+      "model": "stormreach:block/tornado_probe_recorded"
+    },
+    "facing=east,recorded=false": {
+      "model": "stormreach:block/tornado_probe",
+      "y": 90
+    },
+    "facing=east,recorded=true": {
+      "model": "stormreach:block/tornado_probe_recorded",
+      "y": 90
+    },
+    "facing=south,recorded=false": {
+      "model": "stormreach:block/tornado_probe",
+      "y": 180
+    },
+    "facing=south,recorded=true": {
+      "model": "stormreach:block/tornado_probe_recorded",
+      "y": 180
+    },
+    "facing=west,recorded=false": {
+      "model": "stormreach:block/tornado_probe",
+      "y": 270
+    },
+    "facing=west,recorded=true": {
+      "model": "stormreach:block/tornado_probe_recorded",
+      "y": 270
+    }
+  }
+}

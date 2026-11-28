@@ -1,0 +1,60 @@
+{
+  "values": [
+    "stormreach:driftwood_fence",
+    "stormreach:stormpine_fence",
+    {
+      "id": "stormreach:storm_oak_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_fence",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_fence",
+      "required": false
+    },
+    "stormreach:galewood_fence",
+    "stormreach:elderstorm_fence"
+  ]
+}

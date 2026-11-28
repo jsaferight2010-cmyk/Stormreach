@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:glass_bottle",
+    "minecraft:sunflower",
+    "stormreach:salt"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:bottled_sunshine"
+  }
+}

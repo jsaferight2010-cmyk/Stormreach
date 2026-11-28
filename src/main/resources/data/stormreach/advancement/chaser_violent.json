@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:chaser_first",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.chaser_violent.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.chaser_violent.description"
+    },
+    "icon": {
+      "id": "stormreach:chasers_logbook"
+    },
+    "frame": "goal",
+    "hidden": false
+  }
+}

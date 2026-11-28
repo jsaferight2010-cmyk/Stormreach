@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:tempest_realm",
+  "criteria": {
+    "c": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:cloudstep_boots"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.cloudstep.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.cloudstep.description"
+    },
+    "icon": {
+      "id": "stormreach:cloudstep_boots"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "c"
+    ]
+  ]
+}

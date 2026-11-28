@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.gale_friend.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.gale_friend.description"
+    },
+    "icon": {
+      "id": "stormreach:gale_essence"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

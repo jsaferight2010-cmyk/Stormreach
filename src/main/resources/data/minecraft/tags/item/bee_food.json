@@ -1,0 +1,120 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_dandelion",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_open_eyeblossom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_poppy",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_orchid",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_allium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_azure_bluet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_white_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_tulip",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_oxeye_daisy",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cornflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lily_of_the_valley",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wither_rose",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_torchflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sunflower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lilac",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_peony",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_rose_bush",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pitcher_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_flowering_azalea_leaves",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_flowering_azalea",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mangrove_propagule",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cherry_leaves",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_petals",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_wildflowers",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chorus_flower",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_spore_blossom",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cactus_flower",
+   "required": false
+  }
+ ]
+}

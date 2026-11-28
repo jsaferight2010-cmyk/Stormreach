@@ -1,0 +1,21 @@
+{
+ "variants": {
+  "": [
+   {
+    "model": "stormreach:block/storm_red_sand"
+   },
+   {
+    "model": "stormreach:block/storm_red_sand",
+    "y": 90
+   },
+   {
+    "model": "stormreach:block/storm_red_sand",
+    "y": 180
+   },
+   {
+    "model": "stormreach:block/storm_red_sand",
+    "y": 270
+   }
+  ]
+ }
+}

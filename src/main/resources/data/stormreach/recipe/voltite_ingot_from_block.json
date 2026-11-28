@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:voltite_block"
+  ],
+  "result": {
+    "count": 9,
+    "id": "stormreach:voltite_ingot"
+  }
+}

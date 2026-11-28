@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "stormreach:block/driftwood_slab"
+    },
+    "type=double": {
+      "model": "stormreach:block/driftwood_planks"
+    },
+    "type=top": {
+      "model": "stormreach:block/driftwood_slab_top"
+    }
+  }
+}

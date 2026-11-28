@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "stormreach:storm_waxed_oxidized_copper_door",
+            "state": {
+              "half": "lower"
+            }
+          },
+          "name": "stormreach:storm_waxed_oxidized_copper_door"
+        }
+      ],
+      "rolls": 1
+    }
+  ],
+  "random_sequence": "stormreach:blocks/storm_waxed_oxidized_copper_door"
+}

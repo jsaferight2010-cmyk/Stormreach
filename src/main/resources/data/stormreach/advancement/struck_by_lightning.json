@@ -1,0 +1,43 @@
+{
+  "criteria": {
+    "h": {
+      "conditions": {
+        "damage": {
+          "type": {
+            "tags": [
+              {
+                "id": "#minecraft:is_lightning",
+                "expected": true
+              }
+            ]
+          }
+        }
+      },
+      "trigger": "minecraft:entity_hurt_player"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.struck_by_lightning.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.struck_by_lightning.description"
+    },
+    "icon": {
+      "id": "stormreach:lightning_charm"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "h"
+    ]
+  ],
+  "parent": "stormreach:root",
+  "rewards": {
+    "loot": [
+      "stormreach:ach/lightning_rod"
+    ]
+  }
+}

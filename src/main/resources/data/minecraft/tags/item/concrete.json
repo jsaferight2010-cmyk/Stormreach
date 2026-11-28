@@ -1,0 +1,68 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_white_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magenta_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_blue_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_yellow_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lime_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gray_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_gray_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cyan_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purple_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_green_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_concrete",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_black_concrete",
+   "required": false
+  }
+ ]
+}

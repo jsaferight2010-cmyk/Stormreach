@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "lit=false,relic=1": {
+      "model": "stormreach:block/relic_pedestal"
+    },
+    "lit=false,relic=2": {
+      "model": "stormreach:block/relic_pedestal"
+    },
+    "lit=false,relic=3": {
+      "model": "stormreach:block/relic_pedestal"
+    },
+    "lit=false,relic=4": {
+      "model": "stormreach:block/relic_pedestal"
+    },
+    "lit=true,relic=1": {
+      "model": "stormreach:block/relic_pedestal_lit"
+    },
+    "lit=true,relic=2": {
+      "model": "stormreach:block/relic_pedestal_lit"
+    },
+    "lit=true,relic=3": {
+      "model": "stormreach:block/relic_pedestal_lit"
+    },
+    "lit=true,relic=4": {
+      "model": "stormreach:block/relic_pedestal_lit"
+    }
+  }
+}

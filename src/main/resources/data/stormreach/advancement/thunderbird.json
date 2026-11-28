@@ -1,0 +1,38 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "k": {
+      "conditions": {
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "stormreach:thunderbird"
+          }
+        }
+      },
+      "trigger": "minecraft:player_killed_entity"
+    }
+  },
+  "requirements": [
+    [
+      "k"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.thunderbird.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.thunderbird.description"
+    },
+    "icon": {
+      "id": "stormreach:thunderbird_plume"
+    },
+    "frame": "challenge",
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

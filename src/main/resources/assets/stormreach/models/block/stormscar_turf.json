@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "minecraft:block/dirt",
+    "top": "stormreach:block/stormscar_turf_top",
+    "side": "stormreach:block/stormscar_turf_side",
+    "particle": "minecraft:block/dirt"
+  }
+}

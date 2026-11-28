@@ -1,0 +1,68 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_white_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_orange_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_magenta_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_blue_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_yellow_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lime_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_pink_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gray_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_light_gray_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cyan_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purple_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blue_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_brown_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_green_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_carpet",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_black_carpet",
+   "required": false
+  }
+ ]
+}

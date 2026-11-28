@@ -1,0 +1,797 @@
+# Stormreach patch notes
+
+## 6.0.1
+- **Stormreach swords now break blocks in Creative:** the Stormshard Sword, Voltite Sword, Aurorite Sword, Gale Blade, Weatherbreaker and the Stormbreaker. Vanilla swords can't. In Survival they mine like any sword: cobwebs fast, bamboo instantly, everything else at hand speed, and stone and ores drop nothing.
+
+## 6.0.0 (the Overhaul)
+A rebuild of almost everything players see and hear, a crash fix, real multiplayer support, and new storm signs.
+**Not yet played in a real client:** every item below compiles against 26.3 and passes the automated checks (73 in-game GameTests on a test server, 79 unit tests), but visuals and sounds have only been checked offline.
+
+### Fixes
+- **World-creation crash** in Thunderspire Highlands and Brinewater Marsh. 1 in 20 tree placements picked a feature with a biome check inside it.
+- **Weather "from" direction** was backwards on every instrument.
+- **Likely cause of the Hollow Shrine crash:** Cyrrus or the Stranger copying your skin uploaded it to the graphics card mid-frame. That now happens between frames. Not confirmed without the crash log.
+- **Tempest Spire:**
+  - The bottom chest hung over air.
+  - The spiral stair could not be climbed past y 35.
+- The **Tempest Eye** no longer gets left behind in the sky arena.
+- **Saplings:** Galewood and Stormpine saplings now grow.
+- **Gale Cloud** throws you the way you entered it, not always the same way.
+- **Shock Eel:** its bite used to give *you* a protective buff. It now shocks.
+
+### Visuals
+- **Armour:** every set is repainted piece by piece: helmet with an eye slit, real pauldrons, boots only on the feet.
+- **Machines:** the Doppler radar, wind turbine, tornado siren and weather station are full 3D machines.
+  - Placing a tall machine shows a see-through preview, red where it is blocked.
+- **Radar:** shows real reflectivity and velocity scans.
+- **HUD:** a weather panel appears while wearing Storm Chaser goggles or driving the TIV.
+- **Storm clouds:** solid towers with a flat dark base and a rain shaft.
+- **Hail:** falls as particles. It is much cheaper, lands where it should, and leaves crust on the ground.
+- **TIV:** new armoured truck with a cockpit view. The anchor key (Z) drops the spikes at once.
+- **Brine Wraith:** a new model (a drowned sailor).
+- **Models:** salt crystals, cistern, umbrella and Stormkite.
+
+### Weather and tornadoes
+- **Tornadoes:**
+  - Each type has its own shape.
+  - The funnel reaches the real cloud base.
+  - Tornadoes move slower (configurable).
+  - Caught mobs and players ride the vortex properly.
+- **Damage:** trees break by rating, crops get flattened or torn out, and stalled tornadoes keep eroding the ground.
+- **Downbursts** know when the ground is wet.
+- **Puddles** dry out on their own.
+- **Fire whirls** in the Nether, near lava.
+- **Units:** imperial by default, or metric. On a server each player sees their own.
+
+### Gameplay
+- **Barometer and Wind Vane** open their own dial screens.
+- **Creative Wind Generator:** blows any wind from a breeze to EF5, for testing.
+- **Stormheart:** on a power network, a grown Stormheart keeps spreading past its normal radius.
+- **Rusted Locker** hiding reworked.
+- **Backpack:** the worn slot shows in the inventory, including the Creative tab.
+- **Gear tiers rebalanced:** Stormshard, then Voltite (diamond tier), then Aurorite (netherite tier). Wearing storm gear gives a Storm Surge bonus.
+- **Mobs:**
+  - **Stormwarden:** fights on the ground, takes off, then slams down.
+  - **Thunderbird:** circles and dives.
+  - **Rainfrog:** hops.
+  - **Dust Devil:** can be fought.
+  - **Stranger** eggs work.
+  - **Boss orbs:** only last 8 seconds.
+  - **Storm bosses:** natural lightning heals them only a little.
+
+### Structures and story
+- **Hollow Shrine:** rebuilt as a floating island.
+- **Sky arenas:** only exist during the fight.
+- **Cyrrus:** his arrival is a camera cinematic. Press jump to skip it.
+
+### Guidebooks and sound
+- **Field Guide:** rewritten for new players.
+- **Storm Crafter's Handbook:** now includes the brewing recipes.
+- **Sound redesign:**
+  - Most sounds rebuilt with less hiss and squeak.
+  - Variants so repeated sounds don't sound identical.
+  - The tornado roar is heard from 160 blocks and the siren from 192.
+
+### Performance
+- Weather code no longer loads or generates chunks just to look at the ground.
+
+### Multiplayer
+- **Opening another world** in the same session no longer carries over the last world's tornadoes, fights or weather state.
+- **Stopping the server mid-boss-fight** puts players back where they came from.
+- **Switching servers** clears the client's weather HUD, locker camera, hail and cinematics.
+- **Commands:** anyone can use `/stormreach status` and `/stormreach forecast`.
+- **Mod Menu:** on a server, the screen says the server's own config decides gameplay.
+
+### New: signs of the storm
+- **Weatherglass:** a storm glass that grows crystals up to 20 minutes before rain arrives. Comparator output is 0 to 15.
+- **Freezing rain and Glaze:**
+  - In biomes just above freezing, rain at night or in a Thunderhead leaves slippery ice.
+  - The ice melts by day or near a torch.
+- **St. Elmo's fire:** metal held high in a Thunderhead sparks and hisses.
+  - After 10 seconds you get a warning. At 30 seconds it draws lightning.
+  - A lightning rod within 16 blocks takes the charge.
+- **Storms feed the fields:**
+  - Crops in the rain grow about twice as fast.
+  - Lightning gives nearby crops a burst of growth.
+- **New settings** in `stormreach.properties`: `freezingRain`, `elmosFire`, `elmosFireStrikes`, `rainFedCrops`, `lightningFertilizes`, `heartPoweredSpread`, `heartPowerDraw`, `heartPoweredMaxRadius`.
+
+## 5.5.0 (Live Wire)
+Storm electricity and captured water, with JEI support for everything.
+
+### Power (Storm Units, SU)
+- **Generators:**
+  - **Wind Turbine:** the 5.3 turbine now also makes power, up to 30 SU a tick in a gale.
+  - **Water Wheel:** a paddle wheel that turns in moving water, up to 16 SU a tick. Moving Stormwater doubles it.
+- **Copper Cable** joins generators, capacitors and machines into a network on all six sides. Power goes to machines first, then to capacitors.
+- **Storm Capacitor:** stores 100,000 SU. A lightning strike within 24 blocks fills half of it at once, and its glass jars glow as it fills.
+- **Machines:**
+  - **Arc Lamp:** light level 15 while powered.
+  - **Shock Plate:** shocks hostile mobs that step on it.
+  - **Electric Pump:** lifts water into tanks.
+  - **Sprinkler:** waters crops.
+  - **Tesla Coil:** can now also charge from the network.
+- **Multimeter:** reads any power block, tank or cable.
+
+### Captured water
+- **Rain Barrel:** catches rain, which comes out as **Stormwater** in a thunderstorm. Set it on a **Cistern** (32 buckets) and it drains into it.
+- Fill buckets and bottles from either tank, or pour buckets in. Comparators read the level.
+- **Sprinklers** spend the water on a 9x9 area: farmland stays wet, crops and saplings grow faster (more with Stormwater), and fires go out.
+- **Electric Pumps** lift water from ponds, rivers and the sea, which never run dry.
+
+### JEI (and EMI or REI)
+- Every Stormreach recipe already shows up. A new plugin adds four pages:
+  - **Storm Power:** what makes, stores and uses power, and how much.
+  - **Water Capture:** where water comes from and where it goes.
+  - **Catching and Gathering:** bottled creatures and lightning, Storm Cells, creature by-products.
+  - **Creature Drops:** every mob's drops with counts and chances, generated from the loot tables.
+- An information page for every Stormreach item, with its description and how to use it.
+
+### Fixes
+- **The Stormheart is easier to find in creative.** It now leads the Storm Blocks tab and appears in the Weather Events tab. It is the block that starts the Stormblight spreading.
+- 3 new achievements and 2 new sounds.
+
+## 5.4.0 (Thunderfront)
+Signs of the coming storm, and tools for weathering it. The new creatures each have a jointed model, painted texture, keyframed animation and synthesized sounds.
+
+### New creatures
+- **Rainfrog** (marsh, coast, Elderstorm Grove): a golden-eyed frog whose whole marsh starts croaking in the minutes before rain. Its throat sac puffs with every croak, and it hops out to play once the rain arrives. Breed with Slimeballs.
+- **Storm Petrel:** a sooty little seabird with a white rump. Flocks gather low over the sea ahead of a storm and leave once it passes. Drops feathers and the **Omen Feather**.
+- **Dust Devil:** a whirling sand column on clear days in deserts, badlands and savannas. It lifts loose items and spins you round but does no harm. Catch one in a glass bottle.
+
+### Gear and blocks
+- **Umbrella:** keeps hail off you and floats you down from heights. Don't wave it about in a thunderstorm.
+- **Omen Feather:** use it to read the sky: when the rain comes or stops, and whether thunder is due.
+- **Bottled Dust Devil:** throw it to set down a whirlwind that sweeps up the dropped items around it.
+- **Tesla Coil:** stores lightning (from nearby strikes, Storm Cells or a thunderstorm) and zaps hostile mobs within 10 blocks. Redstone holds its fire, and comparators read its charge.
+- **Wind Chimes:** copper chimes that ring in the wind, from a tinkle in a breeze to a clamour in a gale.
+
+### Other
+- **Enchantment descriptions:** all 8 Stormreach enchantments now have descriptions. Mods such as Enchantment Descriptions show them, and these mods used to log a warning for each one.
+- Every new item has its description and Shift details.
+- 4 new achievements and 4 new synthesized sounds.
+
+## 5.3.0 (Skyward)
+More storm creatures, storm chasing gear and weather gadgets, and a cleaner tooltip with a description on every item. Every new creature has its own jointed model, a painted texture, keyframed animation and synthesized sounds.
+
+### Tooltips
+- **Every Stormreach item now has a description**: a sentence or two under its name saying what it is and what it's for. That's about 350 hand-written descriptions, plus a shared one for each generated Storm block and Storm mob egg that names the vanilla original.
+- **A cleaner layout:** name, then the description in soft grey, then a single "Hold ⇧ Shift for details" line.
+  - Holding Shift shows how to use the item and its exact effects (food effects, redstone outputs, cooldowns) as short bullet points.
+  - The usage lines that items used to print all the time now sit under Shift, so nothing appears twice. Live values (a logbook's count, a backpack's contents) stay visible.
+
+### New creatures
+- **Squall Serpent** (Tempest Realm, rare): a horned sky-dragon three blocks long that swims through the air on a wave down six tapering segments, with glowing crystal fins and trailing whiskers.
+  - 160 health and a boss bar. It circles, lunges to bite, rears back to spit ball lightning, and lashes out a gust when hurt.
+  - Drops **Serpent Scales** and its **Squall Heart**.
+- **Hailstone Golem** (Overworld thunderstorms): a hulking giant of packed hail around a glowing core, with an icicle crown.
+  - It smashes up close and heaves both arms overhead to hurl hailstones. Out of the storm it melts, and fire hurts it double.
+  - Drops a **Glacial Core**, Packed Ice and Snowballs.
+- **Aurora Moth** (at night, near light): a plush violet moth with four sheer, eyespotted wings that shade from aurora green to rose. It sheds **Aurora Dust**.
+- **Stormfly:** fireflies with lightning-lit tails that swarm before and during storms. Catch one in a glass bottle.
+
+### Storm chasing and weather gear
+- **Stormchaser suit** (goggles, jacket, trousers, boots), in storm orange with reflective tape:
+  - The goggles give a heads-up readout of the nearest tornado.
+  - The jacket braces you against tornado winds.
+  - The trousers and boots give Speed in the rain.
+  - The full suit makes you immune to lightning.
+- **Weather Radio, upgraded:** it now sounds an alert tone and broadcasts a Tornado Emergency (within 150 blocks), Severe Thunderstorm Warnings, rain statements, the all-clear and Thunderbird advisories.
+- **Cloud Seeder and Supercell Seeder:** rockets that bring rain, or a full thunderstorm.
+- **Bottled Lightning:** hold an empty bottle near a lightning strike to catch it, then throw it to call the bolt down.
+- **Wind Turbine:** a turbine whose three-bladed rotor spins faster in stronger wind and gives a redstone signal for the wind speed.
+- **Storm Shelter Hatch:** a blast-proof steel cellar hatch with hazard stripes.
+
+### Weapons, blocks and food
+- **Gale Blade:** a sword forged around a Squall Heart. Every hit throws the target skyward, and you can use it to ride an updraft.
+- **Blocks:**
+  - **Stormfly Jar:** a lamp that stands or hangs.
+  - **Glacial Lamp**.
+  - **Aurora Glass:** animated, with the aurora drifting across it.
+  - **Serpentscale Block**.
+- **Food:**
+  - **Chaser's Coffee:** Speed, Haste and Night Vision.
+  - **Snow Cone:** Fire Resistance.
+- 9 new achievements and 10 new synthesized sounds (serpent roar, golem crackle and shatter, moth flutter, stormfly buzz, the radio alert tone…).
+- New setting: `hailGolemChance` in `config/stormreach.properties`.
+
+## 5.2.0 (Stormwild)
+New storm-touched creatures, storm chasing gear, and what they give you. Every new creature has its own jointed model, a painted texture, keyframed animation and synthesized sounds.
+
+### New creatures
+- **Sparkskink** (coasts, Static Fields): a lizard that charges up in the rain or when struck by lightning. Its crest glows, it crackles with sparks, and it sheds **Charged Scales**. It scuttles with an S-curved walk and does lizard push-ups. Breed with Glow Berries.
+- **Tidewrack Hermit** (coasts, marsh): a hermit crab in a pearly spiral shell.
+  - It pulls into the shell when you come close, taking far less damage, unless you sneak or hold Kelp.
+  - Drops **Pearlescent Shells**. Breed with Kelp.
+- **Shock Eel** (coastal and marsh water): an eight-part glowing-spotted eel that swims in a travelling wave.
+  - Peaceful, except in thunderstorms (when it hunts swimmers) or when provoked.
+  - Its bite shocks you. Drops **Voltaic Eel** (cook it).
+- **Cloud Whale** (Cloudsea Expanse): a sky giant with a cloud-tufted back that drifts, undulating, high above the ground.
+  - It sings, rains on what's beneath it, and leaves **Cloud Ambergris** every few minutes.
+- **Storm Jelly** (Cloudsea Expanse, Aurora Spires): a translucent, glowing jellyfish of the sky. It pulses and trails its tentacles, stings on touch, and drops **Glowgel**.
+- **Gale Sprite** (Galewood Highlands, Aurora Spires, Elderstorm Grove): a tiny wind spirit with dragonfly wings.
+  - Give it Thistle Down for a **Gale Essence**. It then follows you for three minutes and catches you on the wind when you fall.
+- **Thunderbird:** a storm raptor nearly six blocks across that arrives in thunderstorms.
+  - It circles, dives talons-first, and screams to call lightning onto you.
+  - It has a boss bar and leaves when the storm passes. Drops **Thunderbird Plumes**.
+
+### Storm chasing
+- **Tornado Intercept Vehicle:** a drivable armoured chase truck.
+  - It has an orange hood, a plow, slit-armoured windows, a beacon bar, a radar dome and a roof anemometer that spins with the wind.
+  - **Dashboard:** tracks the nearest tornado: rating, range, bearing, motion, peak wind, and the wind where you are.
+  - **Anchors:** stop and hydraulic anchors drop, and no tornado can move you.
+- **Weather Balloon:** launch a radiosonde. It bursts at the storm tops and sends back a sounding: temperature, dew point, cloud base, freezing level, CAPE, shear and severe risk.
+- **Rain Gauge:** fills with rain, faster in thunderstorms. Read it in millimetres; a comparator reads its level too.
+- **Tornado Probe:** a weighted barrel that no tornado can move. It records the peak wind and how close the core passed; a comparator reads it too.
+- **Storm Chaser's Logbook:** logs every tornado you see (count, strongest, closest) plus your intercepts, probe readings and balloon launches.
+
+### New items and blocks
+- **Stormkite:** hold it while falling to glide. Storm winds push you along.
+- **Tide Conch:** water breathing and Dolphin's Grace for everyone near you; it also calms Shock Eels.
+- **Bottled Gale**, Cooked Voltaic Eel, the **Skylight Lantern** (light 15), the bouncy, glowing **Glowgel Block**, and **Nacre Blocks** and **Nacre Bricks**.
+
+### Also
+- 14 new achievements across both new sets.
+- 19 new sounds, including whale song, a Thunderbird scream and a conch call.
+- Two new Field Guide chapters, and the new mobs' drop rates in the tables.
+- New gameplay options in `config/stormreach.properties`: `wildlifeSpawning` and `thunderbirdChance`.
+
+
+## 5.1.0 (the Overhaul)
+Built and tested in seventeen stages.
+
+### Stage 17: the Stranger is you, and every mob is properly animated
+- **The thing that follows you wears your skin.** The game reads your in-game skin, slim or wide and at any resolution, and the creature that stalks you through the playthrough becomes a storm-worn copy of you. In multiplayer, each Stranger copies the player it is following, and everyone else sees that player's likeness too.
+  - **The Stranger:**
+    - drained of colour, cold and pale, and soaked darker toward the feet
+    - rain-streaked and salt-flecked, with mud on the boots
+    - the outer layer frayed at the hems and torn in places
+    - the eyes hollowed out: the whites go dark and the pupils pale
+    - It stands slumped with its arms hanging, breathes, lets its head drift sideways, and now and then snaps its head to one side. Water drips off it.
+  - **Cyrrus, its true form, becomes the player who called it at the Hollow Altar.** First it is the Stranger, slumped. When corrupted, it turns storm-indigo, lightning veins run over the body, the eyes burn, and veins and eyes glow in the dark. It stands tall with arms held out, trembling with charge. In its final form it is darker, more veined and stronger.
+- **Sharper models.** Textures are painted with shaded colour ramps (cool shadows, warm highlights) and bevelled edges, so every part reads clearly. Materials are crisper: lacquered shell plates, clumped fur, rounded overlapping feathers, masonry with glowing runes, folded cloth with ragged hems, billowing fleece.
+- **More detail:** the crab has chewing mandibles and three-jointed legs, birds have flight feathers and a lower beak, and the Keeper has fingers, a hood and robe panels. The Puffling's fleece is lumpy and the Sovereign's cape has three parts. 522 parts across the 17 models.
+- **Proper keyframed animation** (594 tracks), smoothed with splines, for every mob:
+  - **Idle loops:** breathing, swaying, looking around.
+  - **Walk cycles** with real steps, where the stride is quicker than the push and the knees bend on the swing: a tripod scuttle for crabs, a four-beat walk for the stag, a trot for the Puffling, true hops for the Thistlehop, a galumph for the seal, and heavy heel-to-toe steps for the golem.
+  - **Flight:** birds fold their wings on the ground and flap in the air, with a fast downstroke and the wing tips trailing. Skyray wings ripple in a travelling wave.
+  - **Fidgets now and then:** claw snaps, squawks, head tilts, grazing, ear and tail flicks, a sheep shake, flipper claps, the stag looking up, the hare standing on its hind legs, and the Keeper's sudden head jerk.
+  - **Attacks and casts, synced from the server:** crab pinches, talon strikes, the golem's overhead slam and summoning roar, the Sovereign's two-armed gust push and raised-arm cast, the Keeper's claw swipe, the Squall's squash-and-stretch ram, and the Wisp's spikes flaring.
+  - **A flinch when hurt.**
+  - **Smooth blending** between standing, walking, flying and swimming. Heads track what they look at, bodies and tails lean into turns, and birds bank and glide.
+
+
+### Stage 16: every mob rebuilt
+- **All 17 Stormreach creature models are new**, with more parts, real joints and new animation. Each has its own texture painted to fit it at 4x detail (fur, feathers, shell, scales, crystal, metal, cloud, water).
+  - **Cliff Crab:** a ridged shell, two-jointed legs that scuttle, swaying eye stalks, and pincers that snap.
+  - **Thunder Crab:** now its own model instead of a big Cliff Crab, with crystal spines, a lightning-rod antenna and glowing eyes.
+  - **Storm Gull:** two-jointed wings with dark tips, a fanned tail and webbed feet.
+  - **Stormhawk:** now its own raptor instead of a big gull, with a hooked beak, a golden crest and a banded tail.
+  - **Harbor Seal:** a two-part body that wiggles as it moves, whiskers, front flippers and a tail fluke.
+  - **Squall:** a glowing core inside three cloud rings that spin against each other, with a wispy tail.
+  - **Stormwarden:** now its own storm-stone golem instead of a giant Squall, with a crystal crown, a glowing visor and core, plated shoulders and jointed arms.
+  - **Ball Lightning and Static Wisp:** separate models now. Ball Lightning spins three arcs of sparks around a white-hot core; the Wisp is a golden spark with a crown of spikes and a trailing tail.
+  - **Waterspout and Cyclone:** six turning rings each, of water or of wind, that sway as they spin.
+  - **Tempest Sovereign:** a crowned, armoured storm lord with crystal horns, a halo of lightning, a two-part cape and a body that trails into a spinning vortex.
+  - **Skyray:** two-jointed wing fins, head fins, a three-jointed glowing tail. The saddle now shows when it is saddled.
+  - **Puffling:** a thundercloud fleece with a spark on top, floppy ears and a pink snout. Shearing still removes the fleece.
+  - **Glimmerstag:** jointed legs and branching crystal antlers with glowing tips.
+  - **Thistlehop:** a hare with long ears and thistles blooming on its back; it really hops now.
+  - **Hollow Keeper:** no longer a stretched zombie. A gaunt robed figure three blocks tall, with a bone mask, glowing eyes, long clawed arms, ragged robes and a swinging lantern.
+- Cyrrus, the Stranger and the Brine Wraith stay humanoid (player- and zombie-shaped) and use their redrawn textures.
+- The models come from `tools/mobmodels.py`, which writes both the Java model and its texture, so they always match.
+
+### Stage 15: textures redrawn, not upscaled
+- **Every Stormreach block is repainted at 64x** by material, using each block's own colours:
+  - bricks with mortar and cracks, and stone with strata and veins
+  - ores with faceted gems, and crystal blocks with facets
+  - riveted metal, wood grain and rings, leaf clusters, grassy turf, soil, clouds, lamps and glass
+- Doors, trapdoors and other pictures are redrawn at 4x with smoothed edges, shading and outlines, so they are no longer blocky enlargements.
+- Items are redrawn the same way at 64x.
+- This replaces Stage 12–14's upscale pass.
+
+### Stage 14: 64x items, mobs and armour
+- **Every Stormreach item texture is now 64x**, and **mob and armour textures are 4x their old resolution**, with the same detail pass as the blocks: crisp pixel-art cells with a soft bevel and fine grain.
+- The smooth, procedurally drawn textures (tornado, clouds, hailstones) were already high resolution and are left as they are.
+
+### Stage 13: the Hollow Keeper hunts by sound, and blocks sound like Stormreach
+- **A smarter Hollow Keeper:**
+  - **It hears noise, not just players.** Standing still is silent and sneaking almost silent. Walking carries about 14 blocks, sprinting 28, and fighting or breaking blocks 32. Its guess of where you are sharpens the closer it gets.
+  - **It leaps** at prey it can see from 4–9 blocks away.
+  - **Below half health it roars and enrages:** it moves faster, listens twice as often and hears further.
+  - **It guards the vault**, patrolling near the heart of the maze half the time.
+  - **Hollow Lamps gutter as it passes**, so a corridor going dark is your warning.
+- **Every Stormreach block has its own sounds.** 21 new block sounds for breaking, footsteps and placing, in seven families: stone, crystal, metal, soft, plant, loose ground and glass. They cover the storm versions of vanilla blocks too. Vanilla and other mods' blocks keep their sounds.
+
+### Stage 12: 64x blocks
+- **Every Stormreach block texture is now 64x64** (animated ones keep their animation): 170 textures in all.
+  - The 5.1 additions were drawn at 64x: radar, vault, lamps, locks.
+  - The older ones were upscaled with a detail pass: each original pixel becomes a 4x4 cell with a soft bevel and fine grain, so bricks, crystals and metal read as carved, stacked or riveted, and the designs stay recognisable.
+- Storm versions of vanilla blocks still use the vanilla textures, tinted, and pick up your resource pack's resolution.
+
+### Stage 11: the Tempest Spire temple and the Sovereign's arena
+- **The Tempest Spire is now a temple** (25 x 25, 52 tall):
+  - three stepped terraces with stairs up every side
+  - a colonnade and four obelisk towers crowned with charged stone and lightning rods
+  - a central spire with tall stormglass windows, climbed by a **spiral stair** (no more ladder) past three floors of chambers, each with a chest and a hanging storm lantern
+  - an open-air crown on top: the Sovereign Altar ringed by pillars and lightning rods
+- **The Sovereign's arena** (optional, on by default; set `sovereignArena=false` to fight at the altar instead). When the ritual ends, everyone within 32 blocks of the altar is lifted to a floating storm-stone arena high above the spire, and the Sovereign descends there. Teleports are made safe:
+  - the arena is built and loaded first
+  - you land on solid floor with Slow Falling and a moment of Resistance
+  - if you fall off you're put back on the platform instead of dying
+  - when the Sovereign dies (or after 15 minutes) everyone is taken back to exactly where they stood; a player who logged out mid-fight goes back when they return
+
+### Stage 10: original particles
+- **Six particles of Stormreach's own**, each with its own frames and motion:
+  - **storm sparks**: forked blue-white flashes that flicker, used for lightning, storm gear, the realm, storm mobs and bosses
+  - **rain splashes**: crowns of droplets, used for puddles, waterspout spray and wet downbursts
+  - **hail shards**: tumbling chips of ice when hailstones hit
+  - **debris dust**: brown puffs that swell and break up, used for the tornado's debris whirl and dry downbursts
+  - **wind streaks**: thin white lines riding the wind, used for downburst fronts and Dispel Weather
+  - **vault dust**: golden motes from the Vault Door's locks and opening
+
+### Stage 9: original sound and a new Labyrinth score
+- **Every sound effect is now Stormreach's own.** 41 new sounds were synthesised from scratch for the mod. They replace every vanilla sound it used to borrow:
+  - thunder cracks and rolling rumbles, gusts and howling wind, hail clatter and taps, puddle splashes
+  - crystal chimes, storm surges, the Dispel Weather chime, the radar ping
+  - backpack straps and buckles, armour clinks
+  - the vault's lock rattle, grinding stone and boom, creaking locker doors
+  - a storm horn
+  - voices for the realm's small creatures, sky creatures and wind spirits, and for the bosses (rumbles, roars, hurt, death, charge, blast)
+  - Every sound has a subtitle.
+- **"Hollow Halls"**, the new Labyrinth music: an original, slow piece for soft piano and pads in D Dorian. It's split into the same three layers as before, which fade in and out with the danger:
+  - calm: the piano motif and pads
+  - tense: adds a low heartbeat pulse and a held, uneasy cluster
+  - chase: adds drums and a driving bass
+- Block footstep and break sounds are still vanilla.
+
+### Stage 8: two guidebooks
+- **Every player gets two books the first time they join**, once only. If your inventory is full they drop at your feet.
+  - **Stormreach Field Guide**: the whole player guide in a book, chapter by chapter, with headings, lists and the rarity tables.
+  - **Storm Crafter's Handbook**: every Stormreach recipe drawn as a crafting grid with **the real item icons**, plus furnace, blast furnace, smoker, campfire and stonecutter recipes. Ingredients that accept several items cycle through them, and you can hover any icon to see its name.
+- Lost one? Craft the Field Guide from a book and a Storm Shard, or the Handbook from a book and a crafting table.
+
+### Stage 7: the Labyrinth goes deep
+- **The Hollow Labyrinth is now buried deep in the deepslate**, just above the bedrock. There's no stairway or ruin on the surface any more: you have to find it, with `/locate`, by tunnelling or by following the story.
+- **The Vault Door**: the treasure chamber is sealed by a massive 5 x 5 door of unbreakable vault plating with **three locks built into it**.
+  - **Three different keys**, one in each corner vault: the **Gale Key** (cyan), the **Thunder Key** (gold) and the **Hollow Key** (violet).
+  - Each lock takes only its own key and lights up when set. The game checks everything on the server.
+  - Once all three are set, the door sinks into the floor row by row, with grinding stone and a deep boom.
+- **The vault can't be dug into.** The treasure chamber is sealed in unbreakable plating on every side, above and below.
+- **A real treasure chamber**:
+  - gilded pillars in every hall, soul braziers, candles and hanging lanterns
+  - a raised gilded dais in the centre with the great chest
+  - side chests in the east and west halls
+- **Lighting that shifts.** Hollow Lamps set in the ceiling slowly brighten and dim, and now and then gutter almost out, so the maze never looks quite the same twice.
+- Old single Labyrinth Keys are kept but no longer fit; the corner vaults now hold the three new keys.
+
+### Stage 6: the Doppler radar is a real radar
+- **The Doppler Radar is now a multi-block structure**: a 3x3 concrete pad with hazard edging, a lattice mast, a pedestal, and a 3-block parabolic dish with its feed horn. The dish turns steadily, once every 8 seconds.
+- Place it from the one item; it needs a clear 3x3 space, 7 blocks tall. Using any part opens the radar scope. Breaking any part takes the whole radar down and gives back one radar.
+- **Placement outline:** while you hold the radar, its footprint is outlined: green if it fits, red if something is in the way. Turn it off with `radarPlacementOutline=false` in `config/stormreach.properties`.
+- It still links to a Weather Monitor (within 8 blocks of the pedestal) and still gives a redstone signal when a tornado is near.
+
+### Stage 5: weather screens
+- **Every weather device opens its own screen** instead of printing to chat. Sneak + use still prints the old chat reading.
+  - The anemometer and wind vane show the Wind tab: a compass rose with the wind's direction, average and gusts, and the Beaufort scale.
+  - The thermometer and barometer show the Air tab: temperature, dew point, humidity, pressure and ground wetness.
+  - The weather station shows Overview, Wind, Air and Forecast.
+  - The storm detector, siren and weather radio show an overview with tornado warnings.
+  - The Doppler radar and the portable Storm Radar show a **live radar scope**:
+    - a rotating sweep over range rings
+    - storm cloud echoes coloured green → yellow → red → magenta as they strengthen
+    - hail cores and downburst outflows
+    - tornado markers with a contact list: bearing, distance, estimated rating, rotational shear and motion
+    - switch to **Velocity** to see each tornado's rotation couplet
+- **The Weather Monitor is the central weather interface.** It has every tab, and the radar too once a weather station and a Doppler radar are within 8 blocks.
+- The screens refresh once a second while open, from the server's own readings, so everyone sees the same weather.
+
+### Stage 4: backpacks get their own slot
+- **A backpack slot** in the inventory, just above the offhand slot. It's separate from the chestplate, so you can wear armour and a backpack together.
+  - Shift-click a backpack to put it on or take it off, or sneak + use with one in hand.
+  - The Open Backpack key (B) opens the one you're wearing first.
+- **Worn backpacks show on your back**, sitting over a chestplate instead of clipping into it. Every tier looks different:
+  - its own colours and trim on every tier
+  - side pockets from Storm Crystal up and a bedroll from Aurorite up
+  - a glowing crystal on the Maelstrom pack
+  - the Storm Chaser's Pack has its own look
+- Contents stay in the backpack whether it's worn, carried or dropped. It saves with your character, Soulbound keeps a worn pack too, and without Soulbound it drops on death like armour.
+- In the Creative inventory tab the slot is hidden; sneak + use or the B key still work there.
+
+### Stage 3: rain, hail, downbursts and storm clouds
+- **Real hailstones** in six sizes: pea, marble, quarter, golf ball, baseball and softball.
+  - Each falls at its real terminal speed and is drawn as a lumpy ball of ice sized to its class.
+  - Damage grows steeply with size. A pea stings, a golf ball takes a few hearts, a softball can kill. Helmets and armour help.
+  - Quarter-size and up flattens crops and flowers, golf balls smash glass panes, and baseballs break glass blocks and shred leaves.
+  - Only strong storms make big hail.
+- **Hail on the ground** piles up to four layers and **melts on a timer**: small hail in about 30 seconds, piles with big stones in under a minute. It melts in every biome, so it can't build up into lag.
+- **Hailstorms happen naturally** in thunderstorms: often in the Thunderspire Highlands, now and then anywhere else. The total number of stones in the air is capped. The old "hail" (particles that hurt you if you had no helmet) is gone.
+- **Rain builds up into puddles.** After a couple of minutes of steady rain, puddles start forming on open, level ground; hollows fill first.
+  - They form faster in a downpour and grow larger the longer it rains.
+  - They dry up after the rain stops (faster in hot places).
+  - Walking through them splashes, and they put out burning mobs and players.
+  - Turn them off with `puddles=false`.
+- **Downbursts, wet and dry:**
+  - A wet downburst comes down in a curtain of heavy rain, and its gust front pushes a wall of spray outward.
+  - A dry one falls from wisps of rain that evaporate on the way down and shows only as a ring of dust racing over the ground.
+  - Winds peak just behind the expanding front.
+  - They now happen naturally: wet in thunderstorms, dry in hot, dry climates.
+- **Storm clouds you can watch develop.** During thunderstorms, a few storm clouds grow around you:
+  - a low cumulus swells into a towering cloud, shoots up and spreads an anvil, then slumps and fades
+  - supercells get a darker, bigger one overhead
+  - they drift with the steering wind and collapse when the weather clears or is dispelled
+  - turn them off with `stormClouds=false`
+- Dispel Weather also clears hailstones and storm clouds.
+
+### Stage 2: tornadoes and waterspouts rebuilt
+- **They come down from the sky.** A new tornado starts as a bulge under the cloud base and lowers a pointed funnel until it reaches the ground. A dust whirl (or spray over water) spins up underneath first. It only damages blocks and pulls things in once it touches down, and it lifts back into the cloud when it ropes out or is dispelled.
+- **New look**, drawn as layered, turbulent meshes instead of stacked boxes:
+  - a lumpy condensation funnel with a looser outer sheath, spinning at a rate that fits its width (ropes whirl, wedges turn slowly)
+  - a tall debris cloud at the base (dusty for landspouts, white spray for waterspouts)
+  - a cloud base for the funnel to hang from, with a lowered, rotating wall cloud under supercells
+  - suction vortices orbiting inside multiple-vortex tornadoes
+  - ropes and needles snake about; each shape (rope, needle, drill bit, cone, stovepipe, wedge) keeps its own profile
+- **Violent tornadoes are violent.** Stronger, wider tornadoes check up to four times as many blocks. They strip roofs first, then tear into the walls below. An EF5 levels most things in its core.
+- **Debris is picked up, carried and thrown.** Blocks spiral up around the core, ride the vortex for a while (longer in stronger tornadoes), then fly out along the rotation. Anything they hit takes damage.
+- **Wind forces on players and mobs** depend on the wind where you stand, so they fall off with distance from the funnel:
+  - EF0 winds shove you around.
+  - **EF1 winds pull you toward the funnel.**
+  - **EF2 winds lift you** a few blocks.
+  - Stronger tornadoes carry you higher (an EF5 up to about 45 blocks) and throw you out.
+  - Heavier mobs and armour resist, and sneaking helps you brace. Fall damage counts from where you're dropped.
+- **Tornado Director** (Creative only, in the Weather Events tab): point at the ground and use it to send the nearest tornado there. It curves toward the spot and stops on it. Sneak and use to let it wander again.
+- **See inside tornadoes** (Creative and Spectator only): press **O** to toggle. Tornadoes turn nearly transparent, the debris and particles thin out, and a red band marks the core, where the winds are strongest. The setting is saved as `creativeSeeThroughTornadoes` in `config/stormreach.properties`.
+- **Waterspouts stay over water.** They only form over open water, steer away from the shore, and fall apart if pushed onto land. They don't scour the lakebed. The waterspout spawner tells you if there's no water.
+- Shape, formation and vortex structure stay independent. The EF rating still comes from the damage survey.
+
+### Stage 1: crash and gameplay fixes
+- **Sovereign Altar crash fixed.** The ritual could aim a lightning strike at a spot with no ground under it (an altar over the void or over open air), which crashed the server. Strikes now step inward to find ground and always have a target.
+- **Lightning Staff no longer burns anything.** Its bolts still hit as hard, but they light no fires and set nothing (you, mobs, the ground) on fire. No Fire Resistance is applied or shown; only the staff's own bolts are affected, so natural lightning works as before.
+- **Dispel Weather works.** It now:
+  - ends the rain and thunder for 10–20 minutes (and with them the Gale and Thunderhead)
+  - makes live tornadoes rope out and cancels the ones still forming
+  - breaks up nearby storm fronts, Squalls and ball lightning
+  - shows a ring of clearing cloud with a chime and a message, and says so if the sky is already clear
+- **Rusted Locker rework.**
+  - You stand inside, facing out, and look out through the grate's slats.
+  - You're held in place: walking, jumping and sneaking don't take you out. **Press Use to step out.**
+  - Only one player fits in a locker, and other players see the locker, not you.
+  - The purple-and-black squares were missing icons for the Hidden and Labyrinth effects. Both now have icons.
+- **Creative Realm Pass** (new, Creative only): use it to go to the Tempest Realm and back, for testing. It has no recipe and drops from nothing, and it does nothing outside Creative mode.
+
+## 5.0.0 (the Hollow Storm update)
+**Real tornadoes, weather instruments, backpacks, a buried labyrinth, a new realm forest, a story told in glimpses, and a voiced final boss.** The full player guide, with every rarity and drop-rate table, is in **GUIDE.md**.
+
+### Tornadoes and severe weather
+- **Tornadoes**, modelled on real ones:
+  - They form from Overworld thunderstorms (supercells), as **landspouts** in warm rain and as **waterspouts** over water.
+  - **12 forms**:
+    - 7 shapes: rope, needle, drill-bit, cone, stovepipe, wedge and large wedge
+    - multiple-vortex tornadoes
+    - satellite and companion tornadoes
+    - landspouts and waterspouts
+  - **EF0–EF5 ratings** follow the official 3-second-gust ranges, and each tornado gets its own peak wind inside its range.
+  - The rating is decided by a **damage survey** when the tornado lifts, so open-field tornadoes can rate low.
+- **Wind field:** calm centre and a peak at the core's edge, with inflow and updraft. Subvortices and the tornado's own motion add to the winds on one side.
+- **Movement and lifecycle:** tornadoes travel about 13 m/s with a wobble, and turn left as they decay. They grow, peak, shrink and rope out.
+- **Blocks and debris:** every block has a failure wind (foliage 45 mph up to metal 205 mph). Exposed, unsupported or thin blocks fail first and sheltered blocks hold.
+  - Light loose blocks become flying debris.
+  - Players and mobs are dragged, lifted, thrown and hurt.
+- **Downbursts, hailstorms, ball-lightning swarms** and **supercells with wall clouds**.
+- Tornadoes **roar**, and fit within limits on simulation distance, block checks per tick, airborne debris and live tornado count. Everything runs on the server.
+
+### Meteorology (new creative tab)
+- **New instruments:**
+  - Anemometer: wind and Beaufort force, plus a redstone signal
+  - Thermometer: temperature, dew point and humidity
+  - Weather Station: everything plus a forecast
+  - Storm Detector
+  - **Doppler Radar:** shows rotation (gate-to-gate shear), motion, estimated rating, width and shape, plus a redstone signal
+  - Tornado Siren: redstone-driven
+  - **Weather Monitor:** shows the severe-weather outlook once linked to a station and a radar
+- Handheld Storm Radar and Weather Radio, which also give tornado warnings.
+- The Barometer and Wind Vane now give readouts too.
+
+### Weather Events (new creative tab)
+- 13 tornado spawners: natural odds, each shape, multiple-vortex, satellite, companion, landspout, waterspout. Sneak + use picks EF0–EF5 or random.
+- Supercell, Downburst, Hailstorm, Ball Lightning Swarm and **Dispel**.
+
+### Backpacks
+- **7 tiers:** Diamond 27 → Obsidian 36 → Netherite 54 → Storm Crystal 72 → Voltite 90 → Aurorite 108 → Maelstrom 135 slots.
+  - Craft the Diamond Backpack, then combine each tier with its **Upgrade Kit**. Each kit uses vanilla and Stormreach materials, and the upgrade keeps the contents and enchantments.
+  - Plus the **Storm Chaser's Pack**, an achievement reward.
+- **Backpack window:**
+  - its own screen with pages, a Sort button and the **B** hotkey
+  - no backpacks inside backpacks
+  - the open pack is locked in place
+  - contents spill out if the pack is destroyed
+- **5 backpack enchantments:** Capacity I–III, Magnetism, Organization, Resilience, Soulbound (treasure).
+
+### The Hollow Labyrinth (very rare Overworld structure)
+- A 150×150 maze buried about 38 blocks down. It has four sections and dead ends, sparse loot, and three corner vaults holding the **Labyrinth Keys**.
+- The keys open a sealed treasure chamber holding the **Heart of the Labyrinth**.
+- **The Hollow Keeper** guards the maze and never leaves it. It hunts by sight and sound, and searches lockers.
+- **Rusted Lockers** let you hide (Hidden effect, heartbeat).
+  - Moving gives you away.
+  - The Keeper is likelier to find you if it saw you get in.
+- **Adaptive music:** three original layers (calm, tense and chase) that blend as the Keeper gets closer.
+
+### Elderstorm Grove (new Tempest Realm biome)
+- Giant 2×2 Elderstorm trees and a full purple wood set.
+- Glowing **Stormfruit** that ripens on the trees and can be picked again and again. Make it into Gilded Stormfruit or Stormfruit Preserve.
+- Thunderbloom and Sparkfern.
+- Two new passive mobs:
+  - **Glimmerstags**: deer with glowing antlers
+  - **Thistlehops**: hopping puffballs
+
+### The story
+- **The Stranger:** a figure at the edge of your vision that vanishes when looked at.
+  - It sends signs: footsteps, whispers, smoke, snuffed campfires, cairns.
+  - It leaves Hollow Remnants behind.
+- **Five journal pages** spread across the Sky Vaults, Tempest Spires, the Labyrinth and the Shrine. Together they rebind the **Weathered Journal**.
+- **The Hollow Shrine** (legendary-rare, floating in the Tempest Realm) has a three-stage ritual:
+  1. four relics from four systems on riddle pedestals
+  2. lightning on four conduits in their notched order
+  3. the journal on the altar
+
+### Cyrrus, the Hollow Storm (final boss)
+- A **fully voiced cinematic intro**: he rises from the ground, grows larger with each line and corrupts into his true form.
+  - Audio, subtitles and actions are synced and work in multiplayer.
+  - Text (lang), audio (sounds.json + .ogg) and timing (`data/stormreach/cinematic/*.txt`) are kept apart, so lines can be added or re-recorded without code.
+- **Five telegraphed phases:**
+  1. lightning
+  2. rain and visibility
+  3. wind, with crosswinds that deflect projectiles
+  4. summons
+  5. the whole storm
+- A voiced line opens each phase, and he has last words when he falls.
+- **Drops:** Maelstrom Cores, the Stormcrown, the Weathervane Scepter. The **Weatherbreaker** is crafted from a core.
+
+### Achievements
+- **49 new achievements** across the main tab and three new tabs: Meteorology, the Hollow Labyrinth and the Chronicle.
+  - Tiered chains, hidden achievements, and an endgame challenge.
+  - Vanilla tie-ins: lightning, Channeling, lightning rods.
+- **Exclusive rewards with real abilities**, each given by exactly one achievement:
+  - Lightning Charm (Grounded in offhand)
+  - Storm Chaser's Cap (tornado warnings)
+  - Chaser's Badge (half tornado damage)
+  - Storm Chaser's Pack
+  - four trophies
+
+### Changes
+- **Creative tabs reorganised:** Building, Nature, Tools & Combat, Food, Materials, Spawn Eggs, Weather Events and Meteorology. Storm Blocks and Storm Mobs are unchanged.
+- **Mod Menu now shows performance settings only**, on two pages (Tornadoes, Effects & Load). Gameplay options moved to `config/stormreach.properties`.
+- The Tempest Sovereign now leaves a Sovereign Trophy (via its achievement).
+
+### Testing
+- 36 JUnit tests (`./gradlew test`) cover:
+  - tornado physics, EF scale, climatology and materials
+  - maze, hiding and boss logic
+  - the dialogue/audio/subtitle contract
+- 7 in-game GameTests (`./gradlew runGametest`, also run in GitHub Actions) load the full datapack and exercise:
+  - backpacks
+  - tornadoes
+  - lockers
+  - the shrine ritual
+  - Stormfruit
+- `tools/validate.py` checks every model, texture, lang key, loot table, recipe, tag, sound, script, advancement and worldgen reference.
+
+## 4.0.0 (the Tempest Realm update)
+**A whole new dimension above the storm, and an elaborate road to reach it.**
+
+### The road to the Tempest Realm
+1. **Find a Tempest Spire.** It's a rare ruined tower of purple Tempest Bricks in Stormreach Coast, Thunderspire Highlands and Squallwind Bluffs. `/locate structure stormreach:tempest_spire` finds one, and `/locate biome stormreach:stormreach_coast` finds the coast. Its floors hold loot chests, and the Sovereign Altar sits on its roof.
+2. **Wake the Tempest Sovereign.** There are two ways:
+   - **Naturally:** during a thunderstorm, the altar may stir by itself when a player is within 32 blocks. It's rare and can be changed in Mod Menu.
+   - **With a Tempest Sigil:** this needs a Tempest Core (from the Stormwarden), a Thunderhead Horn, a Stormheart, 2 Blocks of Storm Crystal and 4 Storm Cells. Using it on the altar forces a thunderstorm and starts a 60-second ritual: lightning walks around the spire, faster and closer, until the Sovereign descends.
+3. **Defeat the Tempest Sovereign**, a brand-new three-phase flying boss with a purple boss bar.
+   - **Phase 1:** it calls lightning on you and launches Ball Lightning orbs.
+   - **Phase 2 (below 60%):** Squalls join it, lightning strikes in rings, and gust shockwaves throw you back.
+   - **Phase 3 (below 25%):** it's enraged, faster and stronger. It dives at you and opens a vortex that drags you in before blasting you away.
+   - The storm heals it, and it won't stray far from its spire. It drops exactly **one Tempest Eye**.
+4. **Collect 4 Tempest Eyes** (you can set it anywhere from 4 to 16). That means four Sovereign fights.
+5. **Build a Stormgate.**
+   - Lay a flat 5×5 ring of 16 **Stormgate Frames** (crafted from Fulgurite, Charged Stormstone and Storm Crystal) around a 3×3 pool of **stormwater sources**.
+   - Set the Eyes into the frames. Right-clicking a frame tells you what the gate still needs.
+6. **Call lightning onto the pool** (a natural storm, a Tempest Staff…). The stormwater tears open into a crackling **Stormgate**.
+7. **Step in.**
+   - You arrive in the **Tempest Realm** at the same coordinates.
+   - If there's no gate nearby, a return gate is built for you (on a sky platform if you arrive over the void).
+   - Breaking any frame collapses the gate, and an Eye in a broken frame is lost.
+
+### The Tempest Realm
+- A storm-sky dimension of **floating islands** above a sea of clouds. Distant thunder and real lightning strike the islands.
+- **Falling off the bottom** drops you back into the Overworld sky with Slow Falling. Make sure your gear is safe.
+- **4 biomes:**
+  - Galewood Highlands: forests
+  - Static Fields: open meadows of Skyblooms and Stormcaps
+  - Cloudsea Expanse: sparse islands lost in clouds
+  - Aurora Spires: purple-lit peaks full of Aurorite and glowing Ion spires
+- **Sky Vaults:** floating stone ruins high in the sky with loot (Voltite, Aurorite, Ion Shards, Cloudstep Boots, saddles, Galewood saplings…). `/locate structure stormreach:sky_vault` finds one.
+
+### New blocks (47)
+- **Tempest Spire:** Tempest Bricks (cracked, chiseled, stairs, slab, wall). You can also make them from Stormstone Bricks and an amethyst shard. The Sovereign Altar.
+- **Stormgate:** Stormgate Frame and the Stormgate portal.
+- **Skyshale:** the realm's stone, plus Cobbled, Polished, Bricks, Chiseled, stairs, slabs and walls.
+- **Skysoil** and **Static Grass:** cyan turf that spreads onto Skysoil.
+- **Clouds** (you fall into them, not onto them):
+  - Nimbus Cloud: you sink slowly through it and take no fall damage
+  - Thundercloud: flings you skyward with a crack of static
+  - Gale Cloud: carries you along with the wind
+- **Galewood:** a pale, wind-streaked wood. Log, stripped log, planks, leaves (they drop Cloudberries), sapling, stairs, slab, fence, gate, door, trapdoor, button and pressure plate.
+- **Ores:** Voltite Ore, Aurorite Ore and Ion Ore, plus Blocks of Voltite and Aurorite (both work as beacon bases), and the Ion Lamp.
+- **Plants:** Skybloom, Stormcap and Gale Grass.
+
+### New items
+- Tempest Sigil and Tempest Eye
+- Raw Voltite and Voltite Ingot, Aurorite, Ion Shards (eat one to heal instantly), Stormhawk Feathers
+- **Voltite gear** (better than iron):
+  - sword, pickaxe, axe, shovel, hoe and armor
+  - Voltite swords arc lightning to a second nearby enemy
+  - a full set gives Speed and Haste in the realm
+- **Aurorite gear** (better than diamond, fireproof):
+  - Aurorite swords arc harder
+  - a full set makes you immune to lightning and fall damage
+- **Cloudstep Boots:** no fall damage; sneak in mid-air to glide.
+- **Food:** Cloudberries (Slow Falling), Cloudberry Tart (Jump Boost), Raw and Cooked Skyray, Storm Nectar (Regeneration and Slow Falling), Gale Bread
+- A new creative tab, **Stormreach: Tempest Realm**
+
+### New mobs
+- **Tempest Sovereign:** the boss described above
+- **Skyray:** a gentle flying ray. Put a saddle on it and ride it; it flies wherever you look (W to fly, A/D to drift). Breed with Cloudberries.
+- **Puffling:** a little cloud sheep. Shear it for Nimbus Clouds. While fluffy it floats down gently, and the fluff grows back.
+- **Static Wisp:** a hostile spark that zaps you up close and arcs at you from range
+- **Cyclone:** a hostile whirlwind that flings you into the air
+- **Stormhawk:** a hostile raptor that circles high, then dives. It drops Stormhawk Feathers.
+
+### Advancements
+- A new branch after the Stormwarden: Where the Storm Is Crowned, A Royal Summons, Regicide, Eyes of the Storm, Above the Storm, Ray Rider, Bottled Current, Northern Lights, Dressed for the Storm, Castles in the Air, Head in the Clouds, and a hidden one.
+
+### Settings (new "Realm" page in Mod Menu)
+- Sovereign Answers Storms, Natural Summon Chance, Sigil Ritual Length, Sovereign Health, Eyes to Open a Stormgate, Build Return Gates, Fall Back to the Overworld, Realm Lightning, Realm Mob Spawning, Cloud Effects, Skyray Flight Speed.
+
+## 3.0.0 (the Storm Everything update)
+**Every block and every mob now has a Storm version**
+- **978 Storm blocks**: every vanilla block from every dimension that can have a copy gets one: stone, ores, every wood, wool, concrete, terracotta, glass, plants, crops, Nether blocks, End blocks, deepslate, sculk, copper, redstone parts, rails, doors, slabs, stairs and the rest.
+  - They act exactly like the original (same hardness, tool, sounds, shape and behaviour) and are drawn in a cold storm-blue tint.
+  - They drop their own Storm versions, join the same tags as the original, and so work in recipes that accept a tag (any planks, any logs, any wool…).
+  - They have their own creative tab, **Stormreach: Storm Blocks**.
+  - Not copied: blocks that hold an inventory or block entity (chests, furnaces, signs, beds, banners, heads, shulker boxes, spawners…), portals, fire, cauldrons, flower pots, air and technical blocks.
+- **Storm mobs for every mob, bosses included**: Storm Zombie, Storm Cow, Storm Enderman, Storm Piglin, Storm Warden, Storm Wither, Storm Elder Guardian and every other living mob.
+  - They look like the original with a storm-blue tint, have 25% more health, can't be hurt by lightning, give off sparks, get Speed in the rain and have a 1-in-4 chance to shock what they hit (extra damage and Slowness).
+  - **Storm bosses** call lightning down on their target every few seconds and summon Squalls once they drop below half health.
+  - Each drops its normal loot plus Storm Shards when a player kills it. Each has a tinted spawn egg in the new **Stormreach: Storm Mobs** tab.
+  - The Ender Dragon gets a Storm version, but the Stormblight never converts the real one, so the End fight still works.
+- **The Stormblight can now take over everything**: anything without a hand-made Stormreach counterpart becomes its Storm version, in any dimension. A Stormheart in the Nether paints the land **Storm Wastes**, and one in the End paints it **Storm Void**.
+
+**Stormwater**
+- A new storm-charged blue water. It flows and can be bucketed like water, glows faintly, and counts as water for other mods.
+- Swimming in it gives Static Charge and Dolphin's Grace, but it shocks you every two seconds unless you are Grounded or wearing full Stormshard armor.
+- Lightning hitting stormwater electrifies it and hurts every unprotected creature in it within 10 blocks.
+- In *Unlimited* spread mode it slowly turns the water next to it into more stormwater.
+- The Stormblight turns water into stormwater.
+
+**Stormlava**
+- Lava taken over by the storm: bright blue liquid lightning with its own animated texture. It burns like lava and also deals lightning damage and makes you glow.
+- Lightning striking it can spark Ball Lightning out of it.
+- When water meets it, it hardens into storm stone instead of cobblestone or obsidian: flowing stormlava becomes Stormstone, a stormlava source becomes Charged Stormstone, and a source hit by stormwater becomes Storm Crystal Ore. That gives you a renewable crystal generator.
+- The Stormblight turns lava into stormlava.
+
+**Nether and End storms**
+- New biomes **Storm Wastes** (Nether) and **Storm Void** (End), created only by the Stormblight. They have a permanent dry storm: sparks in the air, lightning, Ball Lightning and Squalls.
+
+**New settings (Stormblight page in Mod Menu)**
+- Storm Every Block, Storm Every Mob, Storm Mob Powers, Stormwater Shocks, Nether & End Storms. All are on by default.
+
+**Also**
+- New advancements: Charged Waters, Liquid Lightning and The Withering Storm (beat a Storm Wither).
+- Storm block and mob names, models and loot are made by `tools/gendata6.py`. Rerun it after a Minecraft update.
+
+## 2.1.0 (the Stormblight update)
+**The Stormblight: storm energy that spreads and takes over**
+- **Stormheart** block (crafted, or found in Storm Shrines).
+  - Wake it with a Storm Cell, a lightning strike or a redstone signal.
+  - An awake heart pulses outward in a growing sphere and turns everything into its Stormreach version. Facing, axis, slab type and waterlogging are kept, and doors convert both halves at once.
+  - When it reaches full size, the area becomes Stormreach Coast, so storms come there.
+  - Use Salt on it to calm it again. Right-click it with an empty hand to see how far it has spread.
+- **Blocks it converts:**
+  - stone, cobblestone, andesite, diorite, granite, tuff → Stormstone
+  - polished stones → Polished Stormstone, stone bricks → Stormstone Bricks (cracked and chiseled too), stone stairs, slabs and walls → stormstone ones
+  - any overworld tree's logs, planks, leaves, saplings, stairs, slabs, fences, gates, doors, trapdoors, buttons and pressure plates → Stormpine
+  - grass, podzol and mycelium → the new **Stormscar Turf**
+  - flowers → Sea Thrift or Sea Rocket, grass and ferns → Saltgrass, sweet berry bushes → Stormberry Shrubs
+  - glass and glass panes → Stormglass, lanterns → Fulgurite Lanterns, glowstone and sea lanterns → Storm Lanterns
+  - amethyst → Storm Crystal, coal and copper ore → Storm Crystal Ore, and some sand → Fulgurite
+- **Mobs it converts:**
+  - chickens and parrots → Storm Gulls
+  - rabbits and turtles → Cliff Crabs
+  - pigs → Harbor Seals
+  - zombies, husks and drowned → Brine Wraiths
+  - creepers → Ball Lightning
+  - spiders → Thunder Crabs
+  - phantoms, vexes and breezes → Squalls
+  - Cliff Crabs → Thunder Crabs during thunderstorms
+  - Named mobs and tamed pets are never touched.
+- **Storm Front**: use a Thunderhead Horn on a Stormheart to release a travelling black storm cloud. It drifts with the wind, rains, throws lightning and converts the land and mobs beneath it for a few minutes.
+- **Stormscar Turf**: grass that plants grow on. In *Unlimited* spread mode it keeps spreading by itself.
+- New **Stormblight** page in Mod Menu:
+  - spread mode: Off, Contained (the default) or Unlimited
+  - heart radius (8–64) and spread speed
+  - mob conversion, biome change, waking on placement, and Storm Front on/off and lifetime
+
+**More content**
+- **Bottled Sunshine** (clears the weather), **Bottled Rain** (starts a Gale) and **Bottled Thunder** (a short Thunderhead).
+- **Storm Shrines** in the Thunderspire Highlands and Squallwind Bluffs, with a dormant Stormheart on an altar, a Storm Collector and a loot chest.
+- 3 new paintings: Storm Lighthouse, Squall at Sea and The Stormwarden.
+- 3 new advancements: Heart of the Storm, Scarred Earth and Weather Maker.
+
+## 2.0.0 (the big storm update, Minecraft 26.3)
+**New biomes**
+- **Squallwind Bluffs**: stormy sea cliffs (takes half of the Stony Shores). Gulls, seals, sea rocket, rich stormstone.
+- **Thunderspire Highlands**: windswept crystal peaks (takes half of the Windswept Gravelly Hills). Stormpine forests, charged stormstone spires, extra storm crystal ore, ash in the air, and hail during Thunderheads.
+- **Brinewater Marsh**: salt flats and driftwood (takes half of the Swamps). Salt crystals, saltgrass, Brine Wraiths at night.
+- Each biome can be switched off in settings. Vanilla biomes still generate, just less often.
+
+**Weather**
+- Hail in the Thunderspire Highlands (wear a helmet!), Ball Lightning that drifts toward you and bursts, and Waterspouts over the sea that lift and fling anything nearby.
+- Any lightning (vanilla included) now turns Stormstone into Storm Crystal Ore or Charged Stormstone, and fuses sand into Fulgurite.
+- New blocks: the **Wind Vane** turns with the storm wind, and the **Storm Collector** charges in rain and thunder and gives you Storm Cells (comparators read its charge).
+- `/stormreach forecast` shows the weather and wind direction.
+
+**Mobs**
+- **Harbor Seal** (peaceful, fast swimmer, breeds with fish)
+- **Brine Wraith** (drowned sailor, causes Hunger, drops salt)
+- **Thunder Crab** (lightning turns a Cliff Crab into one)
+- **Ball Lightning** and **Waterspout** storm hazards
+- **The Stormwarden** boss: use a Storm Cell on a Block of Storm Crystal in a thunderstorm. It has a boss bar, lightning strikes, gust shockwaves and summons Squalls. It drops the Tempest Core.
+- Storm Gulls now lay Gull Eggs.
+
+**Blocks**
+- Stormstone stairs, slab and wall, and the same for Polished Stormstone
+- Chiseled Stormstone, Cracked Stormstone Bricks, Charged Stormstone and a Stormstone Brick Wall
+- A full Driftwood set: fence, gate, door, trapdoor, button and pressure plate
+- A new **Stormpine** tree with log, stripped log, planks, leaves, sapling, stairs, slab, fence, gate, door, trapdoor, button and pressure plate
+- Stormglass Pane, Fulgurite, Fulgurite Lantern, Block of Salt and Salt Crystal
+- Sea Rocket and Saltgrass plants
+
+**Gear**
+- **Stormshard armor**: a full set makes you immune to lightning and gives Speed in thunderstorms
+- **Gale Wings**: a glider like the elytra, and storm gusts boost it
+- **Squall in a Bottle**: a throwable gust that can launch you
+- **Stormbreaker**: a hammer made from the Tempest Core that sends out a thunderclap shockwave
+
+**Enchantments**
+- **Conductive** (swords): shocks what you hit; always works in rain
+- **Galeforce** (boots): you're faster outdoors in the rain
+- **Grounded** (armor): protects against lightning
+
+**Effects and potions**
+- Static Charge (shocks anyone who hits you), brewed with a Storm Shard
+- Grounded (immune to lightning and wind), brewed with a Fulgurite Shard
+- Both have long versions, plus splash and lingering potions
+
+**Food**
+- Gull Egg / Fried Gull Egg, Crab Cakes, Stormberry Jam, Stormberry Juice, Seaweed Salad, Salted Cod, Sailor's Stew, Rock Candy and Tempest Tonic
+- **Stormfin**: a fish you can only catch while it rains
+
+**Structures**
+- **Storm Lighthouses** on the coasts and bluffs
+- **Wrecked Skiffs** on beaches and marshes
+- Both have their own loot chests
+
+**Also**
+- 10 new advancements, recipe book unlocks for every recipe, and the Mod Menu screen now has 4 pages with every new option.
+
+**Fixes**
+- Biome features are now sorted in an order that always agrees with vanilla. This prevents a possible "feature order cycle" crash when creating a world.
+
+## 1.0.0 (first release, Minecraft 26.3)
+- New biome: **Stormreach Coast**, with three frequency settings.
+- New weather on the coast: **Gale** (rain) and **Thunderhead** (thunder), with wind gusts, sea spray, nearby lightning and Squall spawns.
+- Lightning can turn Stormstone into Storm Crystal Ore.
+- New mobs: Cliff Crab, Storm Gull and Squall.
+- 16 new blocks, including the Storm Barometer redstone weather sensor.
+- New gear: Stormshard tools, Tempest Staff and Thunderhead Horn.
+- 6 new foods.
+- Stormreach advancement tab and recipe book unlocks.
+- Mod Menu config screen (3 pages) plus `config/stormreach.properties`.
+- `/stormreach` command.

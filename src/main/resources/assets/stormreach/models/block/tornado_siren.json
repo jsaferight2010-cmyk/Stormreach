@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "stormreach:block/tornado_siren_side",
+    "north": "stormreach:block/tornado_siren_front",
+    "south": "stormreach:block/tornado_siren_side",
+    "east": "stormreach:block/tornado_siren_side",
+    "west": "stormreach:block/tornado_siren_side",
+    "up": "stormreach:block/tornado_siren_side",
+    "down": "stormreach:block/tornado_siren_side"
+  }
+}

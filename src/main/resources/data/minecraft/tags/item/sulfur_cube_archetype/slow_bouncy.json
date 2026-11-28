@@ -1,0 +1,348 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_amethyst_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_andesite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_basalt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_blackstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_calcite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_cinnabar",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_nether_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_polished_blackstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_quartz_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_red_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_stone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_sulfur",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_tuff",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_chiseled_tuff_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cinnabar",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cinnabar_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cobbled_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cobblestone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_deepslate_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_deepslate_tiles",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_nether_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_polished_blackstone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cracked_stone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crimson_nylium",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_crying_obsidian",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cut_red_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_cut_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dark_prismarine",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_deepslate_tiles",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_diamond_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_diorite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_dripstone_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_emerald_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_end_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_end_stone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gilded_blackstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_glowstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_granite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_lapis_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mossy_cobblestone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mossy_stone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_mud_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_netherrack",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_observer",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_obsidian",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_andesite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_basalt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_blackstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_blackstone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_cinnabar",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_deepslate",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_diorite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_granite",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_sulfur",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_polished_tuff",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_prismarine",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_prismarine_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purpur_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_purpur_pillar",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_quartz_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_quartz_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_nether_quartz_ore",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_quartz_pillar",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_nether_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_red_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_redstone_lamp",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sea_lantern",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_smooth_basalt",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_smooth_quartz",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_smooth_red_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_smooth_sandstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_smooth_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stone_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sulfur",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_sulfur_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tuff",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_tuff_bricks",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_warped_nylium",
+   "required": false
+  }
+ ]
+}

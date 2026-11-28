@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_jungle_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_jungle_wood",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_jungle_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_jungle_wood",
+   "required": false
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "stormreach:storm_carved_pumpkin",
+      "required": false
+    },
+    "stormreach:diamond_backpack",
+    "stormreach:obsidian_backpack",
+    "stormreach:netherite_backpack",
+    "stormreach:storm_crystal_backpack",
+    "stormreach:voltite_backpack",
+    "stormreach:aurorite_backpack",
+    "stormreach:maelstrom_backpack",
+    "stormreach:storm_chasers_pack"
+  ]
+}

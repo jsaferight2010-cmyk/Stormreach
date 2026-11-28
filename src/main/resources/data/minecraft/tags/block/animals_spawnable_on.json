@@ -1,0 +1,10 @@
+{
+  "values": [
+    "stormreach:stormscar_turf",
+    {
+      "id": "stormreach:storm_grass_block",
+      "required": false
+    },
+    "stormreach:static_grass"
+  ]
+}

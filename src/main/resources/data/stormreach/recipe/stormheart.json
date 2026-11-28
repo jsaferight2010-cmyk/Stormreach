@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "S": "stormreach:storm_shard",
+    "C": "stormreach:storm_cell",
+    "B": "stormreach:storm_crystal_block"
+  },
+  "pattern": [
+    "SCS",
+    "CBC",
+    "SCS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:stormheart"
+  }
+}

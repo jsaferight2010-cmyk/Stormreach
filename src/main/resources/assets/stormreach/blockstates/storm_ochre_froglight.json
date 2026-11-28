@@ -1,0 +1,16 @@
+{
+ "variants": {
+  "axis=x": {
+   "model": "stormreach:block/storm_ochre_froglight_horizontal",
+   "x": 90,
+   "y": 90
+  },
+  "axis=y": {
+   "model": "stormreach:block/storm_ochre_froglight"
+  },
+  "axis=z": {
+   "model": "stormreach:block/storm_ochre_froglight_horizontal",
+   "x": 90
+  }
+ }
+}

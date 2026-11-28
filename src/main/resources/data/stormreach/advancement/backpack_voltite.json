@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:voltite_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_voltite.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_voltite.description"
+    },
+    "icon": {
+      "id": "stormreach:voltite_backpack"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:backpack_storm_crystal"
+}

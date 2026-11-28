@@ -1,0 +1,16 @@
+{
+ "variants": {
+  "axis=x": {
+   "model": "stormreach:block/storm_dark_oak_wood",
+   "x": 90,
+   "y": 90
+  },
+  "axis=y": {
+   "model": "stormreach:block/storm_dark_oak_wood"
+  },
+  "axis=z": {
+   "model": "stormreach:block/storm_dark_oak_wood",
+   "x": 90
+  }
+ }
+}

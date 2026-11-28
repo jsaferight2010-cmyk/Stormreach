@@ -1,0 +1,10 @@
+{
+ "variants": {
+  "tip=false": {
+   "model": "stormreach:block/storm_pale_hanging_moss"
+  },
+  "tip=true": {
+   "model": "stormreach:block/storm_pale_hanging_moss_tip"
+  }
+ }
+}

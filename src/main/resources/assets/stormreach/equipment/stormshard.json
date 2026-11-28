@@ -1,0 +1,19 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "stormreach:stormshard"
+      }
+    ],
+    "humanoid_baby": [
+      {
+        "texture": "stormreach:stormshard"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "stormreach:stormshard"
+      }
+    ]
+  }
+}

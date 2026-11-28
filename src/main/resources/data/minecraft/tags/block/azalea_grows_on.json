@@ -1,0 +1,12 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_snow_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_powder_snow",
+   "required": false
+  }
+ ]
+}

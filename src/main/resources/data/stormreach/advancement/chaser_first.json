@@ -1,0 +1,26 @@
+{
+  "parent": "stormreach:meteorology",
+  "criteria": {
+    "trigger": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "trigger"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.chaser_first.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.chaser_first.description"
+    },
+    "icon": {
+      "id": "stormreach:chasers_logbook"
+    },
+    "frame": "task",
+    "hidden": false
+  }
+}

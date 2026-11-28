@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_right_open",
+  "textures": {
+    "bottom": "stormreach:block/galewood_door_bottom",
+    "top": "stormreach:block/galewood_door_top"
+  }
+}

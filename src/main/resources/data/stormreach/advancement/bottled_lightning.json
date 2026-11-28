@@ -1,0 +1,33 @@
+{
+  "parent": "stormreach:root",
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:bottled_lightning"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.bottled_lightning.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.bottled_lightning.description"
+    },
+    "icon": {
+      "id": "stormreach:bottled_lightning"
+    },
+    "frame": "goal",
+    "hidden": false
+  }
+}

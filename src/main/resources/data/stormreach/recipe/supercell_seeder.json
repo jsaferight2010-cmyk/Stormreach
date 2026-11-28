@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "stormreach:cloud_seeder",
+    "stormreach:bottled_lightning",
+    "minecraft:gunpowder"
+  ],
+  "result": {
+    "count": 1,
+    "id": "stormreach:supercell_seeder"
+  }
+}

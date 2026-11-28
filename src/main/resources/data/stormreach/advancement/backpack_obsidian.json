@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "b": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:obsidian_backpack"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.backpack_obsidian.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.backpack_obsidian.description"
+    },
+    "icon": {
+      "id": "stormreach:obsidian_backpack"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "b"
+    ]
+  ],
+  "parent": "stormreach:open_backpack"
+}

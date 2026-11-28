@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "stormreach:block/stormberry_shrub_stage2"
+  }
+}

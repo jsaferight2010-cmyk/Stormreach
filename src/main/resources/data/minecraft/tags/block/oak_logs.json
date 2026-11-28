@@ -1,0 +1,20 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_oak_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_oak_wood",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_oak_log",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_stripped_oak_wood",
+   "required": false
+  }
+ ]
+}

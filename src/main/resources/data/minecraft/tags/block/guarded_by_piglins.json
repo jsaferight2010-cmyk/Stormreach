@@ -1,0 +1,16 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_gold_block",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_gilded_blackstone",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_raw_gold_block",
+   "required": false
+  }
+ ]
+}

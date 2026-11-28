@@ -1,0 +1,60 @@
+{
+  "values": [
+    "stormreach:driftwood_planks",
+    "stormreach:stormpine_planks",
+    {
+      "id": "stormreach:storm_oak_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_spruce_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_birch_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_jungle_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_acacia_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_dark_oak_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_pale_oak_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_crimson_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_warped_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_mangrove_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_bamboo_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_cherry_planks",
+      "required": false
+    },
+    {
+      "id": "stormreach:storm_poplar_planks",
+      "required": false
+    },
+    "stormreach:galewood_planks",
+    "stormreach:elderstorm_planks"
+  ]
+}

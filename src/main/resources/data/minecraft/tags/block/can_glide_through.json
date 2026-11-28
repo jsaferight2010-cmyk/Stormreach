@@ -1,0 +1,24 @@
+{
+ "values": [
+  {
+   "id": "stormreach:storm_vine",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_twisting_vines",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_twisting_vines_plant",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weeping_vines",
+   "required": false
+  },
+  {
+   "id": "stormreach:storm_weeping_vines_plant",
+   "required": false
+  }
+ ]
+}

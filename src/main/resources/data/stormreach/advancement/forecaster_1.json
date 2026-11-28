@@ -1,0 +1,33 @@
+{
+  "criteria": {
+    "a": {
+      "conditions": {
+        "items": [
+          {
+            "items": "stormreach:anemometer"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "title": {
+      "translate": "advancements.stormreach.forecaster_1.title"
+    },
+    "description": {
+      "translate": "advancements.stormreach.forecaster_1.description"
+    },
+    "icon": {
+      "id": "stormreach:anemometer"
+    },
+    "frame": "task",
+    "hidden": false
+  },
+  "requirements": [
+    [
+      "a"
+    ]
+  ],
+  "parent": "stormreach:meteorology"
+}

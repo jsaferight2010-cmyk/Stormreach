@@ -1,0 +1,13 @@
+{
+ "variants": {
+  "type=bottom": {
+   "model": "stormreach:block/storm_spruce_slab"
+  },
+  "type=double": {
+   "model": "stormreach:block/storm_spruce_planks"
+  },
+  "type=top": {
+   "model": "stormreach:block/storm_spruce_slab_top"
+  }
+ }
+}

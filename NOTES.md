@@ -723,3 +723,7 @@ boot the headless test server in GitHub Actions as before.
 6.0.1 delivered (Stormreach-6.0.1-mc26.3.zip). Waiting on the user's in-game test. Open question: what "swords didn't work in
 Survival" looked like. No Hollow Shrine crash log exists. Optional: further sound redesign of the
 5.x sounds listed under stage 8 part 2; more "even more" content (ideas: sea fog, rainbows after storms, storm surge).
+
+### Feedback waiting (2026-11-27)
+- The user sent 5 in-game screenshots of 6.0.1 and asked to keep them for later. They're in ~/stormreach-feedback/2026-11-27 (cloud session only; not committed). They show the cables, Tesla coil and capacitor, the water wheel, the pedestal blocks, a rope tornado with ground damage, and the storm clouds.
+- Bug report (message cut off): `/kill` kills all tornadoes and storm clouds. Cause still to find.
